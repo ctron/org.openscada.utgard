@@ -39,14 +39,13 @@ public class OPCCommon
         return (Integer)result[0];
     }
 
-    public String getErrorString ( int errorCode ) throws JIException
+    public String getErrorString ( int errorCode, int localeID ) throws JIException
     {
         JICallObject callObject = new JICallObject ( _opcCommonObject.getIpid (), true );
         callObject.setOpnum ( 3 );
 
         callObject.addInParamAsInt ( errorCode, JIFlags.FLAG_NULL );
-        callObject.addInParamAsInt ( (Integer)1033, JIFlags.FLAG_NULL );
-        //callObject.addOutParamAsObject ( new JIPointer ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ), JIFlags.FLAG_NULL );
+        callObject.addInParamAsInt ( localeID, JIFlags.FLAG_NULL );
         callObject.addOutParamAsObject ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_BSTR ), JIFlags.FLAG_NULL );
 
         Object[] result = _opcCommonObject.call ( callObject );

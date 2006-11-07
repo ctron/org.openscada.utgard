@@ -30,7 +30,7 @@ public class Test1
             server.setLocaleID ( 1033 );
             System.out.println ( String.format ( "LCID: %d", server.getLocaleID () ) );
             server.setClientName ( "test" );
-            System.out.println ( String.format ( "Error Text: %s", server.getErrorString ( 0x80020001 ) ) );
+            System.out.println ( String.format ( "Error Text: '%s'", server.getErrorString ( 0x80020001, 1033 ) ) );
         }
         finally
         {
