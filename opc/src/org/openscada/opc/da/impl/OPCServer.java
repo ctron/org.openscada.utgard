@@ -104,11 +104,9 @@ public class OPCServer
         JICallObject callObject = new JICallObject ( _opcCommonObject.getIpid (), true );
         callObject.setOpnum ( 1 );
 
-        callObject.addOutParamAsObject ( new JIPointer ( Integer.class, false ),
-                JIFlags.FLAG_REPRESENTATION_NESTED_POINTER );
+        callObject.addOutParamAsObject ( Integer.class, JIFlags.FLAG_NULL );
 
-        _opcCommonObject.call ( callObject );
-
-        return 0;
+        Object [] result = _opcCommonObject.call ( callObject );
+        return (Integer)result[0];
     }
 }

@@ -28,9 +28,9 @@ public class Test1
 
             // server.GetStatus ();
             server.setLocaleID ( 1033 );
-            //server.getLocaleID ();
+            System.out.println ( String.format ( "LCID: %d", server.getLocaleID () ) );
             //server.setClientName ( "test" );
-            server.getErrorString ( 0x80020001 );
+            //server.getErrorString ( 0x80020001 );
         }
         finally
         {
