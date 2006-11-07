@@ -54,7 +54,7 @@ public class OPCCommon
     public void setClientName ( String clientName ) throws JIException
     {
         JICallObject callObject = new JICallObject ( _opcCommonObject.getIpid (), true );
-        callObject.setOpnum ( 5 );
+        callObject.setOpnum ( 4 );
 
         callObject.addInParamAsString ( clientName, JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR );
 
