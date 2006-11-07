@@ -1,9 +1,13 @@
 package org.openscada.opc.common.impl;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.IJIComObject;
+import org.jinterop.dcom.core.JIArray;
 import org.jinterop.dcom.core.JICallObject;
 import org.jinterop.dcom.core.JIFlags;
 import org.jinterop.dcom.core.JIPointer;
@@ -60,6 +64,22 @@ public class OPCCommon
         callObject.addInParamAsString ( clientName, JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR );
 
         _opcCommonObject.call ( callObject );
+    }
+
+    public Collection<Integer> queryAvailableLocaleIDs () throws JIException
+    {
+        JICallObject callObject = new JICallObject ( _opcCommonObject.getIpid (), true );
+        callObject.setOpnum ( 2 );
+
+        callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
+
+        Object[] result = _opcCommonObject.call ( callObject );
+
+        JIArray resultArray = (JIArray)((JIPointer)result[1]).getReferent ();
+        Integer[] intArray = (Integer[])resultArray.getArrayInstance ();
+        
+        return Arrays.asList ( intArray );
     }
 
 }

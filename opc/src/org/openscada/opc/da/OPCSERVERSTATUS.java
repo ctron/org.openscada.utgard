@@ -1,6 +1,7 @@
 package org.openscada.opc.da;
 
 import org.jinterop.dcom.common.JIException;
+import org.jinterop.dcom.core.JIPointer;
 import org.jinterop.dcom.core.JIStruct;
 import org.openscada.opc.common.FILETIME;
 
@@ -142,10 +143,10 @@ public class OPCSERVERSTATUS
     {
         JIStruct struct = new JIStruct ();
 
-        struct.addMember ( FILETIME.getStruct ().getClass () );
-        struct.addMember ( FILETIME.getStruct ().getClass () );
-        struct.addMember ( FILETIME.getStruct ().getClass () );
-        struct.addMember ( Enum.class );
+        struct.addMember ( FILETIME.getStruct () );
+        struct.addMember ( FILETIME.getStruct () );
+        struct.addMember ( FILETIME.getStruct () );
+        struct.addMember ( Short.class ); // enum: OPCSERVERSTATE
         struct.addMember ( Integer.class );
         struct.addMember ( Integer.class );
         struct.addMember ( Short.class );
