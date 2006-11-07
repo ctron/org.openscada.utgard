@@ -6,31 +6,35 @@ import org.jinterop.dcom.core.JIStruct;
 public class FILETIME
 {
     private int _high = 0;
+
     private int _low = 0;
-    
+
     public FILETIME ( FILETIME arg0 )
     {
         _high = arg0._high;
         _low = arg0._low;
     }
-    
+
     public int getHigh ()
     {
         return _high;
     }
+
     public void setHigh ( int high )
     {
         _high = high;
     }
+
     public int getLow ()
     {
         return _low;
     }
+
     public void setLow ( int low )
     {
         _low = low;
     }
-    
+
     @Override
     public int hashCode ()
     {
@@ -40,6 +44,7 @@ public class FILETIME
         result = PRIME * result + _low;
         return result;
     }
+
     @Override
     public boolean equals ( Object obj )
     {
@@ -56,14 +61,14 @@ public class FILETIME
             return false;
         return true;
     }
-    
+
     public static JIStruct getStruct () throws JIException
     {
         JIStruct struct = new JIStruct ();
-        
+
         struct.addMember ( Integer.class );
         struct.addMember ( Integer.class );
-        
+
         return struct;
     }
 }

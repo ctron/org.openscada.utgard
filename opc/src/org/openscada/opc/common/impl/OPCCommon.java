@@ -37,7 +37,6 @@ public class OPCCommon
         Object[] result = _opcCommonObject.call ( callObject );
         return (Integer)result[0];
     }
-    
 
     public String getErrorString ( int errorCode ) throws JIException
     {
