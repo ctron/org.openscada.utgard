@@ -47,4 +47,9 @@ public class OPCGroup
         
         return state;
     }
+    
+    public OPCItemMgt getItemManagement () throws IllegalArgumentException, UnknownHostException, JIException
+    {
+        return new OPCItemMgt ( _opcGroupStateMgt );
+    }
 }

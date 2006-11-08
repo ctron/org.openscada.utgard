@@ -1,6 +1,9 @@
 package org.openscada.opc.da.test;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.common.JISystem;
@@ -10,8 +13,12 @@ import org.jinterop.dcom.core.JIClsid;
 import org.jinterop.dcom.core.JIComServer;
 import org.jinterop.dcom.core.JISession;
 import org.openscada.opc.da.OPCGroupState;
+import org.openscada.opc.da.OPCITEMDEF;
+import org.openscada.opc.da.PropertyDescription;
 import org.openscada.opc.da.impl.OPCBrowseServerAddressSpace;
 import org.openscada.opc.da.impl.OPCGroup;
+import org.openscada.opc.da.impl.OPCItemMgt;
+import org.openscada.opc.da.impl.OPCItemProperties;
 import org.openscada.opc.da.impl.OPCServer;
 
 public class Test1
@@ -38,6 +45,18 @@ public class Test1
         System.out.println ( "Locale ID: " + state.getLocaleID () );
         System.out.println ( "Client Handle: " + state.getClientHandle () );
         System.out.println ( "Server Handle: " + state.getServerHandle () );
+    }
+    
+    public static void dumpItemProperties ( OPCItemProperties itemProperties, String itemID ) throws JIException
+    {
+        Collection<PropertyDescription> properties = itemProperties.queryAvailableProperties ( itemID );
+        System.out.println ( String.format ( "Item Properties for '%s' (count:%d)", itemID, properties.size () ) );
+        for ( PropertyDescription pd : properties )
+        {
+            System.out.println ( "ID: " + pd.getId () );
+            System.out.println ( "Description: " + pd.getDescription () );
+            System.out.println ( "Variable Type: " + pd.getVarType () );
+        }
     }
     
     public static void main ( String[] args ) throws IllegalArgumentException, UnknownHostException, JIException
@@ -71,6 +90,19 @@ public class Test1
            OPCGroup group = server.addGroup ( "test", true, 1000, 1234, 0, 0.0f, 1033 );
            group = server.getGroupByName ( "test" );
            dumpGroupState ( group );
+           
+           /*
+           OPCItemMgt itemManagement = group.getItemManagement ();
+           List<OPCITEMDEF> items = new ArrayList<OPCITEMDEF> ();
+           OPCITEMDEF item = new OPCITEMDEF ();
+           item.setItemID ( "Saw-toothed Waves.Int4" );
+           items.add ( item );
+           itemManagement.validate ( items );
+           */
+           OPCItemProperties itemProperties = server.getItemPropertiesService ();
+           dumpItemProperties ( itemProperties, "Saw-toothed Waves.Int" );
+           
+           // clean up
            server.removeGroup ( group, true );
            //server.getGroupByName ( "test" );
            // server.getStatus ();

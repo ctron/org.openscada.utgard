@@ -100,4 +100,16 @@ public class OPCServer extends OPCCommon
         
         return new OPCGroup ( ComFactory.createCOMInstance ( _opcServerObject, ptr ) );
     }
+    
+    public OPCItemProperties getItemPropertiesService ()
+    {
+        try
+        {
+            return new OPCItemProperties ( _opcServerObject );
+        }
+        catch ( Exception e )
+        {
+            return null;
+        }
+    }
 }
