@@ -4,9 +4,14 @@ import java.net.UnknownHostException;
 
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.common.JISystem;
+import org.jinterop.dcom.core.IJIComObject;
+import org.jinterop.dcom.core.IJIUnknown;
 import org.jinterop.dcom.core.JIClsid;
 import org.jinterop.dcom.core.JIComServer;
 import org.jinterop.dcom.core.JISession;
+import org.openscada.opc.da.OPCGroupState;
+import org.openscada.opc.da.impl.OPCBrowseServerAddressSpace;
+import org.openscada.opc.da.impl.OPCGroup;
 import org.openscada.opc.da.impl.OPCServer;
 
 public class Test1
@@ -14,6 +19,25 @@ public class Test1
     public static void showError ( OPCServer server, int errorCode ) throws JIException
     {
         System.out.println ( String.format ( "Error (%X): '%s'", errorCode, server.getErrorString ( errorCode, 1033 ) ) );
+    }
+    
+    public static void browse ( OPCBrowseServerAddressSpace browser ) throws JIException
+    {
+        System.out.println ( String.format ( "Organization: %s", browser.queryOrganization () ) );
+    }
+    
+    public static void dumpGroupState ( OPCGroup group ) throws JIException
+    {
+        OPCGroupState state = group.getState ();
+        
+        System.out.println ( "Name: " + state.getName () );
+        System.out.println ( "Active: " + state.isActive () );
+        System.out.println ( "Update Rate: " + state.getUpdateRate () );
+        System.out.println ( "Time Bias: " + state.getTimeBias () );
+        System.out.println ( "Percent Deadband: " + state.getPercentDeadband () );
+        System.out.println ( "Locale ID: " + state.getLocaleID () );
+        System.out.println ( "Client Handle: " + state.getClientHandle () );
+        System.out.println ( "Server Handle: " + state.getServerHandle () );
     }
     
     public static void main ( String[] args ) throws IllegalArgumentException, UnknownHostException, JIException
@@ -30,8 +54,9 @@ public class Test1
             // session );
             JIComServer comServer = new JIComServer ( JIClsid.valueOf ( "F8582CF2-88FB-11D0-B850-00C0F0104305" ),
                     args[0], session );
-            server = new OPCServer ( comServer.createInstance () );
-
+            IJIComObject serverObject = comServer.createInstance ();
+            server = new OPCServer ( serverObject );
+            
             // server.GetStatus ();
             server.setLocaleID ( 1033 );
             System.out.println ( String.format ( "LCID: %d", server.getLocaleID () ) );
@@ -40,10 +65,16 @@ public class Test1
             {
                 System.out.println ( String.format ( "Available LCID: %d", i ) );
             }
-            //showError ( server, 0x800706F7 );
-            //server.addGroup ( "", true, 1000, 1, 0, 0.0f, 1033 );
+            OPCBrowseServerAddressSpace serverBrowser = new OPCBrowseServerAddressSpace (serverObject);
+            browse ( serverBrowser );
+
+           OPCGroup group = server.addGroup ( "test", true, 1000, 1234, 0, 0.0f, 1033 );
+           dumpGroupState ( group );
+           server.removeGroup ( group, true );
            //server.getGroupByName ( "test" );
-            server.getStatus ();
+           // server.getStatus ();
+            
+           
         }
         catch ( JIException e )
         {

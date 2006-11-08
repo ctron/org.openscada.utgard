@@ -2,6 +2,8 @@ package org.openscada.opc.da.impl;
 
 import java.net.UnknownHostException;
 
+import javax.swing.JInternalFrame;
+
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.IJIComObject;
 import org.jinterop.dcom.core.IJIUnknown;
@@ -42,52 +44,44 @@ public class OPCServer extends OPCCommon
 
         return null;
     }
-    
-    public void addGroup ( String name, boolean active, int updateRate, int clientHandle,
-            int timeBias, float percentDeadband, int localeID ) throws JIException
+
+    public OPCGroup addGroup ( String name, boolean active, int updateRate, int clientHandle, int timeBias, float percentDeadband, int localeID ) throws JIException, IllegalArgumentException, UnknownHostException
     {
         JICallObject callObject = new JICallObject ( _opcServerObject.getIpid (), true );
         callObject.setOpnum ( 0 );
-        
+
         callObject.addInParamAsString ( name, JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR );
         callObject.addInParamAsInt ( active ? 1 : 0, JIFlags.FLAG_NULL );
         callObject.addInParamAsInt ( updateRate, JIFlags.FLAG_NULL );
         callObject.addInParamAsInt ( clientHandle, JIFlags.FLAG_NULL );
-        callObject.addInParamAsInt ( timeBias, JIFlags.FLAG_NULL );
-        callObject.addInParamAsFloat ( percentDeadband, JIFlags.FLAG_NULL );
+        callObject.addInParamAsPointer ( new JIPointer ( new Integer ( timeBias ) ), JIFlags.FLAG_NULL );
+        callObject.addInParamAsPointer ( new JIPointer ( new Float ( percentDeadband ) ), JIFlags.FLAG_NULL );
         callObject.addInParamAsInt ( localeID, JIFlags.FLAG_NULL );
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
         callObject.addInParamAsUUID ( Constants.IOPCGroupStateMgt_IID, JIFlags.FLAG_NULL );
         callObject.addOutParamAsType ( JIInterfacePointer.class, JIFlags.FLAG_NULL );
+
+        Object[] result = _opcServerObject.call ( callObject );
         
-        /*
-        [in, string]        LPCWSTR    szName,
-        [in]                BOOL       bActive,
-        [in]                DWORD      dwRequestedUpdateRate,
-        [in]                OPCHANDLE  hClientGroup,
-        [unique, in]        LONG*      pTimeBias,
-        [unique, in]        FLOAT*     pPercentDeadband,
-        [in]                DWORD      dwLCID,
-        [out]               OPCHANDLE* phServerGroup,
-        [out]               DWORD*     pRevisedUpdateRate,
-        [in]                REFIID     riid,
-        [out, iid_is(riid)] LPUNKNOWN* ppUnk
-         */
+        JIInterfacePointer ptr = (JIInterfacePointer)result[2];
         
-        Object [] result = _opcServerObject.call ( callObject );
+        return new OPCGroup ( ComFactory.createCOMInstance ( _opcServerObject, ptr ) );
     }
     
-    /*
-    public IJIUnknown createInstance(String riid) throws JIException
+    public void removeGroup ( int serverHandle, boolean force ) throws JIException
     {
-        JICallObject callObject = new JICallObject(comObject.getIpid(),true);
-        callObject.setOpnum(13);
+        JICallObject callObject = new JICallObject ( _opcServerObject.getIpid (), true );
+        callObject.setOpnum ( 4 );
         
-        callObject.addInParamAsUUID(riid,JIFlags.FLAG_NULL);
-        callObject.addOutParamAsType(JIInterfacePointer.class,JIFlags.FLAG_NULL);
-        Object[] result = comObject.call(callObject);
-        return ComFactory.createCOMInstance(comObject,(JIInterfacePointer)result[0]);
+        callObject.addInParamAsInt ( serverHandle, JIFlags.FLAG_NULL );
+        callObject.addInParamAsInt ( force ? 1 : 0, JIFlags.FLAG_NULL );
+        
+        _opcServerObject.call ( callObject );
     }
-    */
+    
+    public void removeGroup ( OPCGroup group, boolean force ) throws JIException
+    {
+        removeGroup ( group.getState ().getServerHandle (), force );
+    }
 }
