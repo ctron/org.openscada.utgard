@@ -69,12 +69,11 @@ public class Test1
             browse ( serverBrowser );
 
            OPCGroup group = server.addGroup ( "test", true, 1000, 1234, 0, 0.0f, 1033 );
+           group = server.getGroupByName ( "test" );
            dumpGroupState ( group );
            server.removeGroup ( group, true );
            //server.getGroupByName ( "test" );
            // server.getStatus ();
-            
-           
         }
         catch ( JIException e )
         {
