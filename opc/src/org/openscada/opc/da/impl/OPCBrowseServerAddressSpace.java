@@ -31,8 +31,6 @@ public class OPCBrowseServerAddressSpace extends OPCCommon
         
         Object result[] = _opcBrowseServerAddressSpaceObject.call ( callObject );
         
-        System.out.println ( result[0] );
-        
         return OPCNAMESPACETYPE.fromID ( (Short)result[0] );
     }
 }
