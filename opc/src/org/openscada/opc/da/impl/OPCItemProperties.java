@@ -79,7 +79,17 @@ public class OPCItemProperties
         callObject.addOutParamAsObject (  new JIPointer ( new JIArray ( JIVariant.class, null, 1, true ) ), JIFlags.FLAG_NULL );
         callObject.addOutParamAsObject (  new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
 
-        Object result[] = _opcItemProperties.call ( callObject );
+        Object result[] = null;
+        try
+        {
+            result = _opcItemProperties.call ( callObject );
+        }
+        catch ( JIException e )
+        {
+            if ( e.getErrorCode () != Constants.S_FALSE )
+                throw e;
+            result = callObject.getResultsInCaseOfException ();
+        }
 
         List<PropertyValue> propertyValues = new LinkedList<PropertyValue> ();
 
@@ -112,21 +122,33 @@ public class OPCItemProperties
         callObject.addInParamAsInt ( properties.length, JIFlags.FLAG_NULL );
         callObject.addInParamAsArray ( new JIArray ( ids, true ), JIFlags.FLAG_NULL );
 
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ), null, 1, true ) ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( new
+                JIPointer(new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR )),
+                null, 1, true ) ), JIFlags.FLAG_NULL ); 
         callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
      
-        Object result[] = _opcItemProperties.call ( callObject );
+        Object result[] = null;
+        try
+        {
+            result = _opcItemProperties.call ( callObject );
+        }
+        catch ( JIException e )
+        {
+            if ( e.getErrorCode () != Constants.S_FALSE )
+                throw e;
+            result = callObject.getResultsInCaseOfException ();
+        }
 
         List<ItemLookup> propertyValues = new LinkedList<ItemLookup> ();
 
-        JIString[] itemIDs = (JIString[]) ( (JIArray) ( (JIPointer)result[0] ).getReferent () ).getArrayInstance ();
+        JIPointer[] itemIDs = (JIPointer[]) ( (JIArray) ( (JIPointer)result[0] ).getReferent () ).getArrayInstance ();
         Integer[] errorCodes = (Integer[]) ( (JIArray) ( (JIPointer)result[1] ).getReferent () ).getArrayInstance ();
 
         for ( int i = 0; i < properties.length; i++ )
         {
             ItemLookup il = new ItemLookup ();
             il.setId ( properties[i] );
-            il.setItemId ( itemIDs[i].getString () );
+            il.setItemId ( ((JIString)itemIDs[i].getReferent ()).getString () );
             il.setErrorCode ( errorCodes[i] );
             propertyValues.add ( il );
         }
