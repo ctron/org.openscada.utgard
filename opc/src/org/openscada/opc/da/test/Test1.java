@@ -3,7 +3,9 @@ package org.openscada.opc.da.test;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.ListResourceBundle;
 
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.common.JISystem;
@@ -12,11 +14,15 @@ import org.jinterop.dcom.core.IJIUnknown;
 import org.jinterop.dcom.core.JIClsid;
 import org.jinterop.dcom.core.JIComServer;
 import org.jinterop.dcom.core.JISession;
+import org.openscada.opc.da.IORequest;
+import org.openscada.opc.da.ItemLookup;
 import org.openscada.opc.da.OPCGroupState;
 import org.openscada.opc.da.OPCITEMDEF;
 import org.openscada.opc.da.PropertyDescription;
+import org.openscada.opc.da.PropertyValue;
 import org.openscada.opc.da.impl.OPCBrowseServerAddressSpace;
 import org.openscada.opc.da.impl.OPCGroup;
+import org.openscada.opc.da.impl.OPCItemIO;
 import org.openscada.opc.da.impl.OPCItemMgt;
 import org.openscada.opc.da.impl.OPCItemProperties;
 import org.openscada.opc.da.impl.OPCServer;
@@ -47,16 +53,55 @@ public class Test1
         System.out.println ( "Server Handle: " + state.getServerHandle () );
     }
     
+    public static void dumpItemProperties2 ( OPCItemProperties itemProperties, String itemID, int... ids ) throws JIException
+    {
+        Collection<PropertyValue> values = itemProperties.getItemProperties ( itemID, ids );
+        for ( PropertyValue pv : values )
+        {
+            System.out.println ( String.format ( "ID: %d, Value: %s, Error Code: %d", pv.getId (), pv.getValue ().toString (), pv.getErrorCode () ) );
+        }
+    }
+    
+    public static void dumpItemPropertiesLookup ( OPCItemProperties itemProperties, String itemID, int... ids ) throws JIException
+    {
+        Collection<ItemLookup> values = itemProperties.lookupItemIDs ( itemID, ids );
+        for ( ItemLookup il : values )
+        {
+            System.out.println ( String.format ( "ID: %d, Item ID: %s, Error Code: %d", il.getId (), il.getItemId (), il.getErrorCode () ) );
+        }
+    }
+    
     public static void dumpItemProperties ( OPCItemProperties itemProperties, String itemID ) throws JIException
     {
         Collection<PropertyDescription> properties = itemProperties.queryAvailableProperties ( itemID );
+        int[] ids = new int[properties.size ()];
+        
         System.out.println ( String.format ( "Item Properties for '%s' (count:%d)", itemID, properties.size () ) );
+        int i = 0;
         for ( PropertyDescription pd : properties )
         {
+            ids[i] = pd.getId ();
             System.out.println ( "ID: " + pd.getId () );
             System.out.println ( "Description: " + pd.getDescription () );
             System.out.println ( "Variable Type: " + pd.getVarType () );
+            i++;
         }
+
+        //dumpItemPropertiesLookup ( itemProperties, itemID, ids );
+        dumpItemPropertiesLookup ( itemProperties, itemID, 1 );
+
+        //dumpItemProperties2 ( itemProperties, itemID, ids );
+        dumpItemProperties2 ( itemProperties, itemID, 1, 2 );
+    }
+    
+    public static void queryItems ( OPCItemIO itemIO, String ...items) throws JIException
+    {
+        List<IORequest> requests = new LinkedList<IORequest> ();
+        for ( String item : items )
+        {
+            requests.add ( new IORequest ( item, 0 ) );
+        }
+        itemIO.read ( requests.toArray ( new IORequest[0] ) );
     }
     
     public static void main ( String[] args ) throws IllegalArgumentException, UnknownHostException, JIException
@@ -102,9 +147,11 @@ public class Test1
            OPCItemProperties itemProperties = server.getItemPropertiesService ();
            dumpItemProperties ( itemProperties, "Saw-toothed Waves.Int" );
            
+           OPCItemIO itemIO = server.getItemIOService ();
+           //queryItems ( itemIO, "Saw-toothed Waves.Int" );
+           
            // clean up
            server.removeGroup ( group, true );
-           //server.getGroupByName ( "test" );
            // server.getStatus ();
         }
         catch ( JIException e )

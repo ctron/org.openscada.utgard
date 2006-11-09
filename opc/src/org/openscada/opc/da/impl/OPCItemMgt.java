@@ -53,7 +53,7 @@ public class OPCItemMgt
         callObject.addInParamAsInt ( items.size (), JIFlags.FLAG_NULL );
         callObject.addInParamAsPointer ( new JIPointer ( itemArray ), JIFlags.FLAG_NULL );
         callObject.addInParamAsInt ( 0, JIFlags.FLAG_NULL ); // don't update blobs
-        callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
+        //callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
         callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( OPCITEMRESULT.getStruct (), null, 1, true ) ), JIFlags.FLAG_NULL );
         callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
         

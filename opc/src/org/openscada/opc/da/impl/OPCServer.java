@@ -112,4 +112,16 @@ public class OPCServer extends OPCCommon
             return null;
         }
     }
+    
+    public OPCItemIO getItemIOService ()
+    {
+        try
+        {
+            return new OPCItemIO ( _opcServerObject );
+        }
+        catch ( Exception e )
+        {
+            return null;
+        }
+    }
 }

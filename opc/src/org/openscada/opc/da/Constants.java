@@ -8,4 +8,5 @@ public interface Constants
     public static final String IOPCBrowseServerAddressSpace_IID = "39C13A4F-011E-11D0-9675-0020AFD8ADB3";
     public static final String IOPCItemMgt_IID = "39C13A54-011E-11D0-9675-0020AFD8ADB3";
     public static final String IOPCItemProperties_IID = "39C13A72-011E-11D0-9675-0020AFD8ADB3";
+    public static final String IOPCItemIO_IID = "85C0B427-2893-4CBC-BD78-E5FC5146F08F";
 }
