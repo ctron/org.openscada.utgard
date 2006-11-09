@@ -52,4 +52,14 @@ public class OPCGroup
     {
         return new OPCItemMgt ( _opcGroupStateMgt );
     }
+    
+    public void setName ( String name ) throws JIException
+    {
+        JICallObject callObject = new JICallObject ( _opcGroupStateMgt.getIpid (), true );
+        callObject.setOpnum ( 2 );
+        
+        callObject.addInParamAsString ( name, JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR );
+        
+        _opcGroupStateMgt.call ( callObject );
+    }
 }

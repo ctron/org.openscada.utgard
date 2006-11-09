@@ -91,7 +91,7 @@ public class Test1
         dumpItemPropertiesLookup ( itemProperties, itemID, 1 );
 
         //dumpItemProperties2 ( itemProperties, itemID, ids );
-        dumpItemProperties2 ( itemProperties, itemID, 1, 2 );
+        dumpItemProperties2 ( itemProperties, itemID, 1 );
     }
     
     public static void queryItems ( OPCItemIO itemIO, String ...items) throws JIException
@@ -133,7 +133,8 @@ public class Test1
             browse ( serverBrowser );
 
            OPCGroup group = server.addGroup ( "test", true, 1000, 1234, 0, 0.0f, 1033 );
-           group = server.getGroupByName ( "test" );
+           group.setName ( "test2" );
+           group = server.getGroupByName ( "test2" );
            dumpGroupState ( group );
            
            /*

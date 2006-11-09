@@ -114,7 +114,7 @@ public class OPCItemProperties
         callObject.addInParamAsInt ( properties.length, JIFlags.FLAG_NULL );
         callObject.addInParamAsArray ( new JIArray ( ids, true ), JIFlags.FLAG_NULL );
 
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_BSTR ), null, 1, true ) ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ), null, 1, true ) ), JIFlags.FLAG_NULL );
         callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
      
         Object result[] = _opcItemProperties.call ( callObject );
