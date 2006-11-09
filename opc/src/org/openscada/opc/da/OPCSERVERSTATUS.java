@@ -1,7 +1,6 @@
 package org.openscada.opc.da;
 
 import org.jinterop.dcom.common.JIException;
-import org.jinterop.dcom.core.JIPointer;
 import org.jinterop.dcom.core.JIStruct;
 import org.openscada.opc.common.FILETIME;
 

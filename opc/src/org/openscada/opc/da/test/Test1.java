@@ -1,29 +1,24 @@
 package org.openscada.opc.da.test;
 
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListResourceBundle;
 
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.common.JISystem;
 import org.jinterop.dcom.core.IJIComObject;
-import org.jinterop.dcom.core.IJIUnknown;
 import org.jinterop.dcom.core.JIClsid;
 import org.jinterop.dcom.core.JIComServer;
 import org.jinterop.dcom.core.JISession;
 import org.openscada.opc.da.IORequest;
 import org.openscada.opc.da.ItemLookup;
 import org.openscada.opc.da.OPCGroupState;
-import org.openscada.opc.da.OPCITEMDEF;
 import org.openscada.opc.da.PropertyDescription;
 import org.openscada.opc.da.PropertyValue;
 import org.openscada.opc.da.impl.OPCBrowseServerAddressSpace;
 import org.openscada.opc.da.impl.OPCGroup;
 import org.openscada.opc.da.impl.OPCItemIO;
-import org.openscada.opc.da.impl.OPCItemMgt;
 import org.openscada.opc.da.impl.OPCItemProperties;
 import org.openscada.opc.da.impl.OPCServer;
 
@@ -134,8 +129,10 @@ public class Test1
 
            OPCGroup group = server.addGroup ( "test", true, 1000, 1234, 0, 0.0f, 1033 );
            group.setName ( "test2" );
+           OPCGroup group2 = group.clone ( "test" );
            group = server.getGroupByName ( "test2" );
            dumpGroupState ( group );
+           dumpGroupState ( group2 );
            
            /*
            OPCItemMgt itemManagement = group.getItemManagement ();
@@ -145,6 +142,7 @@ public class Test1
            items.add ( item );
            itemManagement.validate ( items );
            */
+           
            OPCItemProperties itemProperties = server.getItemPropertiesService ();
            dumpItemProperties ( itemProperties, "Saw-toothed Waves.Int" );
            
@@ -153,6 +151,7 @@ public class Test1
            
            // clean up
            server.removeGroup ( group, true );
+           server.removeGroup ( group2, true );
            // server.getStatus ();
         }
         catch ( JIException e )

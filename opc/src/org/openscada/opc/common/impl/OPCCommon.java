@@ -1,7 +1,6 @@
 package org.openscada.opc.common.impl;
 
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 

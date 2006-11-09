@@ -2,18 +2,13 @@ package org.openscada.opc.da.impl;
 
 import java.net.UnknownHostException;
 
-import javax.swing.JInternalFrame;
-
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.IJIComObject;
-import org.jinterop.dcom.core.IJIUnknown;
 import org.jinterop.dcom.core.JICallObject;
 import org.jinterop.dcom.core.JIFlags;
 import org.jinterop.dcom.core.JIInterfacePointer;
 import org.jinterop.dcom.core.JIPointer;
-import org.jinterop.dcom.core.JIString;
 import org.jinterop.dcom.core.JIStruct;
-import org.jinterop.dcom.core.JIVariant;
 import org.jinterop.dcom.win32.ComFactory;
 import org.openscada.opc.common.impl.OPCCommon;
 import org.openscada.opc.da.Constants;

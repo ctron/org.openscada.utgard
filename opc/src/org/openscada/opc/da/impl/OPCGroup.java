@@ -6,7 +6,9 @@ import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.IJIComObject;
 import org.jinterop.dcom.core.JICallObject;
 import org.jinterop.dcom.core.JIFlags;
+import org.jinterop.dcom.core.JIInterfacePointer;
 import org.jinterop.dcom.core.JIString;
+import org.jinterop.dcom.win32.ComFactory;
 import org.openscada.opc.da.Constants;
 import org.openscada.opc.da.OPCGroupState;
 
@@ -53,6 +55,11 @@ public class OPCGroup
         return new OPCItemMgt ( _opcGroupStateMgt );
     }
     
+    /**
+     * Rename to group
+     * @param name the new name
+     * @throws JIException
+     */
     public void setName ( String name ) throws JIException
     {
         JICallObject callObject = new JICallObject ( _opcGroupStateMgt.getIpid (), true );
@@ -61,5 +68,29 @@ public class OPCGroup
         callObject.addInParamAsString ( name, JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR );
         
         _opcGroupStateMgt.call ( callObject );
+    }
+    
+    /**
+     * Clone the group
+     * @param name the name of the cloned group
+     * @return The cloned group
+     * @throws JIException 
+     * @throws UnknownHostException 
+     * @throws IllegalArgumentException 
+     */
+    public OPCGroup clone ( String name ) throws JIException, IllegalArgumentException, UnknownHostException
+    {
+        JICallObject callObject = new JICallObject ( _opcGroupStateMgt.getIpid (), true );
+        callObject.setOpnum ( 3 );
+        
+        callObject.addInParamAsString ( name, JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR );
+        callObject.addInParamAsUUID ( Constants.IOPCGroupStateMgt_IID, JIFlags.FLAG_NULL );
+        callObject.addOutParamAsType ( JIInterfacePointer.class, JIFlags.FLAG_NULL );
+
+        Object[] result = _opcGroupStateMgt.call ( callObject );
+        
+        JIInterfacePointer ptr = (JIInterfacePointer)result[0];
+        
+        return new OPCGroup ( ComFactory.createCOMInstance ( _opcGroupStateMgt, ptr ) );
     }
 }
