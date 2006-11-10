@@ -6,7 +6,6 @@ import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.IJIComObject;
 import org.jinterop.dcom.core.JICallObject;
 import org.jinterop.dcom.core.JIFlags;
-import org.openscada.opc.common.impl.OPCCommon;
 import org.openscada.opc.da.Constants;
 import org.openscada.opc.da.OPCBROWSEDIRECTION;
 import org.openscada.opc.da.OPCBROWSETYPE;

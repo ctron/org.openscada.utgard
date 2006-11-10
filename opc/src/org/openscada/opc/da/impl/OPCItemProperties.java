@@ -13,10 +13,10 @@ import org.jinterop.dcom.core.JIFlags;
 import org.jinterop.dcom.core.JIPointer;
 import org.jinterop.dcom.core.JIString;
 import org.jinterop.dcom.core.JIVariant;
+import org.openscada.opc.common.KeyedResult;
+import org.openscada.opc.common.KeyedResultSet;
 import org.openscada.opc.da.Constants;
-import org.openscada.opc.da.ItemLookup;
 import org.openscada.opc.da.PropertyDescription;
-import org.openscada.opc.da.PropertyValue;
 
 public class OPCItemProperties
 {
@@ -61,8 +61,11 @@ public class OPCItemProperties
         return properties;
     }
 
-    public Collection<PropertyValue> getItemProperties ( String itemID, int... properties ) throws JIException
+    public KeyedResultSet<Integer,JIVariant> getItemProperties ( String itemID, int... properties ) throws JIException
     {
+        if ( properties.length == 0 )
+            return new KeyedResultSet<Integer, JIVariant> ();
+        
         Integer[] ids = new Integer[properties.length];
         for ( int i = 0; i < properties.length; i++ )
         {
@@ -91,24 +94,25 @@ public class OPCItemProperties
             result = callObject.getResultsInCaseOfException ();
         }
 
-        List<PropertyValue> propertyValues = new LinkedList<PropertyValue> ();
-
         JIVariant[] values = (JIVariant[]) ( (JIArray) ( (JIPointer)result[0] ).getReferent () ).getArrayInstance ();
         Integer[] errorCodes = (Integer[]) ( (JIArray) ( (JIPointer)result[1] ).getReferent () ).getArrayInstance ();
 
+        KeyedResultSet<Integer, JIVariant> results = new KeyedResultSet<Integer, JIVariant> ();
         for ( int i = 0; i < properties.length; i++ )
         {
-            PropertyValue pv = new PropertyValue ();
-            pv.setId ( properties[i] );
-            pv.setValue ( values[i] );
-            pv.setErrorCode ( errorCodes[i] );
-            propertyValues.add ( pv );
+            results.add ( new KeyedResult<Integer, JIVariant> ( properties[i],
+                    values[i],
+                    errorCodes[i]
+                    ) );
         }
-        return propertyValues;
+        return results;
     }
     
-    public Collection<ItemLookup> lookupItemIDs ( String itemID, int... properties ) throws JIException
+    public KeyedResultSet<Integer,String> lookupItemIDs ( String itemID, int... properties ) throws JIException
     {
+        if ( properties.length == 0 )
+            return new KeyedResultSet<Integer, String> ();
+        
         Integer[] ids = new Integer[properties.length];
         for ( int i = 0; i < properties.length; i++ )
         {
@@ -139,19 +143,18 @@ public class OPCItemProperties
             result = callObject.getResultsInCaseOfException ();
         }
 
-        List<ItemLookup> propertyValues = new LinkedList<ItemLookup> ();
-
         JIPointer[] itemIDs = (JIPointer[]) ( (JIArray) ( (JIPointer)result[0] ).getReferent () ).getArrayInstance ();
         Integer[] errorCodes = (Integer[]) ( (JIArray) ( (JIPointer)result[1] ).getReferent () ).getArrayInstance ();
 
+        KeyedResultSet<Integer,String> results = new KeyedResultSet<Integer, String> ();
+        
         for ( int i = 0; i < properties.length; i++ )
         {
-            ItemLookup il = new ItemLookup ();
-            il.setId ( properties[i] );
-            il.setItemId ( ((JIString)itemIDs[i].getReferent ()).getString () );
-            il.setErrorCode ( errorCodes[i] );
-            propertyValues.add ( il );
+            results.add ( new KeyedResult<Integer,String> ( properties[i],
+                    ((JIString)itemIDs[i].getReferent ()).getString (),
+                    errorCodes[i]
+                    ) );
         }
-        return propertyValues;
+        return results;
     }
 }

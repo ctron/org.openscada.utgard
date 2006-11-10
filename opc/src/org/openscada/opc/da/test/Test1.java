@@ -12,18 +12,15 @@ import org.jinterop.dcom.core.IJIComObject;
 import org.jinterop.dcom.core.JIClsid;
 import org.jinterop.dcom.core.JIComServer;
 import org.jinterop.dcom.core.JISession;
+import org.jinterop.dcom.core.JIVariant;
 import org.openscada.opc.common.KeyedResult;
 import org.openscada.opc.common.KeyedResultSet;
-import org.openscada.opc.common.Result;
-import org.openscada.opc.common.ResultSet;
 import org.openscada.opc.da.IORequest;
-import org.openscada.opc.da.ItemLookup;
 import org.openscada.opc.da.OPCBROWSEDIRECTION;
 import org.openscada.opc.da.OPCGroupState;
 import org.openscada.opc.da.OPCITEMDEF;
 import org.openscada.opc.da.OPCITEMRESULT;
 import org.openscada.opc.da.PropertyDescription;
-import org.openscada.opc.da.PropertyValue;
 import org.openscada.opc.da.impl.OPCBrowseServerAddressSpace;
 import org.openscada.opc.da.impl.OPCGroup;
 import org.openscada.opc.da.impl.OPCItemIO;
@@ -60,19 +57,19 @@ public class Test1
     
     public static void dumpItemProperties2 ( OPCItemProperties itemProperties, String itemID, int... ids ) throws JIException
     {
-        Collection<PropertyValue> values = itemProperties.getItemProperties ( itemID, ids );
-        for ( PropertyValue pv : values )
+        KeyedResultSet<Integer, JIVariant> values = itemProperties.getItemProperties ( itemID, ids );
+        for ( KeyedResult<Integer, JIVariant> entry : values )
         {
-            System.out.println ( String.format ( "ID: %d, Value: %s, Error Code: %08x", pv.getId (), pv.getValue ().toString (), pv.getErrorCode () ) );
+            System.out.println ( String.format ( "ID: %d, Value: %s, Error Code: %08x", entry.getKey (), entry.getValue ().toString (), entry.getErrorCode () ) );
         }
     }
     
     public static void dumpItemPropertiesLookup ( OPCItemProperties itemProperties, String itemID, int... ids ) throws JIException
     {
-        Collection<ItemLookup> values = itemProperties.lookupItemIDs ( itemID, ids );
-        for ( ItemLookup il : values )
+        KeyedResultSet<Integer, String> values = itemProperties.lookupItemIDs ( itemID, ids );
+        for ( KeyedResult<Integer, String> entry : values )
         {
-            System.out.println ( String.format ( "ID: %d, Item ID: %s, Error Code: %08x", il.getId (), il.getItemId (), il.getErrorCode () ) );
+            System.out.println ( String.format ( "ID: %d, Item ID: %s, Error Code: %08x", entry.getKey (), entry.getValue (), entry.getErrorCode () ) );
         }
     }
     
@@ -93,13 +90,10 @@ public class Test1
         }
 
         System.out.println ( "Lookup" );
-        //dumpItemPropertiesLookup ( itemProperties, itemID, ids );
-        //dumpItemPropertiesLookup ( itemProperties, itemID, -1 );
+        dumpItemPropertiesLookup ( itemProperties, itemID, ids );
 
         System.out.println ( "Query" );
-        dumpItemProperties2 ( itemProperties, itemID, 8  );
-        //dumpItemProperties2 ( itemProperties, itemID, ids );
-        //dumpItemProperties2 ( itemProperties, itemID, -1 );
+        dumpItemProperties2 ( itemProperties, itemID, ids );
     }
     
     public static void queryItems ( OPCItemIO itemIO, String ...items) throws JIException

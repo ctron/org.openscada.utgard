@@ -1,10 +1,6 @@
 package org.openscada.opc.da.impl;
 
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.IJIComObject;
@@ -12,12 +8,9 @@ import org.jinterop.dcom.core.JIArray;
 import org.jinterop.dcom.core.JICallObject;
 import org.jinterop.dcom.core.JIFlags;
 import org.jinterop.dcom.core.JIPointer;
-import org.jinterop.dcom.core.JIString;
 import org.jinterop.dcom.core.JIStruct;
 import org.openscada.opc.common.KeyedResult;
 import org.openscada.opc.common.KeyedResultSet;
-import org.openscada.opc.common.Result;
-import org.openscada.opc.common.ResultSet;
 import org.openscada.opc.da.Constants;
 import org.openscada.opc.da.OPCITEMDEF;
 import org.openscada.opc.da.OPCITEMRESULT;
