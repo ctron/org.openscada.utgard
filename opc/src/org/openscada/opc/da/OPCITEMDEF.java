@@ -1,18 +1,20 @@
 package org.openscada.opc.da;
 
+import org.jinterop.dcom.core.JIVariant;
+
 public class OPCITEMDEF
 {
-    private String _accessPath;
+    private String _accessPath = "";
 
-    private String _itemID;
+    private String _itemID = "";
 
-    private boolean _active;
+    private boolean _active = true;
 
-    private int _clientHandle;
+    private int _clientHandle = 0;
 
-    private short _requestedDataType;
+    private short _requestedDataType = JIVariant.VT_EMPTY;
 
-    private short _reserved;
+    private short _reserved = 0;
 
     public String getAccessPath ()
     {

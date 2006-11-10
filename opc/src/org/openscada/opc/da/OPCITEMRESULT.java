@@ -3,12 +3,13 @@ package org.openscada.opc.da;
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.JIPointer;
 import org.jinterop.dcom.core.JIStruct;
+import org.jinterop.dcom.core.JIVariant;
 
 public class OPCITEMRESULT
 {
     private int _serverHandle = 0;
 
-    private short _canonicalDataType = 0;
+    private short _canonicalDataType = JIVariant.VT_EMPTY;
 
     private short _reserved = 0;
 

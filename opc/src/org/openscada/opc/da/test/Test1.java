@@ -187,7 +187,7 @@ public class Test1
            addItems ( group, "Saw-toothed Waves.Int" , "Saw-toothed Waves.Int2" );
            
            OPCItemProperties itemProperties = server.getItemPropertiesService ();
-           //dumpItemProperties ( itemProperties, "Saw-toothed Waves.Int" );
+           dumpItemProperties ( itemProperties, "Saw-toothed Waves.Int" );
            
            OPCItemIO itemIO = server.getItemIOService ();
            //queryItems ( itemIO, "Saw-toothed Waves.Int" );

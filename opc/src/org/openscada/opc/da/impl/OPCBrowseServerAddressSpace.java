@@ -12,13 +12,12 @@ import org.openscada.opc.da.OPCBROWSEDIRECTION;
 import org.openscada.opc.da.OPCBROWSETYPE;
 import org.openscada.opc.da.OPCNAMESPACETYPE;
 
-public class OPCBrowseServerAddressSpace extends OPCCommon
+public class OPCBrowseServerAddressSpace
 {
     private IJIComObject _opcBrowseServerAddressSpaceObject = null;
 
     public OPCBrowseServerAddressSpace ( IJIComObject opcServer ) throws IllegalArgumentException, UnknownHostException, JIException
     {
-        super ( opcServer );
         _opcBrowseServerAddressSpaceObject = (IJIComObject)opcServer.queryInterface ( Constants.IOPCBrowseServerAddressSpace_IID );
     }
     
