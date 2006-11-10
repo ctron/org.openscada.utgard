@@ -47,16 +47,6 @@ public class OPCBrowseServerAddressSpace
     
     public void browse ( OPCBROWSETYPE browseType, String filterCriteria, int accessRights ) throws JIException
     {
-        /*
-    HRESULT BrowseOPCItemIDs(
-        [in]         OPCBROWSETYPE dwBrowseFilterType,
-        [in, string] LPCWSTR       szFilterCriteria,  
-        [in]         VARTYPE       vtDataTypeFilter,     
-        [in]         DWORD         dwAccessRightsFilter,
-        [out]        LPENUMSTRING* ppIEnumString
-    );         
-         */
-        
         JICallObject callObject = new JICallObject ( _opcBrowseServerAddressSpaceObject.getIpid (), true );
         callObject.setOpnum ( 2 );
         
