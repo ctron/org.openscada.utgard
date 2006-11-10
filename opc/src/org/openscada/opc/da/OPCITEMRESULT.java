@@ -67,4 +67,16 @@ public class OPCITEMRESULT
 
         return struct;
     }
+    
+    public static OPCITEMRESULT fromStruct ( JIStruct struct )
+    {
+        OPCITEMRESULT result = new OPCITEMRESULT ();
+        
+        result.setServerHandle ( (Integer)struct.getMember ( 0 ) );
+        result.setCanonicalDataType ( (Short)struct.getMember ( 1 ) );
+        result.setReserved ( (Short)struct.getMember ( 2 ) );
+        result.setAccessRights ( (Integer)struct.getMember ( 3 ) );
+        
+        return result;
+    }
 }

@@ -1,8 +1,10 @@
 package org.openscada.opc.da.impl;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.IJIComObject;
@@ -12,6 +14,10 @@ import org.jinterop.dcom.core.JIFlags;
 import org.jinterop.dcom.core.JIPointer;
 import org.jinterop.dcom.core.JIString;
 import org.jinterop.dcom.core.JIStruct;
+import org.openscada.opc.common.KeyedResult;
+import org.openscada.opc.common.KeyedResultSet;
+import org.openscada.opc.common.Result;
+import org.openscada.opc.common.ResultSet;
 import org.openscada.opc.da.Constants;
 import org.openscada.opc.da.OPCITEMDEF;
 import org.openscada.opc.da.OPCITEMRESULT;
@@ -25,18 +31,18 @@ public class OPCItemMgt
         _opcItemMgt = (IJIComObject)opcGroup.queryInterface ( Constants.IOPCItemMgt_IID );
     }
     
-    public Collection<OPCITEMRESULT> validate ( Collection<OPCITEMDEF> items ) throws JIException
+    public KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> validate ( OPCITEMDEF ... items ) throws JIException
     {
-        if ( items.size () == 0 )
-            return Collections.emptyList ();
+        if ( items.length == 0 )
+            return new KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> ();
         
         JICallObject callObject = new JICallObject ( _opcItemMgt.getIpid (), true );
         callObject.setOpnum ( 1 );
         
-        JIStruct struct[] = new JIStruct[items.size()];
-        int i = 0;
-        for ( OPCITEMDEF itemDef : items )
+        JIStruct struct[] = new JIStruct[items.length];
+        for ( int i = 0; i < items.length; i++ )
         {
+            OPCITEMDEF itemDef = items[i];
             struct[i] = new JIStruct ();
             struct[i].addMember ( new JIString ( itemDef.getAccessPath (), JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) );
             struct[i].addMember ( new JIString ( itemDef.getItemID (), JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) );
@@ -46,19 +52,74 @@ public class OPCItemMgt
             struct[i].addMember ( new JIPointer ( null ) ); // blob
             struct[i].addMember ( Short.valueOf ( itemDef.getRequestedDataType () ) );
             struct[i].addMember ( Short.valueOf ( itemDef.getReserved () ) );
-            i++;
         }
         JIArray itemArray = new JIArray ( struct, true);
         
-        callObject.addInParamAsInt ( items.size (), JIFlags.FLAG_NULL );
-        callObject.addInParamAsPointer ( new JIPointer ( itemArray ), JIFlags.FLAG_NULL );
+        callObject.addInParamAsInt ( items.length, JIFlags.FLAG_NULL );
+        callObject.addInParamAsArray ( itemArray, JIFlags.FLAG_NULL );
         callObject.addInParamAsInt ( 0, JIFlags.FLAG_NULL ); // don't update blobs
-        //callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
         callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( OPCITEMRESULT.getStruct (), null, 1, true ) ), JIFlags.FLAG_NULL );
         callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
         
         Object result [] = _opcItemMgt.call ( callObject );
         
-        return null;
+        JIStruct[] results = (JIStruct[]) ( (JIArray) ( (JIPointer)result[0] ).getReferent () ).getArrayInstance ();
+        Integer[] errorCodes = (Integer[]) ( (JIArray) ( (JIPointer)result[1] ).getReferent () ).getArrayInstance ();
+        
+        KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> resultList = new KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> ( items.length );
+        for ( int i = 0; i < items.length ; i++ )
+        {
+            OPCITEMRESULT itemResult = OPCITEMRESULT.fromStruct ( results[i] );
+            KeyedResult<OPCITEMDEF,OPCITEMRESULT> resultEntry = new KeyedResult<OPCITEMDEF,OPCITEMRESULT> ( items[i], itemResult, errorCodes[i] );
+            resultList.add ( resultEntry );
+        }
+        
+        return resultList;
     }
+    
+    public KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> add ( OPCITEMDEF ... items ) throws JIException
+    {
+        if ( items.length == 0 )
+            return new KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> ();
+        
+        JICallObject callObject = new JICallObject ( _opcItemMgt.getIpid (), true );
+        callObject.setOpnum ( 1 );
+        
+        JIStruct struct[] = new JIStruct[items.length];
+        for ( int i = 0; i < items.length; i++ )
+        {
+            OPCITEMDEF itemDef = items[i];
+            struct[i] = new JIStruct ();
+            struct[i].addMember ( new JIString ( itemDef.getAccessPath (), JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) );
+            struct[i].addMember ( new JIString ( itemDef.getItemID (), JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) );
+            struct[i].addMember ( Boolean.valueOf ( itemDef.isActive () ) );
+            struct[i].addMember ( Integer.valueOf ( itemDef.getClientHandle () ) );
+            struct[i].addMember ( Integer.valueOf ( 0 ) ); // blob size
+            struct[i].addMember ( new JIPointer ( null ) ); // blob
+            struct[i].addMember ( Short.valueOf ( itemDef.getRequestedDataType () ) );
+            struct[i].addMember ( Short.valueOf ( itemDef.getReserved () ) );
+        }
+        JIArray itemArray = new JIArray ( struct, true);
+        
+        callObject.addInParamAsInt ( items.length, JIFlags.FLAG_NULL );
+        callObject.addInParamAsArray ( itemArray, JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( OPCITEMRESULT.getStruct (), null, 1, true ) ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
+        
+        Object result [] = _opcItemMgt.call ( callObject );
+        
+        JIStruct[] results = (JIStruct[]) ( (JIArray) ( (JIPointer)result[0] ).getReferent () ).getArrayInstance ();
+        Integer[] errorCodes = (Integer[]) ( (JIArray) ( (JIPointer)result[1] ).getReferent () ).getArrayInstance ();
+        
+        KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> resultList = new KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> ( items.length );
+        for ( int i = 0; i < items.length ; i++ )
+        {
+            OPCITEMRESULT itemResult = OPCITEMRESULT.fromStruct ( results[i] );
+            KeyedResult<OPCITEMDEF,OPCITEMRESULT> resultEntry = new KeyedResult<OPCITEMDEF,OPCITEMRESULT> ( items[i], itemResult, errorCodes[i] );
+            resultList.add ( resultEntry );
+        }
+        
+        return resultList;
+    }
+
 }

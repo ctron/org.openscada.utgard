@@ -1,6 +1,7 @@
 package org.openscada.opc.da.test;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,14 +12,22 @@ import org.jinterop.dcom.core.IJIComObject;
 import org.jinterop.dcom.core.JIClsid;
 import org.jinterop.dcom.core.JIComServer;
 import org.jinterop.dcom.core.JISession;
+import org.openscada.opc.common.KeyedResult;
+import org.openscada.opc.common.KeyedResultSet;
+import org.openscada.opc.common.Result;
+import org.openscada.opc.common.ResultSet;
 import org.openscada.opc.da.IORequest;
 import org.openscada.opc.da.ItemLookup;
+import org.openscada.opc.da.OPCBROWSEDIRECTION;
 import org.openscada.opc.da.OPCGroupState;
+import org.openscada.opc.da.OPCITEMDEF;
+import org.openscada.opc.da.OPCITEMRESULT;
 import org.openscada.opc.da.PropertyDescription;
 import org.openscada.opc.da.PropertyValue;
 import org.openscada.opc.da.impl.OPCBrowseServerAddressSpace;
 import org.openscada.opc.da.impl.OPCGroup;
 import org.openscada.opc.da.impl.OPCItemIO;
+import org.openscada.opc.da.impl.OPCItemMgt;
 import org.openscada.opc.da.impl.OPCItemProperties;
 import org.openscada.opc.da.impl.OPCServer;
 
@@ -32,6 +41,7 @@ public class Test1
     public static void browse ( OPCBrowseServerAddressSpace browser ) throws JIException
     {
         System.out.println ( String.format ( "Organization: %s", browser.queryOrganization () ) );
+        browser.changePosition ( null, OPCBROWSEDIRECTION.OPC_BROWSE_TO );
     }
     
     public static void dumpGroupState ( OPCGroup group ) throws JIException
@@ -53,7 +63,7 @@ public class Test1
         Collection<PropertyValue> values = itemProperties.getItemProperties ( itemID, ids );
         for ( PropertyValue pv : values )
         {
-            System.out.println ( String.format ( "ID: %d, Value: %s, Error Code: %d", pv.getId (), pv.getValue ().toString (), pv.getErrorCode () ) );
+            System.out.println ( String.format ( "ID: %d, Value: %s, Error Code: %08x", pv.getId (), pv.getValue ().toString (), pv.getErrorCode () ) );
         }
     }
     
@@ -62,7 +72,7 @@ public class Test1
         Collection<ItemLookup> values = itemProperties.lookupItemIDs ( itemID, ids );
         for ( ItemLookup il : values )
         {
-            System.out.println ( String.format ( "ID: %d, Item ID: %s, Error Code: %d", il.getId (), il.getItemId (), il.getErrorCode () ) );
+            System.out.println ( String.format ( "ID: %d, Item ID: %s, Error Code: %08x", il.getId (), il.getItemId (), il.getErrorCode () ) );
         }
     }
     
@@ -82,11 +92,14 @@ public class Test1
             i++;
         }
 
+        System.out.println ( "Lookup" );
         //dumpItemPropertiesLookup ( itemProperties, itemID, ids );
-        dumpItemPropertiesLookup ( itemProperties, itemID, 1 );
+        //dumpItemPropertiesLookup ( itemProperties, itemID, -1 );
 
+        System.out.println ( "Query" );
+        dumpItemProperties2 ( itemProperties, itemID, 8  );
         //dumpItemProperties2 ( itemProperties, itemID, ids );
-        dumpItemProperties2 ( itemProperties, itemID, 1 );
+        //dumpItemProperties2 ( itemProperties, itemID, -1 );
     }
     
     public static void queryItems ( OPCItemIO itemIO, String ...items) throws JIException
@@ -97,6 +110,43 @@ public class Test1
             requests.add ( new IORequest ( item, 0 ) );
         }
         itemIO.read ( requests.toArray ( new IORequest[0] ) );
+    }
+    
+    public static void addItems ( OPCGroup group, String ...itemIDs) throws IllegalArgumentException, UnknownHostException, JIException
+    {
+        OPCItemMgt itemManagement = group.getItemManagement ();
+        List<OPCITEMDEF> items = new ArrayList<OPCITEMDEF> ( itemIDs.length );
+        for ( String id : itemIDs )
+        {
+            OPCITEMDEF item = new OPCITEMDEF ();
+            item.setItemID ( id );
+            items.add ( item );    
+        }
+        
+        OPCITEMDEF[] itemArray = items.toArray ( new OPCITEMDEF[0] );
+        KeyedResultSet<OPCITEMDEF,OPCITEMRESULT> result = itemManagement.validate ( itemArray );
+        
+        int failed = 0;
+        for ( KeyedResult<OPCITEMDEF,OPCITEMRESULT> resultEntry : result )
+        {
+            System.out.println ( "==================================" );
+            System.out.println ( String.format ( "Item: '%s' ", resultEntry.getKey ().getItemID () ) );
+            
+            System.out.println ( String.format ( "Error Code: %08x", resultEntry.getErrorCode () ) );
+            if ( !resultEntry.isFailed () )
+            {
+                System.out.println ( String.format ( "Server Handle: %d", resultEntry.getValue ().getServerHandle ()  ) );
+                System.out.println ( String.format ( "Data Type: %d", resultEntry.getValue ().getCanonicalDataType ()  ) );
+                System.out.println ( String.format ( "Access Rights: %d", resultEntry.getValue ().getAccessRights ()  ) );
+            }
+            else
+                failed++;
+        }
+        if ( failed != 0 )
+            return;
+        
+        // now add them to the group
+        itemManagement.add ( itemArray );
     }
     
     public static void main ( String[] args ) throws IllegalArgumentException, UnknownHostException, JIException
@@ -125,7 +175,7 @@ public class Test1
                 System.out.println ( String.format ( "Available LCID: %d", i ) );
             }
             OPCBrowseServerAddressSpace serverBrowser = new OPCBrowseServerAddressSpace (serverObject);
-            browse ( serverBrowser );
+            //browse ( serverBrowser );
 
            OPCGroup group = server.addGroup ( "test", true, 1000, 1234, 0, 0.0f, 1033 );
            group.setName ( "test2" );
@@ -134,17 +184,10 @@ public class Test1
            dumpGroupState ( group );
            dumpGroupState ( group2 );
            
-           /*
-           OPCItemMgt itemManagement = group.getItemManagement ();
-           List<OPCITEMDEF> items = new ArrayList<OPCITEMDEF> ();
-           OPCITEMDEF item = new OPCITEMDEF ();
-           item.setItemID ( "Saw-toothed Waves.Int4" );
-           items.add ( item );
-           itemManagement.validate ( items );
-           */
+           addItems ( group, "Saw-toothed Waves.Int" , "Saw-toothed Waves.Int2" );
            
            OPCItemProperties itemProperties = server.getItemPropertiesService ();
-           dumpItemProperties ( itemProperties, "Saw-toothed Waves.Int" );
+           //dumpItemProperties ( itemProperties, "Saw-toothed Waves.Int" );
            
            OPCItemIO itemIO = server.getItemIOService ();
            //queryItems ( itemIO, "Saw-toothed Waves.Int" );
@@ -153,6 +196,8 @@ public class Test1
            server.removeGroup ( group, true );
            server.removeGroup ( group2, true );
            // server.getStatus ();
+           
+           //showError ( server, 0x80004005 );
         }
         catch ( JIException e )
         {
