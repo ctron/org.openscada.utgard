@@ -45,6 +45,7 @@ public class OPCBrowseServerAddressSpace
         
     }
     
+    // FIXME: here
     public void browse ( OPCBROWSETYPE browseType, String filterCriteria, int accessRights ) throws JIException
     {
         JICallObject callObject = new JICallObject ( _opcBrowseServerAddressSpaceObject.getIpid (), true );

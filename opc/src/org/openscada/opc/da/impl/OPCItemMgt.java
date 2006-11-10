@@ -42,16 +42,7 @@ public class OPCItemMgt
         JIStruct struct[] = new JIStruct[items.length];
         for ( int i = 0; i < items.length; i++ )
         {
-            OPCITEMDEF itemDef = items[i];
-            struct[i] = new JIStruct ();
-            struct[i].addMember ( new JIString ( itemDef.getAccessPath (), JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) );
-            struct[i].addMember ( new JIString ( itemDef.getItemID (), JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) );
-            struct[i].addMember ( Boolean.valueOf ( itemDef.isActive () ) );
-            struct[i].addMember ( Integer.valueOf ( itemDef.getClientHandle () ) );
-            struct[i].addMember ( Integer.valueOf ( 0 ) ); // blob size
-            struct[i].addMember ( new JIPointer ( null ) ); // blob
-            struct[i].addMember ( Short.valueOf ( itemDef.getRequestedDataType () ) );
-            struct[i].addMember ( Short.valueOf ( itemDef.getReserved () ) );
+            struct[i] = items[i].toStruct ();
         }
         JIArray itemArray = new JIArray ( struct, true);
         
@@ -88,16 +79,7 @@ public class OPCItemMgt
         JIStruct struct[] = new JIStruct[items.length];
         for ( int i = 0; i < items.length; i++ )
         {
-            OPCITEMDEF itemDef = items[i];
-            struct[i] = new JIStruct ();
-            struct[i].addMember ( new JIString ( itemDef.getAccessPath (), JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) );
-            struct[i].addMember ( new JIString ( itemDef.getItemID (), JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) );
-            struct[i].addMember ( Boolean.valueOf ( itemDef.isActive () ) );
-            struct[i].addMember ( Integer.valueOf ( itemDef.getClientHandle () ) );
-            struct[i].addMember ( Integer.valueOf ( 0 ) ); // blob size
-            struct[i].addMember ( new JIPointer ( null ) ); // blob
-            struct[i].addMember ( Short.valueOf ( itemDef.getRequestedDataType () ) );
-            struct[i].addMember ( Short.valueOf ( itemDef.getReserved () ) );
+            struct[i] = items[i].toStruct ();
         }
         JIArray itemArray = new JIArray ( struct, true);
         
