@@ -106,20 +106,8 @@ public class Test1
         itemIO.read ( requests.toArray ( new IORequest[0] ) );
     }
     
-    public static void addItems ( OPCGroup group, String ...itemIDs) throws IllegalArgumentException, UnknownHostException, JIException
+    public static boolean dumpOPCITEMRESULT ( KeyedResultSet<OPCITEMDEF,OPCITEMRESULT> result )
     {
-        OPCItemMgt itemManagement = group.getItemManagement ();
-        List<OPCITEMDEF> items = new ArrayList<OPCITEMDEF> ( itemIDs.length );
-        for ( String id : itemIDs )
-        {
-            OPCITEMDEF item = new OPCITEMDEF ();
-            item.setItemID ( id );
-            items.add ( item );    
-        }
-        
-        OPCITEMDEF[] itemArray = items.toArray ( new OPCITEMDEF[0] );
-        KeyedResultSet<OPCITEMDEF,OPCITEMRESULT> result = itemManagement.validate ( itemArray );
-        
         int failed = 0;
         for ( KeyedResult<OPCITEMDEF,OPCITEMRESULT> resultEntry : result )
         {
@@ -136,11 +124,49 @@ public class Test1
             else
                 failed++;
         }
-        if ( failed != 0 )
+        return failed == 0;
+    }
+    
+    public static void testItems ( OPCGroup group, String ...itemIDs ) throws IllegalArgumentException, UnknownHostException, JIException
+    {
+        OPCItemMgt itemManagement = group.getItemManagement ();
+        List<OPCITEMDEF> items = new ArrayList<OPCITEMDEF> ( itemIDs.length );
+        for ( String id : itemIDs )
+        {
+            OPCITEMDEF item = new OPCITEMDEF ();
+            item.setItemID ( id );
+            items.add ( item );    
+        }
+        
+        OPCITEMDEF[] itemArray = items.toArray ( new OPCITEMDEF[0] );
+        
+        System.out.println ( "Validate" );
+        KeyedResultSet<OPCITEMDEF,OPCITEMRESULT> result = itemManagement.validate ( itemArray );
+        if ( !dumpOPCITEMRESULT ( result ) )
             return;
         
         // now add them to the group
-        itemManagement.add ( itemArray );
+        System.out.println ( "Add" );
+        result = itemManagement.add ( itemArray );
+        if ( !dumpOPCITEMRESULT ( result ) )
+            return;
+        
+        // get the server handle array
+        Integer[] serverHandles = new Integer[itemArray.length ];
+        for ( int i = 0; i < itemArray.length; i++ )
+        {
+            serverHandles[i] = result.get ( i ).getValue ().getServerHandle ();
+        }
+        
+        System.out.println ( "Active/Inactive" );
+        // set them active
+        itemManagement.setActiveState ( true, serverHandles );
+        // set them inactive
+        itemManagement.setActiveState ( false, serverHandles );
+        
+        // finally remove them again
+        System.out.println ( "Remove" );
+        itemManagement.remove ( serverHandles );
     }
     
     public static void main ( String[] args ) throws IllegalArgumentException, UnknownHostException, JIException
@@ -178,7 +204,7 @@ public class Test1
            dumpGroupState ( group );
            dumpGroupState ( group2 );
            
-           addItems ( group, "Saw-toothed Waves.Int" , "Saw-toothed Waves.Int2" );
+           testItems ( group, "Saw-toothed Waves.Int" , "Saw-toothed Waves.Int2" );
            
            OPCItemProperties itemProperties = server.getItemPropertiesService ();
            dumpItemProperties ( itemProperties, "Saw-toothed Waves.Int" );

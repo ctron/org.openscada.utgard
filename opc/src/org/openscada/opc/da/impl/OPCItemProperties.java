@@ -15,6 +15,7 @@ import org.jinterop.dcom.core.JIString;
 import org.jinterop.dcom.core.JIVariant;
 import org.openscada.opc.common.KeyedResult;
 import org.openscada.opc.common.KeyedResultSet;
+import org.openscada.opc.common.impl.Helper;
 import org.openscada.opc.da.Constants;
 import org.openscada.opc.da.PropertyDescription;
 
@@ -82,17 +83,7 @@ public class OPCItemProperties
         callObject.addOutParamAsObject (  new JIPointer ( new JIArray ( JIVariant.class, null, 1, true ) ), JIFlags.FLAG_NULL );
         callObject.addOutParamAsObject (  new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
 
-        Object result[] = null;
-        try
-        {
-            result = _opcItemProperties.call ( callObject );
-        }
-        catch ( JIException e )
-        {
-            if ( e.getErrorCode () != Constants.S_FALSE )
-                throw e;
-            result = callObject.getResultsInCaseOfException ();
-        }
+        Object result[] = Helper.callRespectSFALSE ( _opcItemProperties, callObject );
 
         JIVariant[] values = (JIVariant[]) ( (JIArray) ( (JIPointer)result[0] ).getReferent () ).getArrayInstance ();
         Integer[] errorCodes = (Integer[]) ( (JIArray) ( (JIPointer)result[1] ).getReferent () ).getArrayInstance ();
@@ -131,17 +122,7 @@ public class OPCItemProperties
                 null, 1, true ) ), JIFlags.FLAG_NULL ); 
         callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
      
-        Object result[] = null;
-        try
-        {
-            result = _opcItemProperties.call ( callObject );
-        }
-        catch ( JIException e )
-        {
-            if ( e.getErrorCode () != Constants.S_FALSE )
-                throw e;
-            result = callObject.getResultsInCaseOfException ();
-        }
+        Object result[] = Helper.callRespectSFALSE ( _opcItemProperties, callObject );
 
         JIPointer[] itemIDs = (JIPointer[]) ( (JIArray) ( (JIPointer)result[0] ).getReferent () ).getArrayInstance ();
         Integer[] errorCodes = (Integer[]) ( (JIArray) ( (JIPointer)result[1] ).getReferent () ).getArrayInstance ();

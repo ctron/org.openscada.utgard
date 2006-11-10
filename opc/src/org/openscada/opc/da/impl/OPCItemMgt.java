@@ -11,6 +11,9 @@ import org.jinterop.dcom.core.JIPointer;
 import org.jinterop.dcom.core.JIStruct;
 import org.openscada.opc.common.KeyedResult;
 import org.openscada.opc.common.KeyedResultSet;
+import org.openscada.opc.common.Result;
+import org.openscada.opc.common.ResultSet;
+import org.openscada.opc.common.impl.Helper;
 import org.openscada.opc.da.Constants;
 import org.openscada.opc.da.OPCITEMDEF;
 import org.openscada.opc.da.OPCITEMRESULT;
@@ -45,7 +48,7 @@ public class OPCItemMgt
         callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( OPCITEMRESULT.getStruct (), null, 1, true ) ), JIFlags.FLAG_NULL );
         callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
         
-        Object result [] = _opcItemMgt.call ( callObject );
+        Object result[] = Helper.callRespectSFALSE ( _opcItemMgt, callObject );
         
         JIStruct[] results = (JIStruct[]) ( (JIArray) ( (JIPointer)result[0] ).getReferent () ).getArrayInstance ();
         Integer[] errorCodes = (Integer[]) ( (JIArray) ( (JIPointer)result[1] ).getReferent () ).getArrayInstance ();
@@ -81,7 +84,7 @@ public class OPCItemMgt
         callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( OPCITEMRESULT.getStruct (), null, 1, true ) ), JIFlags.FLAG_NULL );
         callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
         
-        Object result [] = _opcItemMgt.call ( callObject );
+        Object result[] = Helper.callRespectSFALSE ( _opcItemMgt, callObject );
         
         JIStruct[] results = (JIStruct[]) ( (JIArray) ( (JIPointer)result[0] ).getReferent () ).getArrayInstance ();
         Integer[] errorCodes = (Integer[]) ( (JIArray) ( (JIPointer)result[1] ).getReferent () ).getArrayInstance ();
@@ -95,6 +98,53 @@ public class OPCItemMgt
         }
         
         return resultList;
+    }
+    
+    public ResultSet<Integer> remove ( Integer...items ) throws JIException
+    {
+        if ( items.length == 0 )
+            return new ResultSet<Integer> ();
+        
+        JICallObject callObject = new JICallObject ( _opcItemMgt.getIpid (), true );
+        callObject.setOpnum ( 2 );
+        
+        callObject.addInParamAsInt ( items.length, JIFlags.FLAG_NULL );
+        callObject.addInParamAsArray ( new JIArray ( items, true ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
+        
+        Object result[] = Helper.callRespectSFALSE ( _opcItemMgt, callObject );
+        
+        Integer[] errorCodes = (Integer[]) ( (JIArray) ( (JIPointer)result[0] ).getReferent () ).getArrayInstance ();
+        ResultSet<Integer> results = new ResultSet<Integer> ( items.length );
+        for ( int i = 0; i < items.length; i++ )
+        {
+            results.add ( new Result<Integer> ( items[i], errorCodes[i] ) );
+        }
+        return results;
+    }
+    
+    public ResultSet<Integer> setActiveState ( boolean state, Integer...items ) throws JIException
+    {
+        if ( items.length == 0 )
+            return new ResultSet<Integer> ();
+        
+        JICallObject callObject = new JICallObject ( _opcItemMgt.getIpid (), true );
+        callObject.setOpnum ( 3 );
+        
+        callObject.addInParamAsInt ( items.length, JIFlags.FLAG_NULL );
+        callObject.addInParamAsArray ( new JIArray ( items, true ), JIFlags.FLAG_NULL );
+        callObject.addInParamAsInt ( state ? 1 : 0, JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
+        
+        Object result[] = Helper.callRespectSFALSE ( _opcItemMgt, callObject );
+        
+        Integer[] errorCodes = (Integer[]) ( (JIArray) ( (JIPointer)result[0] ).getReferent () ).getArrayInstance ();
+        ResultSet<Integer> results = new ResultSet<Integer> ( items.length );
+        for ( int i = 0; i < items.length; i++ )
+        {
+            results.add ( new Result<Integer> ( items[i], errorCodes[i] ) );
+        }
+        return results;
     }
 
 }
