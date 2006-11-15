@@ -82,8 +82,8 @@ public class FILETIME
     {
         FILETIME ft = new FILETIME ();
         
-        ft.setHigh ( (Integer)struct.getMember ( 0 ) );
-        ft.setLow ( (Integer)struct.getMember ( 1 ) );
+        ft.setLow ( (Integer)struct.getMember ( 0 ) );
+        ft.setHigh ( (Integer)struct.getMember ( 1 ) );
         
         return ft;
     }
@@ -92,7 +92,15 @@ public class FILETIME
     {
         Calendar c = Calendar.getInstance ();
         
-        c.setTimeInMillis ( ((_high << 32) | _low) );
+        long i = _high;
+        i = i << 32L;
+        i = i | _low;
+        
+        i = i - 116444736000000000L;
+        
+        i = i / 10000L;
+        
+        c.setTimeInMillis ( i );
         
         return c;
     }

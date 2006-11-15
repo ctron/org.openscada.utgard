@@ -56,6 +56,7 @@ public class Test1
     {
         System.out.println ( String.format ( "Organization: %s", browser.queryOrganization () ) );
         browser.changePosition ( null, OPCBROWSEDIRECTION.OPC_BROWSE_TO );
+        
     }
     
     public static void dumpGroupState ( OPCGroup group ) throws JIException
@@ -178,24 +179,33 @@ public class Test1
         }
         
         // set them active
-        System.out.println ( "Active" );
+        System.out.println ( "Activate" );
         ResultSet<Integer> resultSet = itemManagement.setActiveState ( true, serverHandles );
         for ( Result<Integer> resultEntry : resultSet )
         {
             System.out.println ( String.format ( "Item: %08X, Error: %08X", resultEntry.getValue (), resultEntry.getErrorCode () ) );
         }
         
-        //OPCAsyncIO2 asyncIO2 = group.getAsyncIO2 ();
+        // set client handles
+        System.out.println ( "Set client handles" );
+        Integer []clientHandles = new Integer [ serverHandles.length ];
+        for ( int i = 0; i < serverHandles.length; i++ )
+        {
+            clientHandles[i] = i;
+        }
+        itemManagement.setClientHandles ( serverHandles, clientHandles );
+        
+        OPCAsyncIO2 asyncIO2 = group.getAsyncIO2 ();
         // connect handler
         
-        //EventHandler eventHandler = group.attach ( new DumpDataCallback () ); 
-        //asyncIO2.setEnable ( true );
-        //asyncIO2.refresh ( (short)1, 1 );
+        EventHandler eventHandler = group.attach ( new DumpDataCallback () ); 
+        asyncIO2.setEnable ( true );
+        asyncIO2.refresh ( (short)1, 1 );
         
         // sleep
-        /*
         try
         {
+            System.out.println ( "Waiting..." );
             Thread.sleep ( 10 * 1000 );
         }
         catch ( InterruptedException e )
@@ -203,17 +213,16 @@ public class Test1
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        */
         
-        //eventHandler.detach ();
+        eventHandler.detach ();
         
         // sync IO
         OPCSyncIO syncIO = group.getSyncIO ();
-        KeyedResultSet<Integer,OPCITEMSTATE> itemState = syncIO.read ( OPCITEMSOURCE.OPC_DS_CACHE, serverHandles );
+        KeyedResultSet<Integer,OPCITEMSTATE> itemState = syncIO.read ( OPCITEMSOURCE.OPC_DS_DEVICE, serverHandles );
         for ( KeyedResult<Integer,OPCITEMSTATE> itemStateEntry : itemState )
         {
             int errorCode = itemStateEntry.getErrorCode (); 
-            System.out.println ( String.format ( "Server ID: %08X, Value: %s, Timestamp: %d/%d, Quality: %d, Error: %08X", itemStateEntry.getKey (), itemStateEntry.getValue ().getValue (), itemStateEntry.getValue ().getTimestamp ().getHigh (), itemStateEntry.getValue ().getTimestamp ().getLow (), itemStateEntry.getValue ().getQuality (), errorCode ) );
+            System.out.println ( String.format ( "Server ID: %08X, Value: %s, Timestamp: %d/%d (%Tc), Quality: %d, Error: %08X", itemStateEntry.getKey (), itemStateEntry.getValue ().getValue (), itemStateEntry.getValue ().getTimestamp ().getHigh (), itemStateEntry.getValue ().getTimestamp ().getLow (), itemStateEntry.getValue ().getTimestamp ().asCalendar (), itemStateEntry.getValue ().getQuality (), errorCode ) );
             if ( errorCode != 0 )
             {
                 showError ( server, errorCode );

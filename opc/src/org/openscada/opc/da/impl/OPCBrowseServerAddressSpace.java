@@ -6,6 +6,9 @@ import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.IJIComObject;
 import org.jinterop.dcom.core.JICallObject;
 import org.jinterop.dcom.core.JIFlags;
+import org.jinterop.dcom.core.JIInterfacePointer;
+import org.jinterop.dcom.win32.ComFactory;
+import org.openscada.opc.common.impl.EnumString;
 import org.openscada.opc.da.Constants;
 import org.openscada.opc.da.OPCBROWSEDIRECTION;
 import org.openscada.opc.da.OPCBROWSETYPE;
@@ -56,5 +59,18 @@ public class OPCBrowseServerAddressSpace
         callObject.addInParamAsInt ( accessRights, JIFlags.FLAG_NULL );
         
         Object result [] = _opcBrowseServerAddressSpaceObject.call ( callObject );
+    }
+    
+    public EnumString browseAccessPaths ( String itemID ) throws JIException, IllegalArgumentException, UnknownHostException
+    {
+        JICallObject callObject = new JICallObject ( _opcBrowseServerAddressSpaceObject.getIpid (), true );
+        callObject.setOpnum ( 4 );
+        
+        callObject.addInParamAsString ( itemID, JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR );
+        callObject.addOutParamAsType ( JIInterfacePointer.class, JIFlags.FLAG_NULL );
+        
+        Object [] result = _opcBrowseServerAddressSpaceObject.call ( callObject );
+        
+        return new EnumString ( ComFactory.createCOMInstance ( _opcBrowseServerAddressSpaceObject, (JIInterfacePointer)result[0] ) );
     }
 }

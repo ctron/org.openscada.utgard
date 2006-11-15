@@ -57,6 +57,7 @@ public class OPCDataCallback extends EventHandlerImpl
             JIArray errors
             )
     {
+        System.out.println ( "OnReadComplete" );
         return new Object[0];
     }
     

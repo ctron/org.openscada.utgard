@@ -59,9 +59,7 @@ public class OPCServer extends OPCCommon
 
         Object[] result = _opcServerObject.call ( callObject );
         
-        JIInterfacePointer ptr = (JIInterfacePointer)result[2];
-        
-        return new OPCGroup ( ComFactory.createCOMInstance ( _opcServerObject, ptr ) );
+        return new OPCGroup ( ComFactory.createCOMInstance ( _opcServerObject, (JIInterfacePointer)result[2] ) );
     }
     
     public void removeGroup ( int serverHandle, boolean force ) throws JIException

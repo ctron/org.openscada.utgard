@@ -28,11 +28,6 @@ public class OPCSyncIO
         if ( serverHandles == null || serverHandles.length == 0 )
             return new KeyedResultSet<Integer, OPCITEMSTATE> ();
 
-        for ( Integer i : serverHandles )
-        {
-            System.out.println ( i );
-        }
-        
         JICallObject callObject = new JICallObject ( _opcSyncIO.getIpid (), true );
         callObject.setOpnum ( 0 );
 

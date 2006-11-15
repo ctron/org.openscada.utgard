@@ -146,5 +146,31 @@ public class OPCItemMgt
         }
         return results;
     }
+    
+    public ResultSet<Integer> setClientHandles ( Integer [] serverHandles, Integer [] clientHandles ) throws JIException
+    {
+        if ( serverHandles.length != clientHandles.length )
+            throw new JIException ( 0, "Array sizes don't match" );
+        if ( serverHandles.length == 0 )
+            return new ResultSet<Integer> ();
+        
+        JICallObject callObject = new JICallObject ( _opcItemMgt.getIpid (), true );
+        callObject.setOpnum ( 4 );
+        
+        callObject.addInParamAsInt ( serverHandles.length, JIFlags.FLAG_NULL );
+        callObject.addInParamAsArray ( new JIArray ( serverHandles, true ), JIFlags.FLAG_NULL );
+        callObject.addInParamAsArray ( new JIArray ( clientHandles, true ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
+        
+        Object[] result = Helper.callRespectSFALSE ( _opcItemMgt, callObject );
+        
+        Integer[] errorCodes = (Integer[]) ( (JIArray) ( (JIPointer)result[0] ).getReferent () ).getArrayInstance ();
+        ResultSet<Integer> results = new ResultSet<Integer> ( serverHandles.length );
+        for ( int i = 0; i < serverHandles.length; i++ )
+        {
+            results.add ( new Result<Integer> ( serverHandles[i], errorCodes[i] ) );
+        }
+        return results;
+    }
 
 }
