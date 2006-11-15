@@ -70,7 +70,7 @@ public class OPCItemMgt
             return new KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> ();
         
         JICallObject callObject = new JICallObject ( _opcItemMgt.getIpid (), true );
-        callObject.setOpnum ( 1 );
+        callObject.setOpnum ( 0 );
         
         JIStruct struct[] = new JIStruct[items.length];
         for ( int i = 0; i < items.length; i++ )
@@ -136,7 +136,7 @@ public class OPCItemMgt
         callObject.addInParamAsInt ( state ? 1 : 0, JIFlags.FLAG_NULL );
         callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
         
-        Object result[] = Helper.callRespectSFALSE ( _opcItemMgt, callObject );
+        Object[] result = Helper.callRespectSFALSE ( _opcItemMgt, callObject );
         
         Integer[] errorCodes = (Integer[]) ( (JIArray) ( (JIPointer)result[0] ).getReferent () ).getArrayInstance ();
         ResultSet<Integer> results = new ResultSet<Integer> ( items.length );

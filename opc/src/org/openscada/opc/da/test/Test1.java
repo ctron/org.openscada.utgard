@@ -5,34 +5,51 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
+import java.util.logging.Level;
 
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.common.JISystem;
 import org.jinterop.dcom.core.IJIComObject;
 import org.jinterop.dcom.core.JIClsid;
 import org.jinterop.dcom.core.JIComServer;
+import org.jinterop.dcom.core.JIInterfacePointer;
 import org.jinterop.dcom.core.JISession;
 import org.jinterop.dcom.core.JIVariant;
+import org.openscada.opc.common.EventHandler;
 import org.openscada.opc.common.KeyedResult;
 import org.openscada.opc.common.KeyedResultSet;
+import org.openscada.opc.common.Result;
+import org.openscada.opc.common.ResultSet;
+import org.openscada.opc.common.impl.ConnectionPoint;
+import org.openscada.opc.common.impl.ConnectionPointContainer;
+import org.openscada.opc.common.impl.OPCCommon;
+import org.openscada.opc.da.Constants;
 import org.openscada.opc.da.IORequest;
 import org.openscada.opc.da.OPCBROWSEDIRECTION;
 import org.openscada.opc.da.OPCGroupState;
 import org.openscada.opc.da.OPCITEMDEF;
 import org.openscada.opc.da.OPCITEMRESULT;
+import org.openscada.opc.da.OPCITEMSOURCE;
+import org.openscada.opc.da.OPCITEMSTATE;
 import org.openscada.opc.da.PropertyDescription;
+import org.openscada.opc.da.impl.OPCAsyncIO2;
 import org.openscada.opc.da.impl.OPCBrowseServerAddressSpace;
+import org.openscada.opc.da.impl.OPCDataCallback;
 import org.openscada.opc.da.impl.OPCGroup;
 import org.openscada.opc.da.impl.OPCItemIO;
 import org.openscada.opc.da.impl.OPCItemMgt;
 import org.openscada.opc.da.impl.OPCItemProperties;
 import org.openscada.opc.da.impl.OPCServer;
+import org.openscada.opc.da.impl.OPCSyncIO;
 
 public class Test1
 {
-    public static void showError ( OPCServer server, int errorCode ) throws JIException
+    private static JISession _session = null;
+    
+    public static void showError ( OPCCommon common, int errorCode ) throws JIException
     {
-        System.out.println ( String.format ( "Error (%X): '%s'", errorCode, server.getErrorString ( errorCode, 1033 ) ) );
+        System.out.println ( String.format ( "Error (%X): '%s'", errorCode, common.getErrorString ( errorCode, 1033 ) ) );
     }
     
     public static void browse ( OPCBrowseServerAddressSpace browser ) throws JIException
@@ -96,7 +113,7 @@ public class Test1
         dumpItemProperties2 ( itemProperties, itemID, ids );
     }
     
-    public static void queryItems ( OPCItemIO itemIO, String ...items) throws JIException
+    public static void queryItems ( OPCItemIO itemIO, String ...items ) throws JIException
     {
         List<IORequest> requests = new LinkedList<IORequest> ();
         for ( String item : items )
@@ -117,9 +134,10 @@ public class Test1
             System.out.println ( String.format ( "Error Code: %08x", resultEntry.getErrorCode () ) );
             if ( !resultEntry.isFailed () )
             {
-                System.out.println ( String.format ( "Server Handle: %d", resultEntry.getValue ().getServerHandle ()  ) );
-                System.out.println ( String.format ( "Data Type: %d", resultEntry.getValue ().getCanonicalDataType ()  ) );
-                System.out.println ( String.format ( "Access Rights: %d", resultEntry.getValue ().getAccessRights ()  ) );
+                System.out.println ( String.format ( "Server Handle: %08X", resultEntry.getValue ().getServerHandle () ) );
+                System.out.println ( String.format ( "Data Type: %d", resultEntry.getValue ().getCanonicalDataType () ) );
+                System.out.println ( String.format ( "Access Rights: %d", resultEntry.getValue ().getAccessRights () ) );
+                System.out.println ( String.format ( "Reserved: %d", resultEntry.getValue ().getReserved () ) );
             }
             else
                 failed++;
@@ -127,7 +145,7 @@ public class Test1
         return failed == 0;
     }
     
-    public static void testItems ( OPCGroup group, String ...itemIDs ) throws IllegalArgumentException, UnknownHostException, JIException
+    public static void testItems ( OPCServer server, OPCGroup group, String ...itemIDs ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         OPCItemMgt itemManagement = group.getItemManagement ();
         List<OPCITEMDEF> items = new ArrayList<OPCITEMDEF> ( itemIDs.length );
@@ -135,6 +153,7 @@ public class Test1
         {
             OPCITEMDEF item = new OPCITEMDEF ();
             item.setItemID ( id );
+            item.setClientHandle ( new Random ().nextInt () );
             items.add ( item );    
         }
         
@@ -152,16 +171,57 @@ public class Test1
             return;
         
         // get the server handle array
-        Integer[] serverHandles = new Integer[itemArray.length ];
+        Integer[] serverHandles = new Integer [ itemArray.length ];
         for ( int i = 0; i < itemArray.length; i++ )
         {
-            serverHandles[i] = result.get ( i ).getValue ().getServerHandle ();
+            serverHandles[i] = new Integer ( result.get ( i ).getValue ().getServerHandle () );
         }
         
-        System.out.println ( "Active/Inactive" );
         // set them active
-        itemManagement.setActiveState ( true, serverHandles );
+        System.out.println ( "Active" );
+        ResultSet<Integer> resultSet = itemManagement.setActiveState ( true, serverHandles );
+        for ( Result<Integer> resultEntry : resultSet )
+        {
+            System.out.println ( String.format ( "Item: %08X, Error: %08X", resultEntry.getValue (), resultEntry.getErrorCode () ) );
+        }
+        
+        //OPCAsyncIO2 asyncIO2 = group.getAsyncIO2 ();
+        // connect handler
+        
+        //EventHandler eventHandler = group.attach ( new DumpDataCallback () ); 
+        //asyncIO2.setEnable ( true );
+        //asyncIO2.refresh ( (short)1, 1 );
+        
+        // sleep
+        /*
+        try
+        {
+            Thread.sleep ( 10 * 1000 );
+        }
+        catch ( InterruptedException e )
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        */
+        
+        //eventHandler.detach ();
+        
+        // sync IO
+        OPCSyncIO syncIO = group.getSyncIO ();
+        KeyedResultSet<Integer,OPCITEMSTATE> itemState = syncIO.read ( OPCITEMSOURCE.OPC_DS_CACHE, serverHandles );
+        for ( KeyedResult<Integer,OPCITEMSTATE> itemStateEntry : itemState )
+        {
+            int errorCode = itemStateEntry.getErrorCode (); 
+            System.out.println ( String.format ( "Server ID: %08X, Value: %s, Timestamp: %d/%d, Quality: %d, Error: %08X", itemStateEntry.getKey (), itemStateEntry.getValue ().getValue (), itemStateEntry.getValue ().getTimestamp ().getHigh (), itemStateEntry.getValue ().getTimestamp ().getLow (), itemStateEntry.getValue ().getQuality (), errorCode ) );
+            if ( errorCode != 0 )
+            {
+                showError ( server, errorCode );
+            }
+        }
+        
         // set them inactive
+        System.out.println ( "In-Active" );
         itemManagement.setActiveState ( false, serverHandles );
         
         // finally remove them again
@@ -171,18 +231,19 @@ public class Test1
     
     public static void main ( String[] args ) throws IllegalArgumentException, UnknownHostException, JIException
     {
-        JISession session = null;
         OPCServer server = null;
         try
         {
             JISystem.setAutoRegisteration ( true );
+            JISystem.setLogLevel ( Level.ALL );
 
-            session = JISession.createSession ( args[1], args[2], args[3] );
+            _session = JISession.createSession ( args[1], args[2], args[3] );
             // OPCServer server = new OPCServer ( "127.0.0.1", JIProgId.valueOf
             // ( session, "Matrikon.OPC.Simulation.1" ),
             // session );
-            JIComServer comServer = new JIComServer ( JIClsid.valueOf ( "F8582CF2-88FB-11D0-B850-00C0F0104305" ),
-                    args[0], session );
+            //JIComServer comServer = new JIComServer ( JIClsid.valueOf ( "F8582CF2-88FB-11D0-B850-00C0F0104305" ), args[0], _session );
+            JIComServer comServer = new JIComServer ( JIClsid.valueOf ( "2E565242-B238-11D3-842D-0008C779D775" ), args[0], _session );
+            
             IJIComObject serverObject = comServer.createInstance ();
             server = new OPCServer ( serverObject );
             
@@ -197,17 +258,18 @@ public class Test1
             OPCBrowseServerAddressSpace serverBrowser = new OPCBrowseServerAddressSpace (serverObject);
             //browse ( serverBrowser );
 
-           OPCGroup group = server.addGroup ( "test", true, 1000, 1234, 0, 0.0f, 1033 );
+           OPCGroup group = server.addGroup ( "test", true, 100, 1234, 60, 0.0f, 1033 );
            group.setName ( "test2" );
            OPCGroup group2 = group.clone ( "test" );
            group = server.getGroupByName ( "test2" );
            dumpGroupState ( group );
            dumpGroupState ( group2 );
            
-           testItems ( group, "Saw-toothed Waves.Int" , "Saw-toothed Waves.Int2" );
+           //testItems ( server, group, "Saw-toothed Waves.Int2", "Saw-toothed Waves.Int4" );
+           testItems ( server, group, "increment.I2", "increment.I4" );
            
            OPCItemProperties itemProperties = server.getItemPropertiesService ();
-           dumpItemProperties ( itemProperties, "Saw-toothed Waves.Int" );
+           //dumpItemProperties ( itemProperties, "Saw-toothed Waves.Int" );
            
            OPCItemIO itemIO = server.getItemIOService ();
            //queryItems ( itemIO, "Saw-toothed Waves.Int" );
@@ -226,7 +288,8 @@ public class Test1
         }
         finally
         {
-            JISession.destroySession ( session );
+            JISession.destroySession ( _session );
+            _session = null;
         }
     }
 }

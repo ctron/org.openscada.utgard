@@ -1,6 +1,8 @@
 package org.openscada.opc.da;
 
 import org.jinterop.dcom.common.JIException;
+import org.jinterop.dcom.core.JIArray;
+import org.jinterop.dcom.core.JICallObject;
 import org.jinterop.dcom.core.JIFlags;
 import org.jinterop.dcom.core.JIPointer;
 import org.jinterop.dcom.core.JIString;
@@ -91,10 +93,12 @@ public class OPCITEMDEF
         JIStruct struct = new JIStruct ();
         struct.addMember ( new JIString ( getAccessPath (), JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) );
         struct.addMember ( new JIString ( getItemID (), JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) );
-        struct.addMember ( Boolean.valueOf ( isActive () ) );
+        struct.addMember ( new Integer ( isActive () ? 1 : 0 ) );
         struct.addMember ( Integer.valueOf ( getClientHandle () ) );
+        
         struct.addMember ( Integer.valueOf ( 0 ) ); // blob size
         struct.addMember ( new JIPointer ( null ) ); // blob
+        
         struct.addMember ( Short.valueOf ( getRequestedDataType () ) );
         struct.addMember ( Short.valueOf ( getReserved () ) );
         return struct;

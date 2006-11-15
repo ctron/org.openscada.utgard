@@ -1,5 +1,7 @@
 package org.openscada.opc.common;
 
+import java.util.Calendar;
+
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.JIStruct;
 
@@ -9,6 +11,10 @@ public class FILETIME
 
     private int _low = 0;
 
+    public FILETIME ()
+    {
+    }
+    
     public FILETIME ( FILETIME arg0 )
     {
         _high = arg0._high;
@@ -71,4 +77,24 @@ public class FILETIME
 
         return struct;
     }
+
+    public static FILETIME fromStruct ( JIStruct struct )
+    {
+        FILETIME ft = new FILETIME ();
+        
+        ft.setHigh ( (Integer)struct.getMember ( 0 ) );
+        ft.setLow ( (Integer)struct.getMember ( 1 ) );
+        
+        return ft;
+    }
+    
+    public Calendar asCalendar ()
+    {
+        Calendar c = Calendar.getInstance ();
+        
+        c.setTimeInMillis ( ((_high << 32) | _low) );
+        
+        return c;
+    }
 }
+

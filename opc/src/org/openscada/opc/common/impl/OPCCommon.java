@@ -18,7 +18,7 @@ public class OPCCommon
 
     public OPCCommon ( IJIComObject opcObject ) throws IllegalArgumentException, UnknownHostException, JIException
     {
-        _opcCommonObject = (IJIComObject)opcObject.queryInterface ( org.openscada.opc.common.Constants.IOPCCommon_UUID );
+        _opcCommonObject = (IJIComObject)opcObject.queryInterface ( org.openscada.opc.common.Constants.IOPCCommon_IID );
     }
 
     public void setLocaleID ( int localeID ) throws JIException
@@ -49,10 +49,10 @@ public class OPCCommon
 
         callObject.addInParamAsInt ( errorCode, JIFlags.FLAG_NULL );
         callObject.addInParamAsInt ( localeID, JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_BSTR ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ), JIFlags.FLAG_NULL );
 
         Object[] result = _opcCommonObject.call ( callObject );
-        return ( (JIString)result[0] ).getString ();
+        return ((JIString)(( (JIPointer)result[0] ).getReferent ())).getString ();
     }
 
     public void setClientName ( String clientName ) throws JIException

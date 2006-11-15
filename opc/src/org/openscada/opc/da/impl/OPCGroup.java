@@ -3,13 +3,20 @@ package org.openscada.opc.da.impl;
 import java.net.UnknownHostException;
 
 import org.jinterop.dcom.common.JIException;
+import org.jinterop.dcom.common.JIInterfaceDefinition;
+import org.jinterop.dcom.common.JIJavaCoClass;
 import org.jinterop.dcom.core.IJIComObject;
 import org.jinterop.dcom.core.JICallObject;
 import org.jinterop.dcom.core.JIFlags;
 import org.jinterop.dcom.core.JIInterfacePointer;
+import org.jinterop.dcom.core.JIPointer;
+import org.jinterop.dcom.core.JISession;
 import org.jinterop.dcom.core.JIString;
 import org.jinterop.dcom.win32.ComFactory;
+import org.openscada.opc.common.EventHandler;
+import org.openscada.opc.common.impl.ConnectionPointContainer;
 import org.openscada.opc.da.Constants;
+import org.openscada.opc.da.IOPCDataCallback;
 import org.openscada.opc.da.OPCGroupState;
 
 public class OPCGroup
@@ -28,7 +35,7 @@ public class OPCGroup
         
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
         callObject.addOutParamAsType ( Boolean.class, JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_BSTR ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ), JIFlags.FLAG_NULL );
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
         callObject.addOutParamAsType ( Float.class, JIFlags.FLAG_NULL );
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
@@ -40,7 +47,7 @@ public class OPCGroup
         OPCGroupState state = new OPCGroupState ();
         state.setUpdateRate ( (Integer)result[0] );
         state.setActive ( (Boolean )result[1] );
-        state.setName ( ((JIString)result[2]).getString () );
+        state.setName ( ((JIString)((JIPointer)result[2]).getReferent ()).getString () );
         state.setTimeBias ( (Integer) result[3] );
         state.setPercentDeadband ( (Float)result[4] );
         state.setLocaleID ( (Integer)result[5] );
@@ -92,5 +99,45 @@ public class OPCGroup
         JIInterfacePointer ptr = (JIInterfacePointer)result[0];
         
         return new OPCGroup ( ComFactory.createCOMInstance ( _opcGroupStateMgt, ptr ) );
+    }
+    
+    public EventHandler attach ( IOPCDataCallback callback ) throws JIException
+    {
+        OPCDataCallback callbackObject = new OPCDataCallback ();
+        callbackObject.setCallback ( callback );
+        
+        String id = ComFactory.attachEventHandler ( _opcGroupStateMgt, Constants.IOPCDataCallback_IID, JIInterfacePointer.getInterfacePointer(_opcGroupStateMgt.getAssociatedSession (),callbackObject.getCoClass ()) );
+        
+        callbackObject.setInfo ( _opcGroupStateMgt, id );
+        return callbackObject;
+    }
+    
+    public ConnectionPointContainer getConnectionPointContainer () throws JIException
+    {
+        return new ConnectionPointContainer ( _opcGroupStateMgt );
+    }
+    
+    public OPCAsyncIO2 getAsyncIO2 ()
+    {
+        try
+        {
+            return new OPCAsyncIO2 ( _opcGroupStateMgt );
+        }
+        catch ( Exception e )
+        {
+            return null;
+        }
+    }
+    
+    public OPCSyncIO getSyncIO ()
+    {
+        try
+        {
+            return new OPCSyncIO ( _opcGroupStateMgt );
+        }
+        catch ( Exception e )
+        {
+            return null;
+        }
     }
 }
