@@ -117,4 +117,20 @@ public class OPCServer extends OPCCommon
             return null;
         }
     }
+    
+    /**
+     * Get the browser object (<code>IOPCBrowseServerAddressSpace</code>) from the server instance
+     * @return the browser object
+     */
+    public OPCBrowseServerAddressSpace getBrowser ()
+    {
+        try
+        {
+            return new OPCBrowseServerAddressSpace ( _opcServerObject );
+        }
+        catch ( Exception e )
+        {
+            return null;
+        }
+    }
 }

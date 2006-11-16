@@ -317,7 +317,7 @@ public class Test1
                 System.out.println ( String.format ( "Available LCID: %d", i ) );
             }
             
-            OPCBrowseServerAddressSpace serverBrowser = new OPCBrowseServerAddressSpace (serverObject);
+            OPCBrowseServerAddressSpace serverBrowser = server.getBrowser ();
             browseFlat ( serverBrowser );
             browseTree ( serverBrowser );
 
