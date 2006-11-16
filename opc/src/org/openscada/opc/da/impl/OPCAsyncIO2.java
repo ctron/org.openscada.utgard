@@ -6,11 +6,7 @@ import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.IJIComObject;
 import org.jinterop.dcom.core.JICallObject;
 import org.jinterop.dcom.core.JIFlags;
-import org.jinterop.dcom.core.JIInterfacePointer;
-import org.jinterop.dcom.win32.ComFactory;
-import org.openscada.opc.common.EventHandler;
 import org.openscada.opc.da.Constants;
-import org.openscada.opc.da.IOPCDataCallback;
 
 public class OPCAsyncIO2
 {

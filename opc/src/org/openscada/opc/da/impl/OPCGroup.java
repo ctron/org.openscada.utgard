@@ -3,14 +3,11 @@ package org.openscada.opc.da.impl;
 import java.net.UnknownHostException;
 
 import org.jinterop.dcom.common.JIException;
-import org.jinterop.dcom.common.JIInterfaceDefinition;
-import org.jinterop.dcom.common.JIJavaCoClass;
 import org.jinterop.dcom.core.IJIComObject;
 import org.jinterop.dcom.core.JICallObject;
 import org.jinterop.dcom.core.JIFlags;
 import org.jinterop.dcom.core.JIInterfacePointer;
 import org.jinterop.dcom.core.JIPointer;
-import org.jinterop.dcom.core.JISession;
 import org.jinterop.dcom.core.JIString;
 import org.jinterop.dcom.win32.ComFactory;
 import org.openscada.opc.common.EventHandler;

@@ -2,13 +2,11 @@ package org.openscada.opc.da.impl;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.common.JIInterfaceDefinition;
 import org.jinterop.dcom.common.JIJavaCoClass;
 import org.jinterop.dcom.common.JIMethodDescriptor;
-import org.jinterop.dcom.core.IJIUnknown;
 import org.jinterop.dcom.core.JIArray;
 import org.jinterop.dcom.core.JIFlags;
 import org.jinterop.dcom.core.JIParameterObject;

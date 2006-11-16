@@ -1,8 +1,6 @@
 package org.openscada.opc.da;
 
 import org.jinterop.dcom.common.JIException;
-import org.jinterop.dcom.core.JIArray;
-import org.jinterop.dcom.core.JICallObject;
 import org.jinterop.dcom.core.JIFlags;
 import org.jinterop.dcom.core.JIPointer;
 import org.jinterop.dcom.core.JIString;

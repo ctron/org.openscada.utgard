@@ -1,8 +1,8 @@
 package org.openscada.opc.da.test;
 
-import org.openscada.opc.da.Constants;
 import org.openscada.opc.common.KeyedResultSet;
 import org.openscada.opc.common.ResultSet;
+import org.openscada.opc.da.Constants;
 import org.openscada.opc.da.IOPCDataCallback;
 import org.openscada.opc.da.ValueData;
 
