@@ -21,8 +21,7 @@ public class EnumString
 
     public EnumString ( IJIComObject enumStringObject ) throws IllegalArgumentException, UnknownHostException, JIException
     {
-        _enumStringObject = (IJIComObject)enumStringObject
-                .queryInterface ( org.openscada.opc.common.Constants.IEnumString_IID );
+        _enumStringObject = (IJIComObject)enumStringObject.queryInterface ( org.openscada.opc.common.Constants.IEnumString_IID );
     }
 
     public int next ( List<String> list, int num ) throws JIException
@@ -34,8 +33,8 @@ public class EnumString
         callObject.setOpnum ( 0 );
 
         callObject.addInParamAsInt ( num, JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIArray ( new JIPointer ( new JIString (
-                JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ), null, 1, true, true ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIArray ( new JIPointer ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ), null, 1, true,
+                true ), JIFlags.FLAG_NULL );
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
 
         Object[] result = Helper.callRespectSFALSE ( _enumStringObject, callObject );

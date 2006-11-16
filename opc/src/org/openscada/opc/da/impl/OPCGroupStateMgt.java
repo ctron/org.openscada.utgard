@@ -16,6 +16,11 @@ import org.openscada.opc.da.Constants;
 import org.openscada.opc.da.IOPCDataCallback;
 import org.openscada.opc.da.OPCGroupState;
 
+/**
+ * Implementation of <code>IOPCGroupStateMgt</code>
+ * @author Jens Reimann <jens.reimann@inavare.net>
+ *
+ */
 public class OPCGroupStateMgt
 {
     private IJIComObject _opcGroupStateMgt = null;
@@ -32,8 +37,7 @@ public class OPCGroupStateMgt
 
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
         callObject.addOutParamAsType ( Boolean.class, JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ),
-                JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ), JIFlags.FLAG_NULL );
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
         callObject.addOutParamAsType ( Float.class, JIFlags.FLAG_NULL );
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
@@ -73,8 +77,8 @@ public class OPCGroupStateMgt
     {
         JICallObject callObject = new JICallObject ( _opcGroupStateMgt.getIpid (), true );
         callObject.setOpnum ( 1 );
-        
-        callObject.addInParamAsPointer ( new JIPointer ( requestedUpdateRate ), JIFlags.FLAG_NULL  );
+
+        callObject.addInParamAsPointer ( new JIPointer ( requestedUpdateRate ), JIFlags.FLAG_NULL );
         if ( active != null )
             callObject.addInParamAsPointer ( new JIPointer ( Integer.valueOf ( active.booleanValue () ? 1 : 0 ) ), JIFlags.FLAG_NULL );
         else
@@ -83,11 +87,11 @@ public class OPCGroupStateMgt
         callObject.addInParamAsPointer ( new JIPointer ( percentDeadband ), JIFlags.FLAG_NULL );
         callObject.addInParamAsPointer ( new JIPointer ( localeID ), JIFlags.FLAG_NULL );
         callObject.addInParamAsPointer ( new JIPointer ( clientHandle ), JIFlags.FLAG_NULL );
-        
+
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
-        
-        Object [] result = _opcGroupStateMgt.call ( callObject );
-        
+
+        Object[] result = _opcGroupStateMgt.call ( callObject );
+
         return (Integer)result[0];
     }
 
@@ -140,9 +144,8 @@ public class OPCGroupStateMgt
         OPCDataCallback callbackObject = new OPCDataCallback ();
         callbackObject.setCallback ( callback );
 
-        String id = ComFactory.attachEventHandler ( _opcGroupStateMgt, Constants.IOPCDataCallback_IID,
-                JIInterfacePointer.getInterfacePointer ( _opcGroupStateMgt.getAssociatedSession (), callbackObject
-                        .getCoClass () ) );
+        String id = ComFactory.attachEventHandler ( _opcGroupStateMgt, Constants.IOPCDataCallback_IID, JIInterfacePointer
+                .getInterfacePointer ( _opcGroupStateMgt.getAssociatedSession (), callbackObject.getCoClass () ) );
 
         callbackObject.setInfo ( _opcGroupStateMgt, id );
         return callbackObject;

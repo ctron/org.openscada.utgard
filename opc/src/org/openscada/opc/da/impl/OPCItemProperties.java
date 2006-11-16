@@ -37,12 +37,10 @@ public class OPCItemProperties
 
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
 
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ),
-                JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( new JIString (
-                JIFlags.FLAG_REPRESENTATION_STRING_BSTR ), null, 1, true ) ), JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Short.class, null, 1, true ) ),
-                JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_BSTR ), null, 1, true ) ),
+                                         JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Short.class, null, 1, true ) ), JIFlags.FLAG_NULL );
 
         Object result[] = _opcItemProperties.call ( callObject );
 
@@ -50,8 +48,7 @@ public class OPCItemProperties
 
         int len = (Integer)result[0];
         Integer[] ids = (Integer[]) ( (JIArray) ( (JIPointer)result[1] ).getReferent () ).getArrayInstance ();
-        JIString[] descriptions = (JIString[]) ( (JIArray) ( (JIPointer)result[2] ).getReferent () )
-                .getArrayInstance ();
+        JIString[] descriptions = (JIString[]) ( (JIArray) ( (JIPointer)result[2] ).getReferent () ).getArrayInstance ();
         Short[] variableTypes = (Short[]) ( (JIArray) ( (JIPointer)result[3] ).getReferent () ).getArrayInstance ();
 
         for ( int i = 0; i < len; i++ )
@@ -83,10 +80,8 @@ public class OPCItemProperties
         callObject.addInParamAsInt ( properties.length, JIFlags.FLAG_NULL );
         callObject.addInParamAsArray ( new JIArray ( ids, true ), JIFlags.FLAG_NULL );
 
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( JIVariant.class, null, 1, true ) ),
-                JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ),
-                JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( JIVariant.class, null, 1, true ) ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
 
         Object result[] = Helper.callRespectSFALSE ( _opcItemProperties, callObject );
 
@@ -119,10 +114,9 @@ public class OPCItemProperties
         callObject.addInParamAsInt ( properties.length, JIFlags.FLAG_NULL );
         callObject.addInParamAsArray ( new JIArray ( ids, true ), JIFlags.FLAG_NULL );
 
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( new JIPointer ( new JIString (
-                JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ), null, 1, true ) ), JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ),
-                JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( new JIPointer ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ),
+                null, 1, true ) ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
 
         Object result[] = Helper.callRespectSFALSE ( _opcItemProperties, callObject );
 
@@ -133,8 +127,7 @@ public class OPCItemProperties
 
         for ( int i = 0; i < properties.length; i++ )
         {
-            results.add ( new KeyedResult<Integer, String> ( properties[i], ( (JIString)itemIDs[i].getReferent () )
-                    .getString (), errorCodes[i] ) );
+            results.add ( new KeyedResult<Integer, String> ( properties[i], ( (JIString)itemIDs[i].getReferent () ).getString (), errorCodes[i] ) );
         }
         return results;
     }

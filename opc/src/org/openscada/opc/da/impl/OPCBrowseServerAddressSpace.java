@@ -28,8 +28,7 @@ public class OPCBrowseServerAddressSpace
 
     public OPCBrowseServerAddressSpace ( IJIComObject opcServer ) throws IllegalArgumentException, UnknownHostException, JIException
     {
-        _opcBrowseServerAddressSpaceObject = (IJIComObject)opcServer
-                .queryInterface ( Constants.IOPCBrowseServerAddressSpace_IID );
+        _opcBrowseServerAddressSpaceObject = (IJIComObject)opcServer.queryInterface ( Constants.IOPCBrowseServerAddressSpace_IID );
     }
 
     /**
@@ -91,8 +90,7 @@ public class OPCBrowseServerAddressSpace
 
         Object result[] = Helper.callRespectSFALSE ( _opcBrowseServerAddressSpaceObject, callObject );
 
-        return new EnumString ( ComFactory.createCOMInstance ( _opcBrowseServerAddressSpaceObject,
-                (JIInterfacePointer)result[0] ) );
+        return new EnumString ( ComFactory.createCOMInstance ( _opcBrowseServerAddressSpaceObject, (JIInterfacePointer)result[0] ) );
     }
 
     /**
@@ -113,8 +111,7 @@ public class OPCBrowseServerAddressSpace
 
         Object[] result = Helper.callRespectSFALSE ( _opcBrowseServerAddressSpaceObject, callObject );
 
-        return new EnumString ( ComFactory.createCOMInstance ( _opcBrowseServerAddressSpaceObject,
-                (JIInterfacePointer)result[0] ) );
+        return new EnumString ( ComFactory.createCOMInstance ( _opcBrowseServerAddressSpaceObject, (JIInterfacePointer)result[0] ) );
     }
 
     /**
@@ -135,8 +132,7 @@ public class OPCBrowseServerAddressSpace
         callObject.setOpnum ( 3 );
 
         callObject.addInParamAsString ( item, JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ),
-                JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ), JIFlags.FLAG_NULL );
 
         Object[] result = _opcBrowseServerAddressSpaceObject.call ( callObject );
 

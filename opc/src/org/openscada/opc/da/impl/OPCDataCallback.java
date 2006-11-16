@@ -51,8 +51,7 @@ public class OPCDataCallback extends EventHandlerImpl
 
     public JIJavaCoClass getCoClass () throws JIException
     {
-        JIJavaCoClass coClass = new JIJavaCoClass (
-                new JIInterfaceDefinition ( "6E3AC3D2-8222-44E2-9347-D6DBDDCE122E" ), this );
+        JIJavaCoClass coClass = new JIJavaCoClass ( new JIInterfaceDefinition ( "6E3AC3D2-8222-44E2-9347-D6DBDDCE122E" ), this );
 
         JIParameterObject params;
         JIMethodDescriptor method;

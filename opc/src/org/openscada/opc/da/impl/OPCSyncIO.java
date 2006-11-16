@@ -38,10 +38,8 @@ public class OPCSyncIO
         callObject.addInParamAsInt ( serverHandles.length, JIFlags.FLAG_NULL );
         callObject.addInParamAsArray ( new JIArray ( serverHandles, true ), JIFlags.FLAG_NULL );
 
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( OPCITEMSTATE.getStruct (), null, 1, true ) ),
-                JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ),
-                JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( OPCITEMSTATE.getStruct (), null, 1, true ) ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
 
         Object result[] = Helper.callRespectSFALSE ( _opcSyncIO, callObject );
 
@@ -51,8 +49,7 @@ public class OPCSyncIO
 
         for ( int i = 0; i < serverHandles.length; i++ )
         {
-            results.add ( new KeyedResult<Integer, OPCITEMSTATE> ( serverHandles[i], OPCITEMSTATE
-                    .fromStruct ( states[i] ), errorCodes[i] ) );
+            results.add ( new KeyedResult<Integer, OPCITEMSTATE> ( serverHandles[i], OPCITEMSTATE.fromStruct ( states[i] ), errorCodes[i] ) );
         }
 
         return results;
@@ -77,8 +74,7 @@ public class OPCSyncIO
         callObject.addInParamAsInt ( requests.length, JIFlags.FLAG_NULL );
         callObject.addInParamAsArray ( new JIArray ( items, true ), JIFlags.FLAG_NULL );
         callObject.addInParamAsArray ( new JIArray ( values, true ), JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ),
-                JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
 
         Object result[] = Helper.callRespectSFALSE ( _opcSyncIO, callObject );
 

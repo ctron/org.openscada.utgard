@@ -47,8 +47,7 @@ public class Test1
 
     public static void showError ( OPCCommon common, int errorCode ) throws JIException
     {
-        System.out
-                .println ( String.format ( "Error (%X): '%s'", errorCode, common.getErrorString ( errorCode, 1033 ) ) );
+        System.out.println ( String.format ( "Error (%X): '%s'", errorCode, common.getErrorString ( errorCode, 1033 ) ) );
     }
 
     public static void showAccessPaths ( OPCBrowseServerAddressSpace browser, String id ) throws IllegalArgumentException, UnknownHostException, JIException
@@ -125,8 +124,8 @@ public class Test1
         KeyedResultSet<Integer, JIVariant> values = itemProperties.getItemProperties ( itemID, ids );
         for ( KeyedResult<Integer, JIVariant> entry : values )
         {
-            System.out.println ( String.format ( "ID: %d, Value: %s, Error Code: %08x", entry.getKey (), entry
-                    .getValue ().toString (), entry.getErrorCode () ) );
+            System.out.println ( String.format ( "ID: %d, Value: %s, Error Code: %08x", entry.getKey (), entry.getValue ().toString (), entry
+                    .getErrorCode () ) );
         }
     }
 
@@ -135,8 +134,8 @@ public class Test1
         KeyedResultSet<Integer, String> values = itemProperties.lookupItemIDs ( itemID, ids );
         for ( KeyedResult<Integer, String> entry : values )
         {
-            System.out.println ( String.format ( "ID: %d, Item ID: %s, Error Code: %08x", entry.getKey (), entry
-                    .getValue (), entry.getErrorCode () ) );
+            System.out
+                    .println ( String.format ( "ID: %d, Item ID: %s, Error Code: %08x", entry.getKey (), entry.getValue (), entry.getErrorCode () ) );
         }
     }
 
@@ -184,10 +183,8 @@ public class Test1
             System.out.println ( String.format ( "Error Code: %08x", resultEntry.getErrorCode () ) );
             if ( !resultEntry.isFailed () )
             {
-                System.out
-                        .println ( String.format ( "Server Handle: %08X", resultEntry.getValue ().getServerHandle () ) );
-                System.out
-                        .println ( String.format ( "Data Type: %d", resultEntry.getValue ().getCanonicalDataType () ) );
+                System.out.println ( String.format ( "Server Handle: %08X", resultEntry.getValue ().getServerHandle () ) );
+                System.out.println ( String.format ( "Data Type: %d", resultEntry.getValue ().getCanonicalDataType () ) );
                 System.out.println ( String.format ( "Access Rights: %d", resultEntry.getValue ().getAccessRights () ) );
                 System.out.println ( String.format ( "Reserved: %d", resultEntry.getValue ().getReserved () ) );
             }
@@ -211,8 +208,8 @@ public class Test1
             //def.setRequestedDataType ( (short)writeTests[i].getValue ().getType () );
             defs[i] = def;
 
-            System.out.println ( String.format ( "%s <= (%d) %s", writeTests[i].getItemID (), writeTests[i].getValue ()
-                    .getType (), writeTests[i].getValue ().toString () ) );
+            System.out.println ( String.format ( "%s <= (%d) %s", writeTests[i].getItemID (), writeTests[i].getValue ().getType (), writeTests[i]
+                    .getValue ().toString () ) );
         }
 
         System.out.println ( "Add to group" );
@@ -224,12 +221,11 @@ public class Test1
             if ( result.get ( i ).getErrorCode () != 0 )
                 throw new JIException ( result.get ( i ).getErrorCode () );
 
-            writeRequests[i] = new WriteRequest ( result.get ( i ).getValue ().getServerHandle (), writeTests[i]
-                    .getValue () );
+            writeRequests[i] = new WriteRequest ( result.get ( i ).getValue ().getServerHandle (), writeTests[i].getValue () );
             serverHandles[i] = writeRequests[i].getServerHandle ();
 
-            System.out.println ( String.format ( "Item: %s, VT: %d", writeTests[i].getItemID (), result.get ( i )
-                    .getValue ().getCanonicalDataType () ) );
+            System.out.println ( String
+                    .format ( "Item: %s, VT: %d", writeTests[i].getItemID (), result.get ( i ).getValue ().getCanonicalDataType () ) );
         }
 
         System.out.println ( "Perform write" );
@@ -238,8 +234,7 @@ public class Test1
         for ( int i = 0; i < writeTests.length; i++ )
         {
             Result<WriteRequest> writeResult = writeResults.get ( i );
-            System.out.println ( String.format ( "ItemID: %s, ErrorCode: %08X", writeTests[i].getItemID (), writeResult
-                    .getErrorCode () ) );
+            System.out.println ( String.format ( "ItemID: %s, ErrorCode: %08X", writeTests[i].getItemID (), writeResult.getErrorCode () ) );
             if ( writeResult.getErrorCode () != 0 )
                 showError ( server, writeResult.getErrorCode () );
         }
@@ -288,8 +283,7 @@ public class Test1
         ResultSet<Integer> resultSet = itemManagement.setActiveState ( true, serverHandles );
         for ( Result<Integer> resultEntry : resultSet )
         {
-            System.out.println ( String.format ( "Item: %08X, Error: %08X", resultEntry.getValue (), resultEntry
-                    .getErrorCode () ) );
+            System.out.println ( String.format ( "Item: %08X, Error: %08X", resultEntry.getValue (), resultEntry.getErrorCode () ) );
         }
 
         // set client handles
@@ -328,12 +322,10 @@ public class Test1
         for ( KeyedResult<Integer, OPCITEMSTATE> itemStateEntry : itemState )
         {
             int errorCode = itemStateEntry.getErrorCode ();
-            System.out.println ( String.format (
-                    "Server ID: %08X, Value: %s, Timestamp: %d/%d (%Tc), Quality: %d, Error: %08X", itemStateEntry
-                            .getKey (), itemStateEntry.getValue ().getValue (), itemStateEntry.getValue ()
-                            .getTimestamp ().getHigh (), itemStateEntry.getValue ().getTimestamp ().getLow (),
-                    itemStateEntry.getValue ().getTimestamp ().asCalendar (), itemStateEntry.getValue ().getQuality (),
-                    errorCode ) );
+            System.out.println ( String.format ( "Server ID: %08X, Value: %s, Timestamp: %d/%d (%Tc), Quality: %d, Error: %08X", itemStateEntry
+                    .getKey (), itemStateEntry.getValue ().getValue (), itemStateEntry.getValue ().getTimestamp ().getHigh (), itemStateEntry
+                    .getValue ().getTimestamp ().getLow (), itemStateEntry.getValue ().getTimestamp ().asCalendar (), itemStateEntry.getValue ()
+                    .getQuality (), errorCode ) );
             if ( errorCode != 0 )
             {
                 showError ( server, errorCode );

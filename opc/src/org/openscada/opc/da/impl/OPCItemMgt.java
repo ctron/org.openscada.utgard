@@ -45,23 +45,19 @@ public class OPCItemMgt
         callObject.addInParamAsInt ( items.length, JIFlags.FLAG_NULL );
         callObject.addInParamAsArray ( itemArray, JIFlags.FLAG_NULL );
         callObject.addInParamAsInt ( 0, JIFlags.FLAG_NULL ); // don't update blobs
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( OPCITEMRESULT.getStruct (), null, 1, true ) ),
-                JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ),
-                JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( OPCITEMRESULT.getStruct (), null, 1, true ) ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
 
         Object result[] = Helper.callRespectSFALSE ( _opcItemMgt, callObject );
 
         JIStruct[] results = (JIStruct[]) ( (JIArray) ( (JIPointer)result[0] ).getReferent () ).getArrayInstance ();
         Integer[] errorCodes = (Integer[]) ( (JIArray) ( (JIPointer)result[1] ).getReferent () ).getArrayInstance ();
 
-        KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> resultList = new KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> (
-                items.length );
+        KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> resultList = new KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> ( items.length );
         for ( int i = 0; i < items.length; i++ )
         {
             OPCITEMRESULT itemResult = OPCITEMRESULT.fromStruct ( results[i] );
-            KeyedResult<OPCITEMDEF, OPCITEMRESULT> resultEntry = new KeyedResult<OPCITEMDEF, OPCITEMRESULT> ( items[i],
-                    itemResult, errorCodes[i] );
+            KeyedResult<OPCITEMDEF, OPCITEMRESULT> resultEntry = new KeyedResult<OPCITEMDEF, OPCITEMRESULT> ( items[i], itemResult, errorCodes[i] );
             resultList.add ( resultEntry );
         }
 
@@ -85,23 +81,19 @@ public class OPCItemMgt
 
         callObject.addInParamAsInt ( items.length, JIFlags.FLAG_NULL );
         callObject.addInParamAsArray ( itemArray, JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( OPCITEMRESULT.getStruct (), null, 1, true ) ),
-                JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ),
-                JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( OPCITEMRESULT.getStruct (), null, 1, true ) ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
 
         Object result[] = Helper.callRespectSFALSE ( _opcItemMgt, callObject );
 
         JIStruct[] results = (JIStruct[]) ( (JIArray) ( (JIPointer)result[0] ).getReferent () ).getArrayInstance ();
         Integer[] errorCodes = (Integer[]) ( (JIArray) ( (JIPointer)result[1] ).getReferent () ).getArrayInstance ();
 
-        KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> resultList = new KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> (
-                items.length );
+        KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> resultList = new KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> ( items.length );
         for ( int i = 0; i < items.length; i++ )
         {
             OPCITEMRESULT itemResult = OPCITEMRESULT.fromStruct ( results[i] );
-            KeyedResult<OPCITEMDEF, OPCITEMRESULT> resultEntry = new KeyedResult<OPCITEMDEF, OPCITEMRESULT> ( items[i],
-                    itemResult, errorCodes[i] );
+            KeyedResult<OPCITEMDEF, OPCITEMRESULT> resultEntry = new KeyedResult<OPCITEMDEF, OPCITEMRESULT> ( items[i], itemResult, errorCodes[i] );
             resultList.add ( resultEntry );
         }
 
@@ -118,8 +110,7 @@ public class OPCItemMgt
 
         callObject.addInParamAsInt ( items.length, JIFlags.FLAG_NULL );
         callObject.addInParamAsArray ( new JIArray ( items, true ), JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ),
-                JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
 
         Object result[] = Helper.callRespectSFALSE ( _opcItemMgt, callObject );
 
@@ -143,8 +134,7 @@ public class OPCItemMgt
         callObject.addInParamAsInt ( items.length, JIFlags.FLAG_NULL );
         callObject.addInParamAsArray ( new JIArray ( items, true ), JIFlags.FLAG_NULL );
         callObject.addInParamAsInt ( state ? 1 : 0, JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ),
-                JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
 
         Object[] result = Helper.callRespectSFALSE ( _opcItemMgt, callObject );
 
@@ -170,8 +160,7 @@ public class OPCItemMgt
         callObject.addInParamAsInt ( serverHandles.length, JIFlags.FLAG_NULL );
         callObject.addInParamAsArray ( new JIArray ( serverHandles, true ), JIFlags.FLAG_NULL );
         callObject.addInParamAsArray ( new JIArray ( clientHandles, true ), JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ),
-                JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
 
         Object[] result = Helper.callRespectSFALSE ( _opcItemMgt, callObject );
 
