@@ -40,7 +40,7 @@ public class OPCServer extends OPCCommon
         return null;
     }
 
-    public OPCGroup addGroup ( String name, boolean active, int updateRate, int clientHandle, int timeBias, float percentDeadband, int localeID ) throws JIException, IllegalArgumentException, UnknownHostException
+    public OPCGroupStateMgt addGroup ( String name, boolean active, int updateRate, int clientHandle, int timeBias, float percentDeadband, int localeID ) throws JIException, IllegalArgumentException, UnknownHostException
     {
         JICallObject callObject = new JICallObject ( _opcServerObject.getIpid (), true );
         callObject.setOpnum ( 0 );
@@ -59,7 +59,7 @@ public class OPCServer extends OPCCommon
 
         Object[] result = _opcServerObject.call ( callObject );
 
-        return new OPCGroup ( ComFactory.createCOMInstance ( _opcServerObject, (JIInterfacePointer)result[2] ) );
+        return new OPCGroupStateMgt ( ComFactory.createCOMInstance ( _opcServerObject, (JIInterfacePointer)result[2] ) );
     }
 
     public void removeGroup ( int serverHandle, boolean force ) throws JIException
@@ -73,12 +73,12 @@ public class OPCServer extends OPCCommon
         _opcServerObject.call ( callObject );
     }
 
-    public void removeGroup ( OPCGroup group, boolean force ) throws JIException
+    public void removeGroup ( OPCGroupStateMgt group, boolean force ) throws JIException
     {
         removeGroup ( group.getState ().getServerHandle (), force );
     }
 
-    public OPCGroup getGroupByName ( String name ) throws JIException, IllegalArgumentException, UnknownHostException
+    public OPCGroupStateMgt getGroupByName ( String name ) throws JIException, IllegalArgumentException, UnknownHostException
     {
         JICallObject callObject = new JICallObject ( _opcServerObject.getIpid (), true );
         callObject.setOpnum ( 2 );
@@ -91,7 +91,7 @@ public class OPCServer extends OPCCommon
 
         JIInterfacePointer ptr = (JIInterfacePointer)result[0];
 
-        return new OPCGroup ( ComFactory.createCOMInstance ( _opcServerObject, ptr ) );
+        return new OPCGroupStateMgt ( ComFactory.createCOMInstance ( _opcServerObject, ptr ) );
     }
 
     public OPCItemProperties getItemPropertiesService ()

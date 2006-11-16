@@ -33,7 +33,7 @@ import org.openscada.opc.da.OPCNAMESPACETYPE;
 import org.openscada.opc.da.PropertyDescription;
 import org.openscada.opc.da.impl.OPCAsyncIO2;
 import org.openscada.opc.da.impl.OPCBrowseServerAddressSpace;
-import org.openscada.opc.da.impl.OPCGroup;
+import org.openscada.opc.da.impl.OPCGroupStateMgt;
 import org.openscada.opc.da.impl.OPCItemIO;
 import org.openscada.opc.da.impl.OPCItemMgt;
 import org.openscada.opc.da.impl.OPCItemProperties;
@@ -106,7 +106,7 @@ public class Test1
         }
     }
 
-    public static void dumpGroupState ( OPCGroup group ) throws JIException
+    public static void dumpGroupState ( OPCGroupStateMgt group ) throws JIException
     {
         OPCGroupState state = group.getState ();
 
@@ -197,7 +197,7 @@ public class Test1
         return failed == 0;
     }
 
-    public static void writeItems ( OPCServer server, OPCGroup group, WriteTest... writeTests ) throws IllegalArgumentException, UnknownHostException, JIException
+    public static void writeItems ( OPCServer server, OPCGroupStateMgt group, WriteTest... writeTests ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         System.out.println ( "Write items" );
 
@@ -251,7 +251,7 @@ public class Test1
         System.out.println ( "Write items...complete" );
     }
 
-    public static void testItems ( OPCServer server, OPCGroup group, String... itemIDs ) throws IllegalArgumentException, UnknownHostException, JIException
+    public static void testItems ( OPCServer server, OPCGroupStateMgt group, String... itemIDs ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         OPCItemMgt itemManagement = group.getItemManagement ();
         List<OPCITEMDEF> items = new ArrayList<OPCITEMDEF> ( itemIDs.length );
@@ -381,9 +381,9 @@ public class Test1
             browseFlat ( serverBrowser );
             browseTree ( serverBrowser );
 
-            OPCGroup group = server.addGroup ( "test", true, 100, 1234, 60, 0.0f, 1033 );
+            OPCGroupStateMgt group = server.addGroup ( "test", true, 100, 1234, 60, 0.0f, 1033 );
             group.setName ( "test2" );
-            OPCGroup group2 = group.clone ( "test" );
+            OPCGroupStateMgt group2 = group.clone ( "test" );
             group = server.getGroupByName ( "test2" );
             dumpGroupState ( group );
             dumpGroupState ( group2 );

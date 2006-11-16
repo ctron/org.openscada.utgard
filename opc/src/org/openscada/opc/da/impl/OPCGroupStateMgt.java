@@ -16,11 +16,11 @@ import org.openscada.opc.da.Constants;
 import org.openscada.opc.da.IOPCDataCallback;
 import org.openscada.opc.da.OPCGroupState;
 
-public class OPCGroup
+public class OPCGroupStateMgt
 {
     private IJIComObject _opcGroupStateMgt = null;
 
-    public OPCGroup ( IJIComObject opcGroup ) throws IllegalArgumentException, UnknownHostException, JIException
+    public OPCGroupStateMgt ( IJIComObject opcGroup ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         _opcGroupStateMgt = (IJIComObject)opcGroup.queryInterface ( Constants.IOPCGroupStateMgt_IID );
     }
@@ -83,7 +83,7 @@ public class OPCGroup
      * @throws UnknownHostException 
      * @throws IllegalArgumentException 
      */
-    public OPCGroup clone ( String name ) throws JIException, IllegalArgumentException, UnknownHostException
+    public OPCGroupStateMgt clone ( String name ) throws JIException, IllegalArgumentException, UnknownHostException
     {
         JICallObject callObject = new JICallObject ( _opcGroupStateMgt.getIpid (), true );
         callObject.setOpnum ( 3 );
@@ -96,7 +96,7 @@ public class OPCGroup
 
         JIInterfacePointer ptr = (JIInterfacePointer)result[0];
 
-        return new OPCGroup ( ComFactory.createCOMInstance ( _opcGroupStateMgt, ptr ) );
+        return new OPCGroupStateMgt ( ComFactory.createCOMInstance ( _opcGroupStateMgt, ptr ) );
     }
 
     public EventHandler attach ( IOPCDataCallback callback ) throws JIException
