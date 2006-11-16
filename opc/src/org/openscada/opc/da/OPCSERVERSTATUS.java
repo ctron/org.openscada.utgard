@@ -159,15 +159,15 @@ public class OPCSERVERSTATUS
 
         return struct;
     }
-    
+
     public static OPCSERVERSTATUS fromStruct ( JIStruct struct )
     {
         OPCSERVERSTATUS status = new OPCSERVERSTATUS ();
-        
+
         status._startTime = FILETIME.fromStruct ( (JIStruct)struct.getMember ( 0 ) );
         status._currentTime = FILETIME.fromStruct ( (JIStruct)struct.getMember ( 1 ) );
         status._lastUpdateTime = FILETIME.fromStruct ( (JIStruct)struct.getMember ( 2 ) );
-        
+
         status._serverState = OPCSERVERSTATE.fromID ( (Short)struct.getMember ( 3 ) );
         status._groupCount = (Integer)struct.getMember ( 4 );
         status._bandWidth = (Integer)struct.getMember ( 5 );
@@ -175,8 +175,8 @@ public class OPCSERVERSTATUS
         status._minorVersion = (Short)struct.getMember ( 7 );
         status._buildNumber = (Short)struct.getMember ( 8 );
         status._reserved = (Short)struct.getMember ( 9 );
-        status._vendorInfo = ((JIString)((JIPointer)struct.getMember ( 10 )).getReferent ()).getString ();
-        
+        status._vendorInfo = ( (JIString) ( (JIPointer)struct.getMember ( 10 ) ).getReferent () ).getString ();
+
         return status;
     }
 }

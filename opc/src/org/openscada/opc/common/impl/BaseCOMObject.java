@@ -25,8 +25,8 @@ public class BaseCOMObject
     {
         // FIXME: need fix in upstream library
         /*
-        if ( _comObject != null )
-            _comObject.release ();
+         if ( _comObject != null )
+         _comObject.release ();
          */
         _comObject = null;
     }
@@ -44,7 +44,7 @@ public class BaseCOMObject
 
         super.finalize ();
     }
-    
+
     protected synchronized IJIComObject getCOMObject ()
     {
         return _comObject;

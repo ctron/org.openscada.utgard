@@ -51,7 +51,7 @@ public class Test1
     {
         System.out.println ( String.format ( "Error (%X): '%s'", errorCode, common.getErrorString ( errorCode, 1033 ) ) );
     }
-    
+
     public static void showError ( OPCServer server, int errorCode ) throws JIException
     {
         showError ( server.getCommon (), errorCode );
@@ -351,7 +351,7 @@ public class Test1
     public static void dumpServerStatus ( OPCServer server ) throws JIException
     {
         OPCSERVERSTATUS status = server.getStatus ();
-        
+
         System.out.println ( "===== SERVER STATUS ======" );
         System.out.println ( "State: " + status.getServerState ().toString () );
         System.out.println ( "Vendor: " + status.getVendorInfo () );
@@ -363,17 +363,17 @@ public class Test1
         System.out.println ( String.format ( "Last Update Time: %tc", status.getLastUpdateTime ().asCalendar () ) );
         System.out.println ( "===== SERVER STATUS ======" );
     }
-    
+
     public static void enumerateGroups ( OPCServer server, OPCENUMSCOPE scope ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         System.out.println ( "Enum Groups: " + scope.toString () );
-        
+
         for ( String group : server.getGroups ( scope ).asCollection () )
         {
             System.out.println ( "Group: " + group );
         }
     }
-    
+
     public static void main ( String[] args ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         TestConfiguration configuration = new MatrikonSimulationServerConfiguration ();
@@ -393,7 +393,7 @@ public class Test1
             IJIComObject serverObject = comServer.createInstance ();
             server = new OPCServer ( serverObject );
             dumpServerStatus ( server );
-            
+
             OPCCommon common = server.getCommon ();
             common.setLocaleID ( 1033 );
             System.out.println ( String.format ( "LCID: %d", common.getLocaleID () ) );
@@ -431,11 +431,11 @@ public class Test1
             enumerateGroups ( server, OPCENUMSCOPE.OPC_ENUM_PUBLIC );
             enumerateGroups ( server, OPCENUMSCOPE.OPC_ENUM_PRIVATE );
             enumerateGroups ( server, OPCENUMSCOPE.OPC_ENUM_ALL );
-            
+
             // clean up
             server.removeGroup ( group, true );
             server.removeGroup ( group2, true );
-            
+
             // server.getStatus ();
 
             //showError ( server, 0x80004005 );

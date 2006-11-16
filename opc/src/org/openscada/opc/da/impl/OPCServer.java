@@ -155,7 +155,7 @@ public class OPCServer extends BaseCOMObject
             return null;
         }
     }
-    
+
     /**
      * Get the common interface if supported 
      * @return the common interface or <code>null</code> if it is not supported

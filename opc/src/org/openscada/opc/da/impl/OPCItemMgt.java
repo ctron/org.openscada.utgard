@@ -25,7 +25,7 @@ public class OPCItemMgt extends BaseCOMObject
     {
         super ( (IJIComObject)opcGroup.queryInterface ( Constants.IOPCItemMgt_IID ) );
     }
-    
+
     public KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> validate ( OPCITEMDEF... items ) throws JIException
     {
         if ( items.length == 0 )
