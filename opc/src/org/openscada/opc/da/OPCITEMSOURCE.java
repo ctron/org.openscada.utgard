@@ -10,12 +10,12 @@ public enum OPCITEMSOURCE
     {
         _id = id;
     }
-    
+
     public int id ()
     {
         return _id;
     }
-    
+
     public static OPCITEMSOURCE fromID ( int id )
     {
         switch ( id )

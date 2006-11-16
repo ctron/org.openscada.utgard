@@ -10,12 +10,12 @@ public enum OPCNAMESPACETYPE
     {
         _id = id;
     }
-    
+
     public int id ()
     {
         return _id;
     }
-    
+
     public static OPCNAMESPACETYPE fromID ( int id )
     {
         switch ( id )

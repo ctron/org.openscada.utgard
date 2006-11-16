@@ -12,15 +12,13 @@ public class MatrikonSimulationServerConfiguration implements TestConfiguration
 
     public String[] getReadItems ()
     {
-        return new String [] { "Saw-toothed Waves.Int2", "Saw-toothed Waves.Int4" };
+        return new String[] { "Saw-toothed Waves.Int2", "Saw-toothed Waves.Int4" };
     }
 
     public WriteTest[] getWriteItems ()
     {
-        return new WriteTest[]{
-                new WriteTest ( "Write Only.Int2", new JIVariant ( (short)1202, false ) ),
-                new WriteTest ( "Write Only.Int4", new JIVariant ( 1202, false ) )
-        };
+        return new WriteTest[] { new WriteTest ( "Write Only.Int2", new JIVariant ( (short)1202, false ) ),
+                new WriteTest ( "Write Only.Int4", new JIVariant ( 1202, false ) ) };
     }
 
 }

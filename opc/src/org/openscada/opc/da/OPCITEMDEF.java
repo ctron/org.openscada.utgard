@@ -80,7 +80,7 @@ public class OPCITEMDEF
     {
         _reserved = reserved;
     }
-    
+
     /**
      * Convert to structure to a J-Interop structure
      * @return the j-interop structe
@@ -93,10 +93,10 @@ public class OPCITEMDEF
         struct.addMember ( new JIString ( getItemID (), JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) );
         struct.addMember ( new Integer ( isActive () ? 1 : 0 ) );
         struct.addMember ( Integer.valueOf ( getClientHandle () ) );
-        
+
         struct.addMember ( Integer.valueOf ( 0 ) ); // blob size
         struct.addMember ( new JIPointer ( null ) ); // blob
-        
+
         struct.addMember ( Short.valueOf ( getRequestedDataType () ) );
         struct.addMember ( Short.valueOf ( getReserved () ) );
         return struct;

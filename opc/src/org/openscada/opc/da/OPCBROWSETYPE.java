@@ -10,12 +10,12 @@ public enum OPCBROWSETYPE
     {
         _id = id;
     }
-    
+
     public int id ()
     {
         return _id;
     }
-    
+
     public static OPCBROWSETYPE fromID ( int id )
     {
         switch ( id )

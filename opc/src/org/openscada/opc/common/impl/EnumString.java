@@ -39,7 +39,7 @@ public class EnumString
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
 
         Object[] result = Helper.callRespectSFALSE ( _enumStringObject, callObject );
-        
+
         JIPointer[] resultData = (JIPointer[]) ( (JIArray) ( result[0] ) ).getArrayInstance ();
         Integer cnt = (Integer)result[1];
 

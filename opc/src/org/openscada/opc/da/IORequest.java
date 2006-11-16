@@ -6,8 +6,9 @@ package org.openscada.opc.da;
 public class IORequest
 {
     private String _itemID;
+
     private int _maxAge;
-    
+
     public IORequest ( String itemID, int maxAge )
     {
         _itemID = itemID;
@@ -33,6 +34,5 @@ public class IORequest
     {
         _maxAge = maxAge;
     }
-    
-    
+
 }

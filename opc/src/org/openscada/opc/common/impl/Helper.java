@@ -14,11 +14,11 @@ public class Helper
      * @return the result of the call
      * @throws JIException
      */
-    public static Object [] callRespectSFALSE ( IJIComObject object, JICallObject callObject ) throws JIException
+    public static Object[] callRespectSFALSE ( IJIComObject object, JICallObject callObject ) throws JIException
     {
         try
         {
-           return object.call ( callObject );
+            return object.call ( callObject );
         }
         catch ( JIException e )
         {

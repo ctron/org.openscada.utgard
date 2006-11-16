@@ -22,34 +22,38 @@ public class OPCItemIO
     {
         _opcItemIO = (IJIComObject)opcItemIO.queryInterface ( Constants.IOPCItemIO_IID );
     }
-    
+
     public void read ( IORequest[] requests ) throws JIException
     {
         if ( requests.length == 0 )
             return;
-        
+
         JICallObject callObject = new JICallObject ( _opcItemIO.getIpid (), true );
         callObject.setOpnum ( 0 );
-        
-        JIString itemIDs [] = new JIString[requests.length];
-        Integer maxAges [] = new Integer[requests.length];
+
+        JIString itemIDs[] = new JIString[requests.length];
+        Integer maxAges[] = new Integer[requests.length];
         for ( int i = 0; i < requests.length; i++ )
         {
             itemIDs[i] = new JIString ( requests[i].getItemID (), JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR );
             maxAges[i] = new Integer ( requests[i].getMaxAge () );
         }
-        
+
         callObject.addInParamAsInt ( requests.length, JIFlags.FLAG_NULL );
         callObject.addInParamAsArray ( new JIArray ( itemIDs, true ), JIFlags.FLAG_NULL );
         callObject.addInParamAsArray ( new JIArray ( maxAges, true ), JIFlags.FLAG_NULL );
-        
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( JIVariant.class, null, 1, true) ), JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true) ), JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( FILETIME.getStruct (), null, 1, true) ), JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true) ), JIFlags.FLAG_NULL );
-        
+
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( JIVariant.class, null, 1, true ) ),
+                JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ),
+                JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( FILETIME.getStruct (), null, 1, true ) ),
+                JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ),
+                JIFlags.FLAG_NULL );
+
         _opcItemIO.call ( callObject );
-        
-        Object result [] = _opcItemIO.call ( callObject );
+
+        Object result[] = _opcItemIO.call ( callObject );
     }
 }

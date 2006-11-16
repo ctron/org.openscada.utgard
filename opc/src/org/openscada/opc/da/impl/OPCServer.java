@@ -58,26 +58,26 @@ public class OPCServer extends OPCCommon
         callObject.addOutParamAsType ( JIInterfacePointer.class, JIFlags.FLAG_NULL );
 
         Object[] result = _opcServerObject.call ( callObject );
-        
+
         return new OPCGroup ( ComFactory.createCOMInstance ( _opcServerObject, (JIInterfacePointer)result[2] ) );
     }
-    
+
     public void removeGroup ( int serverHandle, boolean force ) throws JIException
     {
         JICallObject callObject = new JICallObject ( _opcServerObject.getIpid (), true );
         callObject.setOpnum ( 4 );
-        
+
         callObject.addInParamAsInt ( serverHandle, JIFlags.FLAG_NULL );
         callObject.addInParamAsInt ( force ? 1 : 0, JIFlags.FLAG_NULL );
-        
+
         _opcServerObject.call ( callObject );
     }
-    
+
     public void removeGroup ( OPCGroup group, boolean force ) throws JIException
     {
         removeGroup ( group.getState ().getServerHandle (), force );
     }
-    
+
     public OPCGroup getGroupByName ( String name ) throws JIException, IllegalArgumentException, UnknownHostException
     {
         JICallObject callObject = new JICallObject ( _opcServerObject.getIpid (), true );
@@ -88,12 +88,12 @@ public class OPCServer extends OPCCommon
         callObject.addOutParamAsType ( JIInterfacePointer.class, JIFlags.FLAG_NULL );
 
         Object[] result = _opcServerObject.call ( callObject );
-        
+
         JIInterfacePointer ptr = (JIInterfacePointer)result[0];
-        
+
         return new OPCGroup ( ComFactory.createCOMInstance ( _opcServerObject, ptr ) );
     }
-    
+
     public OPCItemProperties getItemPropertiesService ()
     {
         try
@@ -105,7 +105,7 @@ public class OPCServer extends OPCCommon
             return null;
         }
     }
-    
+
     public OPCItemIO getItemIOService ()
     {
         try
@@ -117,7 +117,7 @@ public class OPCServer extends OPCCommon
             return null;
         }
     }
-    
+
     /**
      * Get the browser object (<code>IOPCBrowseServerAddressSpace</code>) from the server instance
      * @return the browser object

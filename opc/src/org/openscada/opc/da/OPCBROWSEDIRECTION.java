@@ -10,12 +10,12 @@ public enum OPCBROWSEDIRECTION
     {
         _id = id;
     }
-    
+
     public int id ()
     {
         return _id;
     }
-    
+
     public static OPCBROWSEDIRECTION fromID ( int id )
     {
         switch ( id )

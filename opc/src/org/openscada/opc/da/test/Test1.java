@@ -200,7 +200,7 @@ public class Test1
     public static void writeItems ( OPCServer server, OPCGroup group, WriteTest... writeTests ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         System.out.println ( "Write items" );
-        
+
         OPCItemMgt itemManagement = group.getItemManagement ();
         OPCITEMDEF[] defs = new OPCITEMDEF[writeTests.length];
         for ( int i = 0; i < writeTests.length; i++ )
@@ -210,8 +210,9 @@ public class Test1
             def.setItemID ( writeTests[i].getItemID () );
             //def.setRequestedDataType ( (short)writeTests[i].getValue ().getType () );
             defs[i] = def;
-            
-            System.out.println ( String.format ( "%s <= (%d) %s", writeTests[i].getItemID (), writeTests[i].getValue ().getType (), writeTests[i].getValue ().toString () ) );
+
+            System.out.println ( String.format ( "%s <= (%d) %s", writeTests[i].getItemID (), writeTests[i].getValue ()
+                    .getType (), writeTests[i].getValue ().toString () ) );
         }
 
         System.out.println ( "Add to group" );
@@ -226,25 +227,27 @@ public class Test1
             writeRequests[i] = new WriteRequest ( result.get ( i ).getValue ().getServerHandle (), writeTests[i]
                     .getValue () );
             serverHandles[i] = writeRequests[i].getServerHandle ();
-            
-            System.out.println ( String.format ( "Item: %s, VT: %d", writeTests[i].getItemID (), result.get(i).getValue ().getCanonicalDataType () ) );
+
+            System.out.println ( String.format ( "Item: %s, VT: %d", writeTests[i].getItemID (), result.get ( i )
+                    .getValue ().getCanonicalDataType () ) );
         }
-        
+
         System.out.println ( "Perform write" );
         OPCSyncIO syncIO = group.getSyncIO ();
         ResultSet<WriteRequest> writeResults = syncIO.write ( writeRequests );
-        for ( int i = 0 ; i < writeTests.length; i++ )
+        for ( int i = 0; i < writeTests.length; i++ )
         {
             Result<WriteRequest> writeResult = writeResults.get ( i );
-            System.out.println ( String.format ( "ItemID: %s, ErrorCode: %08X", writeTests[i].getItemID (), writeResult.getErrorCode () ) );
+            System.out.println ( String.format ( "ItemID: %s, ErrorCode: %08X", writeTests[i].getItemID (), writeResult
+                    .getErrorCode () ) );
             if ( writeResult.getErrorCode () != 0 )
                 showError ( server, writeResult.getErrorCode () );
         }
-        
+
         // finally remove them again
         System.out.println ( "Remove from group" );
         itemManagement.remove ( serverHandles );
-        
+
         System.out.println ( "Write items...complete" );
     }
 

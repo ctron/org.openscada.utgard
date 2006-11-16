@@ -36,11 +36,14 @@ public class OPCItemProperties
         callObject.addInParamAsString ( itemID, JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR );
 
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
-        
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_BSTR ), null, 1, true ) ), JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Short.class, null, 1, true ) ), JIFlags.FLAG_NULL );
-        
+
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ),
+                JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( new JIString (
+                JIFlags.FLAG_REPRESENTATION_STRING_BSTR ), null, 1, true ) ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Short.class, null, 1, true ) ),
+                JIFlags.FLAG_NULL );
+
         Object result[] = _opcItemProperties.call ( callObject );
 
         List<PropertyDescription> properties = new LinkedList<PropertyDescription> ();
@@ -62,17 +65,17 @@ public class OPCItemProperties
         return properties;
     }
 
-    public KeyedResultSet<Integer,JIVariant> getItemProperties ( String itemID, int... properties ) throws JIException
+    public KeyedResultSet<Integer, JIVariant> getItemProperties ( String itemID, int... properties ) throws JIException
     {
         if ( properties.length == 0 )
             return new KeyedResultSet<Integer, JIVariant> ();
-        
+
         Integer[] ids = new Integer[properties.length];
         for ( int i = 0; i < properties.length; i++ )
         {
             ids[i] = properties[i];
         }
-        
+
         JICallObject callObject = new JICallObject ( _opcItemProperties.getIpid (), true );
         callObject.setOpnum ( 1 );
 
@@ -80,8 +83,10 @@ public class OPCItemProperties
         callObject.addInParamAsInt ( properties.length, JIFlags.FLAG_NULL );
         callObject.addInParamAsArray ( new JIArray ( ids, true ), JIFlags.FLAG_NULL );
 
-        callObject.addOutParamAsObject (  new JIPointer ( new JIArray ( JIVariant.class, null, 1, true ) ), JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject (  new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( JIVariant.class, null, 1, true ) ),
+                JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ),
+                JIFlags.FLAG_NULL );
 
         Object result[] = Helper.callRespectSFALSE ( _opcItemProperties, callObject );
 
@@ -91,19 +96,16 @@ public class OPCItemProperties
         KeyedResultSet<Integer, JIVariant> results = new KeyedResultSet<Integer, JIVariant> ();
         for ( int i = 0; i < properties.length; i++ )
         {
-            results.add ( new KeyedResult<Integer, JIVariant> ( properties[i],
-                    values[i],
-                    errorCodes[i]
-                    ) );
+            results.add ( new KeyedResult<Integer, JIVariant> ( properties[i], values[i], errorCodes[i] ) );
         }
         return results;
     }
-    
-    public KeyedResultSet<Integer,String> lookupItemIDs ( String itemID, int... properties ) throws JIException
+
+    public KeyedResultSet<Integer, String> lookupItemIDs ( String itemID, int... properties ) throws JIException
     {
         if ( properties.length == 0 )
             return new KeyedResultSet<Integer, String> ();
-        
+
         Integer[] ids = new Integer[properties.length];
         for ( int i = 0; i < properties.length; i++ )
         {
@@ -117,24 +119,22 @@ public class OPCItemProperties
         callObject.addInParamAsInt ( properties.length, JIFlags.FLAG_NULL );
         callObject.addInParamAsArray ( new JIArray ( ids, true ), JIFlags.FLAG_NULL );
 
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( new
-                JIPointer(new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR )),
-                null, 1, true ) ), JIFlags.FLAG_NULL ); 
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
-     
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( new JIPointer ( new JIString (
+                JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ), null, 1, true ) ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ),
+                JIFlags.FLAG_NULL );
+
         Object result[] = Helper.callRespectSFALSE ( _opcItemProperties, callObject );
 
         JIPointer[] itemIDs = (JIPointer[]) ( (JIArray) ( (JIPointer)result[0] ).getReferent () ).getArrayInstance ();
         Integer[] errorCodes = (Integer[]) ( (JIArray) ( (JIPointer)result[1] ).getReferent () ).getArrayInstance ();
 
-        KeyedResultSet<Integer,String> results = new KeyedResultSet<Integer, String> ();
-        
+        KeyedResultSet<Integer, String> results = new KeyedResultSet<Integer, String> ();
+
         for ( int i = 0; i < properties.length; i++ )
         {
-            results.add ( new KeyedResult<Integer,String> ( properties[i],
-                    ((JIString)itemIDs[i].getReferent ()).getString (),
-                    errorCodes[i]
-                    ) );
+            results.add ( new KeyedResult<Integer, String> ( properties[i], ( (JIString)itemIDs[i].getReferent () )
+                    .getString (), errorCodes[i] ) );
         }
         return results;
     }

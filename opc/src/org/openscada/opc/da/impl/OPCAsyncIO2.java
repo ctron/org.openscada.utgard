@@ -16,30 +16,30 @@ public class OPCAsyncIO2
     {
         _opcAsyncIO2 = (IJIComObject)opcAsyncIO2.queryInterface ( Constants.IOPCAsyncIO2_IID );
     }
-    
+
     public void setEnable ( boolean state ) throws JIException
     {
         JICallObject callObject = new JICallObject ( _opcAsyncIO2.getIpid (), true );
         callObject.setOpnum ( 4 );
-        
+
         callObject.addInParamAsInt ( state ? 1 : 0, JIFlags.FLAG_NULL );
-        
+
         _opcAsyncIO2.call ( callObject );
     }
-    
+
     public int refresh ( short source, int transactionID ) throws JIException
     {
         JICallObject callObject = new JICallObject ( _opcAsyncIO2.getIpid (), true );
         callObject.setOpnum ( 2 );
-        
+
         callObject.addInParamAsShort ( source, JIFlags.FLAG_NULL );
         callObject.addInParamAsInt ( transactionID, JIFlags.FLAG_NULL );
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
-        
+
         Object result[] = _opcAsyncIO2.call ( callObject );
-        
+
         _opcAsyncIO2.call ( callObject );
-        
+
         return (Integer)result[0];
     }
 }

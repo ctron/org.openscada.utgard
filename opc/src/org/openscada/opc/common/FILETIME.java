@@ -14,7 +14,7 @@ public class FILETIME
     public FILETIME ()
     {
     }
-    
+
     public FILETIME ( FILETIME arg0 )
     {
         _high = arg0._high;
@@ -81,28 +81,27 @@ public class FILETIME
     public static FILETIME fromStruct ( JIStruct struct )
     {
         FILETIME ft = new FILETIME ();
-        
+
         ft.setLow ( (Integer)struct.getMember ( 0 ) );
         ft.setHigh ( (Integer)struct.getMember ( 1 ) );
-        
+
         return ft;
     }
-    
+
     public Calendar asCalendar ()
     {
         Calendar c = Calendar.getInstance ();
-        
+
         long i = _high;
         i = i << 32L;
         i = i | _low;
-        
+
         i = i - 116444736000000000L;
-        
+
         i = i / 10000L;
-        
+
         c.setTimeInMillis ( i );
-        
+
         return c;
     }
 }
-

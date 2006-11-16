@@ -8,6 +8,7 @@ import org.openscada.opc.common.EventHandler;
 public class EventHandlerImpl implements EventHandler
 {
     private String _identifier = null;
+
     private IJIComObject _object = null;
 
     public String getIdentifier ()
@@ -19,7 +20,7 @@ public class EventHandlerImpl implements EventHandler
     {
         return _object;
     }
-    
+
     public synchronized void setInfo ( IJIComObject object, String identifier )
     {
         _object = object;
@@ -35,5 +36,5 @@ public class EventHandlerImpl implements EventHandler
         _object = null;
         _identifier = null;
     }
-    
+
 }
