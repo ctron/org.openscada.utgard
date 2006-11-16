@@ -8,9 +8,14 @@ public class SoftingDemoServerConfiguration implements TestConfiguration
         return "2E565242-B238-11D3-842D-0008C779D775";
     }
 
-    public String[] getTestItems ()
+    public String[] getReadItems ()
     {
         return new String[] { "increment.I2", "increment.I4" };
+    }
+
+    public WriteTest[] getWriteItems ()
+    {
+        return null;
     }
 
 }
