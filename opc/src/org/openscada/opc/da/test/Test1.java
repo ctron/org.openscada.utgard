@@ -30,6 +30,7 @@ import org.openscada.opc.da.OPCITEMRESULT;
 import org.openscada.opc.da.OPCITEMSOURCE;
 import org.openscada.opc.da.OPCITEMSTATE;
 import org.openscada.opc.da.OPCNAMESPACETYPE;
+import org.openscada.opc.da.OPCSERVERSTATUS;
 import org.openscada.opc.da.PropertyDescription;
 import org.openscada.opc.da.impl.OPCAsyncIO2;
 import org.openscada.opc.da.impl.OPCBrowseServerAddressSpace;
@@ -341,6 +342,24 @@ public class Test1
         itemManagement.remove ( serverHandles );
     }
 
+    public static void dumpServerStatus ( OPCServer server ) throws JIException
+    {
+        OPCSERVERSTATUS status = server.getStatus ();
+        
+        System.out.println ( "===== SERVER STATUS ======" );
+        System.out.println ( "State: " + status.getServerState ().toString () );
+        System.out.println ( "Vendor: " + status.getVendorInfo () );
+        System.out.println ( String.format ( "Version: %d.%d.%d", status.getMajorVersion (), status.getMinorVersion (), status.getBuildNumber () ) );
+        System.out.println ( "Groups: " + status.getGroupCount () );
+        System.out.println ( "Bandwidth: " + status.getBandWidth () );
+        System.out.println ( String.format ( "Start Time: %tc", status.getStartTime ().asCalendar () ) );
+        System.out.println ( String.format ( "Current Time: %tc", status.getCurrentTime ().asCalendar () ) );
+        System.out.println ( String.format ( "Last Update Time: %tc", status.getLastUpdateTime ().asCalendar () ) );
+        System.out.println ( "===== SERVER STATUS ======" );
+        
+        System.exit ( 0 );
+    }
+    
     public static void main ( String[] args ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         TestConfiguration configuration = new MatrikonSimulationServerConfiguration ();
@@ -359,8 +378,8 @@ public class Test1
 
             IJIComObject serverObject = comServer.createInstance ();
             server = new OPCServer ( serverObject );
-
-            // server.GetStatus ();
+            dumpServerStatus ( server );
+            
             server.setLocaleID ( 1033 );
             System.out.println ( String.format ( "LCID: %d", server.getLocaleID () ) );
             server.setClientName ( "test" );

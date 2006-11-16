@@ -24,20 +24,21 @@ public class OPCServer extends OPCCommon
         _opcServerObject = (IJIComObject)opcServer.queryInterface ( Constants.IOPCServer_IID );
     }
 
+    /**
+     * Retrieve the current server status
+     * @return the current server status
+     * @throws JIException
+     */
     public OPCSERVERSTATUS getStatus () throws JIException
     {
         JICallObject callObject = new JICallObject ( _opcServerObject.getIpid (), true );
         callObject.setOpnum ( 3 );
 
-        JIStruct status = OPCSERVERSTATUS.getStruct ();
-
-        callObject.addOutParamAsObject ( new JIPointer ( status, false ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( OPCSERVERSTATUS.getStruct () ), JIFlags.FLAG_NULL );
 
         Object[] result = _opcServerObject.call ( callObject );
 
-        System.out.println ( result.toString () );
-
-        return null;
+        return OPCSERVERSTATUS.fromStruct ( (JIStruct) ((JIPointer)result[0]).getReferent () );
     }
 
     public OPCGroupStateMgt addGroup ( String name, boolean active, int updateRate, int clientHandle, int timeBias, float percentDeadband, int localeID ) throws JIException, IllegalArgumentException, UnknownHostException
@@ -89,9 +90,7 @@ public class OPCServer extends OPCCommon
 
         Object[] result = _opcServerObject.call ( callObject );
 
-        JIInterfacePointer ptr = (JIInterfacePointer)result[0];
-
-        return new OPCGroupStateMgt ( ComFactory.createCOMInstance ( _opcServerObject, ptr ) );
+        return new OPCGroupStateMgt ( ComFactory.createCOMInstance ( _opcServerObject, (JIInterfacePointer)result[0] ) );
     }
 
     public OPCItemProperties getItemPropertiesService ()

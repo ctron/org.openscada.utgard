@@ -1,32 +1,35 @@
 package org.openscada.opc.da;
 
 import org.jinterop.dcom.common.JIException;
+import org.jinterop.dcom.core.JIFlags;
+import org.jinterop.dcom.core.JIPointer;
+import org.jinterop.dcom.core.JIString;
 import org.jinterop.dcom.core.JIStruct;
 import org.openscada.opc.common.FILETIME;
 
 public class OPCSERVERSTATUS
 {
-    private FILETIME _startTime;
+    private FILETIME _startTime = null;
 
-    private FILETIME _currentTime;
+    private FILETIME _currentTime = null;
 
-    private FILETIME _lastUpdateTime;
+    private FILETIME _lastUpdateTime = null;
 
-    private OPCSERVERSTATE _serverState;
+    private OPCSERVERSTATE _serverState = null;
 
-    private int _groupCount;
+    private int _groupCount = -1;
 
-    private int _bandWidth;
+    private int _bandWidth = -1;
 
-    private short _majorVersion;
+    private short _majorVersion = -1;
 
-    private short _minorVersion;
+    private short _minorVersion = -1;
 
-    private short _buildNumber;
+    private short _buildNumber = -1;
 
-    private short _reserved;
+    private short _reserved = 0;
 
-    private String _vendorInfo;
+    private String _vendorInfo = null;
 
     public int getBandWidth ()
     {
@@ -152,8 +155,28 @@ public class OPCSERVERSTATUS
         struct.addMember ( Short.class );
         struct.addMember ( Short.class );
         struct.addMember ( Short.class );
-        struct.addMember ( String.class );
+        struct.addMember ( new JIPointer ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ) );
 
         return struct;
+    }
+    
+    public static OPCSERVERSTATUS fromStruct ( JIStruct struct )
+    {
+        OPCSERVERSTATUS status = new OPCSERVERSTATUS ();
+        
+        status._startTime = FILETIME.fromStruct ( (JIStruct)struct.getMember ( 0 ) );
+        status._currentTime = FILETIME.fromStruct ( (JIStruct)struct.getMember ( 1 ) );
+        status._lastUpdateTime = FILETIME.fromStruct ( (JIStruct)struct.getMember ( 2 ) );
+        
+        status._serverState = OPCSERVERSTATE.fromID ( (Short)struct.getMember ( 3 ) );
+        status._groupCount = (Integer)struct.getMember ( 4 );
+        status._bandWidth = (Integer)struct.getMember ( 5 );
+        status._majorVersion = (Short)struct.getMember ( 6 );
+        status._minorVersion = (Short)struct.getMember ( 7 );
+        status._buildNumber = (Short)struct.getMember ( 8 );
+        status._reserved = (Short)struct.getMember ( 9 );
+        status._vendorInfo = ((JIString)((JIPointer)struct.getMember ( 10 )).getReferent ()).getString ();
+        
+        return status;
     }
 }
