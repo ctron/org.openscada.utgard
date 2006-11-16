@@ -51,6 +51,11 @@ public class Test1
     {
         System.out.println ( String.format ( "Error (%X): '%s'", errorCode, common.getErrorString ( errorCode, 1033 ) ) );
     }
+    
+    public static void showError ( OPCServer server, int errorCode ) throws JIException
+    {
+        showError ( server.getCommon (), errorCode );
+    }
 
     public static void showAccessPaths ( OPCBrowseServerAddressSpace browser, String id ) throws IllegalArgumentException, UnknownHostException, JIException
     {
@@ -389,10 +394,11 @@ public class Test1
             server = new OPCServer ( serverObject );
             dumpServerStatus ( server );
             
-            server.setLocaleID ( 1033 );
-            System.out.println ( String.format ( "LCID: %d", server.getLocaleID () ) );
-            server.setClientName ( "test" );
-            for ( Integer i : server.queryAvailableLocaleIDs () )
+            OPCCommon common = server.getCommon ();
+            common.setLocaleID ( 1033 );
+            System.out.println ( String.format ( "LCID: %d", common.getLocaleID () ) );
+            common.setClientName ( "test" );
+            for ( Integer i : common.queryAvailableLocaleIDs () )
             {
                 System.out.println ( String.format ( "Available LCID: %d", i ) );
             }

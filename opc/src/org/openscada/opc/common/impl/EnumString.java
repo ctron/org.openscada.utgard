@@ -15,13 +15,11 @@ import org.jinterop.dcom.core.JIPointer;
 import org.jinterop.dcom.core.JIString;
 import org.jinterop.dcom.win32.ComFactory;
 
-public class EnumString
+public class EnumString extends BaseCOMObject
 {
-    private IJIComObject _enumStringObject = null;
-
     public EnumString ( IJIComObject enumStringObject ) throws IllegalArgumentException, UnknownHostException, JIException
     {
-        _enumStringObject = (IJIComObject)enumStringObject.queryInterface ( org.openscada.opc.common.Constants.IEnumString_IID );
+        super ( (IJIComObject)enumStringObject.queryInterface ( org.openscada.opc.common.Constants.IEnumString_IID ) );
     }
 
     public int next ( List<String> list, int num ) throws JIException
@@ -29,7 +27,7 @@ public class EnumString
         if ( num <= 0 )
             return 0;
 
-        JICallObject callObject = new JICallObject ( _enumStringObject.getIpid (), true );
+        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
         callObject.setOpnum ( 0 );
 
         callObject.addInParamAsInt ( num, JIFlags.FLAG_NULL );
@@ -37,7 +35,7 @@ public class EnumString
                 true ), JIFlags.FLAG_NULL );
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
 
-        Object[] result = Helper.callRespectSFALSE ( _enumStringObject, callObject );
+        Object[] result = Helper.callRespectSFALSE ( getCOMObject (), callObject );
 
         JIPointer[] resultData = (JIPointer[]) ( (JIArray) ( result[0] ) ).getArrayInstance ();
         Integer cnt = (Integer)result[1];
@@ -61,32 +59,32 @@ public class EnumString
         if ( num <= 0 )
             return;
 
-        JICallObject callObject = new JICallObject ( _enumStringObject.getIpid (), true );
+        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
         callObject.setOpnum ( 1 );
 
         callObject.addInParamAsInt ( num, JIFlags.FLAG_NULL );
 
-        _enumStringObject.call ( callObject );
+        getCOMObject ().call ( callObject );
     }
 
     public void reset () throws JIException
     {
-        JICallObject callObject = new JICallObject ( _enumStringObject.getIpid (), true );
+        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
         callObject.setOpnum ( 2 );
 
-        _enumStringObject.call ( callObject );
+        getCOMObject ().call ( callObject );
     }
 
     public EnumString cloneObject () throws JIException, IllegalArgumentException, UnknownHostException
     {
-        JICallObject callObject = new JICallObject ( _enumStringObject.getIpid (), true );
+        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
         callObject.setOpnum ( 3 );
 
         callObject.addOutParamAsType ( JIInterfacePointer.class, JIFlags.FLAG_NULL );
 
-        Object[] result = _enumStringObject.call ( callObject );
+        Object[] result = getCOMObject ().call ( callObject );
 
-        IJIComObject object = ComFactory.createCOMInstance ( _enumStringObject, (JIInterfacePointer)result[0] );
+        IJIComObject object = ComFactory.createCOMInstance ( getCOMObject (), (JIInterfacePointer)result[0] );
 
         return new EnumString ( object );
     }

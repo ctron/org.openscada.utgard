@@ -11,16 +11,15 @@ import org.jinterop.dcom.core.JIPointer;
 import org.jinterop.dcom.core.JIString;
 import org.jinterop.dcom.core.JIVariant;
 import org.openscada.opc.common.FILETIME;
+import org.openscada.opc.common.impl.BaseCOMObject;
 import org.openscada.opc.da.Constants;
 import org.openscada.opc.da.IORequest;
 
-public class OPCItemIO
+public class OPCItemIO extends BaseCOMObject
 {
-    private IJIComObject _opcItemIO = null;
-
     public OPCItemIO ( IJIComObject opcItemIO ) throws IllegalArgumentException, UnknownHostException, JIException
     {
-        _opcItemIO = (IJIComObject)opcItemIO.queryInterface ( Constants.IOPCItemIO_IID );
+        super ( (IJIComObject)opcItemIO.queryInterface ( Constants.IOPCItemIO_IID ) );
     }
 
     public void read ( IORequest[] requests ) throws JIException
@@ -28,7 +27,7 @@ public class OPCItemIO
         if ( requests.length == 0 )
             return;
 
-        JICallObject callObject = new JICallObject ( _opcItemIO.getIpid (), true );
+        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
         callObject.setOpnum ( 0 );
 
         JIString itemIDs[] = new JIString[requests.length];
@@ -48,8 +47,6 @@ public class OPCItemIO
         callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( FILETIME.getStruct (), null, 1, true ) ), JIFlags.FLAG_NULL );
         callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
 
-        _opcItemIO.call ( callObject );
-
-        Object result[] = _opcItemIO.call ( callObject );
+        Object result[] = getCOMObject ().call ( callObject );
     }
 }

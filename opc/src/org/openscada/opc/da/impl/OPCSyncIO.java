@@ -12,18 +12,17 @@ import org.openscada.opc.common.KeyedResult;
 import org.openscada.opc.common.KeyedResultSet;
 import org.openscada.opc.common.Result;
 import org.openscada.opc.common.ResultSet;
+import org.openscada.opc.common.impl.BaseCOMObject;
 import org.openscada.opc.common.impl.Helper;
 import org.openscada.opc.da.Constants;
 import org.openscada.opc.da.OPCITEMSOURCE;
 import org.openscada.opc.da.OPCITEMSTATE;
 
-public class OPCSyncIO
+public class OPCSyncIO extends BaseCOMObject
 {
-    private IJIComObject _opcSyncIO = null;
-
     public OPCSyncIO ( IJIComObject opcSyncIO ) throws JIException
     {
-        _opcSyncIO = (IJIComObject)opcSyncIO.queryInterface ( Constants.IOPCSyncIO_IID );
+        super ( (IJIComObject)opcSyncIO.queryInterface ( Constants.IOPCSyncIO_IID ) );
     }
 
     public KeyedResultSet<Integer, OPCITEMSTATE> read ( OPCITEMSOURCE source, Integer... serverHandles ) throws JIException
@@ -31,7 +30,7 @@ public class OPCSyncIO
         if ( serverHandles == null || serverHandles.length == 0 )
             return new KeyedResultSet<Integer, OPCITEMSTATE> ();
 
-        JICallObject callObject = new JICallObject ( _opcSyncIO.getIpid (), true );
+        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
         callObject.setOpnum ( 0 );
 
         callObject.addInParamAsShort ( (short)source.id (), JIFlags.FLAG_NULL );
@@ -41,7 +40,7 @@ public class OPCSyncIO
         callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( OPCITEMSTATE.getStruct (), null, 1, true ) ), JIFlags.FLAG_NULL );
         callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
 
-        Object result[] = Helper.callRespectSFALSE ( _opcSyncIO, callObject );
+        Object result[] = Helper.callRespectSFALSE ( getCOMObject (), callObject );
 
         KeyedResultSet<Integer, OPCITEMSTATE> results = new KeyedResultSet<Integer, OPCITEMSTATE> ();
         JIStruct[] states = (JIStruct[]) ( (JIArray) ( (JIPointer)result[0] ).getReferent () ).getArrayInstance ();
@@ -68,7 +67,7 @@ public class OPCSyncIO
             values[i] = requests[i].getValue ();
         }
 
-        JICallObject callObject = new JICallObject ( _opcSyncIO.getIpid (), true );
+        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
         callObject.setOpnum ( 1 );
 
         callObject.addInParamAsInt ( requests.length, JIFlags.FLAG_NULL );
@@ -76,7 +75,7 @@ public class OPCSyncIO
         callObject.addInParamAsArray ( new JIArray ( values, true ), JIFlags.FLAG_NULL );
         callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
 
-        Object result[] = Helper.callRespectSFALSE ( _opcSyncIO, callObject );
+        Object result[] = Helper.callRespectSFALSE ( getCOMObject (), callObject );
 
         Integer[] errorCodes = (Integer[]) ( (JIArray) ( (JIPointer)result[0] ).getReferent () ).getArrayInstance ();
 
