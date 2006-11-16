@@ -31,6 +31,7 @@ public class EnumString extends BaseCOMObject
         callObject.setOpnum ( 0 );
 
         callObject.addInParamAsInt ( num, JIFlags.FLAG_NULL );
+        callObject.addInParamAsInt ( num, JIFlags.FLAG_NULL );
         callObject.addOutParamAsObject ( new JIArray ( new JIPointer ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ), null, 1, true,
                 true ), JIFlags.FLAG_NULL );
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
