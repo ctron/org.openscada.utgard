@@ -10,8 +10,11 @@ import org.jinterop.dcom.core.JIInterfacePointer;
 import org.jinterop.dcom.core.JIPointer;
 import org.jinterop.dcom.core.JIStruct;
 import org.jinterop.dcom.win32.ComFactory;
+import org.openscada.opc.common.impl.EnumString;
+import org.openscada.opc.common.impl.Helper;
 import org.openscada.opc.common.impl.OPCCommon;
 import org.openscada.opc.da.Constants;
+import org.openscada.opc.da.OPCENUMSCOPE;
 import org.openscada.opc.da.OPCSERVERSTATUS;
 
 public class OPCServer extends OPCCommon
@@ -38,7 +41,7 @@ public class OPCServer extends OPCCommon
 
         Object[] result = _opcServerObject.call ( callObject );
 
-        return OPCSERVERSTATUS.fromStruct ( (JIStruct) ((JIPointer)result[0]).getReferent () );
+        return OPCSERVERSTATUS.fromStruct ( (JIStruct) ( (JIPointer)result[0] ).getReferent () );
     }
 
     public OPCGroupStateMgt addGroup ( String name, boolean active, int updateRate, int clientHandle, int timeBias, float percentDeadband, int localeID ) throws JIException, IllegalArgumentException, UnknownHostException
@@ -91,6 +94,28 @@ public class OPCServer extends OPCCommon
         Object[] result = _opcServerObject.call ( callObject );
 
         return new OPCGroupStateMgt ( ComFactory.createCOMInstance ( _opcServerObject, (JIInterfacePointer)result[0] ) );
+    }
+
+    /**
+     * Get the groups
+     * @param scope The scope to get
+     * @return A string enumerator with the groups
+     * @throws JIException
+     * @throws IllegalArgumentException
+     * @throws UnknownHostException
+     */
+    public EnumString getGroups ( OPCENUMSCOPE scope ) throws JIException, IllegalArgumentException, UnknownHostException
+    {
+        JICallObject callObject = new JICallObject ( _opcServerObject.getIpid (), true );
+        callObject.setOpnum ( 5 );
+
+        callObject.addInParamAsShort ( (short)scope.id (), JIFlags.FLAG_NULL );
+        callObject.addInParamAsUUID ( Constants.IEnumString_IID, JIFlags.FLAG_NULL );
+        callObject.addOutParamAsType ( JIInterfacePointer.class, JIFlags.FLAG_NULL );
+
+        Object[] result = Helper.callRespectSFALSE ( _opcServerObject, callObject );
+
+        return new EnumString ( ComFactory.createCOMInstance ( _opcServerObject, (JIInterfacePointer)result[0] ) );
     }
 
     public OPCItemProperties getItemPropertiesService ()

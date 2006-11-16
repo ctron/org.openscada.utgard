@@ -24,6 +24,7 @@ import org.openscada.opc.common.impl.OPCCommon;
 import org.openscada.opc.da.IORequest;
 import org.openscada.opc.da.OPCBROWSEDIRECTION;
 import org.openscada.opc.da.OPCBROWSETYPE;
+import org.openscada.opc.da.OPCENUMSCOPE;
 import org.openscada.opc.da.OPCGroupState;
 import org.openscada.opc.da.OPCITEMDEF;
 import org.openscada.opc.da.OPCITEMRESULT;
@@ -356,8 +357,16 @@ public class Test1
         System.out.println ( String.format ( "Current Time: %tc", status.getCurrentTime ().asCalendar () ) );
         System.out.println ( String.format ( "Last Update Time: %tc", status.getLastUpdateTime ().asCalendar () ) );
         System.out.println ( "===== SERVER STATUS ======" );
+    }
+    
+    public static void enumerateGroups ( OPCServer server, OPCENUMSCOPE scope ) throws IllegalArgumentException, UnknownHostException, JIException
+    {
+        System.out.println ( "Enum Groups: " + scope.toString () );
         
-        System.exit ( 0 );
+        for ( String group : server.getGroups ( scope ).asCollection () )
+        {
+            System.out.println ( "Group: " + group );
+        }
     }
     
     public static void main ( String[] args ) throws IllegalArgumentException, UnknownHostException, JIException
@@ -413,9 +422,14 @@ public class Test1
             OPCItemIO itemIO = server.getItemIOService ();
             //queryItems ( itemIO, "Saw-toothed Waves.Int" );
 
+            enumerateGroups ( server, OPCENUMSCOPE.OPC_ENUM_PUBLIC );
+            enumerateGroups ( server, OPCENUMSCOPE.OPC_ENUM_PRIVATE );
+            enumerateGroups ( server, OPCENUMSCOPE.OPC_ENUM_ALL );
+            
             // clean up
             server.removeGroup ( group, true );
             server.removeGroup ( group2, true );
+            
             // server.getStatus ();
 
             //showError ( server, 0x80004005 );
