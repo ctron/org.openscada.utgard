@@ -17,6 +17,11 @@ import org.openscada.opc.da.OPCBROWSEDIRECTION;
 import org.openscada.opc.da.OPCBROWSETYPE;
 import org.openscada.opc.da.OPCNAMESPACETYPE;
 
+/**
+ * Implementation for <code>IOPCBrowseServerAddressSpace</code>
+ * @author Jens Reimann <jens.reimann@inavare.net>
+ *
+ */
 public class OPCBrowseServerAddressSpace
 {
     private IJIComObject _opcBrowseServerAddressSpaceObject = null;
@@ -26,6 +31,11 @@ public class OPCBrowseServerAddressSpace
         _opcBrowseServerAddressSpaceObject = (IJIComObject)opcServer.queryInterface ( Constants.IOPCBrowseServerAddressSpace_IID );
     }
     
+    /**
+     * Get the information how the namespace is organized
+     * @return the organization of the namespace
+     * @throws JIException
+     */
     public OPCNAMESPACETYPE queryOrganization () throws JIException
     {
         JICallObject callObject = new JICallObject ( _opcBrowseServerAddressSpaceObject.getIpid (), true );
@@ -38,6 +48,23 @@ public class OPCBrowseServerAddressSpace
         return OPCNAMESPACETYPE.fromID ( (Short)result[0] );
     }
     
+    /**
+     * Direct the browser to another position
+     * 
+     * Depending on the <em>direction</em> the new position will be set based on the provided
+     * position information. If the direction is {@link OPCBROWSEDIRECTION#OPC_BROWSE_TO} then
+     * the <em>position</em> is the item to go to. If the direction is {@link OPCBROWSEDIRECTION#OPC_BROWSE_DOWN}
+     * the browser will descent into the tree down (not to) the branch item in <em>position</em>.
+     * Passing {@link OPCBROWSEDIRECTION#OPC_BROWSE_UP} won't need a <em>position</em> (pass <code>null</code>)
+     * and will ascent in the tree one level.
+     * 
+     * Passing {@link OPCBROWSEDIRECTION#OPC_BROWSE_TO} and <code>null</code> as position will
+     * go to the first root entry of the namespace.
+     * 
+     * @param position The item position reference for the direction
+     * @param direction The direction to go based on the position
+     * @throws JIException
+     */
     public void changePosition ( String position, OPCBROWSEDIRECTION direction ) throws JIException
     {
         JICallObject callObject = new JICallObject ( _opcBrowseServerAddressSpaceObject.getIpid (), true );
@@ -66,6 +93,14 @@ public class OPCBrowseServerAddressSpace
         return new EnumString ( ComFactory.createCOMInstance ( _opcBrowseServerAddressSpaceObject, (JIInterfacePointer)result[0] ) );
     }
     
+    /**
+     * Return the possible access paths for an item
+     * @param itemID the item to query
+     * @return A string enumerator for the possible access paths
+     * @throws JIException
+     * @throws IllegalArgumentException
+     * @throws UnknownHostException
+     */
     public EnumString browseAccessPaths ( String itemID ) throws JIException, IllegalArgumentException, UnknownHostException
     {
         JICallObject callObject = new JICallObject ( _opcBrowseServerAddressSpaceObject.getIpid (), true );
@@ -79,6 +114,18 @@ public class OPCBrowseServerAddressSpace
         return new EnumString ( ComFactory.createCOMInstance ( _opcBrowseServerAddressSpaceObject, (JIInterfacePointer)result[0] ) );
     }
     
+    /**
+     * Get the complete item id from an item at the local position.
+     * 
+     * Browsing a hierarchical namespace the browse method will return items based on the
+     * local level in the namespace. So actually only the last part of the item ID hierarchy
+     * is returned. In order to convert this to the full item ID one can use this method. It
+     * will only work if the browser is still at the position in question. 
+     * 
+     * @param item the local item
+     * @return the complete item ID
+     * @throws JIException
+     */
     public String getItemID ( String item ) throws JIException
     {
         JICallObject callObject = new JICallObject ( _opcBrowseServerAddressSpaceObject.getIpid (), true );
