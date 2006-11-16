@@ -385,6 +385,8 @@ public class Test1
             group.setName ( "test2" );
             OPCGroupStateMgt group2 = group.clone ( "test" );
             group = server.getGroupByName ( "test2" );
+            group.setState ( null, false, null, null, null, null );
+            group.setState ( null, true, null, null, null, null );
             dumpGroupState ( group );
             dumpGroupState ( group2 );
 

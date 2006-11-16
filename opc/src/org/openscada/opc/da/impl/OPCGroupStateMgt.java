@@ -55,6 +55,42 @@ public class OPCGroupStateMgt
         return state;
     }
 
+    /**
+     * Set the group state
+     * 
+     * Leaving any of the parameters <code>null</code> will keep the current value untouched.
+     * 
+     * @param requestedUpdateRate the requested update rate
+     * @param active Flag if the group is active or not 
+     * @param timeBias The time bias
+     * @param percentDeadband the deadband percent
+     * @param localeID the locale ID
+     * @param clientHandle the client handle
+     * @return the granted update rate
+     * @throws JIException
+     */
+    public int setState ( Integer requestedUpdateRate, Boolean active, Integer timeBias, Float percentDeadband, Integer localeID, Integer clientHandle ) throws JIException
+    {
+        JICallObject callObject = new JICallObject ( _opcGroupStateMgt.getIpid (), true );
+        callObject.setOpnum ( 1 );
+        
+        callObject.addInParamAsPointer ( new JIPointer ( requestedUpdateRate ), JIFlags.FLAG_NULL  );
+        if ( active != null )
+            callObject.addInParamAsPointer ( new JIPointer ( Integer.valueOf ( active.booleanValue () ? 1 : 0 ) ), JIFlags.FLAG_NULL );
+        else
+            callObject.addInParamAsPointer ( new JIPointer ( null ), JIFlags.FLAG_NULL );
+        callObject.addInParamAsPointer ( new JIPointer ( timeBias ), JIFlags.FLAG_NULL );
+        callObject.addInParamAsPointer ( new JIPointer ( percentDeadband ), JIFlags.FLAG_NULL );
+        callObject.addInParamAsPointer ( new JIPointer ( localeID ), JIFlags.FLAG_NULL );
+        callObject.addInParamAsPointer ( new JIPointer ( clientHandle ), JIFlags.FLAG_NULL );
+        
+        callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
+        
+        Object [] result = _opcGroupStateMgt.call ( callObject );
+        
+        return (Integer)result[0];
+    }
+
     public OPCItemMgt getItemManagement () throws IllegalArgumentException, UnknownHostException, JIException
     {
         return new OPCItemMgt ( _opcGroupStateMgt );
