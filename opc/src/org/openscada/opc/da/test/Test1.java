@@ -2,6 +2,7 @@ package org.openscada.opc.da.test;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,11 +28,13 @@ import org.openscada.opc.common.impl.OPCCommon;
 import org.openscada.opc.da.Constants;
 import org.openscada.opc.da.IORequest;
 import org.openscada.opc.da.OPCBROWSEDIRECTION;
+import org.openscada.opc.da.OPCBROWSETYPE;
 import org.openscada.opc.da.OPCGroupState;
 import org.openscada.opc.da.OPCITEMDEF;
 import org.openscada.opc.da.OPCITEMRESULT;
 import org.openscada.opc.da.OPCITEMSOURCE;
 import org.openscada.opc.da.OPCITEMSTATE;
+import org.openscada.opc.da.OPCNAMESPACETYPE;
 import org.openscada.opc.da.PropertyDescription;
 import org.openscada.opc.da.impl.OPCAsyncIO2;
 import org.openscada.opc.da.impl.OPCBrowseServerAddressSpace;
@@ -52,11 +55,59 @@ public class Test1
         System.out.println ( String.format ( "Error (%X): '%s'", errorCode, common.getErrorString ( errorCode, 1033 ) ) );
     }
     
-    public static void browse ( OPCBrowseServerAddressSpace browser ) throws JIException
+    public static void showAccessPaths ( OPCBrowseServerAddressSpace browser, String id ) throws IllegalArgumentException, UnknownHostException, JIException
+    {
+        for ( String i : browser.browseAccessPaths ( id ).asCollection () )
+        {
+            System.out.println ( "AccessPath Entry: " + i );
+        }
+    }
+    
+    public static void browseTree ( OPCBrowseServerAddressSpace browser ) throws IllegalArgumentException, UnknownHostException, JIException
+    {
+        System.out.println ( "Showing hierarchial address space" );
+        System.out.println ( String.format ( "Organization: %s", browser.queryOrganization () ) );
+
+        if ( !browser.queryOrganization ().equals ( OPCNAMESPACETYPE.OPC_NS_HIERARCHIAL ) )
+            return;
+        
+        browser.changePosition ( null, OPCBROWSEDIRECTION.OPC_BROWSE_TO );
+        browseTree ( browser, 0 );
+    }
+    
+    protected static void browseTree ( OPCBrowseServerAddressSpace browser, int level ) throws JIException, IllegalArgumentException, UnknownHostException
+    {
+        StringBuilder indent = new StringBuilder ( level );
+        for ( int i = 0; i < level; i++ )
+        {
+            indent.append ( '\t' );
+        }
+        for ( String item : browser.browse ( OPCBROWSETYPE.OPC_LEAF, "", 0, JIVariant.VT_EMPTY ).asCollection () )
+        {
+            System.out.println ( indent + "Leaf: " + item );
+            System.out.println ( indent + "\tName: " + browser.getItemID ( item ) );
+        }
+        
+        for ( String item : browser.browse ( OPCBROWSETYPE.OPC_BRANCH, "", 0, JIVariant.VT_EMPTY ).asCollection () )
+        {
+            System.out.println ( indent + "Branch: " + item );
+            browser.changePosition ( item, OPCBROWSEDIRECTION.OPC_BROWSE_DOWN );
+            browseTree ( browser, level+1 );
+            browser.changePosition ( null, OPCBROWSEDIRECTION.OPC_BROWSE_UP );
+        }
+    }
+    
+    public static void browseFlat ( OPCBrowseServerAddressSpace browser ) throws JIException, IllegalArgumentException, UnknownHostException
     {
         System.out.println ( String.format ( "Organization: %s", browser.queryOrganization () ) );
         browser.changePosition ( null, OPCBROWSEDIRECTION.OPC_BROWSE_TO );
         
+        System.out.println ( "Showing flat address space" );
+        for ( String id : browser.browse ( OPCBROWSETYPE.OPC_FLAT, "", 0, JIVariant.VT_EMPTY ).asCollection () )
+        {
+            System.out.println ( "Item: " + id );
+            //showAccessPaths ( browser, id );
+        }
     }
     
     public static void dumpGroupState ( OPCGroup group ) throws JIException
@@ -240,6 +291,8 @@ public class Test1
     
     public static void main ( String[] args ) throws IllegalArgumentException, UnknownHostException, JIException
     {
+        TestConfiguration configuration = new SoftingDemoServerConfiguration ();
+        
         OPCServer server = null;
         try
         {
@@ -250,8 +303,7 @@ public class Test1
             // OPCServer server = new OPCServer ( "127.0.0.1", JIProgId.valueOf
             // ( session, "Matrikon.OPC.Simulation.1" ),
             // session );
-            //JIComServer comServer = new JIComServer ( JIClsid.valueOf ( "F8582CF2-88FB-11D0-B850-00C0F0104305" ), args[0], _session );
-            JIComServer comServer = new JIComServer ( JIClsid.valueOf ( "2E565242-B238-11D3-842D-0008C779D775" ), args[0], _session );
+            JIComServer comServer = new JIComServer ( JIClsid.valueOf ( configuration.getCLSID ()), args[0], _session );
             
             IJIComObject serverObject = comServer.createInstance ();
             server = new OPCServer ( serverObject );
@@ -264,8 +316,10 @@ public class Test1
             {
                 System.out.println ( String.format ( "Available LCID: %d", i ) );
             }
+            
             OPCBrowseServerAddressSpace serverBrowser = new OPCBrowseServerAddressSpace (serverObject);
-            //browse ( serverBrowser );
+            browseFlat ( serverBrowser );
+            browseTree ( serverBrowser );
 
            OPCGroup group = server.addGroup ( "test", true, 100, 1234, 60, 0.0f, 1033 );
            group.setName ( "test2" );
@@ -274,8 +328,7 @@ public class Test1
            dumpGroupState ( group );
            dumpGroupState ( group2 );
            
-           //testItems ( server, group, "Saw-toothed Waves.Int2", "Saw-toothed Waves.Int4" );
-           testItems ( server, group, "increment.I2", "increment.I4" );
+           testItems ( server, group, configuration.getTestItems () );
            
            OPCItemProperties itemProperties = server.getItemPropertiesService ();
            //dumpItemProperties ( itemProperties, "Saw-toothed Waves.Int" );
