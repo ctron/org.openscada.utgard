@@ -1,6 +1,5 @@
 package org.openscada.opc.dcom.common.impl;
 
-import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.IJIComObject;
 
 public class BaseCOMObject
@@ -15,34 +14,6 @@ public class BaseCOMObject
     {
         super ();
         _comObject = comObject;
-    }
-
-    /**
-     * Give up the wrapped COM object. Will release the COM object.
-     * @throws JIException
-     */
-    public synchronized void dispose () throws JIException
-    {
-        // FIXME: need fix in upstream library
-        /*
-         if ( _comObject != null )
-         _comObject.release ();
-         */
-        _comObject = null;
-    }
-
-    @Override
-    protected void finalize () throws Throwable
-    {
-        try
-        {
-            dispose ();
-        }
-        catch ( Throwable e )
-        {
-        }
-
-        super.finalize ();
     }
 
     protected synchronized IJIComObject getCOMObject ()
