@@ -13,8 +13,11 @@ import org.openscada.opc.dcom.common.KeyedResult;
 import org.openscada.opc.dcom.common.KeyedResultSet;
 import org.openscada.opc.dcom.da.OPCITEMDEF;
 import org.openscada.opc.dcom.da.OPCITEMRESULT;
+import org.openscada.opc.dcom.da.OPCITEMSOURCE;
+import org.openscada.opc.dcom.da.OPCITEMSTATE;
 import org.openscada.opc.dcom.da.impl.OPCGroupStateMgt;
 import org.openscada.opc.dcom.da.impl.OPCItemMgt;
+import org.openscada.opc.dcom.da.impl.OPCSyncIO;
 
 public class Group
 {
@@ -25,6 +28,8 @@ public class Group
     private OPCGroupStateMgt _group = null;
 
     private OPCItemMgt _items = null;
+    
+    private OPCSyncIO _syncIO = null;
 
     private Map<String, Integer> _itemHandleMap = new HashMap<String, Integer> ();
 
@@ -36,6 +41,7 @@ public class Group
         _server = server;
         _group = group;
         _items = group.getItemManagement ();
+        _syncIO = group.getSyncIO ();
     }
 
     public void setActive ( boolean state ) throws JIException
@@ -152,5 +158,54 @@ public class Group
             }
         }
         return itemMap;
+    }
+    
+    protected void checkItems ( Item [] items )
+    {
+        for ( Item item : items )
+        {
+            if ( item.getGroup () != this )
+                throw new IllegalArgumentException ( "Item does not belong to this group" );
+        }
+    }
+    
+    public void setActive ( boolean state, Item... items ) throws JIException
+    {
+        checkItems ( items );
+        
+        Integer [] handles = new Integer [ items.length ];
+        for ( int i = 0; i < items.length; i++ )
+        {
+            handles[i] = items[i].getServerHandle ();
+        }
+        
+        _items.setActiveState ( state, handles );
+    }
+    
+    public synchronized Map<String, ItemState> read ( boolean device, Item... items ) throws JIException
+    {
+        checkItems ( items );
+        
+        Integer [] handles = new Integer[items.length];
+        
+        for ( int i = 0; i< items.length; i++ )
+        {
+            handles[i] = items[i].getServerHandle ();
+        }
+        
+        KeyedResultSet<Integer, OPCITEMSTATE> states = _syncIO.read ( device ? OPCITEMSOURCE.OPC_DS_DEVICE : OPCITEMSOURCE.OPC_DS_CACHE, handles );
+        
+        Map<String,ItemState> data = new HashMap<String, ItemState> ();
+        for ( KeyedResult<Integer,OPCITEMSTATE> entry : states )
+        {
+            Item item = _itemMap.get ( entry.getKey () );
+            ItemState state = new ItemState (
+                                             entry.getValue ().getValue (),
+                                             entry.getValue ().getTimestamp ().asCalendar (),
+                                             entry.getValue ().getQuality ()
+                                             );
+            data.put ( item.getId (), state );
+        }
+        return data;
     }
 }

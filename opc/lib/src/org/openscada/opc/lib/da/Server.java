@@ -10,11 +10,15 @@ import org.jinterop.dcom.core.JIClsid;
 import org.jinterop.dcom.core.JIComServer;
 import org.jinterop.dcom.core.JISession;
 import org.openscada.opc.dcom.common.impl.OPCCommon;
+import org.openscada.opc.dcom.da.OPCNAMESPACETYPE;
+import org.openscada.opc.dcom.da.impl.OPCBrowseServerAddressSpace;
 import org.openscada.opc.dcom.da.impl.OPCGroupStateMgt;
 import org.openscada.opc.dcom.da.impl.OPCServer;
 import org.openscada.opc.lib.common.AlreadyConnectedException;
 import org.openscada.opc.lib.common.ConnectionInformation;
 import org.openscada.opc.lib.common.NotConnectedException;
+import org.openscada.opc.lib.da.browser.FlatBrowser;
+import org.openscada.opc.lib.da.browser.TreeBrowser;
 
 public class Server
 {
@@ -25,9 +29,10 @@ public class Server
     private OPCServer _server = null;
     private OPCCommon _common = null;
     
+    private boolean _defaultActive = true;
     private int _defaultUpdateRate = 1000;
-    private int _defaultTimeBias = 0;
-    private float _defaultPercentDeadband = 0.0f;
+    private Integer _defaultTimeBias = null;
+    private Float _defaultPercentDeadband = null;
     private int _defaultLocaleID = 0;
     
     private Map<Integer,Group> _groups = new HashMap<Integer, Group> (); 
@@ -84,7 +89,7 @@ public class Server
         
         try
         {
-            OPCGroupStateMgt groupMgt = _server.addGroup ( name, true, _defaultUpdateRate, 0, _defaultTimeBias, _defaultPercentDeadband, _defaultLocaleID );
+            OPCGroupStateMgt groupMgt = _server.addGroup ( name, _defaultActive, _defaultUpdateRate, 0, _defaultTimeBias, _defaultPercentDeadband, _defaultLocaleID );
             return getGroup ( groupMgt );
         }
         catch ( JIException e )
@@ -147,22 +152,22 @@ public class Server
         _defaultLocaleID = defaultLocaleID;
     }
 
-    public float getDefaultPercentDeadband ()
+    public Float getDefaultPercentDeadband ()
     {
         return _defaultPercentDeadband;
     }
 
-    public void setDefaultPercentDeadband ( float defaultPercentDeadband )
+    public void setDefaultPercentDeadband ( Float defaultPercentDeadband )
     {
         _defaultPercentDeadband = defaultPercentDeadband;
     }
 
-    public int getDefaultTimeBias ()
+    public Integer getDefaultTimeBias ()
     {
         return _defaultTimeBias;
     }
 
-    public void setDefaultTimeBias ( int defaultTimeBias )
+    public void setDefaultTimeBias ( Integer defaultTimeBias )
     {
         _defaultTimeBias = defaultTimeBias;
     }
@@ -175,5 +180,36 @@ public class Server
     public void setDefaultUpdateRate ( int defaultUpdateRate )
     {
         _defaultUpdateRate = defaultUpdateRate;
+    }
+
+    public boolean isDefaultActive ()
+    {
+        return _defaultActive;
+    }
+
+    public void setDefaultActive ( boolean defaultActive )
+    {
+        _defaultActive = defaultActive;
+    }
+    
+    public FlatBrowser getFlatBrowser ()
+    {
+        OPCBrowseServerAddressSpace browser = _server.getBrowser ();
+        if ( browser == null )
+            return null;
+        
+        return new FlatBrowser ( browser );
+    }
+    
+    public TreeBrowser getTreeBrowser () throws JIException
+    {
+        OPCBrowseServerAddressSpace browser = _server.getBrowser ();
+        if ( browser == null )
+            return null;
+        
+        if ( browser.queryOrganization () != OPCNAMESPACETYPE.OPC_NS_HIERARCHIAL )
+            return null;
+        
+        return new TreeBrowser ( browser );
     }
 }
