@@ -3,7 +3,6 @@ package org.openscada.opc.lib.da;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.JIClsid;

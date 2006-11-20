@@ -3,7 +3,6 @@ package org.openscada.opc.lib.test;
 import java.util.Map;
 
 import org.jinterop.dcom.common.JIException;
-import org.openscada.opc.dcom.da.OPCITEMSTATE;
 import org.openscada.opc.lib.common.ConnectionInformation;
 import org.openscada.opc.lib.da.Group;
 import org.openscada.opc.lib.da.Item;

@@ -2,8 +2,6 @@ package org.openscada.opc.lib.da;
 
 import org.apache.log4j.Logger;
 import org.jinterop.dcom.common.JIException;
-import org.openscada.opc.dcom.da.OPCITEMSTATE;
-import org.openscada.opc.dcom.da.impl.OPCItemMgt;
 
 public class Item
 {
