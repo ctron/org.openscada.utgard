@@ -51,7 +51,7 @@ public class OPCTest2
             syncAccess.start ();
             
             // wait a little bit
-            Thread.sleep ( 2 * 1000 );
+            Thread.sleep ( 10 * 1000 );
             
             // stop reading
             syncAccess.stop ();

@@ -19,6 +19,8 @@ public class SyncAccess implements Runnable
     private Map<Item, DataCallback> _items = new HashMap<Item, DataCallback> ();
 
     private Map<String, Item> _itemMap = new HashMap<String, Item> ();
+    
+    private Map<Item, ItemState> _itemCache = new HashMap<Item, ItemState> ();
 
     private boolean _active = false;
 
@@ -41,7 +43,7 @@ public class SyncAccess implements Runnable
 
         _group.setActive ( true );
         _active = true;
-
+        
         _runner = new Thread ( this );
         _runner.setDaemon ( true );
         _runner.start ();
@@ -56,6 +58,7 @@ public class SyncAccess implements Runnable
         _group.setActive ( false );
 
         _runner = null;
+        _itemCache.clear ();
     }
 
     public synchronized void addItem ( String itemId, DataCallback dataCallback ) throws JIException, AddFailedException
@@ -75,6 +78,7 @@ public class SyncAccess implements Runnable
 
         Item item = _itemMap.remove ( itemId );
         _items.remove ( item );
+        _itemCache.remove ( item );
     }
 
     public void run ()
@@ -111,8 +115,30 @@ public class SyncAccess implements Runnable
         Map<Item, ItemState> result = _group.read ( false, items );
         for ( Map.Entry<Item, ItemState> entry : result.entrySet () )
         {
-            _items.get ( entry.getKey () ).changed ( entry.getKey (), entry.getValue () );
+            updateItem ( entry.getKey (), entry.getValue () );
         }
 
+    }
+    
+    protected void updateItem ( Item item, ItemState itemState )
+    {
+        DataCallback dataCallback = _items.get ( item);
+        if ( dataCallback == null )
+            return;
+        
+        ItemState cachedState = _itemCache.get ( item );
+        if ( cachedState == null )
+        {
+            _itemCache.put ( item, itemState );
+            dataCallback.changed ( item, itemState );
+        }
+        else
+        {
+            if ( !cachedState.equals ( itemState ) )
+            {
+                _itemCache.put ( item, itemState );
+                dataCallback.changed ( item, itemState );
+            }
+        }
     }
 }
