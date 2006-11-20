@@ -1,25 +1,24 @@
 package org.openscada.opc.lib.test;
 
-import java.util.Map;
-
 import org.jinterop.dcom.common.JIException;
 import org.openscada.opc.lib.common.ConnectionInformation;
 import org.openscada.opc.lib.da.DataCallback;
-import org.openscada.opc.lib.da.Group;
 import org.openscada.opc.lib.da.Item;
 import org.openscada.opc.lib.da.ItemState;
 import org.openscada.opc.lib.da.Server;
 import org.openscada.opc.lib.da.SyncAccess;
 import org.openscada.opc.lib.da.browser.Branch;
+import org.openscada.opc.lib.da.browser.FlatBrowser;
 import org.openscada.opc.lib.da.browser.Leaf;
+import org.openscada.opc.lib.da.browser.TreeBrowser;
 
-public class OPCTest1
+/**
+ * Another test showing the browser interfaces
+ * @author Jens Reimann <jens.reimann@inavare.net>
+ *
+ */
+public class OPCTest3
 {
-    public static void dumpItemState ( Item item, ItemState state )
-    {
-        System.out.println ( String.format ( "Item: %s, Value: %s, Timestamp: %tc, Quality: %d", item.getId (), state.getValue (), state.getTimestamp (), state.getQuality () ) );
-    }
-    
     public static void dumpTree ( Branch branch, int level )
     {
         StringBuilder sb = new StringBuilder ();
@@ -57,33 +56,25 @@ public class OPCTest1
             // connect to server
             server.connect ();
 
-            // browse
-            dumpTree ( server.getTreeBrowser ().browse (), 0 );
-            
-            // add sync reader
-            
-            // Add a new group
-            Group group = server.addGroup ( "test" );
-            // group is initially active ... just for demonstration
-            group.setActive ( true );
-            
-            // We already have our group ... just for demonstration
-            group = server.findGroup ( "test" );
-            
-            // Add a new item to the group
-            Item item = group.addItem ( "Saw-toothed Waves.Int2" );
-            // Items are initially active ... just for demonstration
-            item.setActive ( true );
-            
-            // Add some more items ... including one that is already existing
-            Map<String,Item> items = group.addItems ( "Saw-toothed Waves.Int2", "Saw-toothed Waves.Int4" );
-            
-            // sync-read some values
-            for ( int i = 0; i < 10; i++ )
+            // browse flat
+            FlatBrowser flatBrowser = server.getFlatBrowser ();
+            if ( flatBrowser != null )
             {
-                Thread.sleep ( 100 );
-                dumpItemState ( item, item.read ( false ) );
+                for ( String item : server.getFlatBrowser ().browse ( "" ) )
+                {
+                    System.out.println ( item );
+                }
             }
+            
+            // browse tree
+            TreeBrowser treeBrowser = server.getTreeBrowser ();
+            if ( treeBrowser != null )
+            {
+                dumpTree ( server.getTreeBrowser ().browse (), 0 );
+            }
+            
+            
+            
         }
         catch ( JIException e )
         {

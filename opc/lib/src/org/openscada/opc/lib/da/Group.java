@@ -182,7 +182,7 @@ public class Group
         _items.setActiveState ( state, handles );
     }
     
-    public synchronized Map<String, ItemState> read ( boolean device, Item... items ) throws JIException
+    public synchronized Map<Item, ItemState> read ( boolean device, Item... items ) throws JIException
     {
         checkItems ( items );
         
@@ -195,7 +195,7 @@ public class Group
         
         KeyedResultSet<Integer, OPCITEMSTATE> states = _syncIO.read ( device ? OPCITEMSOURCE.OPC_DS_DEVICE : OPCITEMSOURCE.OPC_DS_CACHE, handles );
         
-        Map<String,ItemState> data = new HashMap<String, ItemState> ();
+        Map<Item,ItemState> data = new HashMap<Item, ItemState> ();
         for ( KeyedResult<Integer,OPCITEMSTATE> entry : states )
         {
             Item item = _itemMap.get ( entry.getKey () );
@@ -204,7 +204,7 @@ public class Group
                                              entry.getValue ().getTimestamp ().asCalendar (),
                                              entry.getValue ().getQuality ()
                                              );
-            data.put ( item.getId (), state );
+            data.put ( item, state );
         }
         return data;
     }
