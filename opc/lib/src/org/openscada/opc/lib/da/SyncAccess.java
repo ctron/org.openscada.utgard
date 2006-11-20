@@ -2,11 +2,7 @@ package org.openscada.opc.lib.da;
 
 import java.net.UnknownHostException;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.jinterop.dcom.common.JIException;
