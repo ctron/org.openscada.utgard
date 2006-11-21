@@ -12,7 +12,6 @@ import org.jinterop.dcom.core.JIString;
 import org.jinterop.dcom.win32.ComFactory;
 import org.openscada.opc.dcom.common.EventHandler;
 import org.openscada.opc.dcom.common.impl.BaseCOMObject;
-import org.openscada.opc.dcom.common.impl.ConnectionPointContainer;
 import org.openscada.opc.dcom.da.Constants;
 import org.openscada.opc.dcom.da.IOPCDataCallback;
 import org.openscada.opc.dcom.da.OPCGroupState;
@@ -148,11 +147,6 @@ public class OPCGroupStateMgt extends BaseCOMObject
 
         callbackObject.setInfo ( getCOMObject (), id );
         return callbackObject;
-    }
-
-    public ConnectionPointContainer getConnectionPointContainer () throws JIException
-    {
-        return new ConnectionPointContainer ( getCOMObject () );
     }
 
     public OPCAsyncIO2 getAsyncIO2 ()
