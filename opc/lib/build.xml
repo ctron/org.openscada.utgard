@@ -48,11 +48,20 @@
     <!-- - - - - - - - - - - - - - - - - - 
           target: init                      
          - - - - - - - - - - - - - - - - - -->
-    <target name="init">
+    <target name="init" depends="clean">
 		<delete dir="${unpack.base}"/>
     	<mkdir dir="${unpack.base}"/>
     	<unzip dest="${unpack.base}" src="${upload.dir}/${dcom.tag}.zip"/>
     </target>
+	
+	<!-- ================================= 
+          target: clean              
+         ================================= -->
+    <target name="clean" depends="" description="--> Clean up">
+		<delete dir="${unpack.base}"/>
+    	<delete dir="bin"/>
+    </target>
+
 	
 	<!-- ================================= 
           target: build              
@@ -85,6 +94,7 @@
     	<mkdir dir="${deploy.dir}/lib"/>
     	<copy todir="${deploy.dir}/lib">
     		<fileset refid="classpath">
+    			<selector ></selector>
     		</fileset>
     	</copy>
     	<copy todir="${deploy.dir}" file="COPYING"/>
