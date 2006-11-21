@@ -8,6 +8,11 @@ import org.openscada.opc.dcom.da.OPCBROWSEDIRECTION;
 import org.openscada.opc.dcom.da.OPCBROWSETYPE;
 import org.openscada.opc.dcom.da.impl.OPCBrowseServerAddressSpace;
 
+/**
+ * Browse through the hierarchical server namespace
+ * @author Jens Reimann <jens.reimann@inavare.net>
+ *
+ */
 public class TreeBrowser
 {
     private OPCBrowseServerAddressSpace _browser = null;

@@ -1,6 +1,7 @@
 package org.openscada.opc.lib.da;
 
 import java.net.UnknownHostException;
+import java.rmi.server.ServerCloneException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -81,6 +82,16 @@ public class Server
         }
     }
     
+    /**
+     * Add a new named group to the server
+     * @param name The name of the group to use (must be unique)
+     * @return The new group
+     * @throws NotConnectedException If the server is not connected using {@link Server#connect()}
+     * @throws IllegalArgumentException
+     * @throws UnknownHostException
+     * @throws JIException
+     * @throws DuplicateGroupException If a group with this name already exists
+     */
     public synchronized Group addGroup ( String name ) throws NotConnectedException, IllegalArgumentException, UnknownHostException, JIException, DuplicateGroupException
     {
         if ( _server == null )
@@ -105,6 +116,10 @@ public class Server
     
     /**
      * Add a new group and let the server generate a group name
+     * 
+     * Actually this method only calls {@link Server#addGroup(String)} with <code>null</code>
+     * as parameter.
+     * 
      * @return the new group
      * @throws IllegalArgumentException
      * @throws UnknownHostException
@@ -117,6 +132,15 @@ public class Server
         return addGroup ( null );
     }
     
+    /**
+     * Find a group by its name
+     * @param name The name to look for
+     * @return The group
+     * @throws IllegalArgumentException
+     * @throws UnknownHostException
+     * @throws JIException
+     * @throws UnknownGroupException If the group was not found
+     */
     public Group findGroup ( String name ) throws IllegalArgumentException, UnknownHostException, JIException, UnknownGroupException
     {
         try
@@ -191,6 +215,10 @@ public class Server
         _defaultActive = defaultActive;
     }
     
+    /**
+     * Get the flat browser
+     * @return The flat browser or <code>null</code> if the functionality is not supported 
+     */
     public FlatBrowser getFlatBrowser ()
     {
         OPCBrowseServerAddressSpace browser = _server.getBrowser ();
@@ -200,6 +228,11 @@ public class Server
         return new FlatBrowser ( browser );
     }
     
+    /**
+     * Get the tree browser
+     * @return The tree browser or <code>null</code> if the functionality is not supported
+     * @throws JIException
+     */
     public TreeBrowser getTreeBrowser () throws JIException
     {
         OPCBrowseServerAddressSpace browser = _server.getBrowser ();

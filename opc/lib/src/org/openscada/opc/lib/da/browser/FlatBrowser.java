@@ -8,6 +8,11 @@ import org.jinterop.dcom.core.JIVariant;
 import org.openscada.opc.dcom.da.OPCBROWSETYPE;
 import org.openscada.opc.dcom.da.impl.OPCBrowseServerAddressSpace;
 
+/**
+ * Browse through the flat server namespace 
+ * @author Jens Reimann <jens.reimann@inavare.net>
+ *
+ */
 public class FlatBrowser
 {
     private OPCBrowseServerAddressSpace _browser = null;
