@@ -52,6 +52,11 @@ public class Branch
     {
         _name = name;
     }
+
+    public Branch getParent ()
+    {
+        return _parent;
+    }
     
     
 }

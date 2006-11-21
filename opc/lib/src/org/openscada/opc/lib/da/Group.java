@@ -208,4 +208,9 @@ public class Group
         }
         return data;
     }
+
+    public Server getServer ()
+    {
+        return _server;
+    }
 }

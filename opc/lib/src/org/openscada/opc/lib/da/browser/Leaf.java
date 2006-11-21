@@ -38,6 +38,11 @@ public class Leaf
     {
         _name = name;
     }
+
+    public Branch getParent ()
+    {
+        return _parent;
+    }
     
     
 }
