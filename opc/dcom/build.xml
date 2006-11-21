@@ -62,19 +62,35 @@
          ================================= -->
     <target name="deploy" depends="build" description="--> Pack and Deploy">
     	<delete dir="${deploy.base}"/>
+    	
+    	<!-- deploy the bins -->
        	<mkdir dir="${deploy.dir}/bin"/>
     	<jar destfile="${deploy.dir}/bin/${tag}.jar">
     		<fileset dir="bin">
     			<include name="**/*.class"/>
     		</fileset>
     	</jar>
+    	
+    	<!-- add libraries -->
     	<mkdir dir="${deploy.dir}/lib"/>
     	<copy todir="${deploy.dir}/lib">
     		<fileset dir="lib">
     			<include name="*.jar"/>
     		</fileset>
     	</copy>
+    	
+    	<!-- deploy source -->
+    	<mkdir dir="${deploy.dir}/src"/>
+    	<copy todir="${deploy.dir}/src">
+    		<fileset dir="src">
+    			<include name="**/*.java"/>
+    		</fileset>
+    	</copy>
+    	
+    	<!-- add license -->
     	<copy todir="${deploy.dir}" file="COPYING"/>
+    	
+    	<!-- zip it -->
     	<mkdir dir="${upload.dir}"/>
     	<zip basedir="${deploy.base}" file="${upload.dir}/${tag}.zip">
     	</zip>
