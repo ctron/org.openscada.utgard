@@ -18,6 +18,7 @@
 	<property name="upload.dir" value="${upload.base}/${version}"/>
 	<property name="source.base" value="../.."/>
 	<property name="external.base" value="../../external"/>
+	<property name="api.href.dir" value="${api.href.base}/${version}/api"/>
 	
     <!-- ================================= 
           target: default              

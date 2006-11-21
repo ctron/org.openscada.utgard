@@ -20,7 +20,7 @@
         <ant dir="../release">
         	<property name="upload.base" value="/var/vhosts/openscada/download/utgard/nightly-${DSTAMP}"/>
         	<property name="release" value="-${DSTAMP}-nightly"/>
-        	<property name="api.href.base" value="http://openscada.org/download/utgard/nightly-${DSTAMP}/${version}/api"/>
+        	<property name="api.href.base" value="http://openscada.org/download/utgard/nightly-${DSTAMP}"/>
     	</ant>
     </target>
 
