@@ -12,10 +12,35 @@
             The OpenSCADA Utgard OPC Library
     </description>
 
+	
+	<property name="name" value="openscada-opc-lib"/>
+	<property name="tag" value="${name}-${version}${release}"/>
+	
+	<property name="deploy.base" value="deploy"/>
+	<property name="deploy.dir" value="${deploy.base}/${tag}"/>
+
+	<property name="dcom.name" value="openscada-opc-dcom"/>
+	<property name="dcom.tag" value="${dcom.name}-${version}${release}"/>
+	
+	<property name="unpack.base" value="unpack"/>
+	<property name="unpack.module.dcom" value="${unpack.base}/${dcom.tag}"/>
+	
+	<path id="classpath">
+		<pathelement location="${unpack.module.dcom}/lib/j-interop.jar"/>
+		<pathelement location="${unpack.module.dcom}/lib/jarapac.jar"/>
+		<pathelement location="${unpack.module.dcom}/lib/jcifs-1.2.9.jar"/>
+		<pathelement location="${unpack.module.dcom}/lib/iwombat.jar"/>
+		<pathelement location="${unpack.module.dcom}/lib/ntlm-security.jar"/>
+		<pathelement location="${unpack.module.dcom}/lib/ncacn_np.jar"/>
+		<pathelement location="${unpack.module.dcom}/lib/ncacn_ip_tcp.jar"/>
+		<pathelement location="${unpack.module.dcom}/lib/jcifs-ntlm-auth.jar"/>
+		<pathelement location="${unpack.module.dcom}/bin/${dcom.tag}.jar"/>
+	</path>
+	
     <!-- ================================= 
           target: default              
          ================================= -->
-    <target name="default" depends="init" description="--> The OpenSCADA Utgard OPC Library">
+    <target name="default" depends="build,deploy" description="--> The OpenSCADA Utgard OPC Library">
         
     </target>
 
@@ -23,6 +48,46 @@
           target: init                      
          - - - - - - - - - - - - - - - - - -->
     <target name="init">
+		<delete dir="${unpack.base}"/>
+    	<mkdir dir="${unpack.base}"/>
+    	<unzip dest="${unpack.base}" src="${upload.dir}/${dcom.tag}.zip"/>
+    </target>
+	
+	<!-- ================================= 
+          target: build              
+         ================================= -->
+    <target name="build" depends="init" description="--> Build source">
+    	<mkdir dir="bin"/>
+        <javac
+        	source="1.5"
+        	target="1.5"
+        	encoding="utf-8"
+        	destdir="bin"
+        	srcdir="src">
+        		<classpath refid="classpath"/>
+    	</javac>
+    </target>
+
+	<!-- ================================= 
+          target: deploy              
+         ================================= -->
+    <target name="deploy" depends="build" description="--> Pack and Deploy">
+    	<delete dir="${deploy.base}"/>
+       	<mkdir dir="${deploy.dir}/bin"/>
+    	<jar destfile="${deploy.dir}/bin/${tag}.jar">
+    		<fileset dir="bin">
+    			<include name="**/*.class"/>
+    		</fileset>
+    	</jar>
+    	<mkdir dir="${deploy.dir}/lib"/>
+    	<copy todir="${deploy.dir}/lib">
+    		<fileset refid="classpath">
+    		</fileset>
+    	</copy>
+    	<copy todir="${deploy.dir}" file="COPYING"/>
+    	<mkdir dir="${upload.dir}"/>
+    	<zip basedir="${deploy.base}" file="${upload.dir}/${tag}.zip">
+    	</zip>
     </target>
 
 </project>
