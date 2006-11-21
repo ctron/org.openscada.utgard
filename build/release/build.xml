@@ -17,6 +17,7 @@
 	<property name="upload.base" value=""/>
 	<property name="upload.dir" value="${upload.base}/${version}"/>
 	<property name="source.base" value="../.."/>
+	<property name="external.base" value="../../external"/>
 	
     <!-- ================================= 
           target: default              
