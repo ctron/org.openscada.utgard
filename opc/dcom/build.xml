@@ -26,7 +26,7 @@
     <!-- ================================= 
           target: default              
          ================================= -->
-    <target name="default" depends="init" description="--> The OpenSCADA Utgard OPC DCOM Mappings">
+    <target name="default" depends="build" description="--> The OpenSCADA Utgard OPC DCOM Mappings">
         
     </target>
 
