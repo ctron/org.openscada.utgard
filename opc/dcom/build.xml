@@ -55,6 +55,22 @@
         	srcdir="src">
         		<classpath refid="classpath"/>
     	</javac>
+    	
+    	<!-- generate javadoc -->
+    	<mkdir dir="docs/api"/>
+   		<javadoc destdir="${upload.base}/docs/api/${module}"
+        	author="true"
+        	version="true"
+        	use="true"
+        	encoding="utf-8"
+        	>
+        	<tag name="note" description="Note" scope="all"/>
+        	<tag name="warning" description="Warning" scope="all"/>
+        	<packageset dir="src" defaultexcludes="yes">
+        		<include name="**"/>
+        	</packageset>
+   			<classpath refid="classpath"/>
+  		</javadoc>
     </target>
 
 	<!-- ================================= 
@@ -85,6 +101,15 @@
     		<fileset dir="src">
     			<include name="**/*.java"/>
     		</fileset>
+    	</copy>
+    	
+    	<!-- deploy javadoc -->
+		<mkdir dir="${deploy.dir}/docs"/>
+    	<copy todir="${deploy.dir}/docs">
+    		<fileset dir="docs/api"/>
+    	</copy>
+    	<copy todir="${upload.dir}/api/${name}">
+    		<fileset dir="docs/api"/>
     	</copy>
     	
     	<!-- add license -->
