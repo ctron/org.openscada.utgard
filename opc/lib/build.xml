@@ -109,7 +109,11 @@
         	<packageset dir="src" defaultexcludes="yes">
         		<include name="**"/>
         	</packageset>
-   			<classpath refid="classpath"/>
+   			<classpath>
+    			<fileset dir="lib">
+    				<include name="*.jar"/>
+    			</fileset>
+   			</classpath>
    			<link href="${api.href.base}/${dcom.name}" offline="true" packagelistloc="${upload.dir}/api/${dcom.name}"/>
   		</javadoc>
 	
