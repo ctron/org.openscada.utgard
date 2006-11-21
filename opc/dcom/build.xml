@@ -104,8 +104,8 @@
     	</copy>
     	
     	<!-- deploy javadoc -->
-		<mkdir dir="${deploy.dir}/docs"/>
-    	<copy todir="${deploy.dir}/docs">
+		<mkdir dir="${deploy.dir}/docs/api"/>
+    	<copy todir="${deploy.dir}/docs/api">
     		<fileset dir="docs/api"/>
     	</copy>
     	<copy todir="${upload.dir}/api/${name}">
