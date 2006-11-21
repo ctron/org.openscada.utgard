@@ -58,7 +58,7 @@
     	
     	<!-- generate javadoc -->
     	<mkdir dir="docs/api"/>
-   		<javadoc destdir="${upload.base}/docs/api/${module}"
+   		<javadoc destdir="docs/api"
         	author="true"
         	version="true"
         	use="true"
