@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!-- ====================================================================== 
+     21.11.2006 15:04:15                                                        
+
+     OpenSCADA OPC    
+     The OpenSCADA OPC Build File - Project Utgard
+                   
+     jens                                                                
+     ====================================================================== -->
+<project name="OpenSCADA OPC" default="default">
+    <description>
+            The OpenSCADA OPC Build File - Project Utgard
+    </description>
+
+	<property name="version" value="0.1.0"/>
+	<property name="release" value=""/>
+	<property name="upload.base" value=""/>
+	<property name="upload.dir" value="${upload.base}/${version}"/>
+	
+    <!-- ================================= 
+          target: default              
+         ================================= -->
+    <target name="default" depends="init" description="--> The OpenSCADA OPC Build File - Project Utgard">
+    	<ant dir="../dcom"/>
+    	<ant dir="../lib"/>
+    </target>
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: init                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="init" depends="clean">
+    	<tstamp/>
+    </target>
+	
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: clean                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="clean">
+            <delete dir="${upload.dir}"/>
+    </target>
+
+
+</project>

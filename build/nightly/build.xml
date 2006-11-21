@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!-- ====================================================================== 
+     21.11.2006 15:10:54                                                        
+
+     OpenSCADA OPC Nightly Build    
+     The OpenSCADA OPC Nightly build file - Project Utgard
+                   
+     jens                                                                
+     ====================================================================== -->
+<project name="OpenSCADA OPC Nightly Build" default="default">
+    <description>
+            The OpenSCADA OPC Nightly build file - Project Utgard
+    </description>
+
+	<property name="release" value="-nightly"/>
+	<property name="upload.base" value="/home/openscada/www/download/utgard/nightly"/>
+	
+    <!-- ================================= 
+          target: default              
+         ================================= -->
+    <target name="default" depends="init" description="--> The OpenSCADA OPC Nightly build file - Project Utgard">
+        <ant dir="../release"/>
+    </target>
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: init                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="init">
+    	<tstamp/>
+    </target>
+
+</project>
