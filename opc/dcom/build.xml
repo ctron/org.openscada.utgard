@@ -69,7 +69,7 @@
     		</fileset>
     	</copy>
     	<zip basedir="deploy" file="${upload.dir}/openscada-opc-dcom-${version}${release}.zip">
-    		<fileset>
+    		<fileset dir=".">
     			<include name="**/*"/>
     		</fileset>
     	</zip>
