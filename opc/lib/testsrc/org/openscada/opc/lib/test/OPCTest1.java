@@ -38,6 +38,7 @@ public class OPCTest1
         }
     }
     
+    @SuppressWarnings("unused")
     public static void main ( String[] args ) throws Throwable
     {
         // create connection information
