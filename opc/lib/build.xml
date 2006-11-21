@@ -25,18 +25,18 @@
 	<property name="unpack.base" value="unpack"/>
 	<property name="unpack.module.dcom" value="${unpack.base}/${dcom.tag}"/>
 	
-	<path id="classpath">
-		<pathelement location="${unpack.module.dcom}/lib/j-interop.jar"/>
-		<pathelement location="${unpack.module.dcom}/lib/jarapac.jar"/>
-		<pathelement location="${unpack.module.dcom}/lib/jcifs-1.2.9.jar"/>
-		<pathelement location="${unpack.module.dcom}/lib/iwombat.jar"/>
-		<pathelement location="${unpack.module.dcom}/lib/ntlm-security.jar"/>
-		<pathelement location="${unpack.module.dcom}/lib/ncacn_np.jar"/>
-		<pathelement location="${unpack.module.dcom}/lib/ncacn_ip_tcp.jar"/>
-		<pathelement location="${unpack.module.dcom}/lib/jcifs-ntlm-auth.jar"/>
-		<pathelement location="${unpack.module.dcom}/bin/${dcom.tag}.jar"/>
-		<pathelement location="${external.base}/log4j/log4j-1.2.13.jar"/>
-	</path>
+	<fileset id="classpath">
+		<filename location="${unpack.module.dcom}/lib/j-interop.jar"/>
+		<filename location="${unpack.module.dcom}/lib/jarapac.jar"/>
+		<filename location="${unpack.module.dcom}/lib/jcifs-1.2.9.jar"/>
+		<filename location="${unpack.module.dcom}/lib/iwombat.jar"/>
+		<filename location="${unpack.module.dcom}/lib/ntlm-security.jar"/>
+		<filename location="${unpack.module.dcom}/lib/ncacn_np.jar"/>
+		<filename location="${unpack.module.dcom}/lib/ncacn_ip_tcp.jar"/>
+		<filename location="${unpack.module.dcom}/lib/jcifs-ntlm-auth.jar"/>
+		<filename location="${unpack.module.dcom}/bin/${dcom.tag}.jar"/>
+		<filename location="${external.base}/log4j/log4j-1.2.13.jar"/>
+	</fileset>
 	
     <!-- ================================= 
           target: default              
@@ -65,7 +65,9 @@
         	encoding="utf-8"
         	destdir="bin"
         	srcdir="src">
-        		<classpath refid="classpath"/>
+        		<classpath>
+        			<fileset ref="classpath"/>
+	        	</classpath>
     	</javac>
     </target>
 
