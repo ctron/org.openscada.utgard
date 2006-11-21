@@ -55,7 +55,6 @@
           target: deploy              
          ================================= -->
     <target name="deploy" depends="build" description="--> Pack and Deploy">
-    	<mkdir dir="deploy"/>
        	<mkdir dir="deploy/bin"/>
     	<jar destfile="deploy/bin/openscada-opc-dcom-${version}${release}.jar">
     		<fileset dir="bin">
@@ -68,6 +67,7 @@
     			<include name="*.jar"/>
     		</fileset>
     	</copy>
+    	<mkdir dir="${upload.dir}"/>
     	<zip basedir="deploy" file="${upload.dir}/openscada-opc-dcom-${version}${release}.zip">
     		<fileset dir=".">
     			<include name="**/*"/>
