@@ -15,7 +15,7 @@ set HOST=localhost
 set DOMAIN=localhost
 set USER=user
 set PASSWORD=password
-set VERSION=0.1.0-nightly
+set VERSION=@@VERSION@@
 set UUID=F8582CF2-88FB-11D0-B850-00C0F0104305
 
 set TEST_CLASSPATH="../lib/j-interop.jar;../lib/jarapac.jar;../lib/jcifs-1.2.9.jar;../lib/iwombat.jar;../lib/ntlm-security.jar;../lib/ncacn_np.jar;../lib/ncacn_ip_tcp.jar;../lib/cifs-ntlm-auth.jar;../lib/log4j-1.2.13.jar;../lib/openscada-opc-dcom-%VERSION%.jar;../bin/openscada-opc-lib-%VERSION%.jar;../bin/openscada-opc-lib-test-%VERSION%.jar;."

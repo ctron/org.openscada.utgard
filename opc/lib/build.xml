@@ -140,6 +140,13 @@
     		<fileset dir="dist">
     		</fileset>
     	</copy>
+    	<replace
+    		dir="dist"
+    		>
+    		<include name="**/*.bat"/>
+       		<include name="**/*.sh"/>
+    		<replacefilter token="@@VERSION@@" value="${version}"/>
+    	</replace>
     	
     	<!-- make a zip -->
     	<mkdir dir="${upload.dir}"/>
