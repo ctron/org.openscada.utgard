@@ -16,7 +16,7 @@
 	<property name="release" value=""/>
 	<property name="upload.base" value=""/>
 	<property name="upload.dir" value="${upload.base}/${version}"/>
-	<property name="source.base" value=".."/>
+	<property name="source.base" value="../.."/>
 	
     <!-- ================================= 
           target: default              
