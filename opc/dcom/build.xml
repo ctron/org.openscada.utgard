@@ -44,7 +44,7 @@
         <javac
         	source="1.5"
         	target="1.5"
-        	encoding="utf-8">
+        	encoding="utf-8"
         	destdir="bin"
         	srcdir="src">
         		<classpath refid="classpath"/>
