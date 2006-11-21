@@ -16,9 +16,11 @@
           target: default              
          ================================= -->
     <target name="default" depends="init" description="--> The OpenSCADA OPC Nightly build file - Project Utgard">
+    	<delete dir="/var/vhosts/openscada/download/utgard/nightly-${DSTAMP}"/>
         <ant dir="../release">
         	<property name="upload.base" value="/var/vhosts/openscada/download/utgard/nightly-${DSTAMP}"/>
         	<property name="release" value="-${DSTAMP}-nightly"/>
+        	<property name="api.href.base" value="http://openscada.org/download/utgard/nightly-${DSTAMP}/api"/>
     	</ant>
     </target>
 
