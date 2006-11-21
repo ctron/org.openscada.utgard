@@ -13,7 +13,7 @@
     </description>
 
 	<property name="release" value="-nightly"/>
-	<property name="upload.base" value="/home/openscada/www/download/utgard/nightly"/>
+	<property name="upload.base" value="/var/vhosts/openscada/download/utgard/nightly"/>
 	
     <!-- ================================= 
           target: default              
