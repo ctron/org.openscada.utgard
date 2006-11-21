@@ -61,6 +61,7 @@
           target: deploy              
          ================================= -->
     <target name="deploy" depends="build" description="--> Pack and Deploy">
+    	<delete dir="${deploy.base}"/>
        	<mkdir dir="${deploy.dir}/bin"/>
     	<jar destfile="${deploy.dir}/bin/${tag}.jar">
     		<fileset dir="bin">
