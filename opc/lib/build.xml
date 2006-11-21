@@ -94,7 +94,25 @@
    	        		</fileset>
    	        		<pathelement location="bin"/>
    		       	</classpath>
-    	    </javac>
+    	</javac>
+    	
+    	<!-- generate javadoc -->
+    	<mkdir dir="docs/api"/>
+   		<javadoc destdir="docs/api"
+        	author="true"
+        	version="true"
+        	use="true"
+        	encoding="utf-8"
+        	>
+        	<tag name="note" description="Note" scope="all"/>
+        	<tag name="warning" description="Warning" scope="all"/>
+        	<packageset dir="src" defaultexcludes="yes">
+        		<include name="**"/>
+        	</packageset>
+   			<classpath refid="classpath"/>
+   			<link href="${api.href.base}/${dcom.name}" offline="true" packagelistloc="${upload.dir}/api/${dcom.name}"/>
+  		</javadoc>
+	
     </target>
 
 	<!-- ================================= 
@@ -140,6 +158,15 @@
     		</fileset>
     	</copy>
     	
+    	<!-- deploy javadoc -->
+		<mkdir dir="${deploy.dir}/docs/api"/>
+    	<copy todir="${deploy.dir}/docs/api">
+    		<fileset dir="docs/api"/>
+    	</copy>
+    	<copy todir="${upload.dir}/api/${name}">
+    		<fileset dir="docs/api"/>
+    	</copy>
+
     	<!-- add the license -->
     	<copy todir="${deploy.dir}" file="COPYING"/>
     	
