@@ -12,8 +12,8 @@
             The OpenSCADA OPC Nightly build file - Project Utgard
     </description>
 
-	<property name="release" value="-nightly"/>
-	<property name="upload.base" value="/var/vhosts/openscada/download/utgard/nightly"/>
+	<property name="release" value="-${DSTAMP}-nightly"/>
+	<property name="upload.base" value="/var/vhosts/openscada/download/utgard/nightly-${DSTAMP}"/>
 	
     <!-- ================================= 
           target: default              
