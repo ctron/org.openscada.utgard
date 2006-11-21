@@ -114,7 +114,7 @@
     				<include name="*.jar"/>
     			</fileset>
    			</classpath>
-   			<link href="${api.href.base}/${dcom.name}" offline="true" packagelistloc="${upload.dir}/api/${dcom.name}"/>
+   			<link href="${api.href.dir}/${dcom.name}" offline="true" packagelistloc="${upload.dir}/api/${dcom.name}"/>
   		</javadoc>
 	
     </target>
