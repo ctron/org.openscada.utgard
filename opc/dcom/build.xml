@@ -67,6 +67,7 @@
     			<include name="*.jar"/>
     		</fileset>
     	</copy>
+    	<copy todir="deploy" file="COPYING"/>
     	<mkdir dir="${upload.dir}"/>
     	<zip basedir="deploy" file="${upload.dir}/openscada-opc-dcom-${version}${release}.zip">
     		<fileset dir="deploy">
