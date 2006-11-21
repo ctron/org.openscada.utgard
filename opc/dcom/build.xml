@@ -13,14 +13,14 @@
     </description>
 	
 	<path id="classpath">
-		<pathelement name="lib/j-interop.jar"/>
-		<pathelement name="lib/jarapac.jar"/>
-		<pathelement name="lib/jcifs-1.2.9.jar"/>
-		<pathelement name="lib/iwombat.jar"/>
-		<pathelement name="lib/ntlm-security.jar"/>
-		<pathelement name="lib/ncacn_np.jar"/>
-		<pathelement name="lib/ncacn_ip_tcp.jar"/>
-		<pathelement name="lib/jcifs-ntlm-auth.jar"/>
+		<pathelement location="lib/j-interop.jar"/>
+		<pathelement location="lib/jarapac.jar"/>
+		<pathelement location="lib/jcifs-1.2.9.jar"/>
+		<pathelement location="lib/iwombat.jar"/>
+		<pathelement location="lib/ntlm-security.jar"/>
+		<pathelement location="lib/ncacn_np.jar"/>
+		<pathelement location="lib/ncacn_ip_tcp.jar"/>
+		<pathelement location="lib/jcifs-ntlm-auth.jar"/>
 	</path>
 
     <!-- ================================= 
