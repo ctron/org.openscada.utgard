@@ -2,8 +2,14 @@ set JAVA=java
 
 rem But your access data in the following variables
 rem Please not that the UUID is set to the Matrikon Simulation Server
+
+rem If the OPC server is accessable by an anonymous user
+rem You don't need to set a username and password and can
+rem leave the settings as they are.
+
 rem The test samples are currently using hard coded item names from the
-rem Matrikon Simulation server.
+rem Matrikon Simulation server. So changing the UUID will break the test
+rem samples for the moment.
 
 set HOST=localhost
 set DOMAIN=localhost
