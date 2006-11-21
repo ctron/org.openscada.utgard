@@ -42,18 +42,15 @@
     	
     	<mkdir dir="lib"/>
     	<copy todir="lib">
-    		<fileset>
-    			<filename name="${unpack.module.dcom}/lib/j-interop.jar"/>
-    			<filename name="${unpack.module.dcom}/lib/jarapac.jar"/>
-    			<filename name="${unpack.module.dcom}/lib/jcifs-1.2.9.jar"/>
-    			<filename name="${unpack.module.dcom}/lib/iwombat.jar"/>
-    			<filename name="${unpack.module.dcom}/lib/ntlm-security.jar"/>
-    			<filename name="${unpack.module.dcom}/lib/ncacn_np.jar"/>
-    			<filename name="${unpack.module.dcom}/lib/ncacn_ip_tcp.jar"/>
-    			<filename name="${unpack.module.dcom}/lib/jcifs-ntlm-auth.jar"/>
-    			<filename name="${unpack.module.dcom}/bin/${dcom.tag}.jar"/>
-    			<filename name="${external.base}/log4j/log4j-1.2.13.jar"/>
+    		<fileset dir="${unpack.module.dcom}/lib">
+    			<include name="*.jar"/>
 	   		</fileset>
+    		<fileset dir="${unpack.module.dcom}/bin">
+    			<include name="*.jar"/>
+    		</fileset>
+    		<fileset dir="${external.base}/log4j">
+    			<include name="*.jar"/>
+    		</fileset>
     	</copy>
     </target>
 	
