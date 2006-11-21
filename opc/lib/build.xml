@@ -145,7 +145,7 @@
     		>
     		<include name="**/*.bat"/>
        		<include name="**/*.sh"/>
-    		<replacefilter token="@@VERSION@@" value="${version}"/>
+    		<replacefilter token="@@VERSION@@" value="${version}${release}"/>
     	</replace>
     	
     	<!-- make a zip -->
