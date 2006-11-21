@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!-- ====================================================================== 
+     21.11.2006 16:27:17                                                        
+
+     OpenSCADA Utgard - OPC DCOM    
+     The OpenSCADA Utgard OPC DCOM Mappings
+                   
+     jens                                                                
+     ====================================================================== -->
+<project name="OpenSCADA Utgard - OPC DCOM" default="default">
+    <description>
+            The OpenSCADA Utgard OPC DCOM Mappings
+    </description>
+
+    <!-- ================================= 
+          target: default              
+         ================================= -->
+    <target name="default" depends="init" description="--> The OpenSCADA Utgard OPC DCOM Mappings">
+        
+    </target>
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: init                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="init">
+    </target>
+
+</project>
