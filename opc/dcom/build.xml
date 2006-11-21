@@ -39,7 +39,7 @@
 	<!-- ================================= 
           target: build              
          ================================= -->
-    <target name="build" depends="init" description="--> description">
+    <target name="build" depends="init" description="--> Build source">
     	<mkdir dir="bin"/>
         <javac
         	source="1.5"
@@ -49,6 +49,30 @@
         	srcdir="src">
         		<classpath refid="classpath"/>
     	</javac>
+    </target>
+
+	<!-- ================================= 
+          target: deploy              
+         ================================= -->
+    <target name="deploy" depends="build" description="--> Pack and Deploy">
+    	<mkdir dir="deploy"/>
+       	<mkdir dir="deploy/bin"/>
+    	<jar destfile="deploy/bin/openscada-opc-dcom-${version}${release}.jar">
+    		<fileset dir="bin">
+    			<include name="**/*.class"/>
+    		</fileset>
+    	</jar>
+    	<mkdir dir="deploy/lib"/>
+    	<copy todir="deploy/lib">
+    		<fileset dir="lib">
+    			<include name="*.jar"/>
+    		</fileset>
+    	</copy>
+    	<zip basedir="deploy" file="${upload.dir}/openscada-opc-dcom-${version}${release}.zip">
+    		<fileset>
+    			<include name="**/*"/>
+    		</fileset>
+    	</zip>
     </target>
 
 
