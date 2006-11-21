@@ -81,6 +81,19 @@
         			</fileset>
 	        	</classpath>
     	</javac>
+    	<javac
+    	        	source="1.5"
+    	        	target="1.5"
+    	        	encoding="utf-8"
+    	        	destdir="testbin"
+    	        	srcdir="testsrc">
+    	        		<classpath>
+    	        			<fileset dir="lib">
+    	        				<include name="*.jar"/>
+    	        			</fileset>
+    	        			<pathelement location="bin"/>
+    		        	</classpath>
+    	    	</javac>
     </target>
 
 	<!-- ================================= 
@@ -93,6 +106,11 @@
        	<mkdir dir="${deploy.dir}/bin"/>
     	<jar destfile="${deploy.dir}/bin/${tag}.jar">
     		<fileset dir="bin">
+    			<include name="**/*.class"/>
+    		</fileset>
+    	</jar>
+    	<jar destfile="${deploy.dir}/bin/${tag}-test.jar">
+	   		<fileset dir="testbin">
     			<include name="**/*.class"/>
     		</fileset>
     	</jar>
