@@ -81,19 +81,20 @@
         			</fileset>
 	        	</classpath>
     	</javac>
+    	<mkdir dir="testbin"/>
     	<javac
-    	        	source="1.5"
-    	        	target="1.5"
-    	        	encoding="utf-8"
-    	        	destdir="testbin"
-    	        	srcdir="testsrc">
-    	        		<classpath>
-    	        			<fileset dir="lib">
-    	        				<include name="*.jar"/>
-    	        			</fileset>
-    	        			<pathelement location="bin"/>
-    		        	</classpath>
-    	    	</javac>
+   	        source="1.5"
+   	        target="1.5"
+   	        encoding="utf-8"
+   	        destdir="testbin"
+   	        srcdir="testsrc">
+   	        	<classpath>
+   	        		<fileset dir="lib">
+   	        			<include name="*.jar"/>
+   	        		</fileset>
+   	        		<pathelement location="bin"/>
+   		       	</classpath>
+    	    </javac>
     </target>
 
 	<!-- ================================= 
