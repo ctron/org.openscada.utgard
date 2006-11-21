@@ -12,6 +12,12 @@
             The OpenSCADA Utgard OPC DCOM Mappings
     </description>
 	
+	<property name="name" value="openscada-opc-dcom"/>
+	<property name="tag" value="${name}-${version}${release}"/>
+	
+	<property name="deploy.base" value="deploy"/>
+	<property name="deploy.dir" value="${deploy.base}/${tag}"/>
+	
 	<path id="classpath">
 		<pathelement location="lib/j-interop.jar"/>
 		<pathelement location="lib/jarapac.jar"/>
@@ -55,21 +61,21 @@
           target: deploy              
          ================================= -->
     <target name="deploy" depends="build" description="--> Pack and Deploy">
-       	<mkdir dir="deploy/bin"/>
-    	<jar destfile="deploy/bin/openscada-opc-dcom-${version}${release}.jar">
+       	<mkdir dir="${deploy.dir}/bin"/>
+    	<jar destfile="${deploy.dir}/bin/${tag}.jar">
     		<fileset dir="bin">
     			<include name="**/*.class"/>
     		</fileset>
     	</jar>
-    	<mkdir dir="deploy/lib"/>
-    	<copy todir="deploy/lib">
+    	<mkdir dir="${deploy.dir}/lib"/>
+    	<copy todir="${deploy.dir}/lib">
     		<fileset dir="lib">
     			<include name="*.jar"/>
     		</fileset>
     	</copy>
-    	<copy todir="deploy" file="COPYING"/>
+    	<copy todir="${deploy.dir}" file="COPYING"/>
     	<mkdir dir="${upload.dir}"/>
-    	<zip basedir="deploy" file="${upload.dir}/openscada-opc-dcom-${version}${release}.zip">
+    	<zip basedir="${deploy.base}" file="${upload.dir}/${tag}.zip">
     	</zip>
     </target>
 
