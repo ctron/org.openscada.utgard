@@ -135,6 +135,12 @@
     	<!-- add the license -->
     	<copy todir="${deploy.dir}" file="COPYING"/>
     	
+    	<!-- add extra dist files -->
+    	<copy todir="${deploy.dir}">
+    		<fileset dir="dist">
+    		</fileset>
+    	</copy>
+    	
     	<!-- make a zip -->
     	<mkdir dir="${upload.dir}"/>
     	<zip basedir="${deploy.base}" file="${upload.dir}/${tag}.zip">
