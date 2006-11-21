@@ -42,7 +42,7 @@ public class OPCServer extends BaseCOMObject
         return OPCSERVERSTATUS.fromStruct ( (JIStruct) ( (JIPointer)result[0] ).getReferent () );
     }
 
-    public OPCGroupStateMgt addGroup ( String name, boolean active, int updateRate, int clientHandle, int timeBias, float percentDeadband, int localeID ) throws JIException, IllegalArgumentException, UnknownHostException
+    public OPCGroupStateMgt addGroup ( String name, boolean active, int updateRate, int clientHandle, Integer timeBias, Float percentDeadband, int localeID ) throws JIException, IllegalArgumentException, UnknownHostException
     {
         JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
         callObject.setOpnum ( 0 );
@@ -51,8 +51,8 @@ public class OPCServer extends BaseCOMObject
         callObject.addInParamAsInt ( active ? 1 : 0, JIFlags.FLAG_NULL );
         callObject.addInParamAsInt ( updateRate, JIFlags.FLAG_NULL );
         callObject.addInParamAsInt ( clientHandle, JIFlags.FLAG_NULL );
-        callObject.addInParamAsPointer ( new JIPointer ( new Integer ( timeBias ) ), JIFlags.FLAG_NULL );
-        callObject.addInParamAsPointer ( new JIPointer ( new Float ( percentDeadband ) ), JIFlags.FLAG_NULL );
+        callObject.addInParamAsPointer ( new JIPointer ( timeBias ), JIFlags.FLAG_NULL );
+        callObject.addInParamAsPointer ( new JIPointer ( percentDeadband ), JIFlags.FLAG_NULL );
         callObject.addInParamAsInt ( localeID, JIFlags.FLAG_NULL );
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
