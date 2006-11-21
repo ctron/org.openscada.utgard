@@ -66,6 +66,6 @@ public class Item
     
     public ItemState read ( boolean device ) throws JIException
     {
-        return _group.read ( device, this ).get ( _id );
+        return _group.read ( device, this ).get ( this );
     }
 }
