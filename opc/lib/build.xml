@@ -110,7 +110,7 @@
     			<include name="**/*.class"/>
     		</fileset>
     	</jar>
-    	<jar destfile="${deploy.dir}/bin/${tag}-test.jar">
+    	<jar destfile="${deploy.dir}/bin/${name}-test-${version}${release}.jar">
 	   		<fileset dir="testbin">
     			<include name="**/*.class"/>
     		</fileset>
