@@ -141,7 +141,7 @@
     		</fileset>
     	</copy>
     	<replace
-    		dir="{deploy.dir}"
+    		dir="${deploy.dir}"
     		>
     		<include name="**/*.bat"/>
        		<include name="**/*.sh"/>
