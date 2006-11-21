@@ -16,13 +16,14 @@
 	<property name="release" value=""/>
 	<property name="upload.base" value=""/>
 	<property name="upload.dir" value="${upload.base}/${version}"/>
+	<property name="source.base" value=".."/>
 	
     <!-- ================================= 
           target: default              
          ================================= -->
     <target name="default" depends="init" description="--> The OpenSCADA OPC Build File - Project Utgard">
-    	<ant dir="../dcom"/>
-    	<ant dir="../lib"/>
+    	<ant dir="${source.base}/opc/dcom"/>
+    	<ant dir="${source.base}/opc/lib"/>
     </target>
 
     <!-- - - - - - - - - - - - - - - - - - 
