@@ -11,6 +11,17 @@
     <description>
             The OpenSCADA Utgard OPC DCOM Mappings
     </description>
+	
+	<fileset id="classpath">
+		<filename name="lib/j-interop.jar"/>
+		<filename name="lib/jarapac.jar"/>
+		<filename name="lib/jcifs-1.2.9.jar"/>
+		<filename name="lib/iwombat.jar"/>
+		<filename name="lib/ntlm-security.jar"/>
+		<filename name="lib/ncacn_np.jar"/>
+		<filename name="lib/ncacn_ip_tcp.jar"/>
+		<filename name="lib/jcifs-ntlm-auth.jar"/>
+	</fileset>
 
     <!-- ================================= 
           target: default              
@@ -24,5 +35,16 @@
          - - - - - - - - - - - - - - - - - -->
     <target name="init">
     </target>
+	
+	<!-- ================================= 
+          target: build              
+         ================================= -->
+    <target name="build" depends="init" description="--> description">
+        <javac target="1.5" encoding="utf-8">
+        		<classpath refid="classpath"/>
+        		<fileset dir="src"/>
+    	</javac>
+    </target>
+
 
 </project>
