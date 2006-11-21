@@ -124,6 +124,14 @@
     		</fileset>
     	</copy>
     	
+       	<!-- deploy source -->
+       	<mkdir dir="${deploy.dir}/src"/>
+       	<copy todir="${deploy.dir}/src">
+       		<fileset dir="src">
+       			<include name="**/*.java"/>
+       		</fileset>
+       	</copy>
+    	
     	<!-- deploy tests -->
     	<mkdir dir="${deploy.dir}/test"/>
     	<copy todir="${deploy.dir}/test">
