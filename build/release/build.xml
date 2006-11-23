@@ -14,7 +14,7 @@
 
 	<property name="version" value="0.1.0"/>
 	<property name="release" value=""/>
-	<property name="upload.base" value=""/>
+	<property name="upload.base" value="/var/vhosts/openscada/download/utgard"/>
 	<property name="upload.dir" value="${upload.base}/${version}"/>
 	<property name="source.base" value="../.."/>
 	<property name="external.base" value="../../external"/>
