@@ -393,6 +393,7 @@ public class Test1
         }
     }
 
+    @SuppressWarnings("unused")
     public static void main ( String[] args ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         TestConfiguration configuration = new MatrikonSimulationServerConfiguration ();
