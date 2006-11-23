@@ -20,7 +20,6 @@
 package org.openscada.opc.lib.da;
 
 import java.net.UnknownHostException;
-import java.rmi.server.ServerCloneException;
 import java.util.HashMap;
 import java.util.Map;
 
