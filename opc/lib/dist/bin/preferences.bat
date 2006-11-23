@@ -1,22 +1,21 @@
-#!/bin/bash
-JAVA=java
+set JAVA=java
 
-# But your access data in the following variables
-# Please not that the UUID is set to the Matrikon Simulation Server
+rem But your access data in the following variables
+rem Please not that the UUID is set to the Matrikon Simulation Server
 
-# If the OPC server is accessable by an anonymous user
-# You don't need to set a username and password and can
-# leave the settings as they are.
+rem If the OPC server is accessable by an anonymous user
+rem You don't need to set a username and password and can
+rem leave the settings as they are.
 
-# The test samples are currently using hard coded item names from the
-# Matrikon Simulation server. So changing the UUID will break the test
-# samples for the moment.
+rem The test samples are currently using hard coded item names from the
+rem Matrikon Simulation server. So changing the UUID will break the test
+rem samples for the moment.
 
-HOST=localhost
-DOMAIN=localhost
-USER=user
-PASSWORD=password
-VERSION=@@VERSION@@
-UUID=F8582CF2-88FB-11D0-B850-00C0F0104305
+set HOST=localhost
+set DOMAIN=localhost
+set USER=user
+set PASSWORD=password
+set VERSION=@@VERSION@@
+set UUID=F8582CF2-88FB-11D0-B850-00C0F0104305
 
-TEST_CLASSPATH="../lib/j-interop.jar:../lib/jarapac.jar:../lib/jcifs-1.2.9.jar:../lib/iwombat.jar:../lib/ntlm-security.jar:../lib/ncacn_np.jar:../lib/ncacn_ip_tcp.jar:../lib/cifs-ntlm-auth.jar:../lib/log4j-1.2.13.jar:../lib/openscada-opc-dcom-%VERSION%.jar:../bin/openscada-opc-lib-%VERSION%.jar:../bin/openscada-opc-lib-test-%VERSION%.jar:."
+set TEST_CLASSPATH="../lib/j-interop.jar;../lib/jarapac.jar;../lib/jcifs-1.2.9.jar;../lib/iwombat.jar;../lib/ntlm-security.jar;../lib/ncacn_np.jar;../lib/ncacn_ip_tcp.jar;../lib/cifs-ntlm-auth.jar;../lib/log4j-1.2.13.jar;../lib/openscada-opc-dcom-%VERSION%.jar;../bin/openscada-opc-lib-%VERSION%.jar;../bin/openscada-opc-lib-test-%VERSION%.jar;."
