@@ -189,7 +189,9 @@
     	
     	<!-- make a zip -->
     	<mkdir dir="${upload.dir}"/>
-    	<zip basedir="${deploy.base}" file="${upload.dir}/${tag}.zip">
+    	<zip file="${upload.dir}/${tag}.zip" >
+    		<zipfileset dir="${deploy.base}">
+    		</zipfileset>
     	</zip>
     </target>
 
