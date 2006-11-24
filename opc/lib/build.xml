@@ -18,6 +18,9 @@
 	
 	<property name="deploy.base" value="deploy"/>
 	<property name="deploy.dir" value="${deploy.base}/${tag}"/>
+	
+	<property name="export.base" value="export"/>
+	<property name="export.dir" value="${export.base}/${tag}"/>
 
 	<property name="dcom.name" value="openscada-opc-dcom"/>
 	<property name="dcom.tag" value="${dcom.name}-${version}${release}"/>
@@ -61,6 +64,8 @@
 		<delete dir="${unpack.base}"/>
     	<delete dir="bin"/>
     	<delete dir="lib"/>
+       	<delete dir="${deploy.base}"/>
+    	<delete dir="${export.base}"/>
     </target>
 
 	
@@ -118,11 +123,24 @@
   		</javadoc>
 	
     </target>
+	
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: export_project                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="export_project">
+		<mkdir dir="${export.dir}"/>
+    	<exec dir="${export.dir}" failonerror="true" executable="svn">
+    		<arg value="--force"/>
+    		<arg value="export"/>
+			<arg value="${svn.base.utgard}/lib"/>
+    		<arg value="."/>
+    	</exec>
+    </target>
 
 	<!-- ================================= 
           target: deploy              
          ================================= -->
-    <target name="deploy" depends="build" description="--> Pack and Deploy">
+    <target name="deploy" depends="build,export_project" description="--> Pack and Deploy">
     	<delete dir="${deploy.base}"/>
     	
     	<!-- deploy bin -->
@@ -203,6 +221,12 @@
     	<mkdir dir="${upload.dir}"/>
     	<zip file="${upload.dir}/${tag}.zip" >
     		<zipfileset dir="${deploy.base}">
+    		</zipfileset>
+    	</zip>
+    	
+    	<!-- make the project zip -->
+    	<zip file="${upload.dir}/prj-${tag}.zip">
+    		<zipfileset dir="${export.base}">
     		</zipfileset>
     	</zip>
     </target>
