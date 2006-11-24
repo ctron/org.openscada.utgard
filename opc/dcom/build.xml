@@ -115,6 +115,14 @@
     	<!-- add license -->
     	<copy todir="${deploy.dir}" file="COPYING"/>
     	
+    	<!-- add source -->
+    	<mkdir dir="${deploy.dir}/src"/>
+    	<copy todir="${deploy.dir}/src">
+    		<fileset dir="src">
+    			<include name="**/*.java"/>
+    		</fileset>
+    	</copy>
+    	
     	<!-- zip it -->
     	<mkdir dir="${upload.dir}"/>
     	<zip basedir="${deploy.base}" file="${upload.dir}/${tag}.zip">

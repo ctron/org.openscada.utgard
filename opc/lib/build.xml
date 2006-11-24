@@ -154,14 +154,6 @@
        		</fileset>
        	</copy>
     	
-    	<!-- deploy tests -->
-    	<mkdir dir="${deploy.dir}/test"/>
-    	<copy todir="${deploy.dir}/test">
-    		<fileset dir="testsrc">
-    			<include name="**/*.java"/>
-    		</fileset>
-    	</copy>
-    	
     	<!-- deploy javadoc -->
 		<mkdir dir="${deploy.dir}/docs/api"/>
     	<copy todir="${deploy.dir}/docs/api">
@@ -173,6 +165,21 @@
 
     	<!-- add the license -->
     	<copy todir="${deploy.dir}" file="COPYING"/>
+    	
+       	<!-- add source -->
+       	<mkdir dir="${deploy.dir}/src"/>
+       	<copy todir="${deploy.dir}/src">
+       		<fileset dir="src">
+       			<include name="**/*.java"/>
+       		</fileset>
+       	</copy>
+       	<!-- add test source -->
+       	<mkdir dir="${deploy.dir}/testsrc"/>
+       	<copy todir="${deploy.dir}/testsrc">
+       		<fileset dir="testsrc">
+       			<include name="**/*.java"/>
+       		</fileset>
+       	</copy>
     	
     	<!-- add extra dist files -->
     	<copy todir="${deploy.dir}">
