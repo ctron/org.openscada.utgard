@@ -127,12 +127,12 @@
 	<!-- - - - - - - - - - - - - - - - - - 
           target: export_project                      
          - - - - - - - - - - - - - - - - - -->
-    <target name="export_project">
+    <target name="export_project" depends="init">
 		<mkdir dir="${export.dir}"/>
     	<exec dir="${export.dir}" failonerror="true" executable="svn">
     		<arg value="--force"/>
     		<arg value="export"/>
-			<arg value="${svn.base.utgard}/lib"/>
+			<arg value="${svn.base.utgard}/opc/lib"/>
     		<arg value="."/>
     	</exec>
     </target>
