@@ -193,6 +193,11 @@
        		<include name="**/*.sh"/>
     		<replacefilter token="@@VERSION@@" value="${version}${release}"/>
     	</replace>
+    	<chmod perm="a+rx">
+    		<fileset dir="${deploy.dir}">
+    			<include name="**/*.sh"/>
+    		</fileset>
+    	</chmod>
     	
     	<!-- make a zip -->
     	<mkdir dir="${upload.dir}"/>
