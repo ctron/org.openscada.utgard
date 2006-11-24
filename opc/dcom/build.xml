@@ -18,6 +18,9 @@
 	<property name="deploy.base" value="deploy"/>
 	<property name="deploy.dir" value="${deploy.base}/${tag}"/>
 	
+	<property name="export.base" value="export"/>
+	<property name="export.dir" value="${export.base}/${tag}"/>
+	
 	<path id="classpath">
 		<pathelement location="lib/j-interop.jar"/>
 		<pathelement location="lib/jarapac.jar"/>
@@ -36,10 +39,20 @@
         
     </target>
 
+	<!-- ================================= 
+          target: clean              
+         ================================= -->
+    <target name="clean" depends="" description="--> Clean up">
+    	<delete dir="bin"/>
+       	<delete dir="${deploy.base}"/>
+    	<delete dir="${export.base}"/>
+    </target>
+
+	
     <!-- - - - - - - - - - - - - - - - - - 
           target: init                      
          - - - - - - - - - - - - - - - - - -->
-    <target name="init">
+    <target name="init" depends="clean">
     </target>
 	
 	<!-- ================================= 
@@ -72,11 +85,24 @@
    			<classpath refid="classpath"/>
   		</javadoc>
     </target>
+	
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: export_project                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="export_project" depends="init">
+		<mkdir dir="${export.dir}"/>
+    	<exec dir="${export.dir}" failonerror="true" executable="svn">
+    		<arg value="--force"/>
+    		<arg value="export"/>
+			<arg value="${svn.base.utgard}/opc/dcom"/>
+    		<arg value="."/>
+    	</exec>
+    </target>
 
 	<!-- ================================= 
           target: deploy              
          ================================= -->
-    <target name="deploy" depends="build" description="--> Pack and Deploy">
+    <target name="deploy" depends="build,export_project" description="--> Pack and Deploy">
     	<delete dir="${deploy.base}"/>
     	
     	<!-- deploy the bins -->
@@ -126,6 +152,12 @@
     	<!-- zip it -->
     	<mkdir dir="${upload.dir}"/>
     	<zip basedir="${deploy.base}" file="${upload.dir}/${tag}.zip">
+    	</zip>
+    	
+    	<!-- make the project zip -->
+    	<zip file="${upload.dir}/prj-${tag}.zip">
+    		<zipfileset dir="${export.base}">
+    		</zipfileset>
     	</zip>
     </target>
 
