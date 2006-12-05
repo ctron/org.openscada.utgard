@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jinterop.dcom.common.JIException;
+import org.jinterop.dcom.core.JIVariant;
 import org.openscada.opc.lib.common.NotConnectedException;
 
 public class SyncAccess implements Runnable
@@ -159,5 +160,10 @@ public class SyncAccess implements Runnable
                 dataCallback.changed ( item, itemState );
             }
         }
+    }
+    
+    public void write ( String itemId, JIVariant value )
+    {
+        
     }
 }

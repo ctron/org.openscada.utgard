@@ -21,6 +21,7 @@ package org.openscada.opc.lib.da;
 
 import org.apache.log4j.Logger;
 import org.jinterop.dcom.common.JIException;
+import org.jinterop.dcom.core.JIVariant;
 
 public class Item
 {
@@ -59,13 +60,15 @@ public class Item
         _group.setActive ( state, this );
     }
     
-    public void write ()
-    {
-        
-    }
-    
     public ItemState read ( boolean device ) throws JIException
     {
         return _group.read ( device, this ).get ( this );
+    }
+    
+    public Integer write ( JIVariant value ) throws JIException
+    {
+        return _group.write ( new WriteRequest[] {
+                new WriteRequest ( this, value )
+        } ).get ( this );
     }
 }

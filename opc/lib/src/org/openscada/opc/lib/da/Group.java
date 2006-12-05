@@ -30,6 +30,8 @@ import org.apache.log4j.Logger;
 import org.jinterop.dcom.common.JIException;
 import org.openscada.opc.dcom.common.KeyedResult;
 import org.openscada.opc.dcom.common.KeyedResultSet;
+import org.openscada.opc.dcom.common.Result;
+import org.openscada.opc.dcom.common.ResultSet;
 import org.openscada.opc.dcom.da.OPCITEMDEF;
 import org.openscada.opc.dcom.da.OPCITEMRESULT;
 import org.openscada.opc.dcom.da.OPCITEMSOURCE;
@@ -201,7 +203,7 @@ public class Group
         _items.setActiveState ( state, handles );
     }
     
-    public synchronized Map<Item, ItemState> read ( boolean device, Item... items ) throws JIException
+    protected Integer[] getServerHandles ( Item [] items )
     {
         checkItems ( items );
         
@@ -211,6 +213,42 @@ public class Group
         {
             handles[i] = items[i].getServerHandle ();
         }
+        
+        return handles;
+    }
+    
+    public synchronized Map<Item, Integer> write ( WriteRequest ... requests ) throws JIException
+    {
+        Item [] items = new Item[requests.length];
+        
+        for ( int i = 0; i< requests.length ; i++ )
+        {
+            items[i] = requests[i].getItem ();
+        }
+        
+        Integer [] handles = getServerHandles ( items );
+        
+        org.openscada.opc.dcom.da.impl.WriteRequest [] wr = new org.openscada.opc.dcom.da.impl.WriteRequest [ items.length ];
+        for ( int i = 0; i < items.length; i++ )
+        {
+            wr[i] = new org.openscada.opc.dcom.da.impl.WriteRequest ( handles[i], requests[i].getValue () );
+        }
+        
+        ResultSet<org.openscada.opc.dcom.da.impl.WriteRequest> resultSet = _syncIO.write ( wr );
+        
+        Map<Item,Integer> result = new HashMap<Item, Integer> ();
+        for ( int i = 0; i < requests.length; i++ )
+        {
+            Result<org.openscada.opc.dcom.da.impl.WriteRequest> entry = resultSet.get ( i );
+            result.put ( requests[i].getItem (), entry.getErrorCode () );
+        }
+        
+        return result;
+    }
+    
+    public synchronized Map<Item, ItemState> read ( boolean device, Item... items ) throws JIException
+    {
+        Integer [] handles = getServerHandles ( items );
         
         KeyedResultSet<Integer, OPCITEMSTATE> states = _syncIO.read ( device ? OPCITEMSOURCE.OPC_DS_DEVICE : OPCITEMSOURCE.OPC_DS_CACHE, handles );
         
