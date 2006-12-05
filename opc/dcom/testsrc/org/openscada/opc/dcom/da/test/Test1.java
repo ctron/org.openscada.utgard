@@ -467,7 +467,8 @@ public class Test1
         }
         finally
         {
-            JISession.destroySession ( _session );
+            if ( _session != null )
+                JISession.destroySession ( _session );
             _session = null;
         }
     }
