@@ -35,7 +35,9 @@ import org.jinterop.dcom.core.JIString;
 import org.jinterop.dcom.win32.ComFactory;
 
 public class EnumString extends BaseCOMObject
-{
+{   
+    private static final int MAX_FETCH_SIZE = 10;
+    
     public EnumString ( IJIComObject enumStringObject ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         super ( (IJIComObject)enumStringObject.queryInterface ( org.openscada.opc.dcom.common.Constants.IEnumString_IID ) );
@@ -117,8 +119,8 @@ public class EnumString extends BaseCOMObject
         int i = 0;
         do
         {
-            i = next ( data, 100 );
-        } while ( i == 100 );
+            i = next ( data, MAX_FETCH_SIZE );
+        } while ( i == MAX_FETCH_SIZE );
 
         return data;
     }
