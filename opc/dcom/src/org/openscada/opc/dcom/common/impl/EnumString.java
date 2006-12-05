@@ -36,7 +36,7 @@ import org.jinterop.dcom.win32.ComFactory;
 
 public class EnumString extends BaseCOMObject
 {   
-    private static final int MAX_FETCH_SIZE = 10;
+    private static final int DEFAULT_BATCH_SIZE = 10;
     
     public EnumString ( IJIComObject enumStringObject ) throws IllegalArgumentException, UnknownHostException, JIException
     {
@@ -111,7 +111,7 @@ public class EnumString extends BaseCOMObject
         return new EnumString ( object );
     }
 
-    public Collection<String> asCollection () throws JIException
+    public Collection<String> asCollection ( int batchSize ) throws JIException
     {
         reset ();
 
@@ -119,10 +119,15 @@ public class EnumString extends BaseCOMObject
         int i = 0;
         do
         {
-            i = next ( data, MAX_FETCH_SIZE );
-        } while ( i == MAX_FETCH_SIZE );
+            i = next ( data, batchSize );
+        } while ( i == batchSize );
 
         return data;
+    }
+    
+    public Collection<String> asCollection () throws JIException
+    {
+        return asCollection ( DEFAULT_BATCH_SIZE );
     }
 
 }
