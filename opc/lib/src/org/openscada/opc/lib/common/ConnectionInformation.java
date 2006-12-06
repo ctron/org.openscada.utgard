@@ -119,4 +119,14 @@ public class ConnectionInformation
     {
         _progId = progId;
     }
+    
+    public String getClsOrProgId ()
+    {
+        if ( _clsid != null )
+            return _clsid;
+        else if ( _progId != null )
+            return _progId;
+        else
+            return null;
+    }
 }
