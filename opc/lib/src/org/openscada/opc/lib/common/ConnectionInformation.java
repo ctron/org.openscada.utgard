@@ -36,9 +36,9 @@ public class ConnectionInformation
 
     private String _password = "";
     
-    private String _clsid = "";
+    private String _clsid = null;
     
-    private String _progId = "";
+    private String _progId = null;
 
     public ConnectionInformation ()
     {
