@@ -26,6 +26,7 @@ import java.util.Map;
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.JIClsid;
 import org.jinterop.dcom.core.JIComServer;
+import org.jinterop.dcom.core.JIProgId;
 import org.jinterop.dcom.core.JISession;
 import org.openscada.opc.dcom.common.impl.OPCCommon;
 import org.openscada.opc.dcom.da.OPCNAMESPACETYPE;
@@ -69,7 +70,13 @@ public class Server
                                              _connectionInformation.getUser (),
                                              _connectionInformation.getPassword () );
         
-        _comServer = new JIComServer ( JIClsid.valueOf ( _connectionInformation.getClsid () ), _connectionInformation.getHost (), _session );
+        if ( _connectionInformation.getClsid () != null )
+            _comServer = new JIComServer ( JIClsid.valueOf ( _connectionInformation.getClsid () ), _connectionInformation.getHost (), _session );
+        else if ( _connectionInformation.getProgId () != null )
+            _comServer = new JIComServer ( JIProgId.valueOf ( _session, _connectionInformation.getClsid () ), _connectionInformation.getHost (), _session );
+        else
+            throw new IllegalArgumentException ( "Neither clsid nor progid is valid!" );
+        
         _server = new OPCServer ( _comServer.createInstance () );
         _common = _server.getCommon ();
     }

@@ -19,6 +19,13 @@
 
 package org.openscada.opc.lib.common;
 
+/**
+ * Holds the connection information
+ * @author Jens Reimann <jens.reimann@inavare.net>
+ *
+ * If both <code>clsId</code> and <code>progId</code> are set then <code>clsId</code>
+ * has priority!
+ */
 public class ConnectionInformation
 {
     private String _host = "localhost";
@@ -30,6 +37,8 @@ public class ConnectionInformation
     private String _password = "";
     
     private String _clsid = "";
+    
+    private String _progId = "";
 
     public ConnectionInformation ()
     {
@@ -99,5 +108,15 @@ public class ConnectionInformation
     public void setClsid ( String clsid )
     {
         _clsid = clsid;
+    }
+
+    public String getProgId ()
+    {
+        return _progId;
+    }
+
+    public void setProgId ( String progId )
+    {
+        _progId = progId;
     }
 }
