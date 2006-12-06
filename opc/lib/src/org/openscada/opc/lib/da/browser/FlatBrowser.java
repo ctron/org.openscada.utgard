@@ -21,6 +21,7 @@ package org.openscada.opc.lib.da.browser;
 
 import java.net.UnknownHostException;
 import java.util.Collection;
+import java.util.EnumSet;
 
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.JIVariant;
@@ -41,9 +42,31 @@ public class FlatBrowser
         _browser = browser;
     }
 
+    public Collection<String> browse ( String filterCriteria, EnumSet<Access> accessMask ) throws IllegalArgumentException, UnknownHostException, JIException
+    {
+        int accessMaskValue = 0;
+        
+        if ( accessMask.contains ( Access.READ ) )
+            accessMaskValue |= Access.READ.getCode ();
+        if ( accessMask.contains ( Access.WRITE ) )
+            accessMaskValue |= Access.WRITE.getCode ();
+        
+        return _browser.browse ( OPCBROWSETYPE.OPC_FLAT, filterCriteria, accessMaskValue, JIVariant.VT_EMPTY ).asCollection ();
+    }
+    
     public Collection<String> browse ( String filterCriteria ) throws IllegalArgumentException, UnknownHostException, JIException
     {
-        return _browser.browse ( OPCBROWSETYPE.OPC_FLAT, filterCriteria, 0, JIVariant.VT_EMPTY ).asCollection ();
+        return browse ( filterCriteria, EnumSet.noneOf ( Access.class ) );
+    }
+    
+    public Collection<String> browse () throws IllegalArgumentException, UnknownHostException, JIException
+    {
+        return browse ( "", EnumSet.noneOf ( Access.class ) );
+    }
+    
+    public Collection<String> browse ( EnumSet<Access> accessMask ) throws IllegalArgumentException, UnknownHostException, JIException
+    {
+        return browse ( "", accessMask );
     }
 
 }
