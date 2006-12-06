@@ -91,6 +91,26 @@ public class Group
         return items.get ( item );
     }
     
+    public synchronized Map<String, Result<OPCITEMRESULT>> validateItems ( String... items ) throws JIException
+    {
+        OPCITEMDEF[] defs = new OPCITEMDEF[ items.length ];
+        for ( int i = 0; i< items.length; i++ )
+        {
+            defs[i] = new OPCITEMDEF();
+            defs[i].setItemID ( items[i] );
+        }
+        
+        KeyedResultSet<OPCITEMDEF,OPCITEMRESULT> result = _items.validate ( defs );
+        
+        Map<String, Result<OPCITEMRESULT>> resultMap = new HashMap<String, Result<OPCITEMRESULT>> ();
+        for ( KeyedResult<OPCITEMDEF,OPCITEMRESULT> resultEntry : result )
+        {
+            resultMap.put ( resultEntry.getKey ().getItemID (), new Result<OPCITEMRESULT> ( resultEntry.getValue (), resultEntry.getErrorCode () ) );
+        }
+        
+        return resultMap;
+    }
+    
     public synchronized Map<String, Item> addItems ( String... items ) throws JIException, AddFailedException
     {
         // Find which items we already have
