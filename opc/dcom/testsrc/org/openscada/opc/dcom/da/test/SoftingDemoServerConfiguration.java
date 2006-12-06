@@ -26,6 +26,11 @@ public class SoftingDemoServerConfiguration implements TestConfiguration
     {
         return "2E565242-B238-11D3-842D-0008C779D775";
     }
+    
+    public String getProgId ()
+    {
+        return "Softing.OPCToolboxDemo_ServerDA.1";
+    }
 
     public String[] getReadItems ()
     {
