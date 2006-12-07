@@ -53,6 +53,7 @@ public class Server
     private Integer _defaultTimeBias = null;
     private Float _defaultPercentDeadband = null;
     private int _defaultLocaleID = 0;
+    private ErrorMessageResolver _errorMessageResolver = null;
     
     private Map<Integer,Group> _groups = new HashMap<Integer, Group> (); 
     
@@ -79,6 +80,7 @@ public class Server
         
         _server = new OPCServer ( _comServer.createInstance () );
         _common = _server.getCommon ();
+        _errorMessageResolver = new ErrorMessageResolver ( _server.getCommon (), _defaultLocaleID );
     }
     
     public synchronized void disconnect () throws JIException
@@ -86,6 +88,7 @@ public class Server
         if ( _session != null )
         {
             JISession.destroySession ( _session );
+            _errorMessageResolver = null;
             _session = null;
             _comServer = null;
             _server = null;
@@ -185,11 +188,6 @@ public class Server
         }
     }
     
-    public String getErrorMessage ( int errorCode ) throws JIException
-    {
-        return _common.getErrorString ( errorCode, _defaultLocaleID );
-    }
-
     public int getDefaultLocaleID ()
     {
         return _defaultLocaleID;
@@ -268,5 +266,21 @@ public class Server
             return null;
         
         return new TreeBrowser ( browser );
+    }
+    
+    public synchronized String getErrorMessage ( int errorCode )
+    {
+        if ( _errorMessageResolver == null )
+            return String.format ( "Unknown error (%08X)", errorCode );
+        
+        // resolve message
+        String message = _errorMessageResolver.getMessage ( errorCode );
+        
+        // and return if successfull
+        if ( message != null )
+            return message;
+        
+        // return default message
+        return String.format ( "Unknown error (%08X)", errorCode );
     }
 }
