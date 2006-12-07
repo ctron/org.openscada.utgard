@@ -49,6 +49,10 @@ public class OPCTest2
         ci.setPassword ( args[3] );
         ci.setClsid ( args[4] );
         
+        String itemId = "Saw-toothed Waves.Int2";
+        if ( args.length >= 5 )
+            itemId = args[5];
+        
         // create a new server
         Server server = new Server ( ci );
         try
@@ -59,7 +63,7 @@ public class OPCTest2
             // add sync access
             
             SyncAccess syncAccess = new SyncAccess ( server, 100 );
-            syncAccess.addItem ( "Saw-toothed Waves.Int2", new DataCallback () {
+            syncAccess.addItem ( itemId, new DataCallback () {
 
                 public void changed ( Item item, ItemState itemState )
                 {
