@@ -162,8 +162,10 @@ public class SyncAccess implements Runnable
         }
     }
     
-    public void write ( String itemId, JIVariant value )
+    public synchronized void clear ()
     {
-        
+        _items.clear ();
+        _itemMap.clear ();
+        _itemCache.clear ();
     }
 }
