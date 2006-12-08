@@ -38,6 +38,7 @@ import org.openscada.opc.dcom.da.IOPCDataCallback;
 public class OPCDataCallback extends EventHandlerImpl
 {
     private IOPCDataCallback _callback = null;
+    private JIJavaCoClass _coClass = null;
 
     public OPCDataCallback ()
     {
@@ -68,9 +69,12 @@ public class OPCDataCallback extends EventHandlerImpl
         return new Object[0];
     }
 
-    public JIJavaCoClass getCoClass () throws JIException
+    public synchronized JIJavaCoClass getCoClass () throws JIException
     {
-        JIJavaCoClass coClass = new JIJavaCoClass ( new JIInterfaceDefinition ( "6E3AC3D2-8222-44E2-9347-D6DBDDCE122E" ), this );
+        if ( _coClass != null )
+            return _coClass;
+        
+        _coClass = new JIJavaCoClass ( new JIInterfaceDefinition ( Constants.IOPCDataCallback_IID ), this );
 
         JIParameterObject params;
         JIMethodDescriptor method;
@@ -88,7 +92,7 @@ public class OPCDataCallback extends EventHandlerImpl
         params.addInParamAsObject ( new JIArray ( FILETIME.getStruct (), null, 1, true ), JIFlags.FLAG_NULL );
         params.addInParamAsObject ( new JIArray ( Integer.class, null, 1, true ), JIFlags.FLAG_NULL );
         method = new JIMethodDescriptor ( "OnDataChange", 0, params );
-        coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
+        _coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
 
         // OnReadComplete
         params = new JIParameterObject ();
@@ -103,7 +107,7 @@ public class OPCDataCallback extends EventHandlerImpl
         params.addInParamAsObject ( new JIArray ( FILETIME.getStruct (), null, 1, true ), JIFlags.FLAG_NULL );
         params.addInParamAsObject ( new JIArray ( Integer.class, null, 1, true ), JIFlags.FLAG_NULL );
         method = new JIMethodDescriptor ( "OnReadComplete", 1, params );
-        coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
+        _coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
 
         // OnWriteComplete
         params = new JIParameterObject ();
@@ -114,21 +118,21 @@ public class OPCDataCallback extends EventHandlerImpl
         params.addInParamAsObject ( new JIArray ( Integer.class, null, 1, true ), JIFlags.FLAG_NULL );
         params.addInParamAsObject ( new JIArray ( Integer.class, null, 1, true ), JIFlags.FLAG_NULL );
         method = new JIMethodDescriptor ( "OnWriteComplete", 2, params );
-        coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
+        _coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
 
         // OnCancelComplete
         params = new JIParameterObject ();
         params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL );
         params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL );
         method = new JIMethodDescriptor ( "OnCancelComplete", 3, params );
-        coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
+        _coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
 
         // Add supported event interfaces
         List<String> eventInterfaces = new LinkedList<String> ();
         eventInterfaces.add ( Constants.IOPCDataCallback_IID );
-        coClass.setSupportedEventInterfaces ( eventInterfaces );
+        _coClass.setSupportedEventInterfaces ( eventInterfaces );
 
-        return coClass;
+        return _coClass;
     }
 
     public void setCallback ( IOPCDataCallback callback )

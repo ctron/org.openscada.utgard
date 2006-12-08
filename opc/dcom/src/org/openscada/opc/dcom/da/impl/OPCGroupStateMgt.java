@@ -22,6 +22,7 @@ package org.openscada.opc.dcom.da.impl;
 import java.net.UnknownHostException;
 
 import org.jinterop.dcom.common.JIException;
+import org.jinterop.dcom.common.JISystem;
 import org.jinterop.dcom.core.IJIComObject;
 import org.jinterop.dcom.core.JICallObject;
 import org.jinterop.dcom.core.JIFlags;
@@ -160,7 +161,7 @@ public class OPCGroupStateMgt extends BaseCOMObject
     {
         OPCDataCallback callbackObject = new OPCDataCallback ();
         callbackObject.setCallback ( callback );
-
+        
         String id = ComFactory.attachEventHandler ( getCOMObject (), Constants.IOPCDataCallback_IID, JIInterfacePointer
                 .getInterfacePointer ( getCOMObject ().getAssociatedSession (), callbackObject.getCoClass () ) );
 

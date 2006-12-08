@@ -32,6 +32,7 @@ import org.jinterop.dcom.common.JISystem;
 import org.jinterop.dcom.core.IJIComObject;
 import org.jinterop.dcom.core.JIClsid;
 import org.jinterop.dcom.core.JIComServer;
+import org.jinterop.dcom.core.JIProgId;
 import org.jinterop.dcom.core.JISession;
 import org.jinterop.dcom.core.JIVariant;
 import org.openscada.opc.dcom.common.EventHandler;
@@ -321,13 +322,18 @@ public class Test1
         }
         itemManagement.setClientHandles ( serverHandles, clientHandles );
 
+        System.out.println ( "Create async IO 2.0 object" );
         OPCAsyncIO2 asyncIO2 = group.getAsyncIO2 ();
         // connect handler
 
+        System.out.println ( "attach" );
         EventHandler eventHandler = group.attach ( new DumpDataCallback () );
+        /*
+        System.out.println ( "attach..enable" );
         asyncIO2.setEnable ( true );
+        System.out.println ( "attach..refresh" );
         asyncIO2.refresh ( (short)1, 1 );
-
+        */
         // sleep
         try
         {
@@ -408,12 +414,15 @@ public class Test1
             // OPCServer server = new OPCServer ( "127.0.0.1", JIProgId.valueOf
             // ( session, "Matrikon.OPC.Simulation.1" ),
             // session );
-            JIComServer comServer = new JIComServer ( JIClsid.valueOf ( configuration.getCLSID () ), args[0], _session );
+            
+            //JIComServer comServer = new JIComServer ( JIClsid.valueOf ( configuration.getCLSID () ), args[0], _session );
+            JIComServer comServer = new JIComServer ( JIProgId.valueOf ( _session, configuration.getProgId () ), args[0], _session );
 
             IJIComObject serverObject = comServer.createInstance ();
             server = new OPCServer ( serverObject );
             dumpServerStatus ( server );
 
+            /*
             OPCCommon common = server.getCommon ();
             common.setLocaleID ( 1033 );
             System.out.println ( String.format ( "LCID: %d", common.getLocaleID () ) );
@@ -422,12 +431,17 @@ public class Test1
             {
                 System.out.println ( String.format ( "Available LCID: %d", i ) );
             }
+            */
 
+            
             OPCBrowseServerAddressSpace serverBrowser = server.getBrowser ();
             browseFlat ( serverBrowser );
+            /*
             browseTree ( serverBrowser );
+            */
 
             OPCGroupStateMgt group = server.addGroup ( "test", true, 100, 1234, 60, 0.0f, 1033 );
+/*
             group.setName ( "test2" );
             OPCGroupStateMgt group2 = group.clone ( "test" );
             group = server.getGroupByName ( "test2" );
@@ -435,8 +449,8 @@ public class Test1
             group.setState ( null, true, null, null, null, null );
             dumpGroupState ( group );
             dumpGroupState ( group2 );
-
-            //testItems ( server, group, configuration.getReadItems () );
+*/
+            testItems ( server, group, configuration.getReadItems () );
             if ( configuration.getWriteItems () != null )
             {
                 writeItems ( server, group, configuration.getWriteItems () );
@@ -454,11 +468,8 @@ public class Test1
 
             // clean up
             server.removeGroup ( group, true );
-            server.removeGroup ( group2, true );
+            //server.removeGroup ( group2, true );
 
-            // server.getStatus ();
-
-            //showError ( server, 0x80004005 );
         }
         catch ( JIException e )
         {
