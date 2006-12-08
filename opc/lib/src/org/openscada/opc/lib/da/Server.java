@@ -20,7 +20,10 @@
 package org.openscada.opc.lib.da;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.jinterop.dcom.common.JIException;
@@ -46,7 +49,6 @@ public class Server
     private JISession _session = null;
     private JIComServer _comServer = null;
     private OPCServer _server = null;
-    private OPCCommon _common = null;
     
     private boolean _defaultActive = true;
     private int _defaultUpdateRate = 1000;
@@ -56,6 +58,8 @@ public class Server
     private ErrorMessageResolver _errorMessageResolver = null;
     
     private Map<Integer,Group> _groups = new HashMap<Integer, Group> (); 
+    
+    private List<ServerStateListener> _stateListeners = new LinkedList<ServerStateListener> ();
     
     public Server ( ConnectionInformation connectionInformation )
     {
@@ -81,17 +85,26 @@ public class Server
         _server = new OPCServer ( _comServer.createInstance () );
         _common = _server.getCommon ();
         _errorMessageResolver = new ErrorMessageResolver ( _server.getCommon (), _defaultLocaleID );
+        
+        notifyConnectionStateChange ( true );
     }
     
     public synchronized void disconnect () throws JIException
     {
-        if ( _session != null )
+        if ( _session == null )
+            return;
+        
+        try
         {
             JISession.destroySession ( _session );
+        }
+        finally
+        {
             _errorMessageResolver = null;
             _session = null;
             _comServer = null;
             _server = null;
+            notifyConnectionStateChange ( false );
         }
     }
     
@@ -282,5 +295,24 @@ public class Server
         
         // return default message
         return String.format ( "Unknown error (%08X)", errorCode );
+    }
+    
+    public synchronized void addStateListener ( ServerStateListener listener )
+    {
+        _stateListeners.add ( listener );
+    }
+    
+    public synchronized void removeStateListener ( ServerStateListener listener )
+    {
+        _stateListeners.remove ( listener );
+    }
+    
+    protected synchronized void notifyConnectionStateChange ( boolean connected )
+    {
+        List<ServerStateListener> list = new ArrayList<ServerStateListener> ( _stateListeners );
+        for ( ServerStateListener listener : list )
+        {
+            listener.connectionStateChanged ( connected );
+        }
     }
 }

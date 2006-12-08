@@ -124,20 +124,19 @@ public class SyncAccess implements Runnable
                     _lastError = null;
                     notifyStateListenersError ( null );
                 }
-                Thread.sleep ( _delay );
             }
             catch ( Exception e )
             {
                 _log.error ( "Sync read failed", e );
                 notifyStateListenersError ( e );
-                try
-                {
-                    stop ();
-                }
-                catch ( Exception e1 )
-                {
-                    _log.fatal ( "Failed to recover sync read error", e1 );
-                }
+            }
+            
+            try
+            {
+                Thread.sleep ( _delay );
+            }
+            catch ( InterruptedException e )
+            {
             }
         }
     }
