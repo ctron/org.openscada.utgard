@@ -20,7 +20,10 @@
 package org.openscada.opc.lib.da;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -47,6 +50,8 @@ public class SyncAccess implements Runnable
     private Thread _runner = null;
 
     private int _delay = 0;
+    
+    private List<SyncAccessStateListener> _stateListeners = new LinkedList<SyncAccessStateListener> ();
 
     public SyncAccess ( Server server, int delay ) throws IllegalArgumentException, UnknownHostException, NotConnectedException, JIException, DuplicateGroupException
     {
@@ -60,9 +65,11 @@ public class SyncAccess implements Runnable
     {
         if ( _active )
             return;
-
+        
         _group.setActive ( true );
         _active = true;
+        
+        notifyStateListenersState ( true );
         
         _runner = new Thread ( this );
         _runner.setDaemon ( true );
@@ -73,8 +80,10 @@ public class SyncAccess implements Runnable
     {
         if ( !_active )
             return;
-
+        
         _active = false;
+        notifyStateListenersState ( false );
+        
         _group.setActive ( false );
 
         _runner = null;
@@ -113,6 +122,7 @@ public class SyncAccess implements Runnable
             catch ( Exception e )
             {
                 _log.error ( "Sync read failed", e );
+                notifyStateListenersError ( e );
                 try
                 {
                     stop ();
@@ -167,5 +177,35 @@ public class SyncAccess implements Runnable
         _items.clear ();
         _itemMap.clear ();
         _itemCache.clear ();
+    }
+    
+    public synchronized void addStateListener ( SyncAccessStateListener listener )
+    {
+        _stateListeners.add ( listener );
+    }
+    
+    public synchronized void removeStateListener ( SyncAccessStateListener listener )
+    {
+        _stateListeners.remove ( listener );
+    }
+    
+    protected synchronized void notifyStateListenersState ( boolean state )
+    {
+        List<SyncAccessStateListener> list = new ArrayList<SyncAccessStateListener> ( _stateListeners );
+        
+        for ( SyncAccessStateListener listener : list )
+        {
+            listener.stateChanged ( state );
+        }
+    }
+    
+    protected synchronized void notifyStateListenersError ( Throwable t )
+    {
+        List<SyncAccessStateListener> list = new ArrayList<SyncAccessStateListener> ( _stateListeners );
+        
+        for ( SyncAccessStateListener listener : list )
+        {
+            listener.errorOccured ( t );
+        }
     }
 }
