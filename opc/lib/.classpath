@@ -5,6 +5,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/openscada_opc_dcom"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ext_log4j"/>
-	<classpathentry kind="lib" path="lib/openscada_utils.jar" sourcepath="/openscada_utils/src"/>
+	<classpathentry kind="lib" path="lib/openscada-utils.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
