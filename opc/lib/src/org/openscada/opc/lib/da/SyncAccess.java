@@ -52,6 +52,8 @@ public class SyncAccess implements Runnable
     private int _delay = 0;
     
     private List<SyncAccessStateListener> _stateListeners = new LinkedList<SyncAccessStateListener> ();
+    
+    private Throwable _lastError = null;
 
     public SyncAccess ( Server server, int delay ) throws IllegalArgumentException, UnknownHostException, NotConnectedException, JIException, DuplicateGroupException
     {
@@ -117,6 +119,11 @@ public class SyncAccess implements Runnable
             try
             {
                 runOnce ();
+                if ( _lastError != null )
+                {
+                    _lastError = null;
+                    notifyStateListenersError ( null );
+                }
                 Thread.sleep ( _delay );
             }
             catch ( Exception e )
