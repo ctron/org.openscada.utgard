@@ -83,7 +83,6 @@ public class Server
             throw new IllegalArgumentException ( "Neither clsid nor progid is valid!" );
         
         _server = new OPCServer ( _comServer.createInstance () );
-        _common = _server.getCommon ();
         _errorMessageResolver = new ErrorMessageResolver ( _server.getCommon (), _defaultLocaleID );
         
         notifyConnectionStateChange ( true );
