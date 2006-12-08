@@ -50,7 +50,7 @@ public class OPCTest2
         ci.setClsid ( args[4] );
         
         String itemId = "Saw-toothed Waves.Int2";
-        if ( args.length >= 5 )
+        if ( args.length >= 6 )
             itemId = args[5];
         
         // create a new server
