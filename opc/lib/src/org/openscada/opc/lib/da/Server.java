@@ -66,9 +66,14 @@ public class Server
         _connectionInformation = connectionInformation;
     }
     
+    protected synchronized boolean isConnected ()
+    {
+        return _session != null;
+    }
+    
     public synchronized void connect () throws IllegalArgumentException, UnknownHostException, JIException, AlreadyConnectedException
     {
-        if ( _session != null )
+        if ( isConnected () )
             throw new AlreadyConnectedException ();
         
         _session = JISession.createSession ( _connectionInformation.getDomain (),
@@ -90,7 +95,7 @@ public class Server
     
     public synchronized void disconnect () throws JIException
     {
-        if ( _session == null )
+        if ( !isConnected () )
             return;
         
         try
@@ -134,7 +139,7 @@ public class Server
      */
     public synchronized Group addGroup ( String name ) throws NotConnectedException, IllegalArgumentException, UnknownHostException, JIException, DuplicateGroupException
     {
-        if ( _server == null )
+        if ( !isConnected () )
             throw new NotConnectedException ();
         
         try
@@ -180,9 +185,13 @@ public class Server
      * @throws UnknownHostException
      * @throws JIException
      * @throws UnknownGroupException If the group was not found
+     * @throws NotConnectedException If the server is not connected
      */
-    public Group findGroup ( String name ) throws IllegalArgumentException, UnknownHostException, JIException, UnknownGroupException
+    public Group findGroup ( String name ) throws IllegalArgumentException, UnknownHostException, JIException, UnknownGroupException, NotConnectedException
     {
+        if ( !isConnected () )
+            throw new NotConnectedException ();
+        
         try
         {
             OPCGroupStateMgt groupMgt = _server.getGroupByName ( name );
@@ -299,6 +308,7 @@ public class Server
     public synchronized void addStateListener ( ServerStateListener listener )
     {
         _stateListeners.add ( listener );
+        listener.connectionStateChanged ( isConnected () );
     }
     
     public synchronized void removeStateListener ( ServerStateListener listener )
