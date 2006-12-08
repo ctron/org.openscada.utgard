@@ -33,6 +33,7 @@ import org.jinterop.dcom.core.JIProgId;
 import org.jinterop.dcom.core.JISession;
 import org.openscada.opc.dcom.common.impl.OPCCommon;
 import org.openscada.opc.dcom.da.OPCNAMESPACETYPE;
+import org.openscada.opc.dcom.da.OPCSERVERSTATUS;
 import org.openscada.opc.dcom.da.impl.OPCBrowseServerAddressSpace;
 import org.openscada.opc.dcom.da.impl.OPCGroupStateMgt;
 import org.openscada.opc.dcom.da.impl.OPCServer;
@@ -41,6 +42,7 @@ import org.openscada.opc.lib.common.ConnectionInformation;
 import org.openscada.opc.lib.common.NotConnectedException;
 import org.openscada.opc.lib.da.browser.FlatBrowser;
 import org.openscada.opc.lib.da.browser.TreeBrowser;
+import org.openscada.utils.timing.Scheduler;
 
 public class Server
 {
@@ -59,11 +61,20 @@ public class Server
     
     private Map<Integer,Group> _groups = new HashMap<Integer, Group> (); 
     
-    private List<ServerStateListener> _stateListeners = new LinkedList<ServerStateListener> ();
+    private List<ServerConnectionStateListener> _stateListeners = new LinkedList<ServerConnectionStateListener> ();
+    
+    private Scheduler _scheduler = null;
     
     public Server ( ConnectionInformation connectionInformation )
     {
+        super ();
         _connectionInformation = connectionInformation;
+        _scheduler = new Scheduler ( true );
+    }
+    
+    public Scheduler getScheduler ()
+    {
+        return _scheduler;
     }
     
     protected synchronized boolean isConnected ()
@@ -93,14 +104,24 @@ public class Server
         notifyConnectionStateChange ( true );
     }
     
-    public synchronized void disconnect () throws JIException
+    public synchronized void disconnect ()
     {
         if ( !isConnected () )
             return;
         
         try
         {
+            notifyConnectionStateChange ( false );
+        }
+        catch ( Throwable t )
+        {}
+        
+        try
+        {
             JISession.destroySession ( _session );
+        }
+        catch ( Exception e )
+        {
         }
         finally
         {
@@ -108,7 +129,8 @@ public class Server
             _session = null;
             _comServer = null;
             _server = null;
-            notifyConnectionStateChange ( false );
+            
+            _groups.clear ();
         }
     }
     
@@ -305,23 +327,35 @@ public class Server
         return String.format ( "Unknown error (%08X)", errorCode );
     }
     
-    public synchronized void addStateListener ( ServerStateListener listener )
+    public synchronized void addStateListener ( ServerConnectionStateListener listener )
     {
         _stateListeners.add ( listener );
         listener.connectionStateChanged ( isConnected () );
     }
     
-    public synchronized void removeStateListener ( ServerStateListener listener )
+    public synchronized void removeStateListener ( ServerConnectionStateListener listener )
     {
         _stateListeners.remove ( listener );
     }
     
     protected synchronized void notifyConnectionStateChange ( boolean connected )
     {
-        List<ServerStateListener> list = new ArrayList<ServerStateListener> ( _stateListeners );
-        for ( ServerStateListener listener : list )
+        List<ServerConnectionStateListener> list = new ArrayList<ServerConnectionStateListener> ( _stateListeners );
+        for ( ServerConnectionStateListener listener : list )
         {
             listener.connectionStateChanged ( connected );
+        }
+    }
+    
+    public OPCSERVERSTATUS getServerState ()
+    {
+        try
+        {
+            return _server.getStatus ();
+        }
+        catch ( Exception e )
+        {
+            return null;
         }
     }
 }

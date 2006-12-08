@@ -277,6 +277,7 @@ public class Group
         {
             Item item = _itemMap.get ( entry.getKey () );
             ItemState state = new ItemState (
+                                             entry.getErrorCode (),
                                              entry.getValue ().getValue (),
                                              entry.getValue ().getTimestamp ().asCalendar (),
                                              entry.getValue ().getQuality ()
@@ -289,5 +290,19 @@ public class Group
     public Server getServer ()
     {
         return _server;
+    }
+    
+    public synchronized void clear () throws JIException
+    {
+        Integer [] handles = _itemMap.keySet ().toArray ( new Integer[0] );
+        try
+        {
+            _items.remove ( handles );
+        }
+        finally
+        {
+            _itemHandleMap.clear ();
+            _itemMap.clear ();
+        }
     }
 }

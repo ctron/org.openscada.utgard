@@ -71,13 +71,13 @@ public class OPCTest2
                 }} );
             
             // start reading
-            syncAccess.start ();
+            syncAccess.bind ();
             
             // wait a little bit
             Thread.sleep ( 10 * 1000 );
             
             // stop reading
-            syncAccess.stop ();
+            syncAccess.unbind ();
         }
         catch ( JIException e )
         {

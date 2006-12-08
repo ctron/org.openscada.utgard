@@ -25,15 +25,18 @@ import org.jinterop.dcom.core.JIVariant;
 
 public class ItemState
 {
+    private int _errorCode = 0;
+    
     private JIVariant _value = null;
 
     private Calendar _timestamp = null;
 
     private Short _quality = null;
 
-    public ItemState ( JIVariant value, Calendar timestamp, Short quality )
+    public ItemState ( int errorCode, JIVariant value, Calendar timestamp, Short quality )
     {
         super ();
+        _errorCode = errorCode;
         _value = value;
         _timestamp = timestamp;
         _quality = quality;
@@ -74,14 +77,25 @@ public class ItemState
         _value = value;
     }
 
+    public int getErrorCode ()
+    {
+        return _errorCode;
+    }
+
+    public void setErrorCode ( int errorCode )
+    {
+        _errorCode = errorCode;
+    }
+
     @Override
     public int hashCode ()
     {
         final int PRIME = 31;
         int result = 1;
+        result = PRIME * result + _errorCode;
         result = PRIME * result + ( ( _quality == null ) ? 0 : _quality.hashCode () );
         result = PRIME * result + ( ( _timestamp == null ) ? 0 : _timestamp.hashCode () );
-        result = PRIME * result + ( ( _value == null ) ? 0 : _value.toString().hashCode () );
+        result = PRIME * result + ( ( _value == null ) ? 0 : _value.hashCode () );
         return result;
     }
 
@@ -95,6 +109,8 @@ public class ItemState
         if ( getClass () != obj.getClass () )
             return false;
         final ItemState other = (ItemState)obj;
+        if ( _errorCode != other._errorCode )
+            return false;
         if ( _quality == null )
         {
             if ( other._quality != null )
@@ -114,7 +130,7 @@ public class ItemState
             if ( other._value != null )
                 return false;
         }
-        else if ( !_value.toString ().equals ( other._value.toString () ) )
+        else if ( !_value.equals ( other._value ) )
             return false;
         return true;
     }

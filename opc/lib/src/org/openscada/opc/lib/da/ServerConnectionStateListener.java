@@ -1,6 +1,6 @@
 package org.openscada.opc.lib.da;
 
-public interface ServerStateListener
+public interface ServerConnectionStateListener
 {
     public abstract void connectionStateChanged ( boolean connected );
 }
