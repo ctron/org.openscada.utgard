@@ -40,6 +40,9 @@ public class SyncAccess implements Runnable, ServerConnectionStateListener
     
     private Map<String, DataCallback> _itemSet = new HashMap<String,DataCallback> (); 
 
+    /**
+     * Holds the item to callback assignment
+     */
     private Map<Item, DataCallback> _items = new HashMap<Item, DataCallback> ();
 
     private Map<String, Item> _itemMap = new HashMap<String, Item> ();
@@ -122,11 +125,17 @@ public class SyncAccess implements Runnable, ServerConnectionStateListener
         _active = false;
         notifyStateListenersState ( false );
         
-        _group.setActive ( false );
-        _group = null;
-
-        _runner = null;
         _items.clear ();
+        try
+        {
+            _group.setActive ( false );
+        }
+        catch ( Throwable t )
+        {
+            _log.warn ( "Failed to disable group. No problem is we already lost connection" );
+        }
+        _group = null;
+        _runner = null;
     }
 
     public synchronized void addItem ( String itemId, DataCallback dataCallback ) throws JIException, AddFailedException
@@ -204,8 +213,7 @@ public class SyncAccess implements Runnable, ServerConnectionStateListener
         }
         catch ( JIException e )
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            _log.warn ( "Failed to clear group. No problem if we already lost the connection", e );
         }
     }
 
@@ -287,6 +295,7 @@ public class SyncAccess implements Runnable, ServerConnectionStateListener
     public synchronized void addStateListener ( SyncAccessStateListener listener )
     {
         _stateListeners.add ( listener );
+        listener.stateChanged ( isActive () );
     }
     
     public synchronized void removeStateListener ( SyncAccessStateListener listener )
