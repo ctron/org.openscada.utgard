@@ -20,10 +20,6 @@
 package org.openscada.opc.lib.da;
 
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -37,14 +33,12 @@ public class SyncAccess extends AccessBase implements Runnable
     private Thread _runner = null;
 
     private Throwable _lastError = null;
-    
+
     public SyncAccess ( Server server, int period ) throws IllegalArgumentException, UnknownHostException, NotConnectedException, JIException, DuplicateGroupException
     {
         super ( server, period );
     }
-   
-    
-    
+
     public void run ()
     {
         while ( _active )
@@ -64,7 +58,7 @@ public class SyncAccess extends AccessBase implements Runnable
                 notifyStateListenersError ( e );
                 _server.disconnect ();
             }
-            
+
             try
             {
                 Thread.sleep ( getPeriod () );
@@ -80,7 +74,7 @@ public class SyncAccess extends AccessBase implements Runnable
         if ( !_active )
             return;
 
-        Item [] items = _items.keySet ().toArray ( new Item[_items.size ()] );
+        Item[] items = _items.keySet ().toArray ( new Item[_items.size ()] );
 
         Map<Item, ItemState> result = _group.read ( false, items );
         for ( Map.Entry<Item, ItemState> entry : result.entrySet () )
@@ -89,22 +83,22 @@ public class SyncAccess extends AccessBase implements Runnable
         }
 
     }
-        
+
     @Override
     protected synchronized void start () throws JIException, IllegalArgumentException, UnknownHostException, NotConnectedException, DuplicateGroupException
     {
         super.start ();
-        
+
         _runner = new Thread ( this );
         _runner.setDaemon ( true );
         _runner.start ();
     }
-    
+
     @Override
     protected synchronized void stop () throws JIException
     {
         super.stop ();
-        
+
         _runner = null;
         _items.clear ();
     }
