@@ -34,7 +34,7 @@ import org.openscada.opc.dcom.common.Result;
 import org.openscada.opc.dcom.common.ResultSet;
 import org.openscada.opc.dcom.da.OPCITEMDEF;
 import org.openscada.opc.dcom.da.OPCITEMRESULT;
-import org.openscada.opc.dcom.da.OPCITEMSOURCE;
+import org.openscada.opc.dcom.da.OPCDATASOURCE;
 import org.openscada.opc.dcom.da.OPCITEMSTATE;
 import org.openscada.opc.dcom.da.impl.OPCGroupStateMgt;
 import org.openscada.opc.dcom.da.impl.OPCItemMgt;
@@ -270,7 +270,7 @@ public class Group
     {
         Integer [] handles = getServerHandles ( items );
         
-        KeyedResultSet<Integer, OPCITEMSTATE> states = _syncIO.read ( device ? OPCITEMSOURCE.OPC_DS_DEVICE : OPCITEMSOURCE.OPC_DS_CACHE, handles );
+        KeyedResultSet<Integer, OPCITEMSTATE> states = _syncIO.read ( device ? OPCDATASOURCE.OPC_DS_DEVICE : OPCDATASOURCE.OPC_DS_CACHE, handles );
         
         Map<Item,ItemState> data = new HashMap<Item, ItemState> ();
         for ( KeyedResult<Integer,OPCITEMSTATE> entry : states )
