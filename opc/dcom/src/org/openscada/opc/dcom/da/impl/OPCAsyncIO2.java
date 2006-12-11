@@ -56,8 +56,16 @@ public class OPCAsyncIO2 extends BaseCOMObject
 
         Object result[] = getCOMObject ().call ( callObject );
 
-        getCOMObject ().call ( callObject );
-
         return (Integer)result[0];
+    }
+    
+    public void cancel ( int cancelId ) throws JIException
+    {
+        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+        callObject.setOpnum ( 3 );
+
+        callObject.addInParamAsInt ( cancelId, JIFlags.FLAG_NULL );
+
+        getCOMObject ().call ( callObject );
     }
 }
