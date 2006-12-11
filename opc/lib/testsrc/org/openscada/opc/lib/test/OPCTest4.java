@@ -22,6 +22,7 @@ package org.openscada.opc.lib.test;
 import org.jinterop.dcom.common.JIException;
 import org.openscada.opc.lib.common.ConnectionInformation;
 import org.openscada.opc.lib.da.AccessBase;
+import org.openscada.opc.lib.da.Async20Access;
 import org.openscada.opc.lib.da.DataCallback;
 import org.openscada.opc.lib.da.Item;
 import org.openscada.opc.lib.da.ItemState;
@@ -29,11 +30,11 @@ import org.openscada.opc.lib.da.Server;
 import org.openscada.opc.lib.da.SyncAccess;
 
 /**
- * Another test showing the "Access" interface with the SyncAccess implementation.
+ * Another test showing the "Access" interface with the Async20Access implementation.
  * @author Jens Reimann <jens.reimann@inavare.net>
  *
  */
-public class OPCTest2
+public class OPCTest4
 {
     public static void dumpItemState ( Item item, ItemState state )
     {
@@ -63,7 +64,7 @@ public class OPCTest2
             
             // add sync access
             
-            AccessBase access = new SyncAccess ( server, 100 );
+            AccessBase access = new Async20Access ( server, 100 );
             access.addItem ( itemId, new DataCallback () {
 
                 public void changed ( Item item, ItemState itemState )

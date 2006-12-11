@@ -29,14 +29,16 @@ public class Item
     
     private Group _group = null;
     private int _serverHandle = 0;
+    private int _clientHandle = 0;
     private String _id = null;
     
-    public Item ( Group group, int serverHandle, String id )
+    public Item ( Group group, int serverHandle, int clientHandle, String id )
     {
         super ();
         _log.debug ( String.format ( "Adding new item '%s' (0x%08X) for group %s", id, serverHandle, group.toString () ) );
         _group = group;
         _serverHandle = serverHandle;
+        _clientHandle = clientHandle;
         _id = id;
     }
     
@@ -48,6 +50,11 @@ public class Item
     public int getServerHandle ()
     {
         return _serverHandle;
+    }
+    
+    public int getClientHandle ()
+    {
+        return _clientHandle;
     }
 
     public String getId ()
