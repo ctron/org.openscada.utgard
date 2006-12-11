@@ -21,6 +21,7 @@ package org.openscada.opc.lib.test;
 
 import org.jinterop.dcom.common.JIException;
 import org.openscada.opc.lib.common.ConnectionInformation;
+import org.openscada.opc.lib.da.AccessBase;
 import org.openscada.opc.lib.da.DataCallback;
 import org.openscada.opc.lib.da.Item;
 import org.openscada.opc.lib.da.ItemState;
@@ -62,7 +63,7 @@ public class OPCTest2
             
             // add sync access
             
-            SyncAccess syncAccess = new SyncAccess ( server, 100 );
+            AccessBase syncAccess = new SyncAccess ( server, 100 );
             syncAccess.addItem ( itemId, new DataCallback () {
 
                 public void changed ( Item item, ItemState itemState )
