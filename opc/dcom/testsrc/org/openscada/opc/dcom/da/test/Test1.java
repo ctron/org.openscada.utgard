@@ -48,7 +48,7 @@ import org.openscada.opc.dcom.da.OPCENUMSCOPE;
 import org.openscada.opc.dcom.da.OPCGroupState;
 import org.openscada.opc.dcom.da.OPCITEMDEF;
 import org.openscada.opc.dcom.da.OPCITEMRESULT;
-import org.openscada.opc.dcom.da.OPCITEMSOURCE;
+import org.openscada.opc.dcom.da.OPCDATASOURCE;
 import org.openscada.opc.dcom.da.OPCITEMSTATE;
 import org.openscada.opc.dcom.da.OPCNAMESPACETYPE;
 import org.openscada.opc.dcom.da.OPCSERVERSTATUS;
@@ -350,7 +350,7 @@ public class Test1
 
         // sync IO - read
         OPCSyncIO syncIO = group.getSyncIO ();
-        KeyedResultSet<Integer, OPCITEMSTATE> itemState = syncIO.read ( OPCITEMSOURCE.OPC_DS_DEVICE, serverHandles );
+        KeyedResultSet<Integer, OPCITEMSTATE> itemState = syncIO.read ( OPCDATASOURCE.OPC_DS_DEVICE, serverHandles );
         for ( KeyedResult<Integer, OPCITEMSTATE> itemStateEntry : itemState )
         {
             int errorCode = itemStateEntry.getErrorCode ();

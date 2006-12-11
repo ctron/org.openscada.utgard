@@ -34,7 +34,7 @@ import org.openscada.opc.dcom.common.ResultSet;
 import org.openscada.opc.dcom.common.impl.BaseCOMObject;
 import org.openscada.opc.dcom.common.impl.Helper;
 import org.openscada.opc.dcom.da.Constants;
-import org.openscada.opc.dcom.da.OPCITEMSOURCE;
+import org.openscada.opc.dcom.da.OPCDATASOURCE;
 import org.openscada.opc.dcom.da.OPCITEMSTATE;
 
 public class OPCSyncIO extends BaseCOMObject
@@ -44,7 +44,7 @@ public class OPCSyncIO extends BaseCOMObject
         super ( (IJIComObject)opcSyncIO.queryInterface ( Constants.IOPCSyncIO_IID ) );
     }
 
-    public KeyedResultSet<Integer, OPCITEMSTATE> read ( OPCITEMSOURCE source, Integer... serverHandles ) throws JIException
+    public KeyedResultSet<Integer, OPCITEMSTATE> read ( OPCDATASOURCE source, Integer... serverHandles ) throws JIException
     {
         if ( serverHandles == null || serverHandles.length == 0 )
             return new KeyedResultSet<Integer, OPCITEMSTATE> ();

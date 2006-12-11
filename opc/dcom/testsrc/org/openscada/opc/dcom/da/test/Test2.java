@@ -48,7 +48,7 @@ import org.openscada.opc.dcom.da.OPCENUMSCOPE;
 import org.openscada.opc.dcom.da.OPCGroupState;
 import org.openscada.opc.dcom.da.OPCITEMDEF;
 import org.openscada.opc.dcom.da.OPCITEMRESULT;
-import org.openscada.opc.dcom.da.OPCITEMSOURCE;
+import org.openscada.opc.dcom.da.OPCDATASOURCE;
 import org.openscada.opc.dcom.da.OPCITEMSTATE;
 import org.openscada.opc.dcom.da.OPCNAMESPACETYPE;
 import org.openscada.opc.dcom.da.OPCSERVERSTATUS;
@@ -62,6 +62,7 @@ import org.openscada.opc.dcom.da.impl.OPCItemProperties;
 import org.openscada.opc.dcom.da.impl.OPCServer;
 import org.openscada.opc.dcom.da.impl.OPCSyncIO;
 import org.openscada.opc.dcom.da.impl.WriteRequest;
+import org.openscada.opc.dcom.da.impl.OPCAsyncIO2.AsyncResult;
 
 public class Test2
 {
@@ -150,16 +151,21 @@ public class Test2
 
         System.out.println ( "Create async IO 2.0 object" );
         OPCAsyncIO2 asyncIO2 = group.getAsyncIO2 ();
+        
         // connect handler
-
         System.out.println ( "attach" );
         EventHandler eventHandler = group.attach ( new DumpDataCallback () );
-        /*
+        
         System.out.println ( "attach..enable" );
         asyncIO2.setEnable ( true );
+        
         System.out.println ( "attach..refresh" );
-        asyncIO2.refresh ( (short)1, 1 );
-        */
+        int cancelId = asyncIO2.refresh ( OPCDATASOURCE.OPC_DS_DEVICE, 1 );
+        
+        System.out.println ( "attach..read" );
+        AsyncResult asyncResult = asyncIO2.read ( 2, serverHandles );
+        System.out.println ( String.format ( "attach..read..cancelId: %08X", asyncResult.getCancelId () ) );
+        
         // sleep
         try
         {
@@ -172,6 +178,7 @@ public class Test2
             e.printStackTrace ();
         }
 
+        System.out.println ( "Detaching" );
         eventHandler.detach ();
 
         // set them inactive

@@ -29,11 +29,17 @@ import org.jinterop.dcom.common.JIMethodDescriptor;
 import org.jinterop.dcom.core.JIArray;
 import org.jinterop.dcom.core.JIFlags;
 import org.jinterop.dcom.core.JIParameterObject;
+import org.jinterop.dcom.core.JIStruct;
 import org.jinterop.dcom.core.JIVariant;
 import org.openscada.opc.dcom.common.FILETIME;
+import org.openscada.opc.dcom.common.KeyedResult;
+import org.openscada.opc.dcom.common.KeyedResultSet;
+import org.openscada.opc.dcom.common.Result;
+import org.openscada.opc.dcom.common.ResultSet;
 import org.openscada.opc.dcom.common.impl.EventHandlerImpl;
 import org.openscada.opc.dcom.da.Constants;
 import org.openscada.opc.dcom.da.IOPCDataCallback;
+import org.openscada.opc.dcom.da.ValueData;
 
 public class OPCDataCallback extends EventHandlerImpl
 {
@@ -45,28 +51,119 @@ public class OPCDataCallback extends EventHandlerImpl
         super ();
     }
 
-    public Object[] OnDataChange ( int transactionId, int serverGroupHandle, int masterQuality, int masterErrorCode, int count, JIArray clientHandles, JIArray values, JIArray quantities, JIArray timestamps, JIArray errors )
+    public synchronized Object[] OnDataChange ( int transactionId, int serverGroupHandle, int masterQuality, int masterErrorCode, int count, JIArray clientHandles, JIArray values, JIArray qualities, JIArray timestamps, JIArray errors )
     {
-        System.out.println ( "OnDataChange" );
-        return new Object[0];
+        if ( _callback == null )
+            return new Object[0];
+        
+        // get arrays for more readable code later ;-)
+        Integer[] errorCodes = (Integer[])errors.getArrayInstance ();
+        Integer[] itemHandles = (Integer[])clientHandles.getArrayInstance ();
+        Short[] qualitiesArray = (Short[])qualities.getArrayInstance ();
+        JIVariant[] valuesArray = (JIVariant[])values.getArrayInstance ();
+        JIStruct[] timestampArray = (JIStruct[])timestamps.getArrayInstance ();
+        
+        // create result data
+        KeyedResultSet<Integer,ValueData> result = new KeyedResultSet<Integer, ValueData> ();
+        for ( int i = 0 ; i < count; i++ )
+        {
+            ValueData vd = new ValueData ();
+            vd.setQuality ( qualitiesArray[i] );
+            vd.setTimestamp ( FILETIME.fromStruct ( timestampArray[i] ).asCalendar () );
+            vd.setValue ( valuesArray[i] );
+            result.add ( new KeyedResult<Integer,ValueData> ( itemHandles[i], vd, errorCodes[i] ) );
+        }
+        
+        // fire event
+        try
+        {
+            _callback.dataChange ( transactionId, serverGroupHandle, masterQuality, masterErrorCode, result );
+        }
+        catch ( Throwable e )
+        {
+            e.printStackTrace ();
+        }
+
+        // The client must always return S_OK
+        return new Object[] { Constants.S_OK };
     }
 
-    public Object[] OnReadComplete ( int transactionId, int serverGroupHandle, int masterQuality, int masterErrorCode, int count, JIArray clientHandles, JIArray values, JIArray quantities, JIArray timestamps, JIArray errors )
+    public synchronized Object[] OnReadComplete ( int transactionId, int serverGroupHandle, int masterQuality, int masterErrorCode, int count, JIArray clientHandles, JIArray values, JIArray qualities, JIArray timestamps, JIArray errors )
     {
-        System.out.println ( "OnReadComplete" );
-        return new Object[0];
+        if ( _callback == null )
+            return new Object[0];
+        
+        // get arrays for more readable code later ;-)
+        Integer[] errorCodes = (Integer[])errors.getArrayInstance ();
+        Integer[] itemHandles = (Integer[])clientHandles.getArrayInstance ();
+        Short[] qualitiesArray = (Short[])qualities.getArrayInstance ();
+        JIVariant[] valuesArray = (JIVariant[])values.getArrayInstance ();
+        JIStruct[] timestampArray = (JIStruct[])timestamps.getArrayInstance ();
+        
+        // create result data
+        KeyedResultSet<Integer,ValueData> result = new KeyedResultSet<Integer, ValueData> ();
+        for ( int i = 0 ; i < count; i++ )
+        {
+            ValueData vd = new ValueData ();
+            vd.setQuality ( qualitiesArray[i] );
+            vd.setTimestamp ( FILETIME.fromStruct ( timestampArray[i] ).asCalendar () );
+            vd.setValue ( valuesArray[i] );
+            result.add ( new KeyedResult<Integer,ValueData> ( itemHandles[i], vd, errorCodes[i] ) );
+        }
+        
+        // fire event
+        try
+        {
+            _callback.readComplete ( transactionId, serverGroupHandle, masterQuality, masterErrorCode, result );
+        }
+        catch ( Throwable e )
+        {
+            e.printStackTrace ();
+        }
+        
+        // The client must always return S_OK
+        return new Object[] { Constants.S_OK };
     }
 
-    public Object[] OnWriteComplete ( int transactionId, int serverGroupHandle, int masterErrorCode, int count, JIArray clientHandles, JIArray errors )
+    public synchronized Object[] OnWriteComplete ( int transactionId, int serverGroupHandle, int masterErrorCode, int count, JIArray clientHandles, JIArray errors )
     {
-        //return new Object[0];
-        return new Object[0];
+        if ( _callback == null )
+            return new Object[0];
+        
+        // get arrays for more readable code later ;-)
+        Integer[] errorCodes = (Integer[])errors.getArrayInstance ();
+        Integer[] itemHandles = (Integer[])clientHandles.getArrayInstance ();
+        
+        // create result data
+        ResultSet<Integer> result = new ResultSet<Integer> ();
+        for ( int i = 0 ; i < count; i++ )
+        {
+            result.add ( new Result<Integer> ( itemHandles[i], errorCodes[i] ) );
+        }
+        
+        // fire event
+        try
+        {
+            _callback.writeComplete ( transactionId, serverGroupHandle, masterErrorCode, result );
+        }
+        catch ( Throwable e )
+        {
+            e.printStackTrace ();
+        }
+        
+        // The client must always return S_OK
+        return new Object[] { Constants.S_OK };
     }
 
-    public Object[] OnCancelComplete ( int transactionId, int serverGroupHandle )
+    public synchronized Object[] OnCancelComplete ( int transactionId, int serverGroupHandle )
     {
-        //return new Object[0];
-        return new Object[0];
+        if ( _callback == null )
+            return new Object[0];
+        
+        _callback.cancelComplete ( transactionId, serverGroupHandle );
+        
+        // The client must always return S_OK
+        return new Object[] { Constants.S_OK };
     }
 
     public synchronized JIJavaCoClass getCoClass () throws JIException
@@ -74,24 +171,25 @@ public class OPCDataCallback extends EventHandlerImpl
         if ( _coClass != null )
             return _coClass;
         
-        _coClass = new JIJavaCoClass ( new JIInterfaceDefinition ( Constants.IOPCDataCallback_IID ), this );
+        _coClass = new JIJavaCoClass ( new JIInterfaceDefinition ( Constants.IOPCDataCallback_IID, false ), this );
 
         JIParameterObject params;
         JIMethodDescriptor method;
 
         // OnDataChange
         params = new JIParameterObject ();
-        params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL );
-        params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL );
-        params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL );
-        params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL );
-        params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL );
-        params.addInParamAsObject ( new JIArray ( Integer.class, null, 1, true ), JIFlags.FLAG_NULL );
-        params.addInParamAsObject ( new JIArray ( JIVariant.class, null, 1, true ), JIFlags.FLAG_NULL );
-        params.addInParamAsObject ( new JIArray ( Integer.class, null, 1, true ), JIFlags.FLAG_NULL );
-        params.addInParamAsObject ( new JIArray ( FILETIME.getStruct (), null, 1, true ), JIFlags.FLAG_NULL );
-        params.addInParamAsObject ( new JIArray ( Integer.class, null, 1, true ), JIFlags.FLAG_NULL );
-        method = new JIMethodDescriptor ( "OnDataChange", 0, params );
+        params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL ); // trans id
+        params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL ); // group handle
+        params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL ); // master quality
+        params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL ); // master error
+        params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL ); // count
+        params.addInParamAsObject ( ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL ); // item handles
+        params.addInParamAsObject ( ( new JIArray ( JIVariant.class, null, 1, true ) ), JIFlags.FLAG_NULL ); // values
+        params.addInParamAsObject ( ( new JIArray ( Short.class, null, 1, true ) ), JIFlags.FLAG_NULL ); // qualities
+        params.addInParamAsObject ( ( new JIArray ( FILETIME.getStruct (), null, 1, true ) ), JIFlags.FLAG_NULL ); // timestamps
+        params.addInParamAsObject ( ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL ); // errors
+        
+        method = new JIMethodDescriptor ( "OnDataChange", params );
         _coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
 
         // OnReadComplete
@@ -103,10 +201,10 @@ public class OPCDataCallback extends EventHandlerImpl
         params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL );
         params.addInParamAsObject ( new JIArray ( Integer.class, null, 1, true ), JIFlags.FLAG_NULL );
         params.addInParamAsObject ( new JIArray ( JIVariant.class, null, 1, true ), JIFlags.FLAG_NULL );
-        params.addInParamAsObject ( new JIArray ( Integer.class, null, 1, true ), JIFlags.FLAG_NULL );
+        params.addInParamAsObject ( new JIArray ( Short.class, null, 1, true ), JIFlags.FLAG_NULL );
         params.addInParamAsObject ( new JIArray ( FILETIME.getStruct (), null, 1, true ), JIFlags.FLAG_NULL );
         params.addInParamAsObject ( new JIArray ( Integer.class, null, 1, true ), JIFlags.FLAG_NULL );
-        method = new JIMethodDescriptor ( "OnReadComplete", 1, params );
+        method = new JIMethodDescriptor ( "OnReadComplete", params );
         _coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
 
         // OnWriteComplete
@@ -117,14 +215,14 @@ public class OPCDataCallback extends EventHandlerImpl
         params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL );
         params.addInParamAsObject ( new JIArray ( Integer.class, null, 1, true ), JIFlags.FLAG_NULL );
         params.addInParamAsObject ( new JIArray ( Integer.class, null, 1, true ), JIFlags.FLAG_NULL );
-        method = new JIMethodDescriptor ( "OnWriteComplete", 2, params );
+        method = new JIMethodDescriptor ( "OnWriteComplete", params );
         _coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
 
         // OnCancelComplete
         params = new JIParameterObject ();
         params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL );
         params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL );
-        method = new JIMethodDescriptor ( "OnCancelComplete", 3, params );
+        method = new JIMethodDescriptor ( "OnCancelComplete", params );
         _coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
 
         // Add supported event interfaces
@@ -135,7 +233,7 @@ public class OPCDataCallback extends EventHandlerImpl
         return _coClass;
     }
 
-    public void setCallback ( IOPCDataCallback callback )
+    public synchronized void setCallback ( IOPCDataCallback callback )
     {
         _callback = callback;
     }

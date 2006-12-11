@@ -24,11 +24,11 @@ import org.openscada.opc.dcom.common.ResultSet;
 
 public interface IOPCDataCallback
 {
-    public int dataChange ( int transactionId, int serverGroupHandle, int masterQuality, int masterErrorCode, KeyedResultSet<Integer, ValueData> result );
+    public void dataChange ( int transactionId, int serverGroupHandle, int masterQuality, int masterErrorCode, KeyedResultSet<Integer, ValueData> result );
 
-    public int readComplete ( int transactionId, int serverGroupHandle, int masterQuality, int masterErrorCode, KeyedResultSet<Integer, ValueData> result );
+    public void readComplete ( int transactionId, int serverGroupHandle, int masterQuality, int masterErrorCode, KeyedResultSet<Integer, ValueData> result );
 
-    public int writeComplete ( int transactionId, int serverGroupHandle, int masterErrorCode, ResultSet<Integer> result );
+    public void writeComplete ( int transactionId, int serverGroupHandle, int masterErrorCode, ResultSet<Integer> result );
 
-    public int cancelComplete ( int transactionId, int serverGroupHandle );
+    public void cancelComplete ( int transactionId, int serverGroupHandle );
 }

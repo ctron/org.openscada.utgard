@@ -19,37 +19,43 @@
 
 package org.openscada.opc.dcom.da.test;
 
+import org.openscada.opc.dcom.common.KeyedResult;
 import org.openscada.opc.dcom.common.KeyedResultSet;
 import org.openscada.opc.dcom.common.ResultSet;
-import org.openscada.opc.dcom.da.Constants;
 import org.openscada.opc.dcom.da.IOPCDataCallback;
 import org.openscada.opc.dcom.da.ValueData;
 
 public class DumpDataCallback implements IOPCDataCallback
 {
 
-    public int cancelComplete ( int transactionId, int serverGroupHandle )
+    public void cancelComplete ( int transactionId, int serverGroupHandle )
     {
-        // TODO Auto-generated method stub
-        return Constants.S_OK;
+        System.out.println ( String.format ( "cancelComplete: %08X, Group: %08X", transactionId, serverGroupHandle ) );
     }
 
-    public int dataChange ( int transactionId, int serverGroupHandle, int masterQuality, int masterErrorCode, KeyedResultSet<Integer, ValueData> result )
+    public void dataChange ( int transactionId, int serverGroupHandle, int masterQuality, int masterErrorCode, KeyedResultSet<Integer, ValueData> result )
     {
-        // TODO Auto-generated method stub
-        return Constants.S_OK;
+        System.out.println ( String.format ( "dataChange: %d, Group: %08X, MasterQ: %d, Error: %d", transactionId, serverGroupHandle, masterQuality, masterErrorCode ) );
+        
+        for ( KeyedResult<Integer,ValueData> entry : result )
+        {
+            System.out.println ( String.format ( "%08X - Error: %08X, Quality: %d, %Tc - %s", entry.getKey (), entry.getErrorCode (), entry.getValue ().getQuality (), entry.getValue ().getTimestamp (), entry.getValue().getValue ().toString ()) ); 
+        }
     }
 
-    public int readComplete ( int transactionId, int serverGroupHandle, int masterQuality, int masterErrorCode, KeyedResultSet<Integer, ValueData> result )
+    public void readComplete ( int transactionId, int serverGroupHandle, int masterQuality, int masterErrorCode, KeyedResultSet<Integer, ValueData> result )
     {
-        // TODO Auto-generated method stub
-        return Constants.S_OK;
+        System.out.println ( String.format ( "readComplete: %d, Group: %08X, MasterQ: %d, Error: %d", transactionId, serverGroupHandle, masterQuality, masterErrorCode ) );
+        
+        for ( KeyedResult<Integer,ValueData> entry : result )
+        {
+            System.out.println ( String.format ( "%08X - Error: %08X, Quality: %d, %Tc - %s", entry.getKey (), entry.getErrorCode (), entry.getValue ().getQuality (), entry.getValue ().getTimestamp (), entry.getValue().getValue ().toString ()) ); 
+        }
     }
 
-    public int writeComplete ( int transactionId, int serverGroupHandle, int masterErrorCode, ResultSet<Integer> result )
+    public void writeComplete ( int transactionId, int serverGroupHandle, int masterErrorCode, ResultSet<Integer> result )
     {
         // TODO Auto-generated method stub
-        return Constants.S_OK;
     }
 
 }

@@ -19,13 +19,13 @@
 
 package org.openscada.opc.dcom.da;
 
-public enum OPCITEMSOURCE
+public enum OPCDATASOURCE
 {
     OPC_DS_CACHE ( 1 ), OPC_DS_DEVICE ( 2 ), OPC_DS_UNKNOWN ( 0 );
 
     private int _id;
 
-    private OPCITEMSOURCE ( int id )
+    private OPCDATASOURCE ( int id )
     {
         _id = id;
     }
@@ -35,7 +35,7 @@ public enum OPCITEMSOURCE
         return _id;
     }
 
-    public static OPCITEMSOURCE fromID ( int id )
+    public static OPCDATASOURCE fromID ( int id )
     {
         switch ( id )
         {
