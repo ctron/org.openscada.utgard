@@ -19,6 +19,8 @@
 
 package org.openscada.opc.dcom.common;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Calendar;
 
 import org.jinterop.dcom.common.JIException;
@@ -110,14 +112,12 @@ public class FILETIME
     public Calendar asCalendar ()
     {
         Calendar c = Calendar.getInstance ();
-
-        long i = _high;
-        i = i << 32L;
-        i = i | _low;
-
-        i = i - 116444736000000000L;
+        
+        long i = ( ( 0xFFFFFFFFFFFFFFFFL & _high ) << 32L ) | ( 0xFFFFFFFFFFFFFFFFL & _low );
 
         i = i / 10000L;
+        
+        i = i - 11644473600000L;
 
         c.setTimeInMillis ( i );
 
