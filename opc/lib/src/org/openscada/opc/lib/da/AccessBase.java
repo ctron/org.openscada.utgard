@@ -19,7 +19,7 @@ public abstract class AccessBase implements ServerConnectionStateListener
 
     protected Group _group = null;
     protected boolean _active = false;
-    private List<SyncAccessStateListener> _stateListeners = new LinkedList<SyncAccessStateListener> ();
+    private List<AccessStateListener> _stateListeners = new LinkedList<AccessStateListener> ();
     private boolean _bound = false;
     
     /**
@@ -72,22 +72,22 @@ public abstract class AccessBase implements ServerConnectionStateListener
         return _active;
     }
 
-    public synchronized void addStateListener ( SyncAccessStateListener listener )
+    public synchronized void addStateListener ( AccessStateListener listener )
     {
         _stateListeners.add ( listener );
         listener.stateChanged ( isActive () );
     }
 
-    public synchronized void removeStateListener ( SyncAccessStateListener listener )
+    public synchronized void removeStateListener ( AccessStateListener listener )
     {
         _stateListeners.remove ( listener );
     }
 
     protected synchronized void notifyStateListenersState ( boolean state )
     {
-        List<SyncAccessStateListener> list = new ArrayList<SyncAccessStateListener> ( _stateListeners );
+        List<AccessStateListener> list = new ArrayList<AccessStateListener> ( _stateListeners );
         
-        for ( SyncAccessStateListener listener : list )
+        for ( AccessStateListener listener : list )
         {
             listener.stateChanged ( state );
         }
@@ -95,9 +95,9 @@ public abstract class AccessBase implements ServerConnectionStateListener
 
     protected synchronized void notifyStateListenersError ( Throwable t )
     {
-        List<SyncAccessStateListener> list = new ArrayList<SyncAccessStateListener> ( _stateListeners );
+        List<AccessStateListener> list = new ArrayList<AccessStateListener> ( _stateListeners );
         
-        for ( SyncAccessStateListener listener : list )
+        for ( AccessStateListener listener : list )
         {
             listener.errorOccured ( t );
         }
