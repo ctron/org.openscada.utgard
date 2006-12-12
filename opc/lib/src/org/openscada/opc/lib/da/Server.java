@@ -89,7 +89,7 @@ public class Server
         
         _session = JISession.createSession ( _connectionInformation.getDomain (),
                                              _connectionInformation.getUser (),
-                                             _connectionInformation.getPassword () );
+                                             _connectionInformation.getPassword (), false );
         
         if ( _connectionInformation.getClsid () != null )
             _comServer = new JIComServer ( JIClsid.valueOf ( _connectionInformation.getClsid () ), _connectionInformation.getHost (), _session );
