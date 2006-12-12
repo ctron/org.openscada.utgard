@@ -17,7 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.openscada.opc.dcom.da.impl;
+package org.openscada.opc.dcom.da;
 
 import org.jinterop.dcom.core.JIVariant;
 

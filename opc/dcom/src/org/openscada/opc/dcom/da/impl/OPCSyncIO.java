@@ -36,6 +36,7 @@ import org.openscada.opc.dcom.common.impl.Helper;
 import org.openscada.opc.dcom.da.Constants;
 import org.openscada.opc.dcom.da.OPCDATASOURCE;
 import org.openscada.opc.dcom.da.OPCITEMSTATE;
+import org.openscada.opc.dcom.da.WriteRequest;
 
 public class OPCSyncIO extends BaseCOMObject
 {

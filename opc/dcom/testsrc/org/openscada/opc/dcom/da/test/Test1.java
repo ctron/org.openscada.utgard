@@ -53,6 +53,7 @@ import org.openscada.opc.dcom.da.OPCITEMSTATE;
 import org.openscada.opc.dcom.da.OPCNAMESPACETYPE;
 import org.openscada.opc.dcom.da.OPCSERVERSTATUS;
 import org.openscada.opc.dcom.da.PropertyDescription;
+import org.openscada.opc.dcom.da.WriteRequest;
 import org.openscada.opc.dcom.da.impl.OPCAsyncIO2;
 import org.openscada.opc.dcom.da.impl.OPCBrowseServerAddressSpace;
 import org.openscada.opc.dcom.da.impl.OPCGroupStateMgt;
@@ -61,7 +62,6 @@ import org.openscada.opc.dcom.da.impl.OPCItemMgt;
 import org.openscada.opc.dcom.da.impl.OPCItemProperties;
 import org.openscada.opc.dcom.da.impl.OPCServer;
 import org.openscada.opc.dcom.da.impl.OPCSyncIO;
-import org.openscada.opc.dcom.da.impl.WriteRequest;
 
 public class Test1
 {
