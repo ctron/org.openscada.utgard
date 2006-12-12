@@ -38,12 +38,15 @@ public class Async20Access extends AccessBase implements IOPCDataCallback
     private static Logger _log = Logger.getLogger ( Async20Access.class );
 
     private EventHandler _eventHandler = null;
-    
+
     private Throwable _lastError = null;
 
-    public Async20Access ( Server server, int period ) throws IllegalArgumentException, UnknownHostException, NotConnectedException, JIException, DuplicateGroupException
+    private boolean _initialRefresh = false;
+
+    public Async20Access ( Server server, int period, boolean initialRefresh ) throws IllegalArgumentException, UnknownHostException, NotConnectedException, JIException, DuplicateGroupException
     {
         super ( server, period );
+        _initialRefresh = initialRefresh;
     }
 
     public void run ()
@@ -96,11 +99,11 @@ public class Async20Access extends AccessBase implements IOPCDataCallback
     {
         if ( isActive () )
             return;
-        
+
         super.start ();
-        
+
         _eventHandler = _group.attach ( this );
-        if ( !_items.isEmpty () )
+        if ( ( !_items.isEmpty () ) && _initialRefresh )
         {
             _group.getAsyncIO20 ().refresh ( OPCDATASOURCE.OPC_DS_CACHE, 0 );
         }
@@ -111,14 +114,14 @@ public class Async20Access extends AccessBase implements IOPCDataCallback
     {
         if ( !isActive () )
             return;
-        
+
         super.stop ();
-        
+
         _eventHandler.detach ();
     }
 
     public void cancelComplete ( int transactionId, int serverGroupHandle )
-    {   
+    {
     }
 
     public void dataChange ( int transactionId, int serverGroupHandle, int masterQuality, int masterErrorCode, KeyedResultSet<Integer, ValueData> result )
@@ -126,7 +129,8 @@ public class Async20Access extends AccessBase implements IOPCDataCallback
         for ( KeyedResult<Integer, ValueData> entry : result )
         {
             Item item = _group.findItemByClientHandle ( entry.getKey () );
-            updateItem ( item, new ItemState ( entry.getErrorCode (), entry.getValue ().getValue (), entry.getValue().getTimestamp (), entry.getValue ().getQuality () ) );
+            updateItem ( item, new ItemState ( entry.getErrorCode (), entry.getValue ().getValue (), entry.getValue ()
+                    .getTimestamp (), entry.getValue ().getQuality () ) );
         }
     }
 
@@ -135,6 +139,6 @@ public class Async20Access extends AccessBase implements IOPCDataCallback
     }
 
     public void writeComplete ( int transactionId, int serverGroupHandle, int masterErrorCode, ResultSet<Integer> result )
-    {   
+    {
     }
 }
