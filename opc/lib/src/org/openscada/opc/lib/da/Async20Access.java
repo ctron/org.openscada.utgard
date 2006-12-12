@@ -100,7 +100,10 @@ public class Async20Access extends AccessBase implements IOPCDataCallback
         super.start ();
         
         _eventHandler = _group.attach ( this );
-        _group.getAsyncIO20 ().refresh ( OPCDATASOURCE.OPC_DS_CACHE, 0 );
+        if ( !_items.isEmpty () )
+        {
+            _group.getAsyncIO20 ().refresh ( OPCDATASOURCE.OPC_DS_CACHE, 0 );
+        }
     }
 
     @Override
