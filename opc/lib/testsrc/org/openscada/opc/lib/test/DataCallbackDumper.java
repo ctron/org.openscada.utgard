@@ -28,7 +28,8 @@ public class DataCallbackDumper implements DataCallback
 
     public void changed ( Item item, ItemState itemState )
     {
-        System.out.println ( String.format ( "Item: %s, Value: %s, Timestamp: %tc, Quality: %d", item.getId (), itemState.getValue (), itemState.getTimestamp (), itemState.getQuality () ) );
+        System.out.println ( String.format ( "Item: %s, Value: %s, Timestamp: %tc, Quality: %d", item.getId (),
+                itemState.getValue (), itemState.getTimestamp (), itemState.getQuality () ) );
     }
 
 }

@@ -41,35 +41,36 @@ public class OPCTest2
         ci.setUser ( args[2] );
         ci.setPassword ( args[3] );
         ci.setClsid ( args[4] );
-        
+
         String itemId = "Saw-toothed Waves.Int2";
         if ( args.length >= 6 )
             itemId = args[5];
-        
+
         // create a new server
         Server server = new Server ( ci );
         try
         {
             // connect to server
             server.connect ();
-            
+
             // add sync access
-            
+
             AccessBase access = new SyncAccess ( server, 100 );
             access.addItem ( itemId, new DataCallbackDumper () );
-            
+
             // start reading
             access.bind ();
-            
+
             // wait a little bit
             Thread.sleep ( 10 * 1000 );
-            
+
             // stop reading
             access.unbind ();
         }
         catch ( JIException e )
         {
-            System.out.println ( String.format ( "%08X: %s", e.getErrorCode (), server.getErrorMessage ( e.getErrorCode () ) ) );
+            System.out.println ( String.format ( "%08X: %s", e.getErrorCode (),
+                    server.getErrorMessage ( e.getErrorCode () ) ) );
         }
     }
 }

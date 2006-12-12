@@ -28,7 +28,8 @@ import org.openscada.opc.lib.da.Async20Access;
 import org.openscada.opc.lib.da.Server;
 
 /**
- * Another test showing the "Access" interface with the Async20Access implementation. Testing two connections at the same time.
+ * Another test showing the "Access" interface with
+ * the Async20Access implementation. Testing two connections at the same time.
  * 
  * @author Jens Reimann <jens.reimann@inavare.net>
  */
@@ -59,7 +60,7 @@ public class OPCTest5
                 ti._server = new Server ( ci );
 
                 ti._server.connect ();
-                ti._access = new Async20Access ( ti._server, 100 );
+                ti._access = new Async20Access ( ti._server, 100, false );
                 ti._access.addItem ( ti._itemId, new DataCallbackDumper () );
                 ti._access.bind ();
 

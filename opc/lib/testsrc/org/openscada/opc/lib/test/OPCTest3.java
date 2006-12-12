@@ -37,23 +37,23 @@ public class OPCTest3
     public static void dumpTree ( Branch branch, int level )
     {
         StringBuilder sb = new StringBuilder ();
-        for ( int i = 0; i < level ; i++ )
+        for ( int i = 0; i < level; i++ )
         {
-            sb.append ( "  " );   
+            sb.append ( "  " );
         }
         String indent = sb.toString ();
-        
+
         for ( Leaf leaf : branch.getLeaves () )
         {
-            System.out.println ( indent + "Leaf: " + leaf.getName () + " [" +  leaf.getItemId () + "]" );
+            System.out.println ( indent + "Leaf: " + leaf.getName () + " [" + leaf.getItemId () + "]" );
         }
         for ( Branch subBranch : branch.getBranches () )
         {
             System.out.println ( indent + "Branch: " + subBranch.getName () );
-            dumpTree ( subBranch, level+1 );
+            dumpTree ( subBranch, level + 1 );
         }
     }
-    
+
     public static void main ( String[] args ) throws Throwable
     {
         // create connection information
@@ -63,7 +63,7 @@ public class OPCTest3
         ci.setUser ( args[2] );
         ci.setPassword ( args[3] );
         ci.setClsid ( args[4] );
-        
+
         // create a new server
         Server server = new Server ( ci );
         try
@@ -80,7 +80,7 @@ public class OPCTest3
                     System.out.println ( item );
                 }
             }
-            
+
             // browse tree
             TreeBrowser treeBrowser = server.getTreeBrowser ();
             if ( treeBrowser != null )
@@ -90,7 +90,8 @@ public class OPCTest3
         }
         catch ( JIException e )
         {
-            System.out.println ( String.format ( "%08X: %s", e.getErrorCode (), server.getErrorMessage ( e.getErrorCode () ) ) );
+            System.out.println ( String.format ( "%08X: %s", e.getErrorCode (),
+                    server.getErrorMessage ( e.getErrorCode () ) ) );
         }
     }
 }
