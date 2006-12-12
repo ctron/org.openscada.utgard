@@ -19,6 +19,7 @@
 
 package org.openscada.opc.dcom.common;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 
 import org.jinterop.dcom.common.JIException;
@@ -117,14 +118,12 @@ public class FILETIME
         long i = 0xFFFFFFFF & _high;
         i = i << 32;
         
-        long i2 = 0xFFFFFFFF & _low;
-        i = i | i2;
-
-        i = i / 10000L;
+        BigDecimal d1 = new BigDecimal ( 0xFFFFFFFFFFFFFFFFL & i );
+        d1 = d1.add ( new BigDecimal ( 0xFFFFFFFF & _low ) );
+        d1 = d1.divide ( new BigDecimal ( 10000L ) );
+        d1 = d1.subtract ( new BigDecimal ( 11644473600000L ) );
         
-        i = i - 11644473600000L;
-
-        c.setTimeInMillis ( i );
+        c.setTimeInMillis ( d1.longValue () );
 
         return c;
     }
