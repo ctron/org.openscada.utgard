@@ -273,18 +273,18 @@ public class Group
 
         Integer[] handles = getServerHandles ( items );
 
-        org.openscada.opc.dcom.da.impl.WriteRequest[] wr = new org.openscada.opc.dcom.da.impl.WriteRequest[items.length];
+        org.openscada.opc.dcom.da.WriteRequest[] wr = new org.openscada.opc.dcom.da.WriteRequest[items.length];
         for ( int i = 0; i < items.length; i++ )
         {
-            wr[i] = new org.openscada.opc.dcom.da.impl.WriteRequest ( handles[i], requests[i].getValue () );
+            wr[i] = new org.openscada.opc.dcom.da.WriteRequest ( handles[i], requests[i].getValue () );
         }
 
-        ResultSet<org.openscada.opc.dcom.da.impl.WriteRequest> resultSet = _syncIO.write ( wr );
+        ResultSet<org.openscada.opc.dcom.da.WriteRequest> resultSet = _syncIO.write ( wr );
 
         Map<Item, Integer> result = new HashMap<Item, Integer> ();
         for ( int i = 0; i < requests.length; i++ )
         {
-            Result<org.openscada.opc.dcom.da.impl.WriteRequest> entry = resultSet.get ( i );
+            Result<org.openscada.opc.dcom.da.WriteRequest> entry = resultSet.get ( i );
             result.put ( requests[i].getItem (), entry.getErrorCode () );
         }
 
