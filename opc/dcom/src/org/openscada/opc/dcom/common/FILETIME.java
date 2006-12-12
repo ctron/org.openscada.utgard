@@ -114,7 +114,11 @@ public class FILETIME
         /*
          * The following "strange" stuff is needed since we miss a ulong type
          */
-        long i = ( ( 0xFFFFFFFFFFFFFFFFL & _high ) << 32L ) | ( 0xFFFFFFFFFFFFFFFFL & _low );
+        long i = 0xFFFFFFFF & _high;
+        i = i << 32;
+        
+        long i2 = 0xFFFFFFFF & _low;
+        i = i | i2;
 
         i = i / 10000L;
         
