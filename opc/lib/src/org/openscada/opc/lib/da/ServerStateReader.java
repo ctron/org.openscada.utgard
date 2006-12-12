@@ -24,12 +24,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.openscada.opc.dcom.da.OPCSERVERSTATUS;
+import org.openscada.utils.timing.Scheduler;
 import org.openscada.utils.timing.Scheduler.Job;
 
 
 public class ServerStateReader
 {
     private Server _server = null;
+    private Scheduler _scheduler = null;
     
     private List<ServerStateListener> _listeners = new LinkedList<ServerStateListener> ();
     
@@ -39,6 +41,14 @@ public class ServerStateReader
     {
         super ();
         _server = server;
+        _scheduler = _server.getScheduler ();
+    }
+    
+    public ServerStateReader ( Server server, Scheduler scheduler )
+    {
+        super ();
+        _server = server;
+        _scheduler = scheduler;
     }
     
     public synchronized void start ()
@@ -46,7 +56,7 @@ public class ServerStateReader
         if ( _job != null )
             return;
         
-        _job = _server.getScheduler ().addJob ( new Runnable () {
+        _job = _scheduler.addJob ( new Runnable () {
 
             public void run ()
             {
@@ -56,7 +66,7 @@ public class ServerStateReader
     
     public synchronized void stop ()
     {
-        _server.getScheduler ().removeJob ( _job );
+        _scheduler.removeJob ( _job );
         _job = null;
     }
 
