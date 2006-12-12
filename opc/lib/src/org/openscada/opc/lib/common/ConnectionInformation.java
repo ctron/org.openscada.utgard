@@ -51,6 +51,17 @@ public class ConnectionInformation
         _user = user;
         _password = password;
     }
+    
+    public ConnectionInformation ( ConnectionInformation arg0 )
+    {
+        super ();
+        _user = arg0._user;
+        _password = arg0._password;
+        _domain = arg0._domain;
+        _host = arg0._host;
+        _progId = arg0._progId;
+        _clsid = arg0._clsid;
+    }
 
     public String getDomain ()
     {
