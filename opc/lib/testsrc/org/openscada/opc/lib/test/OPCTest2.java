@@ -22,9 +22,6 @@ package org.openscada.opc.lib.test;
 import org.jinterop.dcom.common.JIException;
 import org.openscada.opc.lib.common.ConnectionInformation;
 import org.openscada.opc.lib.da.AccessBase;
-import org.openscada.opc.lib.da.DataCallback;
-import org.openscada.opc.lib.da.Item;
-import org.openscada.opc.lib.da.ItemState;
 import org.openscada.opc.lib.da.Server;
 import org.openscada.opc.lib.da.SyncAccess;
 
@@ -35,11 +32,6 @@ import org.openscada.opc.lib.da.SyncAccess;
  */
 public class OPCTest2
 {
-    public static void dumpItemState ( Item item, ItemState state )
-    {
-        System.out.println ( String.format ( "Item: %s, Value: %s, Timestamp: %tc, Quality: %d", item.getId (), state.getValue (), state.getTimestamp (), state.getQuality () ) );
-    }
-    
     public static void main ( String[] args ) throws Throwable
     {
         // create connection information
@@ -64,12 +56,7 @@ public class OPCTest2
             // add sync access
             
             AccessBase access = new SyncAccess ( server, 100 );
-            access.addItem ( itemId, new DataCallback () {
-
-                public void changed ( Item item, ItemState itemState )
-                {
-                    dumpItemState ( item, itemState );
-                }} );
+            access.addItem ( itemId, new DataCallbackDumper () );
             
             // start reading
             access.bind ();

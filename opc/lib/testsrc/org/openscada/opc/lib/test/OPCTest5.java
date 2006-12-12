@@ -19,60 +19,60 @@
 
 package org.openscada.opc.lib.test;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.jinterop.dcom.common.JIException;
 import org.openscada.opc.lib.common.ConnectionInformation;
-import org.openscada.opc.lib.da.AccessBase;
 import org.openscada.opc.lib.da.Async20Access;
-import org.openscada.opc.lib.da.DataCallback;
-import org.openscada.opc.lib.da.Item;
-import org.openscada.opc.lib.da.ItemState;
 import org.openscada.opc.lib.da.Server;
 
 /**
- * Another test showing the "Access" interface with the Async20Access implementation.
+ * Another test showing the "Access" interface with the Async20Access implementation. Testing two connections at the same time.
+ * 
  * @author Jens Reimann <jens.reimann@inavare.net>
- *
  */
-public class OPCTest4
+public class OPCTest5
 {
     public static void main ( String[] args ) throws Throwable
     {
         // create connection information
-        ConnectionInformation ci = new ConnectionInformation ();
-        ci.setHost ( args[0] );
-        ci.setDomain ( args[1] );
-        ci.setUser ( args[2] );
-        ci.setPassword ( args[3] );
-        ci.setClsid ( args[4] );
-        
-        String itemId = "Saw-toothed Waves.Int2";
-        if ( args.length >= 6 )
-            itemId = args[5];
-        
-        // create a new server
-        Server server = new Server ( ci );
+        ConnectionInformation baseInfo = new ConnectionInformation ();
+        baseInfo.setHost ( args[0] );
+        baseInfo.setDomain ( args[1] );
+        baseInfo.setUser ( args[2] );
+        baseInfo.setPassword ( args[3] );
+
+        List<TestInfo> testInfo = new LinkedList<TestInfo> ();
+        int i = 0;
+
         try
         {
-            // connect to server
-            server.connect ();
-            
-            // add sync access
-            
-            AccessBase access = new Async20Access ( server, 100 );
-            access.addItem ( itemId, new DataCallbackDumper () );
-            
-            // start reading
-            access.bind ();
-            
+
+            while ( args.length > ( ( i * 2 ) + 4 ) )
+            {
+                ConnectionInformation ci = new ConnectionInformation ( baseInfo );
+                ci.setClsid ( args[ ( i * 2 ) + 4] );
+                TestInfo ti = new TestInfo ();
+                ti._info = ci;
+                ti._itemId = args[ ( i * 2 ) + 5];
+                ti._server = new Server ( ci );
+
+                ti._server.connect ();
+                ti._access = new Async20Access ( ti._server, 100 );
+                ti._access.addItem ( ti._itemId, new DataCallbackDumper () );
+                ti._access.bind ();
+
+                testInfo.add ( ti );
+                i++;
+            }
+
             // wait a little bit
             Thread.sleep ( 10 * 1000 );
-            
-            // stop reading
-            access.unbind ();
         }
         catch ( JIException e )
         {
-            System.out.println ( String.format ( "%08X: %s", e.getErrorCode (), server.getErrorMessage ( e.getErrorCode () ) ) );
+            System.out.println ( String.format ( "%08X", e.getErrorCode () ) );
         }
     }
 }
