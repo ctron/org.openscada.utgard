@@ -36,7 +36,7 @@ import org.jinterop.dcom.win32.ComFactory;
 
 public class EnumString extends BaseCOMObject
 {   
-    private static final int DEFAULT_BATCH_SIZE = Integer.getInteger ( "openscada.dcom.enum-batch-size", 10 );
+    public static final int DEFAULT_BATCH_SIZE = Integer.getInteger ( "openscada.dcom.enum-batch-size", 10 );
     
     public EnumString ( IJIComObject enumStringObject ) throws IllegalArgumentException, UnknownHostException, JIException
     {
