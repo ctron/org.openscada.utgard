@@ -23,8 +23,10 @@ import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.EnumSet;
 
+import org.apache.log4j.Logger;
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.JIVariant;
+import org.openscada.opc.dcom.common.impl.EnumString;
 import org.openscada.opc.dcom.da.OPCBROWSETYPE;
 import org.openscada.opc.dcom.da.impl.OPCBrowseServerAddressSpace;
 
@@ -35,11 +37,21 @@ import org.openscada.opc.dcom.da.impl.OPCBrowseServerAddressSpace;
  */
 public class FlatBrowser
 {
+    private static Logger _log = Logger.getLogger ( FlatBrowser.class );
+    
     private OPCBrowseServerAddressSpace _browser = null;
+    
+    private int _batchSize = EnumString.DEFAULT_BATCH_SIZE;
 
     public FlatBrowser ( OPCBrowseServerAddressSpace browser )
     {
         _browser = browser;
+    }
+    
+    public FlatBrowser ( OPCBrowseServerAddressSpace browser, int batchSize )
+    {
+        _browser = browser;
+        _batchSize = batchSize;
     }
 
     public Collection<String> browse ( String filterCriteria, EnumSet<Access> accessMask ) throws IllegalArgumentException, UnknownHostException, JIException
@@ -51,7 +63,9 @@ public class FlatBrowser
         if ( accessMask.contains ( Access.WRITE ) )
             accessMaskValue |= Access.WRITE.getCode ();
         
-        return _browser.browse ( OPCBROWSETYPE.OPC_FLAT, filterCriteria, accessMaskValue, JIVariant.VT_EMPTY ).asCollection ();
+        _log.debug ( "Browsing with a batch size of " + _batchSize );
+        
+        return _browser.browse ( OPCBROWSETYPE.OPC_FLAT, filterCriteria, accessMaskValue, JIVariant.VT_EMPTY ).asCollection ( _batchSize );
     }
     
     public Collection<String> browse ( String filterCriteria ) throws IllegalArgumentException, UnknownHostException, JIException
