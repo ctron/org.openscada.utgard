@@ -90,6 +90,7 @@ public class OPCTest3
         }
         catch ( JIException e )
         {
+            e.printStackTrace ();
             System.out.println ( String.format ( "%08X: %s", e.getErrorCode (),
                     server.getErrorMessage ( e.getErrorCode () ) ) );
         }
