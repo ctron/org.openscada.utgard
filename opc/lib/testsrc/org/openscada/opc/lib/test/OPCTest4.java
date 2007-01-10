@@ -57,7 +57,6 @@ public class OPCTest4
             server.connect ();
 
             // add sync access
-
             AccessBase access = new Async20Access ( server, 100, true );
             access.addItem ( itemId, new DataCallbackDumper () );
 
