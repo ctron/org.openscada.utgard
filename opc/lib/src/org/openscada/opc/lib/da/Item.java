@@ -35,7 +35,7 @@ public class Item
 
     private String _id = null;
 
-    public Item ( Group group, int serverHandle, int clientHandle, String id )
+    Item ( Group group, int serverHandle, int clientHandle, String id )
     {
         super ();
         _log.debug ( String.format ( "Adding new item '%s' (0x%08X) for group %s", id, serverHandle, group.toString () ) );

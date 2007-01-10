@@ -66,7 +66,7 @@ public class Group
 
     private Map<Integer, Item> _itemClientMap = new HashMap<Integer, Item> ();
 
-    public Group ( Server server, OPCGroupStateMgt group ) throws IllegalArgumentException, UnknownHostException, JIException
+    Group ( Server server, OPCGroupStateMgt group ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         _log.debug ( "Creating new group instance with COM group " + group );
         _server = server;
@@ -85,22 +85,50 @@ public class Group
         return _group.getState ().isActive ();
     }
 
+    /**
+     * Get the group name from the server
+     * @return The group name fetched from the server
+     * @throws JIException
+     */
     public String getName () throws JIException
     {
         return _group.getState ().getName ();
     }
 
+    /**
+     * Change the group name
+     * @param name the new name of the group
+     * @throws JIException
+     */
     public void setName ( String name ) throws JIException
     {
         _group.setName ( name );
     }
 
+    /**
+     * Add a single item. Actually calls {@link #addItems(String[])} with only
+     * one paraemter
+     * @param item The item to add
+     * @return The added item
+     * @throws JIException The add operation failed
+     * @throws AddFailedException The item was not added due to an error
+     */
     public Item addItem ( String item ) throws JIException, AddFailedException
     {
         Map<String, Item> items = addItems ( item );
         return items.get ( item );
     }
 
+    /**
+     * Validate item ids and get additional information to them.
+     * <br>
+     * According to the OPC specification you should first <em>validate</em>
+     * the items and the <em>add</em> them. The spec also says that when a server
+     * lets the item pass validation it must also let them pass the add operation.
+     * @param items The items to validate
+     * @return A result map of item id to result information (including error code).
+     * @throws JIException
+     */
     public synchronized Map<String, Result<OPCITEMRESULT>> validateItems ( String... items ) throws JIException
     {
         OPCITEMDEF[] defs = new OPCITEMDEF[items.length];
@@ -122,6 +150,13 @@ public class Group
         return resultMap;
     }
 
+    /**
+     * Add new items to the group
+     * @param items The items (by string id) to add
+     * @return A result map of id to item object
+     * @throws JIException The add operation completely failed. No item was added.
+     * @throws AddFailedException If one or more item could not be added. Item without error where added.
+     */
     public synchronized Map<String, Item> addItems ( String... items ) throws JIException, AddFailedException
     {
         // Find which items we already have
