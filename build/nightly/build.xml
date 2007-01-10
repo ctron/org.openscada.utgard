@@ -1,11 +1,9 @@
 <?xml version="1.0"?>
 <!-- ====================================================================== 
-     21.11.2006 15:10:54                                                        
-
      OpenSCADA OPC Nightly Build    
      The OpenSCADA OPC Nightly build file - Project Utgard
                    
-     jens                                                                
+	 Jens Reimann <jens.reimann@inavare.net>
      ====================================================================== -->
 <project name="OpenSCADA OPC Nightly Build" default="default">
     <description>
@@ -16,11 +14,11 @@
           target: default              
          ================================= -->
     <target name="default" depends="init" description="--> The OpenSCADA OPC Nightly build file - Project Utgard">
-    	<delete dir="/var/vhosts/openscada/download/utgard/nightly-${DSTAMP}"/>
+    	<delete dir="/var/vhosts/openscada/download/utgard/integration/nightly-${DSTAMP}"/>
         <ant dir="../release">
-        	<property name="upload.base" value="/var/vhosts/openscada/download/utgard/nightly-${DSTAMP}"/>
+        	<property name="upload.base" value="/var/vhosts/openscada/download/utgard/integration/nightly-${DSTAMP}"/>
         	<property name="release" value="-${DSTAMP}-nightly"/>
-        	<property name="api.href.base" value="http://openscada.org/download/utgard/nightly-${DSTAMP}"/>
+        	<property name="api.href.base" value="http://openscada.org/download/utgard/integration/nightly-${DSTAMP}"/>
     	</ant>
     </target>
 
