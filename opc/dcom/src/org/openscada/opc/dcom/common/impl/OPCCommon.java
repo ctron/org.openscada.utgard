@@ -66,7 +66,8 @@ public class OPCCommon extends BaseCOMObject
 
         callObject.addInParamAsInt ( errorCode, JIFlags.FLAG_NULL );
         callObject.addInParamAsInt ( localeID, JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ),
+                JIFlags.FLAG_NULL );
 
         Object[] result = getCOMObject ().call ( callObject );
         return ( (JIString) ( ( (JIPointer)result[0] ).getReferent () ) ).getString ();
@@ -88,7 +89,8 @@ public class OPCCommon extends BaseCOMObject
         callObject.setOpnum ( 2 );
 
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ),
+                JIFlags.FLAG_NULL );
 
         Object[] result = getCOMObject ().call ( callObject );
 

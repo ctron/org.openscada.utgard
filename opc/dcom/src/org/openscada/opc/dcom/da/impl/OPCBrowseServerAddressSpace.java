@@ -150,7 +150,8 @@ public class OPCBrowseServerAddressSpace extends BaseCOMObject
         callObject.setOpnum ( 3 );
 
         callObject.addInParamAsString ( item, JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ),
+                JIFlags.FLAG_NULL );
 
         Object[] result = getCOMObject ().call ( callObject );
 

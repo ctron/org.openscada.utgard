@@ -111,18 +111,18 @@ public class FILETIME
     public Calendar asCalendar ()
     {
         Calendar c = Calendar.getInstance ();
-        
+
         /*
          * The following "strange" stuff is needed since we miss a ulong type
          */
         long i = 0xFFFFFFFF & _high;
         i = i << 32;
-        
+
         BigDecimal d1 = new BigDecimal ( 0xFFFFFFFFFFFFFFFFL & i );
         d1 = d1.add ( new BigDecimal ( 0xFFFFFFFF & _low ) );
         d1 = d1.divide ( new BigDecimal ( 10000L ) );
         d1 = d1.subtract ( new BigDecimal ( 11644473600000L ) );
-        
+
         c.setTimeInMillis ( d1.longValue () );
 
         return c;

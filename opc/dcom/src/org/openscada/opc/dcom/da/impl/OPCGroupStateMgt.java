@@ -54,7 +54,8 @@ public class OPCGroupStateMgt extends BaseCOMObject
 
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
         callObject.addOutParamAsType ( Boolean.class, JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ),
+                JIFlags.FLAG_NULL );
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
         callObject.addOutParamAsType ( Float.class, JIFlags.FLAG_NULL );
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
@@ -97,7 +98,8 @@ public class OPCGroupStateMgt extends BaseCOMObject
 
         callObject.addInParamAsPointer ( new JIPointer ( requestedUpdateRate ), JIFlags.FLAG_NULL );
         if ( active != null )
-            callObject.addInParamAsPointer ( new JIPointer ( Integer.valueOf ( active.booleanValue () ? 1 : 0 ) ), JIFlags.FLAG_NULL );
+            callObject.addInParamAsPointer ( new JIPointer ( Integer.valueOf ( active.booleanValue () ? 1 : 0 ) ),
+                    JIFlags.FLAG_NULL );
         else
             callObject.addInParamAsPointer ( new JIPointer ( null ), JIFlags.FLAG_NULL );
         callObject.addInParamAsPointer ( new JIPointer ( timeBias ), JIFlags.FLAG_NULL );
@@ -165,17 +167,18 @@ public class OPCGroupStateMgt extends BaseCOMObject
     public EventHandler attach ( IOPCDataCallback callback ) throws JIException
     {
         OPCDataCallback callbackObject = new OPCDataCallback ();
-        
+
         callbackObject.setCallback ( callback );
-        
+
         // sync the callback object so that no calls get through the callback
         // until the callback information is set
         // If happens in some cases that the callback is triggered before
         // the method attachEventHandler returns.
         synchronized ( callbackObject )
         {
-            String id = ComFactory.attachEventHandler ( getCOMObject (), Constants.IOPCDataCallback_IID, JIInterfacePointer
-                    .getInterfacePointer ( getCOMObject ().getAssociatedSession (), callbackObject.getCoClass () ) );
+            String id = ComFactory.attachEventHandler ( getCOMObject (), Constants.IOPCDataCallback_IID,
+                    JIInterfacePointer.getInterfacePointer ( getCOMObject ().getAssociatedSession (),
+                            callbackObject.getCoClass () ) );
 
             callbackObject.setInfo ( getCOMObject (), id );
         }

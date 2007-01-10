@@ -44,6 +44,7 @@ import org.openscada.opc.dcom.da.ValueData;
 public class OPCDataCallback extends EventHandlerImpl
 {
     private IOPCDataCallback _callback = null;
+
     private JIJavaCoClass _coClass = null;
 
     public OPCDataCallback ()
@@ -55,25 +56,25 @@ public class OPCDataCallback extends EventHandlerImpl
     {
         if ( _callback == null )
             return new Object[0];
-        
+
         // get arrays for more readable code later ;-)
         Integer[] errorCodes = (Integer[])errors.getArrayInstance ();
         Integer[] itemHandles = (Integer[])clientHandles.getArrayInstance ();
         Short[] qualitiesArray = (Short[])qualities.getArrayInstance ();
         JIVariant[] valuesArray = (JIVariant[])values.getArrayInstance ();
         JIStruct[] timestampArray = (JIStruct[])timestamps.getArrayInstance ();
-        
+
         // create result data
-        KeyedResultSet<Integer,ValueData> result = new KeyedResultSet<Integer, ValueData> ();
-        for ( int i = 0 ; i < count; i++ )
+        KeyedResultSet<Integer, ValueData> result = new KeyedResultSet<Integer, ValueData> ();
+        for ( int i = 0; i < count; i++ )
         {
             ValueData vd = new ValueData ();
             vd.setQuality ( qualitiesArray[i] );
             vd.setTimestamp ( FILETIME.fromStruct ( timestampArray[i] ).asCalendar () );
             vd.setValue ( valuesArray[i] );
-            result.add ( new KeyedResult<Integer,ValueData> ( itemHandles[i], vd, errorCodes[i] ) );
+            result.add ( new KeyedResult<Integer, ValueData> ( itemHandles[i], vd, errorCodes[i] ) );
         }
-        
+
         // fire event
         try
         {
@@ -92,25 +93,25 @@ public class OPCDataCallback extends EventHandlerImpl
     {
         if ( _callback == null )
             return new Object[0];
-        
+
         // get arrays for more readable code later ;-)
         Integer[] errorCodes = (Integer[])errors.getArrayInstance ();
         Integer[] itemHandles = (Integer[])clientHandles.getArrayInstance ();
         Short[] qualitiesArray = (Short[])qualities.getArrayInstance ();
         JIVariant[] valuesArray = (JIVariant[])values.getArrayInstance ();
         JIStruct[] timestampArray = (JIStruct[])timestamps.getArrayInstance ();
-        
+
         // create result data
-        KeyedResultSet<Integer,ValueData> result = new KeyedResultSet<Integer, ValueData> ();
-        for ( int i = 0 ; i < count; i++ )
+        KeyedResultSet<Integer, ValueData> result = new KeyedResultSet<Integer, ValueData> ();
+        for ( int i = 0; i < count; i++ )
         {
             ValueData vd = new ValueData ();
             vd.setQuality ( qualitiesArray[i] );
             vd.setTimestamp ( FILETIME.fromStruct ( timestampArray[i] ).asCalendar () );
             vd.setValue ( valuesArray[i] );
-            result.add ( new KeyedResult<Integer,ValueData> ( itemHandles[i], vd, errorCodes[i] ) );
+            result.add ( new KeyedResult<Integer, ValueData> ( itemHandles[i], vd, errorCodes[i] ) );
         }
-        
+
         // fire event
         try
         {
@@ -120,7 +121,7 @@ public class OPCDataCallback extends EventHandlerImpl
         {
             e.printStackTrace ();
         }
-        
+
         // The client must always return S_OK
         return new Object[] { Constants.S_OK };
     }
@@ -129,18 +130,18 @@ public class OPCDataCallback extends EventHandlerImpl
     {
         if ( _callback == null )
             return new Object[0];
-        
+
         // get arrays for more readable code later ;-)
         Integer[] errorCodes = (Integer[])errors.getArrayInstance ();
         Integer[] itemHandles = (Integer[])clientHandles.getArrayInstance ();
-        
+
         // create result data
         ResultSet<Integer> result = new ResultSet<Integer> ();
-        for ( int i = 0 ; i < count; i++ )
+        for ( int i = 0; i < count; i++ )
         {
             result.add ( new Result<Integer> ( itemHandles[i], errorCodes[i] ) );
         }
-        
+
         // fire event
         try
         {
@@ -150,7 +151,7 @@ public class OPCDataCallback extends EventHandlerImpl
         {
             e.printStackTrace ();
         }
-        
+
         // The client must always return S_OK
         return new Object[] { Constants.S_OK };
     }
@@ -159,9 +160,9 @@ public class OPCDataCallback extends EventHandlerImpl
     {
         if ( _callback == null )
             return new Object[0];
-        
+
         _callback.cancelComplete ( transactionId, serverGroupHandle );
-        
+
         // The client must always return S_OK
         return new Object[] { Constants.S_OK };
     }
@@ -170,7 +171,7 @@ public class OPCDataCallback extends EventHandlerImpl
     {
         if ( _coClass != null )
             return _coClass;
-        
+
         _coClass = new JIJavaCoClass ( new JIInterfaceDefinition ( Constants.IOPCDataCallback_IID, false ), this );
 
         JIParameterObject params;
@@ -188,7 +189,7 @@ public class OPCDataCallback extends EventHandlerImpl
         params.addInParamAsObject ( ( new JIArray ( Short.class, null, 1, true ) ), JIFlags.FLAG_NULL ); // qualities
         params.addInParamAsObject ( ( new JIArray ( FILETIME.getStruct (), null, 1, true ) ), JIFlags.FLAG_NULL ); // timestamps
         params.addInParamAsObject ( ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL ); // errors
-        
+
         method = new JIMethodDescriptor ( "OnDataChange", params );
         _coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
 

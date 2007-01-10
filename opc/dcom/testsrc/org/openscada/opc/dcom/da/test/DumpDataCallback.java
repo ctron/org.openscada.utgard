@@ -35,21 +35,27 @@ public class DumpDataCallback implements IOPCDataCallback
 
     public void dataChange ( int transactionId, int serverGroupHandle, int masterQuality, int masterErrorCode, KeyedResultSet<Integer, ValueData> result )
     {
-        System.out.println ( String.format ( "dataChange: %d, Group: %08X, MasterQ: %d, Error: %d", transactionId, serverGroupHandle, masterQuality, masterErrorCode ) );
-        
-        for ( KeyedResult<Integer,ValueData> entry : result )
+        System.out.println ( String.format ( "dataChange: %d, Group: %08X, MasterQ: %d, Error: %d", transactionId,
+                serverGroupHandle, masterQuality, masterErrorCode ) );
+
+        for ( KeyedResult<Integer, ValueData> entry : result )
         {
-            System.out.println ( String.format ( "%08X - Error: %08X, Quality: %d, %Tc - %s", entry.getKey (), entry.getErrorCode (), entry.getValue ().getQuality (), entry.getValue ().getTimestamp (), entry.getValue().getValue ().toString ()) ); 
+            System.out.println ( String.format ( "%08X - Error: %08X, Quality: %d, %Tc - %s", entry.getKey (),
+                    entry.getErrorCode (), entry.getValue ().getQuality (), entry.getValue ().getTimestamp (),
+                    entry.getValue ().getValue ().toString () ) );
         }
     }
 
     public void readComplete ( int transactionId, int serverGroupHandle, int masterQuality, int masterErrorCode, KeyedResultSet<Integer, ValueData> result )
     {
-        System.out.println ( String.format ( "readComplete: %d, Group: %08X, MasterQ: %d, Error: %d", transactionId, serverGroupHandle, masterQuality, masterErrorCode ) );
-        
-        for ( KeyedResult<Integer,ValueData> entry : result )
+        System.out.println ( String.format ( "readComplete: %d, Group: %08X, MasterQ: %d, Error: %d", transactionId,
+                serverGroupHandle, masterQuality, masterErrorCode ) );
+
+        for ( KeyedResult<Integer, ValueData> entry : result )
         {
-            System.out.println ( String.format ( "%08X - Error: %08X, Quality: %d, %Tc - %s", entry.getKey (), entry.getErrorCode (), entry.getValue ().getQuality (), entry.getValue ().getTimestamp (), entry.getValue().getValue ().toString ()) ); 
+            System.out.println ( String.format ( "%08X - Error: %08X, Quality: %d, %Tc - %s", entry.getKey (),
+                    entry.getErrorCode (), entry.getValue ().getQuality (), entry.getValue ().getTimestamp (),
+                    entry.getValue ().getValue ().toString () ) );
         }
     }
 

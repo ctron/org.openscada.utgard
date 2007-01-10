@@ -38,15 +38,16 @@ public class OPCAsyncIO2 extends BaseCOMObject
     public class AsyncResult
     {
         private ResultSet<Integer> _result = null;
+
         private Integer _cancelId = null;
-        
+
         public AsyncResult ()
         {
             super ();
             _result = new ResultSet<Integer> ();
             _cancelId = null;
         }
-        
+
         public AsyncResult ( ResultSet<Integer> result, Integer cancelId )
         {
             super ();
@@ -64,7 +65,7 @@ public class OPCAsyncIO2 extends BaseCOMObject
             return _result;
         }
     }
-    
+
     public OPCAsyncIO2 ( IJIComObject opcAsyncIO2 ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         super ( (IJIComObject)opcAsyncIO2.queryInterface ( Constants.IOPCAsyncIO2_IID ) );
@@ -93,7 +94,7 @@ public class OPCAsyncIO2 extends BaseCOMObject
 
         return (Integer)result[0];
     }
-    
+
     public void cancel ( int cancelId ) throws JIException
     {
         JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
@@ -103,34 +104,35 @@ public class OPCAsyncIO2 extends BaseCOMObject
 
         getCOMObject ().call ( callObject );
     }
-    
-    public AsyncResult read ( int transactionId, Integer...serverHandles ) throws JIException
+
+    public AsyncResult read ( int transactionId, Integer... serverHandles ) throws JIException
     {
         if ( serverHandles == null || serverHandles.length == 0 )
             return new AsyncResult ();
-        
+
         JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
         callObject.setOpnum ( 0 );
-        
+
         callObject.addInParamAsInt ( serverHandles.length, JIFlags.FLAG_NULL );
         callObject.addInParamAsArray ( new JIArray ( serverHandles, true ), JIFlags.FLAG_NULL );
         callObject.addInParamAsInt ( transactionId, JIFlags.FLAG_NULL );
-        
+
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
-        
-        Object [] result = getCOMObject ().call ( callObject );
-        
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ),
+                JIFlags.FLAG_NULL );
+
+        Object[] result = getCOMObject ().call ( callObject );
+
         Integer cancelId = (Integer)result[0];
-        Integer[] errorCodes = (Integer[])((JIArray)((JIPointer)result[1]).getReferent ()).getArrayInstance ();
-        
+        Integer[] errorCodes = (Integer[]) ( (JIArray) ( (JIPointer)result[1] ).getReferent () ).getArrayInstance ();
+
         ResultSet<Integer> resultSet = new ResultSet<Integer> ();
-        
+
         for ( int i = 0; i < serverHandles.length; i++ )
         {
             resultSet.add ( new Result<Integer> ( serverHandles[i], errorCodes[i] ) );
         }
-        
+
         return new AsyncResult ( resultSet, cancelId );
     }
 }

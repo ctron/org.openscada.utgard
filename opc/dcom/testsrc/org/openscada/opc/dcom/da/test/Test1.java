@@ -30,7 +30,6 @@ import java.util.logging.Level;
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.common.JISystem;
 import org.jinterop.dcom.core.IJIComObject;
-import org.jinterop.dcom.core.JIClsid;
 import org.jinterop.dcom.core.JIComServer;
 import org.jinterop.dcom.core.JIProgId;
 import org.jinterop.dcom.core.JISession;
@@ -44,11 +43,11 @@ import org.openscada.opc.dcom.common.impl.OPCCommon;
 import org.openscada.opc.dcom.da.IORequest;
 import org.openscada.opc.dcom.da.OPCBROWSEDIRECTION;
 import org.openscada.opc.dcom.da.OPCBROWSETYPE;
+import org.openscada.opc.dcom.da.OPCDATASOURCE;
 import org.openscada.opc.dcom.da.OPCENUMSCOPE;
 import org.openscada.opc.dcom.da.OPCGroupState;
 import org.openscada.opc.dcom.da.OPCITEMDEF;
 import org.openscada.opc.dcom.da.OPCITEMRESULT;
-import org.openscada.opc.dcom.da.OPCDATASOURCE;
 import org.openscada.opc.dcom.da.OPCITEMSTATE;
 import org.openscada.opc.dcom.da.OPCNAMESPACETYPE;
 import org.openscada.opc.dcom.da.OPCSERVERSTATUS;
@@ -151,8 +150,8 @@ public class Test1
         KeyedResultSet<Integer, JIVariant> values = itemProperties.getItemProperties ( itemID, ids );
         for ( KeyedResult<Integer, JIVariant> entry : values )
         {
-            System.out.println ( String.format ( "ID: %d, Value: %s, Error Code: %08x", entry.getKey (), entry.getValue ().toString (), entry
-                    .getErrorCode () ) );
+            System.out.println ( String.format ( "ID: %d, Value: %s, Error Code: %08x", entry.getKey (),
+                    entry.getValue ().toString (), entry.getErrorCode () ) );
         }
     }
 
@@ -161,8 +160,8 @@ public class Test1
         KeyedResultSet<Integer, String> values = itemProperties.lookupItemIDs ( itemID, ids );
         for ( KeyedResult<Integer, String> entry : values )
         {
-            System.out
-                    .println ( String.format ( "ID: %d, Item ID: %s, Error Code: %08x", entry.getKey (), entry.getValue (), entry.getErrorCode () ) );
+            System.out.println ( String.format ( "ID: %d, Item ID: %s, Error Code: %08x", entry.getKey (),
+                    entry.getValue (), entry.getErrorCode () ) );
         }
     }
 
@@ -235,8 +234,8 @@ public class Test1
             //def.setRequestedDataType ( (short)writeTests[i].getValue ().getType () );
             defs[i] = def;
 
-            System.out.println ( String.format ( "%s <= (%d) %s", writeTests[i].getItemID (), writeTests[i].getValue ().getType (), writeTests[i]
-                    .getValue ().toString () ) );
+            System.out.println ( String.format ( "%s <= (%d) %s", writeTests[i].getItemID (),
+                    writeTests[i].getValue ().getType (), writeTests[i].getValue ().toString () ) );
         }
 
         System.out.println ( "Add to group" );
@@ -248,11 +247,12 @@ public class Test1
             if ( result.get ( i ).getErrorCode () != 0 )
                 throw new JIException ( result.get ( i ).getErrorCode () );
 
-            writeRequests[i] = new WriteRequest ( result.get ( i ).getValue ().getServerHandle (), writeTests[i].getValue () );
+            writeRequests[i] = new WriteRequest ( result.get ( i ).getValue ().getServerHandle (),
+                    writeTests[i].getValue () );
             serverHandles[i] = writeRequests[i].getServerHandle ();
 
-            System.out.println ( String
-                    .format ( "Item: %s, VT: %d", writeTests[i].getItemID (), result.get ( i ).getValue ().getCanonicalDataType () ) );
+            System.out.println ( String.format ( "Item: %s, VT: %d", writeTests[i].getItemID (),
+                    result.get ( i ).getValue ().getCanonicalDataType () ) );
         }
 
         System.out.println ( "Perform write" );
@@ -261,7 +261,8 @@ public class Test1
         for ( int i = 0; i < writeTests.length; i++ )
         {
             Result<WriteRequest> writeResult = writeResults.get ( i );
-            System.out.println ( String.format ( "ItemID: %s, ErrorCode: %08X", writeTests[i].getItemID (), writeResult.getErrorCode () ) );
+            System.out.println ( String.format ( "ItemID: %s, ErrorCode: %08X", writeTests[i].getItemID (),
+                    writeResult.getErrorCode () ) );
             if ( writeResult.getErrorCode () != 0 )
                 showError ( server, writeResult.getErrorCode () );
         }
@@ -310,7 +311,8 @@ public class Test1
         ResultSet<Integer> resultSet = itemManagement.setActiveState ( true, serverHandles );
         for ( Result<Integer> resultEntry : resultSet )
         {
-            System.out.println ( String.format ( "Item: %08X, Error: %08X", resultEntry.getValue (), resultEntry.getErrorCode () ) );
+            System.out.println ( String.format ( "Item: %08X, Error: %08X", resultEntry.getValue (),
+                    resultEntry.getErrorCode () ) );
         }
 
         // set client handles
@@ -329,11 +331,11 @@ public class Test1
         System.out.println ( "attach" );
         EventHandler eventHandler = group.attach ( new DumpDataCallback () );
         /*
-        System.out.println ( "attach..enable" );
-        asyncIO2.setEnable ( true );
-        System.out.println ( "attach..refresh" );
-        asyncIO2.refresh ( (short)1, 1 );
-        */
+         System.out.println ( "attach..enable" );
+         asyncIO2.setEnable ( true );
+         System.out.println ( "attach..refresh" );
+         asyncIO2.refresh ( (short)1, 1 );
+         */
         // sleep
         try
         {
@@ -354,10 +356,13 @@ public class Test1
         for ( KeyedResult<Integer, OPCITEMSTATE> itemStateEntry : itemState )
         {
             int errorCode = itemStateEntry.getErrorCode ();
-            System.out.println ( String.format ( "Server ID: %08X, Value: %s, Timestamp: %d/%d (%Tc), Quality: %d, Error: %08X", itemStateEntry
-                    .getKey (), itemStateEntry.getValue ().getValue (), itemStateEntry.getValue ().getTimestamp ().getHigh (), itemStateEntry
-                    .getValue ().getTimestamp ().getLow (), itemStateEntry.getValue ().getTimestamp ().asCalendar (), itemStateEntry.getValue ()
-                    .getQuality (), errorCode ) );
+            System.out.println ( String.format (
+                    "Server ID: %08X, Value: %s, Timestamp: %d/%d (%Tc), Quality: %d, Error: %08X",
+                    itemStateEntry.getKey (), itemStateEntry.getValue ().getValue (),
+                    itemStateEntry.getValue ().getTimestamp ().getHigh (),
+                    itemStateEntry.getValue ().getTimestamp ().getLow (),
+                    itemStateEntry.getValue ().getTimestamp ().asCalendar (), itemStateEntry.getValue ().getQuality (),
+                    errorCode ) );
             if ( errorCode != 0 )
             {
                 showError ( server, errorCode );
@@ -380,7 +385,8 @@ public class Test1
         System.out.println ( "===== SERVER STATUS ======" );
         System.out.println ( "State: " + status.getServerState ().toString () );
         System.out.println ( "Vendor: " + status.getVendorInfo () );
-        System.out.println ( String.format ( "Version: %d.%d.%d", status.getMajorVersion (), status.getMinorVersion (), status.getBuildNumber () ) );
+        System.out.println ( String.format ( "Version: %d.%d.%d", status.getMajorVersion (), status.getMinorVersion (),
+                status.getBuildNumber () ) );
         System.out.println ( "Groups: " + status.getGroupCount () );
         System.out.println ( "Bandwidth: " + status.getBandWidth () );
         System.out.println ( String.format ( "Start Time: %tc", status.getStartTime ().asCalendar () ) );
@@ -399,7 +405,7 @@ public class Test1
         }
     }
 
-    @SuppressWarnings("unused")
+    @SuppressWarnings ( "unused" )
     public static void main ( String[] args ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         TestConfiguration configuration = new MatrikonSimulationServerConfiguration ();
@@ -414,42 +420,42 @@ public class Test1
             // OPCServer server = new OPCServer ( "127.0.0.1", JIProgId.valueOf
             // ( session, "Matrikon.OPC.Simulation.1" ),
             // session );
-            
+
             //JIComServer comServer = new JIComServer ( JIClsid.valueOf ( configuration.getCLSID () ), args[0], _session );
-            JIComServer comServer = new JIComServer ( JIProgId.valueOf ( _session, configuration.getProgId () ), args[0], _session );
+            JIComServer comServer = new JIComServer ( JIProgId.valueOf ( _session, configuration.getProgId () ),
+                    args[0], _session );
 
             IJIComObject serverObject = comServer.createInstance ();
             server = new OPCServer ( serverObject );
             dumpServerStatus ( server );
 
             /*
-            OPCCommon common = server.getCommon ();
-            common.setLocaleID ( 1033 );
-            System.out.println ( String.format ( "LCID: %d", common.getLocaleID () ) );
-            common.setClientName ( "test" );
-            for ( Integer i : common.queryAvailableLocaleIDs () )
-            {
-                System.out.println ( String.format ( "Available LCID: %d", i ) );
-            }
-            */
+             OPCCommon common = server.getCommon ();
+             common.setLocaleID ( 1033 );
+             System.out.println ( String.format ( "LCID: %d", common.getLocaleID () ) );
+             common.setClientName ( "test" );
+             for ( Integer i : common.queryAvailableLocaleIDs () )
+             {
+             System.out.println ( String.format ( "Available LCID: %d", i ) );
+             }
+             */
 
-            
             OPCBrowseServerAddressSpace serverBrowser = server.getBrowser ();
             browseFlat ( serverBrowser );
             /*
-            browseTree ( serverBrowser );
-            */
+             browseTree ( serverBrowser );
+             */
 
             OPCGroupStateMgt group = server.addGroup ( "test", true, 100, 1234, 60, 0.0f, 1033 );
-/*
-            group.setName ( "test2" );
-            OPCGroupStateMgt group2 = group.clone ( "test" );
-            group = server.getGroupByName ( "test2" );
-            group.setState ( null, false, null, null, null, null );
-            group.setState ( null, true, null, null, null, null );
-            dumpGroupState ( group );
-            dumpGroupState ( group2 );
-*/
+            /*
+             group.setName ( "test2" );
+             OPCGroupStateMgt group2 = group.clone ( "test" );
+             group = server.getGroupByName ( "test2" );
+             group.setState ( null, false, null, null, null, null );
+             group.setState ( null, true, null, null, null, null );
+             dumpGroupState ( group );
+             dumpGroupState ( group2 );
+             */
             testItems ( server, group, configuration.getReadItems () );
             if ( configuration.getWriteItems () != null )
             {

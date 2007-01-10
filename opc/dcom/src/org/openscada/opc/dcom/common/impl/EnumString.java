@@ -35,12 +35,13 @@ import org.jinterop.dcom.core.JIString;
 import org.jinterop.dcom.win32.ComFactory;
 
 public class EnumString extends BaseCOMObject
-{   
+{
     public static final int DEFAULT_BATCH_SIZE = Integer.getInteger ( "openscada.dcom.enum-batch-size", 10 );
-    
+
     public EnumString ( IJIComObject enumStringObject ) throws IllegalArgumentException, UnknownHostException, JIException
     {
-        super ( (IJIComObject)enumStringObject.queryInterface ( org.openscada.opc.dcom.common.Constants.IEnumString_IID ) );
+        super (
+                (IJIComObject)enumStringObject.queryInterface ( org.openscada.opc.dcom.common.Constants.IEnumString_IID ) );
     }
 
     public int next ( List<String> list, int num ) throws JIException
@@ -53,8 +54,8 @@ public class EnumString extends BaseCOMObject
 
         callObject.addInParamAsInt ( num, JIFlags.FLAG_NULL );
         callObject.addInParamAsInt ( num, JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIArray ( new JIPointer ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ), null, 1, true,
-                true ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIArray ( new JIPointer ( new JIString (
+                JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ), null, 1, true, true ), JIFlags.FLAG_NULL );
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
 
         Object[] result = Helper.callRespectSFALSE ( getCOMObject (), callObject );
@@ -124,7 +125,7 @@ public class EnumString extends BaseCOMObject
 
         return data;
     }
-    
+
     public Collection<String> asCollection () throws JIException
     {
         return asCollection ( DEFAULT_BATCH_SIZE );

@@ -21,8 +21,6 @@ package org.openscada.opc.dcom.da.test;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
@@ -30,38 +28,22 @@ import java.util.logging.Level;
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.common.JISystem;
 import org.jinterop.dcom.core.IJIComObject;
-import org.jinterop.dcom.core.JIClsid;
 import org.jinterop.dcom.core.JIComServer;
 import org.jinterop.dcom.core.JIProgId;
 import org.jinterop.dcom.core.JISession;
-import org.jinterop.dcom.core.JIVariant;
 import org.openscada.opc.dcom.common.EventHandler;
 import org.openscada.opc.dcom.common.KeyedResult;
 import org.openscada.opc.dcom.common.KeyedResultSet;
 import org.openscada.opc.dcom.common.Result;
 import org.openscada.opc.dcom.common.ResultSet;
 import org.openscada.opc.dcom.common.impl.OPCCommon;
-import org.openscada.opc.dcom.da.IORequest;
-import org.openscada.opc.dcom.da.OPCBROWSEDIRECTION;
-import org.openscada.opc.dcom.da.OPCBROWSETYPE;
-import org.openscada.opc.dcom.da.OPCENUMSCOPE;
-import org.openscada.opc.dcom.da.OPCGroupState;
+import org.openscada.opc.dcom.da.OPCDATASOURCE;
 import org.openscada.opc.dcom.da.OPCITEMDEF;
 import org.openscada.opc.dcom.da.OPCITEMRESULT;
-import org.openscada.opc.dcom.da.OPCDATASOURCE;
-import org.openscada.opc.dcom.da.OPCITEMSTATE;
-import org.openscada.opc.dcom.da.OPCNAMESPACETYPE;
-import org.openscada.opc.dcom.da.OPCSERVERSTATUS;
-import org.openscada.opc.dcom.da.PropertyDescription;
-import org.openscada.opc.dcom.da.WriteRequest;
 import org.openscada.opc.dcom.da.impl.OPCAsyncIO2;
-import org.openscada.opc.dcom.da.impl.OPCBrowseServerAddressSpace;
 import org.openscada.opc.dcom.da.impl.OPCGroupStateMgt;
-import org.openscada.opc.dcom.da.impl.OPCItemIO;
 import org.openscada.opc.dcom.da.impl.OPCItemMgt;
-import org.openscada.opc.dcom.da.impl.OPCItemProperties;
 import org.openscada.opc.dcom.da.impl.OPCServer;
-import org.openscada.opc.dcom.da.impl.OPCSyncIO;
 import org.openscada.opc.dcom.da.impl.OPCAsyncIO2.AsyncResult;
 
 public class Test2
@@ -137,7 +119,8 @@ public class Test2
         ResultSet<Integer> resultSet = itemManagement.setActiveState ( true, serverHandles );
         for ( Result<Integer> resultEntry : resultSet )
         {
-            System.out.println ( String.format ( "Item: %08X, Error: %08X", resultEntry.getValue (), resultEntry.getErrorCode () ) );
+            System.out.println ( String.format ( "Item: %08X, Error: %08X", resultEntry.getValue (),
+                    resultEntry.getErrorCode () ) );
         }
 
         // set client handles
@@ -151,21 +134,21 @@ public class Test2
 
         System.out.println ( "Create async IO 2.0 object" );
         OPCAsyncIO2 asyncIO2 = group.getAsyncIO2 ();
-        
+
         // connect handler
         System.out.println ( "attach" );
         EventHandler eventHandler = group.attach ( new DumpDataCallback () );
-        
+
         System.out.println ( "attach..enable" );
         asyncIO2.setEnable ( true );
-        
+
         System.out.println ( "attach..refresh" );
         int cancelId = asyncIO2.refresh ( OPCDATASOURCE.OPC_DS_DEVICE, 1 );
-        
+
         System.out.println ( "attach..read" );
         AsyncResult asyncResult = asyncIO2.read ( 2, serverHandles );
         System.out.println ( String.format ( "attach..read..cancelId: %08X", asyncResult.getCancelId () ) );
-        
+
         // sleep
         try
         {
@@ -190,7 +173,7 @@ public class Test2
         itemManagement.remove ( serverHandles );
     }
 
-    @SuppressWarnings("unused")
+    @SuppressWarnings ( "unused" )
     public static void main ( String[] args ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         TestConfiguration configuration = new MatrikonSimulationServerConfiguration ();
@@ -202,9 +185,10 @@ public class Test2
             JISystem.setLogLevel ( Level.ALL );
 
             _session = JISession.createSession ( args[1], args[2], args[3] );
-            
+
             //JIComServer comServer = new JIComServer ( JIClsid.valueOf ( configuration.getCLSID () ), args[0], _session );
-            JIComServer comServer = new JIComServer ( JIProgId.valueOf ( _session, configuration.getProgId () ), args[0], _session );
+            JIComServer comServer = new JIComServer ( JIProgId.valueOf ( _session, configuration.getProgId () ),
+                    args[0], _session );
 
             IJIComObject serverObject = comServer.createInstance ();
             server = new OPCServer ( serverObject );

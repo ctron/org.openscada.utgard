@@ -55,10 +55,12 @@ public class OPCItemProperties extends BaseCOMObject
 
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
 
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_BSTR ), null, 1, true ) ),
-                                         JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Short.class, null, 1, true ) ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ),
+                JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( new JIString (
+                JIFlags.FLAG_REPRESENTATION_STRING_BSTR ), null, 1, true ) ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Short.class, null, 1, true ) ),
+                JIFlags.FLAG_NULL );
 
         Object result[] = getCOMObject ().call ( callObject );
 
@@ -98,8 +100,10 @@ public class OPCItemProperties extends BaseCOMObject
         callObject.addInParamAsInt ( properties.length, JIFlags.FLAG_NULL );
         callObject.addInParamAsArray ( new JIArray ( ids, true ), JIFlags.FLAG_NULL );
 
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( JIVariant.class, null, 1, true ) ), JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( JIVariant.class, null, 1, true ) ),
+                JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ),
+                JIFlags.FLAG_NULL );
 
         Object result[] = Helper.callRespectSFALSE ( getCOMObject (), callObject );
 
@@ -132,9 +136,10 @@ public class OPCItemProperties extends BaseCOMObject
         callObject.addInParamAsInt ( properties.length, JIFlags.FLAG_NULL );
         callObject.addInParamAsArray ( new JIArray ( ids, true ), JIFlags.FLAG_NULL );
 
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( new JIPointer ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ),
-                null, 1, true ) ), JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( new JIPointer ( new JIString (
+                JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ), null, 1, true ) ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ),
+                JIFlags.FLAG_NULL );
 
         Object result[] = Helper.callRespectSFALSE ( getCOMObject (), callObject );
 
@@ -145,7 +150,8 @@ public class OPCItemProperties extends BaseCOMObject
 
         for ( int i = 0; i < properties.length; i++ )
         {
-            results.add ( new KeyedResult<Integer, String> ( properties[i], ( (JIString)itemIDs[i].getReferent () ).getString (), errorCodes[i] ) );
+            results.add ( new KeyedResult<Integer, String> ( properties[i],
+                    ( (JIString)itemIDs[i].getReferent () ).getString (), errorCodes[i] ) );
         }
         return results;
     }
