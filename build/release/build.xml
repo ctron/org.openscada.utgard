@@ -1,18 +1,16 @@
 <?xml version="1.0"?>
 <!-- ====================================================================== 
-     21.11.2006 15:04:15                                                        
-
      OpenSCADA OPC    
      The OpenSCADA OPC Build File - Project Utgard
-                   
-     jens                                                                
+
+	 Jens Reimann <jens.reimann@inavare.net>
      ====================================================================== -->
 <project name="OpenSCADA OPC" default="default">
     <description>
             The OpenSCADA OPC Build File - Project Utgard
     </description>
 
-	<property name="version" value="0.1.4"/>
+	<property name="version" value="0.1.5"/>
 	<property name="release" value=""/>
 	<property name="upload.base" value="/var/vhosts/openscada/download/utgard"/>
 	<property name="upload.dir" value="${upload.base}/${version}"/>
