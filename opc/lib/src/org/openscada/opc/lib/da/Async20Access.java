@@ -20,7 +20,6 @@
 package org.openscada.opc.lib.da;
 
 import java.net.UnknownHostException;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jinterop.dcom.common.JIException;
@@ -35,11 +34,10 @@ import org.openscada.opc.lib.common.NotConnectedException;
 
 public class Async20Access extends AccessBase implements IOPCDataCallback
 {
+    @SuppressWarnings("unused")
     private static Logger _log = Logger.getLogger ( Async20Access.class );
 
     private EventHandler _eventHandler = null;
-
-    private Throwable _lastError = null;
 
     private boolean _initialRefresh = false;
 
@@ -47,51 +45,6 @@ public class Async20Access extends AccessBase implements IOPCDataCallback
     {
         super ( server, period );
         _initialRefresh = initialRefresh;
-    }
-
-    public void run ()
-    {
-        while ( _active )
-        {
-            try
-            {
-                runOnce ();
-                if ( _lastError != null )
-                {
-                    _lastError = null;
-                    notifyStateListenersError ( null );
-                }
-            }
-            catch ( Exception e )
-            {
-                _log.error ( "Sync read failed", e );
-                notifyStateListenersError ( e );
-                _server.disconnect ();
-            }
-
-            try
-            {
-                Thread.sleep ( getPeriod () );
-            }
-            catch ( InterruptedException e )
-            {
-            }
-        }
-    }
-
-    protected synchronized void runOnce () throws JIException
-    {
-        if ( !_active )
-            return;
-
-        Item[] items = _items.keySet ().toArray ( new Item[_items.size ()] );
-
-        Map<Item, ItemState> result = _group.read ( false, items );
-        for ( Map.Entry<Item, ItemState> entry : result.entrySet () )
-        {
-            updateItem ( entry.getKey (), entry.getValue () );
-        }
-
     }
 
     @Override
