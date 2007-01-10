@@ -41,11 +41,19 @@ public class AddFailedException extends Exception
         _items = items;
     }
 
+    /**
+     * Get the map of item id to error code
+     * @return the result map containing the failed items
+     */
     public Map<String, Integer> getErrors ()
     {
         return _errors;
     }
 
+    /**
+     * Get the map of item it to item object
+     * @return the result map containing the succeeded items
+     */
     public Map<String, Item> getItems ()
     {
         return _items;
