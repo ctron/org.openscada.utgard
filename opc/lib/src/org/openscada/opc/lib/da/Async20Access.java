@@ -30,6 +30,7 @@ import org.openscada.opc.dcom.common.ResultSet;
 import org.openscada.opc.dcom.da.IOPCDataCallback;
 import org.openscada.opc.dcom.da.OPCDATASOURCE;
 import org.openscada.opc.dcom.da.ValueData;
+import org.openscada.opc.dcom.da.impl.OPCAsyncIO2;
 import org.openscada.opc.lib.common.NotConnectedException;
 
 public class Async20Access extends AccessBase implements IOPCDataCallback
@@ -58,6 +59,10 @@ public class Async20Access extends AccessBase implements IOPCDataCallback
         _eventHandler = _group.attach ( this );
         if ( ( !_items.isEmpty () ) && _initialRefresh )
         {
+            OPCAsyncIO2 async20 = _group.getAsyncIO20 ();
+            if ( async20 == null )
+                throw new NotConnectedException ();
+            
             _group.getAsyncIO20 ().refresh ( OPCDATASOURCE.OPC_DS_CACHE, 0 );
         }
     }
