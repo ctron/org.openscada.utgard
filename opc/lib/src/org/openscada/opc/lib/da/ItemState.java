@@ -26,7 +26,7 @@ import org.jinterop.dcom.core.JIVariant;
 public class ItemState
 {
     private int _errorCode = 0;
-    
+
     private JIVariant _value = null;
 
     private Calendar _timestamp = null;

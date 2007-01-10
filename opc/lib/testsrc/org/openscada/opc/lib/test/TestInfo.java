@@ -26,7 +26,10 @@ import org.openscada.opc.lib.da.Server;
 class TestInfo
 {
     ConnectionInformation _info = null;
+
     String _itemId = null;
+
     Server _server = null;
+
     AccessBase _access = null;
 }

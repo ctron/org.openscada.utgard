@@ -26,12 +26,15 @@ import org.jinterop.dcom.core.JIVariant;
 public class Item
 {
     private static Logger _log = Logger.getLogger ( Item.class );
-    
+
     private Group _group = null;
+
     private int _serverHandle = 0;
+
     private int _clientHandle = 0;
+
     private String _id = null;
-    
+
     public Item ( Group group, int serverHandle, int clientHandle, String id )
     {
         super ();
@@ -41,17 +44,17 @@ public class Item
         _clientHandle = clientHandle;
         _id = id;
     }
-    
+
     public Group getGroup ()
     {
         return _group;
     }
-    
+
     public int getServerHandle ()
     {
         return _serverHandle;
     }
-    
+
     public int getClientHandle ()
     {
         return _clientHandle;
@@ -61,21 +64,19 @@ public class Item
     {
         return _id;
     }
-    
+
     public void setActive ( boolean state ) throws JIException
     {
         _group.setActive ( state, this );
     }
-    
+
     public ItemState read ( boolean device ) throws JIException
     {
         return _group.read ( device, this ).get ( this );
     }
-    
+
     public Integer write ( JIVariant value ) throws JIException
     {
-        return _group.write ( new WriteRequest[] {
-                new WriteRequest ( this, value )
-        } ).get ( this );
+        return _group.write ( new WriteRequest[] { new WriteRequest ( this, value ) } ).get ( this );
     }
 }

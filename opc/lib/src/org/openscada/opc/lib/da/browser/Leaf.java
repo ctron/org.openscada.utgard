@@ -21,16 +21,18 @@ package org.openscada.opc.lib.da.browser;
 
 public class Leaf
 {
-    private Branch _parent = null; 
+    private Branch _parent = null;
+
     private String _name = "";
+
     private String _itemId = null;
-    
+
     public Leaf ( Branch parent, String name )
     {
         _parent = parent;
         _name = name;
     }
-    
+
     public Leaf ( Branch parent, String name, String itemId )
     {
         _parent = parent;
@@ -62,6 +64,5 @@ public class Leaf
     {
         return _parent;
     }
-    
-    
+
 }

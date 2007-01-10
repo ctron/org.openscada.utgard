@@ -38,16 +38,16 @@ import org.openscada.opc.dcom.da.impl.OPCBrowseServerAddressSpace;
 public class FlatBrowser
 {
     private static Logger _log = Logger.getLogger ( FlatBrowser.class );
-    
+
     private OPCBrowseServerAddressSpace _browser = null;
-    
+
     private int _batchSize = EnumString.DEFAULT_BATCH_SIZE;
 
     public FlatBrowser ( OPCBrowseServerAddressSpace browser )
     {
         _browser = browser;
     }
-    
+
     public FlatBrowser ( OPCBrowseServerAddressSpace browser, int batchSize )
     {
         _browser = browser;
@@ -57,27 +57,28 @@ public class FlatBrowser
     public Collection<String> browse ( String filterCriteria, EnumSet<Access> accessMask ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         int accessMaskValue = 0;
-        
+
         if ( accessMask.contains ( Access.READ ) )
             accessMaskValue |= Access.READ.getCode ();
         if ( accessMask.contains ( Access.WRITE ) )
             accessMaskValue |= Access.WRITE.getCode ();
-        
+
         _log.debug ( "Browsing with a batch size of " + _batchSize );
-        
-        return _browser.browse ( OPCBROWSETYPE.OPC_FLAT, filterCriteria, accessMaskValue, JIVariant.VT_EMPTY ).asCollection ( _batchSize );
+
+        return _browser.browse ( OPCBROWSETYPE.OPC_FLAT, filterCriteria, accessMaskValue, JIVariant.VT_EMPTY ).asCollection (
+                _batchSize );
     }
-    
+
     public Collection<String> browse ( String filterCriteria ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         return browse ( filterCriteria, EnumSet.noneOf ( Access.class ) );
     }
-    
+
     public Collection<String> browse () throws IllegalArgumentException, UnknownHostException, JIException
     {
         return browse ( "", EnumSet.noneOf ( Access.class ) );
     }
-    
+
     public Collection<String> browse ( EnumSet<Access> accessMask ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         return browse ( "", accessMask );

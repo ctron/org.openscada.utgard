@@ -35,9 +35,9 @@ public class ConnectionInformation
     private String _user = "";
 
     private String _password = "";
-    
+
     private String _clsid = null;
-    
+
     private String _progId = null;
 
     public ConnectionInformation ()
@@ -51,7 +51,7 @@ public class ConnectionInformation
         _user = user;
         _password = password;
     }
-    
+
     public ConnectionInformation ( ConnectionInformation arg0 )
     {
         super ();
@@ -130,7 +130,7 @@ public class ConnectionInformation
     {
         _progId = progId;
     }
-    
+
     public String getClsOrProgId ()
     {
         if ( _clsid != null )

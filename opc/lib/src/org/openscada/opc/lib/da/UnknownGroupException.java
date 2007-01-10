@@ -22,7 +22,7 @@ package org.openscada.opc.lib.da;
 public class UnknownGroupException extends Exception
 {
     private String _name = null;
-    
+
     public UnknownGroupException ( String name )
     {
         super ();

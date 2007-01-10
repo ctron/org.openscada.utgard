@@ -37,9 +37,9 @@ import org.openscada.opc.dcom.common.KeyedResultSet;
 import org.openscada.opc.dcom.common.Result;
 import org.openscada.opc.dcom.common.ResultSet;
 import org.openscada.opc.dcom.da.IOPCDataCallback;
+import org.openscada.opc.dcom.da.OPCDATASOURCE;
 import org.openscada.opc.dcom.da.OPCITEMDEF;
 import org.openscada.opc.dcom.da.OPCITEMRESULT;
-import org.openscada.opc.dcom.da.OPCDATASOURCE;
 import org.openscada.opc.dcom.da.OPCITEMSTATE;
 import org.openscada.opc.dcom.da.impl.OPCAsyncIO2;
 import org.openscada.opc.dcom.da.impl.OPCGroupStateMgt;
@@ -167,7 +167,8 @@ public class Group
         {
             if ( entry.getErrorCode () == 0 )
             {
-                Item item = new Item ( this, entry.getValue ().getServerHandle (), itemDef[i].getClientHandle (), entry.getKey ().getItemID () );
+                Item item = new Item ( this, entry.getValue ().getServerHandle (), itemDef[i].getClientHandle (),
+                        entry.getKey ().getItemID () );
                 addItem ( item );
                 foundItems.add ( item.getServerHandle () );
             }
@@ -302,8 +303,8 @@ public class Group
         for ( KeyedResult<Integer, OPCITEMSTATE> entry : states )
         {
             Item item = _itemMap.get ( entry.getKey () );
-            ItemState state = new ItemState ( entry.getErrorCode (), entry.getValue ().getValue (), entry.getValue ()
-                    .getTimestamp ().asCalendar (), entry.getValue ().getQuality () );
+            ItemState state = new ItemState ( entry.getErrorCode (), entry.getValue ().getValue (),
+                    entry.getValue ().getTimestamp ().asCalendar (), entry.getValue ().getQuality () );
             data.put ( item, state );
         }
         return data;
@@ -338,7 +339,7 @@ public class Group
     {
         return _group.attach ( dataCallback );
     }
-    
+
     public synchronized Item findItemByClientHandle ( int clientHandle )
     {
         return _itemClientMap.get ( clientHandle );

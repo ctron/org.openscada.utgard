@@ -25,16 +25,19 @@ import java.util.LinkedList;
 public class Branch
 {
     private Branch _parent = null;
+
     private String _name = null;
+
     private Collection<Branch> _branches = new LinkedList<Branch> ();
+
     private Collection<Leaf> _leaves = new LinkedList<Leaf> ();
-    
+
     public Branch ( Branch parent )
     {
         super ();
         _parent = parent;
     }
-    
+
     public Branch ( Branch parent, String name )
     {
         super ();
@@ -76,6 +79,5 @@ public class Branch
     {
         return _parent;
     }
-    
-    
+
 }

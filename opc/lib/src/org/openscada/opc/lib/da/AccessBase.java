@@ -33,32 +33,35 @@ import org.openscada.opc.lib.common.NotConnectedException;
 public abstract class AccessBase implements ServerConnectionStateListener
 {
     private static Logger _log = Logger.getLogger ( AccessBase.class );
-    
+
     protected Server _server = null;
 
     protected Group _group = null;
+
     protected boolean _active = false;
+
     private List<AccessStateListener> _stateListeners = new LinkedList<AccessStateListener> ();
+
     private boolean _bound = false;
-    
+
     /**
      * Holds the item to callback assignment
      */
     protected Map<Item, DataCallback> _items = new HashMap<Item, DataCallback> ();
-    
 
     protected Map<String, Item> _itemMap = new HashMap<String, Item> ();
-    
+
     protected Map<Item, ItemState> _itemCache = new HashMap<Item, ItemState> ();
 
     private int _period = 0;
-    protected Map<String, DataCallback> _itemSet = new HashMap<String,DataCallback> ();
+
+    protected Map<String, DataCallback> _itemSet = new HashMap<String, DataCallback> ();
 
     public AccessBase ( Server server, int period ) throws IllegalArgumentException, UnknownHostException, NotConnectedException, JIException, DuplicateGroupException
     {
         super ();
         _server = server;
-        _period = period; 
+        _period = period;
     }
 
     public boolean isBound ()
@@ -70,7 +73,7 @@ public abstract class AccessBase implements ServerConnectionStateListener
     {
         if ( isBound () )
             return;
-        
+
         _server.addStateListener ( this );
         _bound = true;
     }
@@ -79,10 +82,10 @@ public abstract class AccessBase implements ServerConnectionStateListener
     {
         if ( !isBound () )
             return;
-        
+
         _server.removeStateListener ( this );
         _bound = false;
-        
+
         stop ();
     }
 
@@ -105,7 +108,7 @@ public abstract class AccessBase implements ServerConnectionStateListener
     protected synchronized void notifyStateListenersState ( boolean state )
     {
         List<AccessStateListener> list = new ArrayList<AccessStateListener> ( _stateListeners );
-        
+
         for ( AccessStateListener listener : list )
         {
             listener.stateChanged ( state );
@@ -115,13 +118,13 @@ public abstract class AccessBase implements ServerConnectionStateListener
     protected synchronized void notifyStateListenersError ( Throwable t )
     {
         List<AccessStateListener> list = new ArrayList<AccessStateListener> ( _stateListeners );
-        
+
         for ( AccessStateListener listener : list )
         {
             listener.errorOccured ( t );
         }
     }
-    
+
     public int getPeriod ()
     {
         return _period;
@@ -131,9 +134,9 @@ public abstract class AccessBase implements ServerConnectionStateListener
     {
         if ( _itemSet.containsKey ( itemId ) )
             return;
-        
+
         _itemSet.put ( itemId, dataCallback );
-        
+
         if ( isActive () )
         {
             realizeItem ( itemId );
@@ -144,9 +147,9 @@ public abstract class AccessBase implements ServerConnectionStateListener
     {
         if ( !_itemSet.containsKey ( itemId ) )
             return;
-    
+
         _itemSet.remove ( itemId );
-        
+
         if ( isActive () )
         {
             unrealizeItem ( itemId );
@@ -171,19 +174,18 @@ public abstract class AccessBase implements ServerConnectionStateListener
             _log.error ( "Failed to change state", e );
         }
     }
-    
-    
+
     protected synchronized void start () throws JIException, IllegalArgumentException, UnknownHostException, NotConnectedException, DuplicateGroupException
     {
         if ( isActive () )
             return;
-        
+
         _group = _server.addGroup ();
         _group.setActive ( true );
         _active = true;
-        
+
         notifyStateListenersState ( true );
-        
+
         realizeAll ();
 
     }
@@ -191,25 +193,24 @@ public abstract class AccessBase implements ServerConnectionStateListener
     protected void realizeItem ( String itemId ) throws JIException, AddFailedException
     {
         _log.debug ( String.format ( "Realizing item: %s", itemId ) );
-        
+
         DataCallback dataCallback = _itemSet.get ( itemId );
         if ( dataCallback == null )
             return;
-        
+
         Item item = _group.addItem ( itemId );
         _items.put ( item, dataCallback );
         _itemMap.put ( itemId, item );
     }
-    
+
     protected void unrealizeItem ( String itemId )
     {
         Item item = _itemMap.remove ( itemId );
         _items.remove ( item );
         _itemCache.remove ( item );
-        
+
         // FIXME: remove from group
     }
-    
 
     /*
      * FIXME: need some perfomance boost: subscribe all in one call
@@ -225,11 +226,11 @@ public abstract class AccessBase implements ServerConnectionStateListener
             catch ( Exception e )
             {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
+                e.printStackTrace ();
             }
         }
     }
-    
+
     protected void unrealizeAll ()
     {
         _items.clear ();
@@ -243,17 +244,17 @@ public abstract class AccessBase implements ServerConnectionStateListener
             _log.warn ( "Failed to clear group. No problem if we already lost the connection", e );
         }
     }
-    
+
     protected synchronized void stop () throws JIException
     {
         if ( !isActive () )
             return;
 
         unrealizeAll ();
-        
+
         _active = false;
         notifyStateListenersState ( false );
-        
+
         try
         {
             _group.setActive ( false );
@@ -264,7 +265,7 @@ public abstract class AccessBase implements ServerConnectionStateListener
         }
         _group = null;
     }
-    
+
     public synchronized void clear ()
     {
         _itemSet.clear ();
@@ -272,14 +273,13 @@ public abstract class AccessBase implements ServerConnectionStateListener
         _itemMap.clear ();
         _itemCache.clear ();
     }
-    
 
     protected void updateItem ( Item item, ItemState itemState )
     {
         DataCallback dataCallback = _items.get ( item );
         if ( dataCallback == null )
             return;
-        
+
         ItemState cachedState = _itemCache.get ( item );
         if ( cachedState == null )
         {

@@ -35,30 +35,30 @@ import org.openscada.opc.dcom.da.impl.OPCBrowseServerAddressSpace;
 public class TreeBrowser
 {
     private OPCBrowseServerAddressSpace _browser = null;
-    
+
     private String _filterCriteria = "";
-    
+
     public TreeBrowser ( OPCBrowseServerAddressSpace browser )
     {
         _browser = browser;
     }
-    
+
     public TreeBrowser ( OPCBrowseServerAddressSpace browser, String filterCriteria )
     {
         _browser = browser;
         _filterCriteria = filterCriteria;
     }
-    
+
     public Branch browse () throws JIException, IllegalArgumentException, UnknownHostException
     {
         Branch branch = new Branch ( null );
-        
+
         _browser.changePosition ( null, OPCBROWSEDIRECTION.OPC_BROWSE_TO );
         browse ( branch );
-        
+
         return branch;
     }
-    
+
     protected void browse ( Branch branch ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         for ( String item : _browser.browse ( OPCBROWSETYPE.OPC_LEAF, _filterCriteria, 0, JIVariant.VT_EMPTY ).asCollection () )

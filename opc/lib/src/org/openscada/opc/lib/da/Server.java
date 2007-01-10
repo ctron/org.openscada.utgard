@@ -31,7 +31,6 @@ import org.jinterop.dcom.core.JIClsid;
 import org.jinterop.dcom.core.JIComServer;
 import org.jinterop.dcom.core.JIProgId;
 import org.jinterop.dcom.core.JISession;
-import org.openscada.opc.dcom.common.impl.OPCCommon;
 import org.openscada.opc.dcom.da.OPCNAMESPACETYPE;
 import org.openscada.opc.dcom.da.OPCSERVERSTATUS;
 import org.openscada.opc.dcom.da.impl.OPCBrowseServerAddressSpace;
@@ -47,75 +46,84 @@ import org.openscada.utils.timing.Scheduler;
 public class Server
 {
     private ConnectionInformation _connectionInformation = null;
-    
+
     private JISession _session = null;
+
     private JIComServer _comServer = null;
+
     private OPCServer _server = null;
-    
+
     private boolean _defaultActive = true;
+
     private int _defaultUpdateRate = 1000;
+
     private Integer _defaultTimeBias = null;
+
     private Float _defaultPercentDeadband = null;
+
     private int _defaultLocaleID = 0;
+
     private ErrorMessageResolver _errorMessageResolver = null;
-    
-    private Map<Integer,Group> _groups = new HashMap<Integer, Group> (); 
-    
+
+    private Map<Integer, Group> _groups = new HashMap<Integer, Group> ();
+
     private List<ServerConnectionStateListener> _stateListeners = new LinkedList<ServerConnectionStateListener> ();
-    
+
     private Scheduler _scheduler = null;
-    
+
     public Server ( ConnectionInformation connectionInformation )
     {
         super ();
         _connectionInformation = connectionInformation;
         _scheduler = new Scheduler ( true );
     }
-    
+
     public Scheduler getScheduler ()
     {
         return _scheduler;
     }
-    
+
     protected synchronized boolean isConnected ()
     {
         return _session != null;
     }
-    
+
     public synchronized void connect () throws IllegalArgumentException, UnknownHostException, JIException, AlreadyConnectedException
     {
         if ( isConnected () )
             throw new AlreadyConnectedException ();
-        
-        _session = JISession.createSession ( _connectionInformation.getDomain (),
-                                             _connectionInformation.getUser (),
-                                             _connectionInformation.getPassword (), false );
-        
+
+        _session = JISession.createSession ( _connectionInformation.getDomain (), _connectionInformation.getUser (),
+                _connectionInformation.getPassword (), false );
+
         if ( _connectionInformation.getClsid () != null )
-            _comServer = new JIComServer ( JIClsid.valueOf ( _connectionInformation.getClsid () ), _connectionInformation.getHost (), _session );
+            _comServer = new JIComServer ( JIClsid.valueOf ( _connectionInformation.getClsid () ),
+                    _connectionInformation.getHost (), _session );
         else if ( _connectionInformation.getProgId () != null )
-            _comServer = new JIComServer ( JIProgId.valueOf ( _session, _connectionInformation.getClsid () ), _connectionInformation.getHost (), _session );
+            _comServer = new JIComServer ( JIProgId.valueOf ( _session, _connectionInformation.getClsid () ),
+                    _connectionInformation.getHost (), _session );
         else
             throw new IllegalArgumentException ( "Neither clsid nor progid is valid!" );
-        
+
         _server = new OPCServer ( _comServer.createInstance () );
         _errorMessageResolver = new ErrorMessageResolver ( _server.getCommon (), _defaultLocaleID );
-        
+
         notifyConnectionStateChange ( true );
     }
-    
+
     public synchronized void disconnect ()
     {
         if ( !isConnected () )
             return;
-        
+
         try
         {
             notifyConnectionStateChange ( false );
         }
         catch ( Throwable t )
-        {}
-        
+        {
+        }
+
         try
         {
             JISession.destroySession ( _session );
@@ -129,11 +137,11 @@ public class Server
             _session = null;
             _comServer = null;
             _server = null;
-            
+
             _groups.clear ();
         }
     }
-    
+
     protected synchronized Group getGroup ( OPCGroupStateMgt groupMgt ) throws JIException, IllegalArgumentException, UnknownHostException
     {
         Integer serverHandle = groupMgt.getState ().getServerHandle ();
@@ -148,7 +156,7 @@ public class Server
             return group;
         }
     }
-    
+
     /**
      * Add a new named group to the server
      * @param name The name of the group to use (must be unique)
@@ -163,10 +171,11 @@ public class Server
     {
         if ( !isConnected () )
             throw new NotConnectedException ();
-        
+
         try
         {
-            OPCGroupStateMgt groupMgt = _server.addGroup ( name, _defaultActive, _defaultUpdateRate, 0, _defaultTimeBias, _defaultPercentDeadband, _defaultLocaleID );
+            OPCGroupStateMgt groupMgt = _server.addGroup ( name, _defaultActive, _defaultUpdateRate, 0,
+                    _defaultTimeBias, _defaultPercentDeadband, _defaultLocaleID );
             return getGroup ( groupMgt );
         }
         catch ( JIException e )
@@ -180,7 +189,7 @@ public class Server
             }
         }
     }
-    
+
     /**
      * Add a new group and let the server generate a group name
      * 
@@ -198,7 +207,7 @@ public class Server
     {
         return addGroup ( null );
     }
-    
+
     /**
      * Find a group by its name
      * @param name The name to look for
@@ -213,7 +222,7 @@ public class Server
     {
         if ( !isConnected () )
             throw new NotConnectedException ();
-        
+
         try
         {
             OPCGroupStateMgt groupMgt = _server.getGroupByName ( name );
@@ -230,7 +239,7 @@ public class Server
             }
         }
     }
-    
+
     public int getDefaultLocaleID ()
     {
         return _defaultLocaleID;
@@ -280,7 +289,7 @@ public class Server
     {
         _defaultActive = defaultActive;
     }
-    
+
     /**
      * Get the flat browser
      * @return The flat browser or <code>null</code> if the functionality is not supported 
@@ -290,10 +299,10 @@ public class Server
         OPCBrowseServerAddressSpace browser = _server.getBrowser ();
         if ( browser == null )
             return null;
-        
+
         return new FlatBrowser ( browser );
     }
-    
+
     /**
      * Get the tree browser
      * @return The tree browser or <code>null</code> if the functionality is not supported
@@ -304,40 +313,40 @@ public class Server
         OPCBrowseServerAddressSpace browser = _server.getBrowser ();
         if ( browser == null )
             return null;
-        
+
         if ( browser.queryOrganization () != OPCNAMESPACETYPE.OPC_NS_HIERARCHIAL )
             return null;
-        
+
         return new TreeBrowser ( browser );
     }
-    
+
     public synchronized String getErrorMessage ( int errorCode )
     {
         if ( _errorMessageResolver == null )
             return String.format ( "Unknown error (%08X)", errorCode );
-        
+
         // resolve message
         String message = _errorMessageResolver.getMessage ( errorCode );
-        
+
         // and return if successfull
         if ( message != null )
             return message;
-        
+
         // return default message
         return String.format ( "Unknown error (%08X)", errorCode );
     }
-    
+
     public synchronized void addStateListener ( ServerConnectionStateListener listener )
     {
         _stateListeners.add ( listener );
         listener.connectionStateChanged ( isConnected () );
     }
-    
+
     public synchronized void removeStateListener ( ServerConnectionStateListener listener )
     {
         _stateListeners.remove ( listener );
     }
-    
+
     protected synchronized void notifyConnectionStateChange ( boolean connected )
     {
         List<ServerConnectionStateListener> list = new ArrayList<ServerConnectionStateListener> ( _stateListeners );
@@ -346,7 +355,7 @@ public class Server
             listener.connectionStateChanged ( connected );
         }
     }
-    
+
     public OPCSERVERSTATUS getServerState ()
     {
         try

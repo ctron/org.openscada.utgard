@@ -34,7 +34,7 @@ import org.openscada.opc.lib.da.Server;
 public class OPCTest4
 {
     private static Logger _log = Logger.getLogger ( OPCTest4.class );
-    
+
     public static void main ( String[] args ) throws Throwable
     {
         // create connection information
