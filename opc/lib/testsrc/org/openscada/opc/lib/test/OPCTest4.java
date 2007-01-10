@@ -19,6 +19,7 @@
 
 package org.openscada.opc.lib.test;
 
+import org.apache.log4j.Logger;
 import org.jinterop.dcom.common.JIException;
 import org.openscada.opc.lib.common.ConnectionInformation;
 import org.openscada.opc.lib.da.AccessBase;
@@ -32,6 +33,8 @@ import org.openscada.opc.lib.da.Server;
  */
 public class OPCTest4
 {
+    private static Logger _log = Logger.getLogger ( OPCTest4.class );
+    
     public static void main ( String[] args ) throws Throwable
     {
         // create connection information
@@ -62,7 +65,9 @@ public class OPCTest4
             access.bind ();
 
             // wait a little bit
+            _log.info ( "Sleep for some seconds to give events a chance..." );
             Thread.sleep ( 10 * 1000 );
+            _log.info ( "Returned from sleep" );
 
             // stop reading
             access.unbind ();
