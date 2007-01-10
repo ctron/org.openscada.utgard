@@ -22,7 +22,6 @@ package org.openscada.opc.dcom.da.impl;
 import java.net.UnknownHostException;
 
 import org.jinterop.dcom.common.JIException;
-import org.jinterop.dcom.common.JISystem;
 import org.jinterop.dcom.core.IJIComObject;
 import org.jinterop.dcom.core.JICallObject;
 import org.jinterop.dcom.core.JIFlags;
@@ -157,15 +156,29 @@ public class OPCGroupStateMgt extends BaseCOMObject
         return new OPCGroupStateMgt ( ComFactory.createCOMInstance ( getCOMObject (), ptr ) );
     }
 
+    /**
+     * Attach a new callback to the group
+     * @param callback The callback to attach
+     * @return The event handler information
+     * @throws JIException
+     */
     public EventHandler attach ( IOPCDataCallback callback ) throws JIException
     {
         OPCDataCallback callbackObject = new OPCDataCallback ();
+        
         callbackObject.setCallback ( callback );
         
-        String id = ComFactory.attachEventHandler ( getCOMObject (), Constants.IOPCDataCallback_IID, JIInterfacePointer
-                .getInterfacePointer ( getCOMObject ().getAssociatedSession (), callbackObject.getCoClass () ) );
+        // sync the callback object so that no calls get through the callback
+        // until the callback information is set
+        // If happens in some cases that the callback is triggered before
+        // the method attachEventHandler returns.
+        synchronized ( callbackObject )
+        {
+            String id = ComFactory.attachEventHandler ( getCOMObject (), Constants.IOPCDataCallback_IID, JIInterfacePointer
+                    .getInterfacePointer ( getCOMObject ().getAssociatedSession (), callbackObject.getCoClass () ) );
 
-        callbackObject.setInfo ( getCOMObject (), id );
+            callbackObject.setInfo ( getCOMObject (), id );
+        }
         return callbackObject;
     }
 
