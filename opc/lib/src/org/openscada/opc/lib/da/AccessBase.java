@@ -260,7 +260,9 @@ public abstract class AccessBase implements ServerConnectionStateListener
     protected synchronized void stop () throws JIException
     {
         if ( !isActive () )
+        {
             return;
+        }
 
         unrealizeAll ();
 
