@@ -72,7 +72,9 @@ public abstract class AccessBase implements ServerConnectionStateListener
     public synchronized void bind ()
     {
         if ( isBound () )
+        {
             return;
+        }
 
         _server.addStateListener ( this );
         _bound = true;
@@ -81,7 +83,9 @@ public abstract class AccessBase implements ServerConnectionStateListener
     public synchronized void unbind () throws JIException
     {
         if ( !isBound () )
+        {
             return;
+        }
 
         _server.removeStateListener ( this );
         _bound = false;
@@ -133,7 +137,9 @@ public abstract class AccessBase implements ServerConnectionStateListener
     public synchronized void addItem ( String itemId, DataCallback dataCallback ) throws JIException, AddFailedException
     {
         if ( _itemSet.containsKey ( itemId ) )
+        {
             return;
+        }
 
         _itemSet.put ( itemId, dataCallback );
 
@@ -146,7 +152,9 @@ public abstract class AccessBase implements ServerConnectionStateListener
     public synchronized void removeItem ( String itemId )
     {
         if ( !_itemSet.containsKey ( itemId ) )
+        {
             return;
+        }
 
         _itemSet.remove ( itemId );
 
@@ -178,7 +186,9 @@ public abstract class AccessBase implements ServerConnectionStateListener
     protected synchronized void start () throws JIException, IllegalArgumentException, UnknownHostException, NotConnectedException, DuplicateGroupException
     {
         if ( isActive () )
+        { 
             return;
+        }
 
         _group = _server.addGroup ();
         _group.setActive ( true );
@@ -196,7 +206,9 @@ public abstract class AccessBase implements ServerConnectionStateListener
 
         DataCallback dataCallback = _itemSet.get ( itemId );
         if ( dataCallback == null )
+        {
             return;
+        }
 
         Item item = _group.addItem ( itemId );
         _items.put ( item, dataCallback );
