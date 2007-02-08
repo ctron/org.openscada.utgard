@@ -70,6 +70,6 @@ public class OPCItemIO extends BaseCOMObject
         callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ),
                 JIFlags.FLAG_NULL );
 
-        Object result[] = getCOMObject ().call ( callObject );
+        getCOMObject ().call ( callObject );
     }
 }
