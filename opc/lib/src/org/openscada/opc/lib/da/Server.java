@@ -26,6 +26,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.JIClsid;
 import org.jinterop.dcom.core.JIComServer;
@@ -45,6 +46,8 @@ import org.openscada.utils.timing.Scheduler;
 
 public class Server
 {
+    private static Logger _log = Logger.getLogger ( Server.class );
+    
     private ConnectionInformation _connectionInformation = null;
 
     private JISession _session = null;
@@ -95,28 +98,70 @@ public class Server
             throw new AlreadyConnectedException ();
         }
 
-        _session = JISession.createSession ( _connectionInformation.getDomain (), _connectionInformation.getUser (),
-                _connectionInformation.getPassword (), false );
+        try
+        {
+            if ( _connectionInformation.getClsid () != null )
+            {
+                _session = JISession.createSession ( _connectionInformation.getDomain (),
+                        _connectionInformation.getUser (), _connectionInformation.getPassword (), false );
+                _comServer = new JIComServer ( JIClsid.valueOf ( _connectionInformation.getClsid () ),
+                        _connectionInformation.getHost (), _session );
+            }
+            else if ( _connectionInformation.getProgId () != null )
+            {
+                _session = JISession.createSession ( _connectionInformation.getDomain (),
+                        _connectionInformation.getUser (), _connectionInformation.getPassword (), false );
+                _comServer = new JIComServer ( JIProgId.valueOf ( _session, _connectionInformation.getClsid () ),
+                        _connectionInformation.getHost (), _session );
+            }
+            else
+            {
+                throw new IllegalArgumentException ( "Neither clsid nor progid is valid!" );
+            }
 
-        if ( _connectionInformation.getClsid () != null )
-            _comServer = new JIComServer ( JIClsid.valueOf ( _connectionInformation.getClsid () ),
-                    _connectionInformation.getHost (), _session );
-        else if ( _connectionInformation.getProgId () != null )
-            _comServer = new JIComServer ( JIProgId.valueOf ( _session, _connectionInformation.getClsid () ),
-                    _connectionInformation.getHost (), _session );
-        else
-            throw new IllegalArgumentException ( "Neither clsid nor progid is valid!" );
-
-        _server = new OPCServer ( _comServer.createInstance () );
-        _errorMessageResolver = new ErrorMessageResolver ( _server.getCommon (), _defaultLocaleID );
+            _server = new OPCServer ( _comServer.createInstance () );
+            _errorMessageResolver = new ErrorMessageResolver ( _server.getCommon (), _defaultLocaleID );
+        }
+        catch ( UnknownHostException e )
+        {
+            _log.info ( "Unknown host when connecting to server", e  );
+            cleanup ();
+            throw e;
+        }
+        catch ( JIException e )
+        {
+            _log.info ( "Failed to connect to server", e  );
+            cleanup ();
+            throw e; 
+        }
 
         notifyConnectionStateChange ( true );
+    }
+    
+    protected void cleanup ()
+    {
+        try
+        {
+            JISession.destroySession ( _session );
+        }
+        catch ( Throwable e )
+        {
+        }
+        
+        _errorMessageResolver = null;
+        _session = null;
+        _comServer = null;
+        _server = null;
+
+        _groups.clear ();
     }
 
     public synchronized void disconnect ()
     {
         if ( !isConnected () )
+        {
             return;
+        }
 
         try
         {
@@ -126,22 +171,7 @@ public class Server
         {
         }
 
-        try
-        {
-            JISession.destroySession ( _session );
-        }
-        catch ( Exception e )
-        {
-        }
-        finally
-        {
-            _errorMessageResolver = null;
-            _session = null;
-            _comServer = null;
-            _server = null;
-
-            _groups.clear ();
-        }
+        cleanup ();
     }
 
     protected synchronized Group getGroup ( OPCGroupStateMgt groupMgt ) throws JIException, IllegalArgumentException, UnknownHostException
