@@ -275,7 +275,7 @@ public abstract class AccessBase implements ServerConnectionStateListener
         }
         catch ( Throwable t )
         {
-            _log.warn ( "Failed to disable group. No problem is we already lost connection" );
+            _log.warn ( "Failed to disable group. No problem if we already lost connection" );
         }
         _group = null;
     }
