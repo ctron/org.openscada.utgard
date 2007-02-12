@@ -91,7 +91,9 @@ public class Server
     public synchronized void connect () throws IllegalArgumentException, UnknownHostException, JIException, AlreadyConnectedException
     {
         if ( isConnected () )
+        {
             throw new AlreadyConnectedException ();
+        }
 
         _session = JISession.createSession ( _connectionInformation.getDomain (), _connectionInformation.getUser (),
                 _connectionInformation.getPassword (), false );
