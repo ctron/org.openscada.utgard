@@ -52,7 +52,9 @@ public class Async20Access extends AccessBase implements IOPCDataCallback
     protected synchronized void start () throws JIException, IllegalArgumentException, UnknownHostException, NotConnectedException, DuplicateGroupException
     {
         if ( isActive () )
+        {
             return;
+        }
 
         super.start ();
 
