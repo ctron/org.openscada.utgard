@@ -72,7 +72,9 @@ public class SyncAccess extends AccessBase implements Runnable
     protected synchronized void runOnce () throws JIException
     {
         if ( !_active )
+        {
             return;
+        }
 
         Item[] items = _items.keySet ().toArray ( new Item[_items.size ()] );
 

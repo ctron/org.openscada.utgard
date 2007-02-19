@@ -63,7 +63,9 @@ public class Async20Access extends AccessBase implements IOPCDataCallback
         {
             OPCAsyncIO2 async20 = _group.getAsyncIO20 ();
             if ( async20 == null )
+            {
                 throw new NotConnectedException ();
+            }
             
             _group.getAsyncIO20 ().refresh ( OPCDATASOURCE.OPC_DS_CACHE, 0 );
         }
