@@ -144,6 +144,7 @@ public class Test2
 
         System.out.println ( "attach..refresh" );
         int cancelId = asyncIO2.refresh ( OPCDATASOURCE.OPC_DS_DEVICE, 1 );
+        System.out.println ( "Cancel ID: " + cancelId );
 
         System.out.println ( "attach..read" );
         AsyncResult asyncResult = asyncIO2.read ( 2, serverHandles );

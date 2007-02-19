@@ -53,7 +53,6 @@ import org.openscada.opc.dcom.da.OPCNAMESPACETYPE;
 import org.openscada.opc.dcom.da.OPCSERVERSTATUS;
 import org.openscada.opc.dcom.da.PropertyDescription;
 import org.openscada.opc.dcom.da.WriteRequest;
-import org.openscada.opc.dcom.da.impl.OPCAsyncIO2;
 import org.openscada.opc.dcom.da.impl.OPCBrowseServerAddressSpace;
 import org.openscada.opc.dcom.da.impl.OPCGroupStateMgt;
 import org.openscada.opc.dcom.da.impl.OPCItemIO;
@@ -325,7 +324,7 @@ public class Test1
         itemManagement.setClientHandles ( serverHandles, clientHandles );
 
         System.out.println ( "Create async IO 2.0 object" );
-        OPCAsyncIO2 asyncIO2 = group.getAsyncIO2 ();
+        // OPCAsyncIO2 asyncIO2 = group.getAsyncIO2 ();
         // connect handler
 
         System.out.println ( "attach" );
