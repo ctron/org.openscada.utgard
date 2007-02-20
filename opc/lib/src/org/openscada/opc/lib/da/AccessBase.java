@@ -190,6 +190,7 @@ public abstract class AccessBase implements ServerConnectionStateListener
             return;
         }
 
+        _log.debug ( "Create a new group" );
         _group = _server.addGroup ();
         _group.setActive ( true );
         _active = true;
@@ -197,7 +198,6 @@ public abstract class AccessBase implements ServerConnectionStateListener
         notifyStateListenersState ( true );
 
         realizeAll ();
-
     }
 
     protected void realizeItem ( String itemId ) throws JIException, AddFailedException
@@ -237,8 +237,7 @@ public abstract class AccessBase implements ServerConnectionStateListener
             }
             catch ( Exception e )
             {
-                // TODO Auto-generated catch block
-                e.printStackTrace ();
+                _log.warn ( "Failed to realize item", e );
             }
         }
     }
@@ -292,7 +291,9 @@ public abstract class AccessBase implements ServerConnectionStateListener
     {
         DataCallback dataCallback = _items.get ( item );
         if ( dataCallback == null )
+        {
             return;
+        }
 
         ItemState cachedState = _itemCache.get ( item );
         if ( cachedState == null )

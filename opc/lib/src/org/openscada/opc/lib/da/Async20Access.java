@@ -88,6 +88,7 @@ public class Async20Access extends AccessBase implements IOPCDataCallback
 
     public void dataChange ( int transactionId, int serverGroupHandle, int masterQuality, int masterErrorCode, KeyedResultSet<Integer, ValueData> result )
     {
+        _log.debug ( String.format ( "readComplete - transId %d", transactionId ) );
         for ( KeyedResult<Integer, ValueData> entry : result )
         {
             Item item = _group.findItemByClientHandle ( entry.getKey () );
@@ -98,6 +99,7 @@ public class Async20Access extends AccessBase implements IOPCDataCallback
 
     public void readComplete ( int transactionId, int serverGroupHandle, int masterQuality, int masterErrorCode, KeyedResultSet<Integer, ValueData> result )
     {
+        _log.debug ( String.format ( "readComplete - transId %d", transactionId ) );
     }
 
     public void writeComplete ( int transactionId, int serverGroupHandle, int masterErrorCode, ResultSet<Integer> result )

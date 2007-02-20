@@ -216,7 +216,9 @@ public class Group
 
         // if we have failed items then throw an exception with the result
         if ( failedItems.size () != 0 )
+        {
             throw new AddFailedException ( failedItems, findItems ( foundItems ) );
+        }
 
         // simply return the result in case of success
         return findItems ( foundItems );
