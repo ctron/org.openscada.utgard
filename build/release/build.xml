@@ -10,7 +10,7 @@
             The OpenSCADA OPC Build File - Project Utgard
     </description>
 
-	<property name="version" value="0.1.6"/>
+	<property name="version" value="0.1.7"/>
 	<property name="release" value=""/>
 	<property name="upload.base" value="/var/vhosts/openscada/download/utgard"/>
 	<property name="upload.dir" value="${upload.base}/${version}"/>
