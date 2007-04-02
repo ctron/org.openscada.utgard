@@ -79,7 +79,11 @@ public class Async20Access extends AccessBase implements IOPCDataCallback
 
         super.stop ();
 
-        _eventHandler.detach ();
+        if ( _eventHandler != null )
+        {
+            _eventHandler.detach ();
+            _eventHandler = null;
+        }
     }
 
     public void cancelComplete ( int transactionId, int serverGroupHandle )
