@@ -48,7 +48,9 @@ public class OPCSyncIO extends BaseCOMObject
     public KeyedResultSet<Integer, OPCITEMSTATE> read ( OPCDATASOURCE source, Integer... serverHandles ) throws JIException
     {
         if ( serverHandles == null || serverHandles.length == 0 )
+        {
             return new KeyedResultSet<Integer, OPCITEMSTATE> ();
+        }
 
         JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
         callObject.setOpnum ( 0 );
@@ -80,7 +82,9 @@ public class OPCSyncIO extends BaseCOMObject
     public ResultSet<WriteRequest> write ( WriteRequest... requests ) throws JIException
     {
         if ( requests.length == 0 )
+        {
             return new ResultSet<WriteRequest> ();
+        }
 
         Integer[] items = new Integer[requests.length];
         JIVariant[] values = new JIVariant[requests.length];
