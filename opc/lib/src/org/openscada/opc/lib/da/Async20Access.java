@@ -66,7 +66,7 @@ public class Async20Access extends AccessBase implements IOPCDataCallback
             {
                 throw new NotConnectedException ();
             }
-            
+
             _group.getAsyncIO20 ().refresh ( OPCDATASOURCE.OPC_DS_CACHE, 0 );
         }
     }
@@ -77,13 +77,20 @@ public class Async20Access extends AccessBase implements IOPCDataCallback
         if ( !isActive () )
             return;
 
-        super.stop ();
-
         if ( _eventHandler != null )
         {
-            _eventHandler.detach ();
+            try
+            {
+                _eventHandler.detach ();
+            }
+            catch ( Exception e )
+            {
+                _log.debug ( "Failed to detach group", e );
+            }
             _eventHandler = null;
         }
+        
+        super.stop ();        
     }
 
     public void cancelComplete ( int transactionId, int serverGroupHandle )
@@ -93,9 +100,16 @@ public class Async20Access extends AccessBase implements IOPCDataCallback
     public void dataChange ( int transactionId, int serverGroupHandle, int masterQuality, int masterErrorCode, KeyedResultSet<Integer, ValueData> result )
     {
         _log.debug ( String.format ( "readComplete - transId %d", transactionId ) );
+
+        Group group = _group;
+        if ( group == null )
+        {
+            return;
+        }
+
         for ( KeyedResult<Integer, ValueData> entry : result )
         {
-            Item item = _group.findItemByClientHandle ( entry.getKey () );
+            Item item = group.findItemByClientHandle ( entry.getKey () );
             updateItem ( item, new ItemState ( entry.getErrorCode (), entry.getValue ().getValue (),
                     entry.getValue ().getTimestamp (), entry.getValue ().getQuality () ) );
         }
