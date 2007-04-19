@@ -85,7 +85,7 @@ public class AutoReconnectController implements ServerConnectionStateListener
         _log.debug ( "Requesting connection" );
         notifyStateChange ( AutoReconnectState.DISCONNECTED );
         
-        triggerReconnect ();
+        triggerReconnect ( false );
     }
 
     public synchronized void disconnect ()
@@ -115,7 +115,7 @@ public class AutoReconnectController implements ServerConnectionStateListener
             if ( isRequested () )
             {
                 notifyStateChange ( AutoReconnectState.DISCONNECTED );
-                triggerReconnect ();
+                triggerReconnect ( true );
             }
         }
         else
@@ -131,7 +131,7 @@ public class AutoReconnectController implements ServerConnectionStateListener
         }
     }
 
-    private void triggerReconnect ()
+    private void triggerReconnect ( final boolean wait )
     {
         _log.debug ( "Trigger reconnect" );
         
@@ -139,20 +139,23 @@ public class AutoReconnectController implements ServerConnectionStateListener
 
             public void run ()
             {
-                performReconnect ();
+                performReconnect ( wait );
             }
         } );
         t.setDaemon ( true );
         t.start ();
     }
 
-    private void performReconnect ()
+    private void performReconnect ( boolean wait )
     {
         try
         {
-            notifyStateChange ( AutoReconnectState.WAITING );
-            _log.debug ( "Delaying..." );
-            Thread.sleep ( _delay );
+            if ( wait )
+            {
+                notifyStateChange ( AutoReconnectState.WAITING );
+                _log.debug ( "Delaying..." );
+                Thread.sleep ( _delay );
+            }
         }
         catch ( InterruptedException e )
         {
@@ -175,7 +178,7 @@ public class AutoReconnectController implements ServerConnectionStateListener
         {
             _log.info ( "Re-connect failed", e  );
             notifyStateChange ( AutoReconnectState.DISCONNECTED );
-            triggerReconnect ();
+            triggerReconnect ( true );
         }
     }
 

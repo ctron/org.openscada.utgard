@@ -4,12 +4,12 @@
 	<classpathentry kind="src" path="testsrc"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="lib" path="lib/j-interop.jar" sourcepath="/j-interop/src"/>
-	<classpathentry exported="true" kind="lib" path="lib/jarapac.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jcifs-1.2.9.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/iwombat.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/ntlm-security.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/ncacn_np.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/ncacn_ip_tcp.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jcifs-ntlm-auth.jar"/>
+	<classpathentry kind="lib" path="lib/jarapac.jar"/>
+	<classpathentry kind="lib" path="lib/jcifs-1.2.9.jar"/>
+	<classpathentry kind="lib" path="lib/iwombat.jar"/>
+	<classpathentry kind="lib" path="lib/ntlm-security.jar"/>
+	<classpathentry kind="lib" path="lib/ncacn_np.jar"/>
+	<classpathentry kind="lib" path="lib/ncacn_ip_tcp.jar"/>
+	<classpathentry kind="lib" path="lib/jcifs-ntlm-auth.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

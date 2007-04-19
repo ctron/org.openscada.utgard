@@ -179,7 +179,7 @@ public abstract class AccessBase implements ServerConnectionStateListener
         }
         catch ( Exception e )
         {
-            _log.error ( "Failed to change state", e );
+            _log.error ( String.format ( "Failed to change state (%s)", connected ), e );
         }
     }
 
@@ -252,7 +252,7 @@ public abstract class AccessBase implements ServerConnectionStateListener
         }
         catch ( JIException e )
         {
-            _log.warn ( "Failed to clear group. No problem if we already lost the connection", e );
+            _log.info ( "Failed to clear group. No problem if we already lost the connection", e );
         }
     }
 
@@ -270,7 +270,7 @@ public abstract class AccessBase implements ServerConnectionStateListener
 
         try
         {
-            _group.setActive ( false );
+            _group.remove ();
         }
         catch ( Throwable t )
         {

@@ -183,7 +183,7 @@ public class Server
         }
         else
         {
-            Group group = new Group ( this, groupMgt );
+            Group group = new Group ( this, serverHandle, groupMgt );
             _groups.put ( serverHandle, group );
             return group;
         }
@@ -394,9 +394,20 @@ public class Server
         {
             return _server.getStatus ();
         }
-        catch ( Exception e )
+        catch ( Throwable e )
         {
+            _log.info ( "Server connection failed", e );
+            disconnect ();
             return null;
+        }
+    }
+
+    public void removeGroup ( Group group, boolean force ) throws JIException
+    {
+        if ( _groups.containsKey ( group.getServerHandle () ) )
+        {
+            _server.removeGroup ( group.getServerHandle (), force );
+            _groups.remove ( group.getServerHandle () );
         }
     }
 }

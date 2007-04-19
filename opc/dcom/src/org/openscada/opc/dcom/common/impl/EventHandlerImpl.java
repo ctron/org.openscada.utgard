@@ -50,10 +50,16 @@ public class EventHandlerImpl implements EventHandler
     {
         if ( _object != null && _identifier != null )
         {
-            ComFactory.detachEventHandler ( _object, _identifier );
+            try
+            {
+                ComFactory.detachEventHandler ( _object, _identifier );
+            }
+            finally
+            {
+                _object = null;
+                _identifier = null;
+            }
         }
-        _object = null;
-        _identifier = null;
     }
 
 }

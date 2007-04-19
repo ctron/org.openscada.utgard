@@ -54,6 +54,8 @@ public class Group
 
     private Server _server = null;
 
+    private int _serverHandle;
+    
     private OPCGroupStateMgt _group = null;
 
     private OPCItemMgt _items = null;
@@ -66,10 +68,11 @@ public class Group
 
     private Map<Integer, Item> _itemClientMap = new HashMap<Integer, Item> ();
 
-    Group ( Server server, OPCGroupStateMgt group ) throws IllegalArgumentException, UnknownHostException, JIException
+    Group ( Server server, int serverHandle, OPCGroupStateMgt group ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         _log.debug ( "Creating new group instance with COM group " + group );
         _server = server;
+        _serverHandle = serverHandle;
         _group = group;
         _items = group.getItemManagement ();
         _syncIO = group.getSyncIO ();
@@ -80,6 +83,16 @@ public class Group
         _group.setState ( null, state, null, null, null, null );
     }
 
+    /**
+     * remove the group from the server
+     * @throws JIException 
+     *
+     */
+    public void remove () throws JIException
+    {
+        _server.removeGroup ( this, true );
+    }
+    
     public boolean isActive () throws JIException
     {
         return _group.getState ().isActive ();
@@ -380,6 +393,11 @@ public class Group
     public synchronized Item findItemByClientHandle ( int clientHandle )
     {
         return _itemClientMap.get ( clientHandle );
+    }
+    
+    public int getServerHandle ()
+    {
+        return _serverHandle;
     }
 
 }

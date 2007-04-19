@@ -83,10 +83,11 @@ public class Async20Access extends AccessBase implements IOPCDataCallback
             {
                 _eventHandler.detach ();
             }
-            catch ( Exception e )
+            catch ( Throwable e )
             {
-                _log.debug ( "Failed to detach group", e );
+                _log.warn ( "Failed to detach group", e );
             }
+            
             _eventHandler = null;
         }
         
