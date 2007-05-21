@@ -19,6 +19,7 @@
 
 package org.openscada.opc.lib.test;
 
+import org.jinterop.dcom.common.JIException;
 import org.openscada.opc.lib.da.DataCallback;
 import org.openscada.opc.lib.da.Item;
 import org.openscada.opc.lib.da.ItemState;
@@ -30,6 +31,16 @@ public class DataCallbackDumper implements DataCallback
     {
         System.out.println ( String.format ( "Item: %s, Value: %s, Timestamp: %tc, Quality: %d", item.getId (),
                 itemState.getValue (), itemState.getTimestamp (), itemState.getQuality () ) );
+
+        try
+        {
+            VariantDumper.dumpValue ( "\t", itemState.getValue () );
+        }
+        catch ( JIException e )
+        {
+            e.printStackTrace ();
+        }
+
     }
 
 }

@@ -20,9 +20,13 @@
 package org.openscada.opc.lib.test;
 
 import org.jinterop.dcom.common.JIException;
+import org.jinterop.dcom.core.JIArray;
+import org.jinterop.dcom.core.JIFlags;
+import org.jinterop.dcom.core.JIString;
 import org.openscada.opc.lib.common.ConnectionInformation;
 import org.openscada.opc.lib.da.Group;
 import org.openscada.opc.lib.da.Item;
+import org.openscada.opc.lib.da.ItemState;
 import org.openscada.opc.lib.da.Server;
 
 /**
@@ -65,11 +69,31 @@ public class OPCTest7
             // Items are initially active ... just for demonstration
             item.setActive ( true );
 
+            JIString[] data = new JIString[] {
+                    new JIString ( "ab", JIFlags.FLAG_REPRESENTATION_STRING_BSTR ),
+                    new JIString ( "cd", JIFlags.FLAG_REPRESENTATION_STRING_BSTR )
+                    };
+            Double [] ddata = new Double [] { 1.1, 2.2, 3.3 }; 
+            JIArray array = new JIArray ( ddata, true );
+
+            // POINT: A
+            //VariantDumper.dumpValue ( "", new JIVariant ( array ) );
+            //item.write ( new JIVariant ( array ) );
+            // POINT: A
+            
             // sync-read some values and write them back
-            for ( int i = 0; i < 10; i++ )
+            for ( int i = 0; i < 3; i++ )
             {
                 System.out.println ( String.format ( "Write step #%d", i ) );
-                item.write ( item.read ( false ).getValue () );
+                ItemState itemState = item.read ( false );
+                VariantDumper.dumpValue ( "", itemState.getValue () );
+                
+                // POINT: B(1)
+                item.write ( itemState.getValue () );
+                // POINT: B(2)
+                //item.write ( new JIVariant ( array ) );
+                // POINT: B
+                
                 Thread.sleep ( 1000 );
             }
         }
