@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2007 inavare GmbH (http://inavare.com)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,12 @@ import org.apache.log4j.Logger;
 import org.jinterop.dcom.common.JIException;
 import org.openscada.opc.dcom.common.impl.OPCCommon;
 
+/**
+ * An error message resolver that will lookup the error code using the
+ * server interface and will cache the result locally.
+ * @author Jens Reimann
+ *
+ */
 public class ErrorMessageResolver
 {
     private static Logger _log = Logger.getLogger ( ErrorMessageResolver.class );
