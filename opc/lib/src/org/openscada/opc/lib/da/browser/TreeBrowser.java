@@ -21,6 +21,7 @@ package org.openscada.opc.lib.da.browser;
 
 import java.net.UnknownHostException;
 import java.util.Collection;
+import java.util.LinkedList;
 
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.JIVariant;
@@ -54,11 +55,20 @@ public class TreeBrowser
         _filterCriteria = filterCriteria;
     }
 
+    /**
+     * Move the tree browser to the root folder
+     * @throws JIException
+     */
     protected void moveToRoot () throws JIException
     {
         _browser.changePosition ( null, OPCBROWSEDIRECTION.OPC_BROWSE_TO );
     }
     
+    /**
+     * Move the tree browser to a branch
+     * @param branch The branch to move to
+     * @throws JIException
+     */
     protected void moveToBranch ( Branch branch ) throws JIException
     {
         Collection<String> branchStack = branch.getBranchStack ();
@@ -70,6 +80,13 @@ public class TreeBrowser
         }
     }
     
+    /**
+     * Browse the root branch for its sub-branches.
+     * @return The list of sub branches
+     * @throws JIException
+     * @throws IllegalArgumentException
+     * @throws UnknownHostException
+     */
     public Branch browseBranches () throws JIException, IllegalArgumentException, UnknownHostException
     {
         Branch branch = new Branch ();
@@ -77,6 +94,13 @@ public class TreeBrowser
         return branch;        
     }
     
+    /**
+     * Browse the root branch for this leaves.
+     * @return The list of leaves
+     * @throws IllegalArgumentException
+     * @throws UnknownHostException
+     * @throws JIException
+     */
     public Branch browseLeaves () throws IllegalArgumentException, UnknownHostException, JIException
     {
         Branch branch = new Branch ();
@@ -84,20 +108,39 @@ public class TreeBrowser
         return branch;
     }
     
-    public Branch fillBranches ( Branch branch ) throws JIException, IllegalArgumentException, UnknownHostException
+    /**
+     * Fill the branch list of the provided branch.
+     * @param branch The branch to fill.
+     * @throws JIException
+     * @throws IllegalArgumentException
+     * @throws UnknownHostException
+     */
+    public void fillBranches ( Branch branch ) throws JIException, IllegalArgumentException, UnknownHostException
     {
         moveToBranch ( branch );
         browse ( branch, false, true, false );
-        return branch;
     }
     
-    public Branch fillLeaves ( Branch branch ) throws IllegalArgumentException, UnknownHostException, JIException
+    /**
+     * Fill the leaf list of the provided branch. 
+     * @param branch The branch to fill.
+     * @throws IllegalArgumentException
+     * @throws UnknownHostException
+     * @throws JIException
+     */
+    public void fillLeaves ( Branch branch ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         moveToBranch ( branch );
         browse ( branch, true, false, false );
-        return branch;
     }
     
+    /**
+     * Browse through all levels of the tree browser.
+     * @return The whole expanded server address space
+     * @throws JIException
+     * @throws IllegalArgumentException
+     * @throws UnknownHostException
+     */
     public Branch browse () throws JIException, IllegalArgumentException, UnknownHostException
     {
         Branch branch = new Branch ();
@@ -105,11 +148,18 @@ public class TreeBrowser
         return branch;
     }
     
-    public Branch fill ( Branch branch ) throws IllegalArgumentException, UnknownHostException, JIException
+    /**
+     * Fill the leaves and branches of the branch provided branches including
+     * alls sub-branches. 
+     * @param branch The branch to fill.
+     * @throws IllegalArgumentException
+     * @throws UnknownHostException
+     * @throws JIException
+     */
+    public void fill ( Branch branch ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         moveToBranch ( branch );
         browse ( branch, true, true, true );
-        return branch;
     }
 
     /**
@@ -123,7 +173,8 @@ public class TreeBrowser
      */
     protected void browseLeaves ( Branch branch ) throws IllegalArgumentException, UnknownHostException, JIException
     {
-        branch.getLeaves ().clear ();
+        branch.setLeaves ( new LinkedList<Leaf> () );
+        
         for ( String item : _browser.browse ( OPCBROWSETYPE.OPC_LEAF, _filterCriteria, 0, JIVariant.VT_EMPTY ).asCollection () )
         {
             Leaf leaf = new Leaf ( branch, item, _browser.getItemID ( item ) );
@@ -133,7 +184,7 @@ public class TreeBrowser
     
     protected void browseBranches ( Branch branch, boolean leaves, boolean descend ) throws IllegalArgumentException, UnknownHostException, JIException
     {
-        branch.getBranches ().clear ();
+        branch.setBranches ( new LinkedList<Branch> () );
         
         for ( String item : _browser.browse ( OPCBROWSETYPE.OPC_BRANCH, _filterCriteria, 0, JIVariant.VT_EMPTY ).asCollection () )
         {

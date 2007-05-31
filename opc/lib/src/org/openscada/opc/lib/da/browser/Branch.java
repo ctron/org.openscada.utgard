@@ -42,6 +42,11 @@ public class Branch
         super ();
     }
     
+    /**
+     * Create a branch with a parent branch and a name of this branch.
+     * @param parent The parent of this branch
+     * @param name The name of this branch
+     */
     public Branch ( Branch parent, String name )
     {
         super ();
@@ -49,6 +54,12 @@ public class Branch
         _parent = parent;
     }
 
+    /**
+     * Get all branches.
+     * <br/>
+     * They must be filled first with a fill method from the {@link TreeBrowser} 
+     * @return The list of branches
+     */
     public Collection<Branch> getBranches ()
     {
         return _branches;
@@ -59,6 +70,12 @@ public class Branch
         _branches = branches;
     }
 
+    /**
+     * Get all leaves.
+     * <br/>
+     * They must be filled first with a fill method from the {@link TreeBrowser} 
+     * @return The list of leaves
+     */
     public Collection<Leaf> getLeaves ()
     {
         return _leaves;
@@ -85,8 +102,8 @@ public class Branch
     }
     
     /**
-     * Get a list of 
-     * @return
+     * Get the list of names from the parent up to this branch
+     * @return The stack of branch names from the parent up this one
      */
     public Collection<String> getBranchStack ()
     {
