@@ -24,8 +24,8 @@ import java.net.UnknownHostException;
 import org.jinterop.dcom.common.JIException;
 import org.openscada.opc.lib.common.ConnectionInformation;
 import org.openscada.opc.lib.da.Server;
+import org.openscada.opc.lib.da.browser.BaseBrowser;
 import org.openscada.opc.lib.da.browser.Branch;
-import org.openscada.opc.lib.da.browser.FlatBrowser;
 import org.openscada.opc.lib.da.browser.Leaf;
 import org.openscada.opc.lib.da.browser.TreeBrowser;
 
@@ -85,7 +85,7 @@ public class OPCTest3
             server.connect ();
 
             // browse flat
-            FlatBrowser flatBrowser = server.getFlatBrowser ();
+            BaseBrowser flatBrowser = server.getFlatBrowser ();
             if ( flatBrowser != null )
             {
                 for ( String item : server.getFlatBrowser ().browse ( "" ) )
