@@ -20,7 +20,11 @@
 package org.openscada.opc.lib.da.browser;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Stack;
 
 public class Branch
 {
@@ -32,12 +36,15 @@ public class Branch
 
     private Collection<Leaf> _leaves = new LinkedList<Leaf> ();
 
-    public Branch ( Branch parent )
+    /**
+     * Create a branch to the virtual root folder
+     *
+     */
+    public Branch ()
     {
         super ();
-        _parent = parent;
     }
-
+    
     public Branch ( Branch parent, String name )
     {
         super ();
@@ -78,6 +85,25 @@ public class Branch
     public Branch getParent ()
     {
         return _parent;
+    }
+    
+    /**
+     * Get a list of 
+     * @return
+     */
+    public Collection<String> getBranchStack ()
+    {
+        LinkedList<String> branches = new LinkedList<String> ();
+        
+        Branch currentBranch = this;
+        while ( currentBranch.getParent () != null )
+        {
+            branches.add ( currentBranch.getName () );
+            currentBranch = currentBranch.getParent ();
+        }
+        
+        Collections.reverse ( branches );
+        return branches;
     }
 
 }

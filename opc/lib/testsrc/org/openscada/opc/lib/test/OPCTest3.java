@@ -19,6 +19,8 @@
 
 package org.openscada.opc.lib.test;
 
+import java.net.UnknownHostException;
+
 import org.jinterop.dcom.common.JIException;
 import org.openscada.opc.lib.common.ConnectionInformation;
 import org.openscada.opc.lib.da.Server;
@@ -34,6 +36,17 @@ import org.openscada.opc.lib.da.browser.TreeBrowser;
  */
 public class OPCTest3
 {
+    
+    private static void dumpLeaf ( String prefix, Leaf leaf )
+    {
+        System.out.println ( prefix + "Leaf: " + leaf.getName () + " [" + leaf.getItemId () + "]" );
+    }
+    
+    private static void dumpBranch ( String prefix, Branch branch )
+    {
+        System.out.println ( prefix + "Branch: " + branch.getName () );
+    }
+    
     public static void dumpTree ( Branch branch, int level )
     {
         StringBuilder sb = new StringBuilder ();
@@ -45,11 +58,11 @@ public class OPCTest3
 
         for ( Leaf leaf : branch.getLeaves () )
         {
-            System.out.println ( indent + "Leaf: " + leaf.getName () + " [" + leaf.getItemId () + "]" );
+            dumpLeaf ( indent, leaf );
         }
         for ( Branch subBranch : branch.getBranches () )
         {
-            System.out.println ( indent + "Branch: " + subBranch.getName () );
+            dumpBranch ( indent, subBranch );
             dumpTree ( subBranch, level + 1 );
         }
     }
@@ -85,14 +98,33 @@ public class OPCTest3
             TreeBrowser treeBrowser = server.getTreeBrowser ();
             if ( treeBrowser != null )
             {
-                dumpTree ( server.getTreeBrowser ().browse (), 0 );
+                dumpTree ( treeBrowser.browse (), 0 );
             }
+            
+            // browse tree manually
+            browseTree ( "", treeBrowser, new Branch () );
         }
         catch ( JIException e )
         {
             e.printStackTrace ();
             System.out.println ( String.format ( "%08X: %s", e.getErrorCode (),
                     server.getErrorMessage ( e.getErrorCode () ) ) );
+        }
+    }
+
+    private static void browseTree ( String prefix, TreeBrowser treeBrowser, Branch branch ) throws IllegalArgumentException, UnknownHostException, JIException
+    {
+        treeBrowser.fillLeaves ( branch );
+        treeBrowser.fillBranches ( branch );
+        
+        for ( Leaf leaf : branch.getLeaves () )
+        {
+            dumpLeaf ( "M - " + prefix+" ", leaf );
+        }
+        for ( Branch subBranch : branch.getBranches () )
+        {
+            dumpBranch ( "M - " + prefix+" ", subBranch );
+            browseTree ( prefix+" ", treeBrowser, subBranch );
         }
     }
 }

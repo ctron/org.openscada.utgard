@@ -20,6 +20,7 @@
 package org.openscada.opc.lib.da.browser;
 
 import java.net.UnknownHostException;
+import java.util.Collection;
 
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.JIVariant;
@@ -28,7 +29,11 @@ import org.openscada.opc.dcom.da.OPCBROWSETYPE;
 import org.openscada.opc.dcom.da.impl.OPCBrowseServerAddressSpace;
 
 /**
- * Browse through the hierarchical server namespace
+ * Browse through the hierarchical server namespace.
+ * <br/>
+ * The operations on the address space browser browser are not synchronized
+ * as is the TreeBrowser itself. The user must take care of preventing
+ * simultanious access to this instance and the server address space browser.
  * @author Jens Reimann <jens.reimann@inavare.net>
  *
  */
@@ -49,30 +54,113 @@ public class TreeBrowser
         _filterCriteria = filterCriteria;
     }
 
+    protected void moveToRoot () throws JIException
+    {
+        _browser.changePosition ( null, OPCBROWSEDIRECTION.OPC_BROWSE_TO );
+    }
+    
+    protected void moveToBranch ( Branch branch ) throws JIException
+    {
+        Collection<String> branchStack = branch.getBranchStack ();
+        
+        moveToRoot ();
+        for ( String branchName : branchStack )
+        {
+            _browser.changePosition ( branchName, OPCBROWSEDIRECTION.OPC_BROWSE_DOWN );
+        }
+    }
+    
+    public Branch browseBranches () throws JIException, IllegalArgumentException, UnknownHostException
+    {
+        Branch branch = new Branch ();
+        fillBranches ( branch );
+        return branch;        
+    }
+    
+    public Branch browseLeaves () throws IllegalArgumentException, UnknownHostException, JIException
+    {
+        Branch branch = new Branch ();
+        fillLeaves ( branch );
+        return branch;
+    }
+    
+    public Branch fillBranches ( Branch branch ) throws JIException, IllegalArgumentException, UnknownHostException
+    {
+        moveToBranch ( branch );
+        browse ( branch, false, true, false );
+        return branch;
+    }
+    
+    public Branch fillLeaves ( Branch branch ) throws IllegalArgumentException, UnknownHostException, JIException
+    {
+        moveToBranch ( branch );
+        browse ( branch, true, false, false );
+        return branch;
+    }
+    
     public Branch browse () throws JIException, IllegalArgumentException, UnknownHostException
     {
-        Branch branch = new Branch ( null );
-
-        _browser.changePosition ( null, OPCBROWSEDIRECTION.OPC_BROWSE_TO );
-        browse ( branch );
-
+        Branch branch = new Branch ();
+        fill ( branch );
+        return branch;
+    }
+    
+    public Branch fill ( Branch branch ) throws IllegalArgumentException, UnknownHostException, JIException
+    {
+        moveToBranch ( branch );
+        browse ( branch, true, true, true );
         return branch;
     }
 
-    protected void browse ( Branch branch ) throws IllegalArgumentException, UnknownHostException, JIException
+    /**
+     * Fill the branch object with the leaves of this currently selected branch.
+     * <br/>
+     * The server object is not located to the branch before browsing!
+     * @param branch The branch to fill
+     * @throws IllegalArgumentException
+     * @throws UnknownHostException
+     * @throws JIException
+     */
+    protected void browseLeaves ( Branch branch ) throws IllegalArgumentException, UnknownHostException, JIException
     {
+        branch.getLeaves ().clear ();
         for ( String item : _browser.browse ( OPCBROWSETYPE.OPC_LEAF, _filterCriteria, 0, JIVariant.VT_EMPTY ).asCollection () )
         {
             Leaf leaf = new Leaf ( branch, item, _browser.getItemID ( item ) );
             branch.getLeaves ().add ( leaf );
         }
+    }
+    
+    protected void browseBranches ( Branch branch, boolean leaves, boolean descend ) throws IllegalArgumentException, UnknownHostException, JIException
+    {
+        branch.getBranches ().clear ();
+        
         for ( String item : _browser.browse ( OPCBROWSETYPE.OPC_BRANCH, _filterCriteria, 0, JIVariant.VT_EMPTY ).asCollection () )
         {
             Branch subBranch = new Branch ( branch, item );
-            _browser.changePosition ( item, OPCBROWSEDIRECTION.OPC_BROWSE_DOWN );
-            browse ( subBranch );
-            _browser.changePosition ( null, OPCBROWSEDIRECTION.OPC_BROWSE_UP );
+            // descend only if we should
+            if ( descend )
+            {
+                _browser.changePosition ( item, OPCBROWSEDIRECTION.OPC_BROWSE_DOWN );
+                browse ( subBranch, leaves, true, true );
+                _browser.changePosition ( null, OPCBROWSEDIRECTION.OPC_BROWSE_UP );
+            }
             branch.getBranches ().add ( subBranch );
+        }
+    }
+    
+    protected void browse ( Branch branch, boolean leaves, boolean branches, boolean descend ) throws IllegalArgumentException, UnknownHostException, JIException
+    {
+        // process leaves
+        if ( leaves )
+        {
+            browseLeaves ( branch );
+        }
+        
+        // process branches
+        if ( branches )
+        {
+            browseBranches ( branch, leaves, descend );
         }
     }
 }
