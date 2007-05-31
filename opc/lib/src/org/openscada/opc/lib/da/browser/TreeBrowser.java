@@ -21,6 +21,7 @@ package org.openscada.opc.lib.da.browser;
 
 import java.net.UnknownHostException;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.LinkedList;
 
 import org.jinterop.dcom.common.JIException;
@@ -38,21 +39,41 @@ import org.openscada.opc.dcom.da.impl.OPCBrowseServerAddressSpace;
  * @author Jens Reimann <jens.reimann@inavare.net>
  *
  */
-public class TreeBrowser
-{
-    private OPCBrowseServerAddressSpace _browser = null;
-
+public class TreeBrowser extends BaseBrowser
+{    
+    
     private String _filterCriteria = "";
-
+    private EnumSet<Access> _accessMask = EnumSet.noneOf ( Access.class );
+    private int _variantType = JIVariant.VT_EMPTY;
+    
+    /**
+     * Browse for all items without search parameters.
+     * <br/>
+     * This will actually call:
+     * <br/>
+     * <code>
+     * TreeBrowser ( browser, "", EnumSet.noneOf ( Access.class ), JIVariant.VT_EMPTY );
+     * </code>
+     * @param browser The browser to use for browsing
+     */
     public TreeBrowser ( OPCBrowseServerAddressSpace browser )
     {
-        _browser = browser;
+        super ( browser );
     }
 
-    public TreeBrowser ( OPCBrowseServerAddressSpace browser, String filterCriteria )
+    /**
+     * Browse for items with search parameters.
+     * @param browser The browser to use
+     * @param filterCriteria The filter criteria. It is specific to the server you use.
+     * @param accessMask The access mask (use <code>EnumSet.noneOf ( Access.class )</code> for all)
+     * @param variantType The variant type (use <code>JIVariant.VT_EMPTY</code> for all)
+     */
+    public TreeBrowser ( OPCBrowseServerAddressSpace browser, String filterCriteria, EnumSet<Access> accessMask, int variantType )
     {
-        _browser = browser;
+        super ( browser );
         _filterCriteria = filterCriteria;
+        _accessMask = accessMask;
+        _variantType = variantType;
     }
 
     /**
@@ -175,7 +196,7 @@ public class TreeBrowser
     {
         branch.setLeaves ( new LinkedList<Leaf> () );
         
-        for ( String item : _browser.browse ( OPCBROWSETYPE.OPC_LEAF, _filterCriteria, 0, JIVariant.VT_EMPTY ).asCollection () )
+        for ( String item : browse ( OPCBROWSETYPE.OPC_LEAF, _filterCriteria, _accessMask, _variantType ) )
         {
             Leaf leaf = new Leaf ( branch, item, _browser.getItemID ( item ) );
             branch.getLeaves ().add ( leaf );
@@ -186,7 +207,7 @@ public class TreeBrowser
     {
         branch.setBranches ( new LinkedList<Branch> () );
         
-        for ( String item : _browser.browse ( OPCBROWSETYPE.OPC_BRANCH, _filterCriteria, 0, JIVariant.VT_EMPTY ).asCollection () )
+        for ( String item : browse ( OPCBROWSETYPE.OPC_BRANCH, _filterCriteria, _accessMask, _variantType ) )
         {
             Branch subBranch = new Branch ( branch, item );
             // descend only if we should

@@ -26,7 +26,6 @@ import java.util.EnumSet;
 import org.apache.log4j.Logger;
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.JIVariant;
-import org.openscada.opc.dcom.common.impl.EnumString;
 import org.openscada.opc.dcom.da.OPCBROWSETYPE;
 import org.openscada.opc.dcom.da.impl.OPCBrowseServerAddressSpace;
 
@@ -35,53 +34,46 @@ import org.openscada.opc.dcom.da.impl.OPCBrowseServerAddressSpace;
  * @author Jens Reimann <jens.reimann@inavare.net>
  *
  */
-public class FlatBrowser
+public class FlatBrowser extends BaseBrowser
 {
-    private static Logger _log = Logger.getLogger ( FlatBrowser.class );
-
-    private OPCBrowseServerAddressSpace _browser = null;
-
-    private int _batchSize = EnumString.DEFAULT_BATCH_SIZE;
-
     public FlatBrowser ( OPCBrowseServerAddressSpace browser )
     {
-        _browser = browser;
+        super ( browser );
     }
 
     public FlatBrowser ( OPCBrowseServerAddressSpace browser, int batchSize )
     {
-        _browser = browser;
-        _batchSize = batchSize;
+        super ( browser, batchSize );
     }
 
-    public Collection<String> browse ( String filterCriteria, EnumSet<Access> accessMask ) throws IllegalArgumentException, UnknownHostException, JIException
+    /**
+     * Perform a flat browse operation
+     * @param filterCriteria The filter criteria. Use an empty string if you don't need one.
+     * @param accessMask The access mask. An empty set will search for all.
+     * @param variantType The variant type. Must be one of the <code>VT_</code> constants of {@link JIVariant}. Use {@link JIVariant#VT_EMPTY} if you want to browse for all.
+     * @return The list of entries
+     * @throws IllegalArgumentException
+     * @throws UnknownHostException
+     * @throws JIException
+     */
+    public Collection<String> browse ( String filterCriteria, EnumSet<Access> accessMask, int variantType ) throws IllegalArgumentException, UnknownHostException, JIException
     {
-        int accessMaskValue = 0;
-
-        if ( accessMask.contains ( Access.READ ) )
-            accessMaskValue |= Access.READ.getCode ();
-        if ( accessMask.contains ( Access.WRITE ) )
-            accessMaskValue |= Access.WRITE.getCode ();
-
-        _log.debug ( "Browsing with a batch size of " + _batchSize );
-
-        return _browser.browse ( OPCBROWSETYPE.OPC_FLAT, filterCriteria, accessMaskValue, JIVariant.VT_EMPTY ).asCollection (
-                _batchSize );
+        return browse ( OPCBROWSETYPE.OPC_FLAT, filterCriteria, accessMask, variantType );
     }
 
     public Collection<String> browse ( String filterCriteria ) throws IllegalArgumentException, UnknownHostException, JIException
     {
-        return browse ( filterCriteria, EnumSet.noneOf ( Access.class ) );
+        return browse ( filterCriteria, EnumSet.noneOf ( Access.class ), JIVariant.VT_EMPTY );
     }
 
     public Collection<String> browse () throws IllegalArgumentException, UnknownHostException, JIException
     {
-        return browse ( "", EnumSet.noneOf ( Access.class ) );
+        return browse ( "", EnumSet.noneOf ( Access.class ), JIVariant.VT_EMPTY );
     }
 
     public Collection<String> browse ( EnumSet<Access> accessMask ) throws IllegalArgumentException, UnknownHostException, JIException
     {
-        return browse ( "", accessMask );
+        return browse ( "", accessMask, JIVariant.VT_EMPTY );
     }
 
 }
