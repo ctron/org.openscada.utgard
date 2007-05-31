@@ -23,7 +23,6 @@ import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.EnumSet;
 
-import org.apache.log4j.Logger;
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.JIVariant;
 import org.openscada.opc.dcom.da.OPCBROWSETYPE;
