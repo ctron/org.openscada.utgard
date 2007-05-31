@@ -102,5 +102,18 @@ public class BaseBrowser
 
         return _browser.browse ( type, filterCriteria, accessMaskValue, variantType ).asCollection ( _batchSize );
     }
+    
+    /**
+     * Browse the access paths for one item.
+     * @param itemId The item ID to look up the access paths
+     * @return The collection of the access paths
+     * @throws JIException 
+     * @throws UnknownHostException 
+     * @throws IllegalArgumentException 
+     */
+    public Collection<String> getAccessPaths ( String itemId ) throws IllegalArgumentException, UnknownHostException, JIException
+    {
+        return _browser.browseAccessPaths ( itemId ).asCollection ( _batchSize );
+    }
 
 }
