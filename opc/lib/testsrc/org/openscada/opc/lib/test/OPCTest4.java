@@ -19,6 +19,9 @@
 
 package org.openscada.opc.lib.test;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.log4j.Logger;
 import org.jinterop.dcom.common.JIException;
 import org.openscada.opc.lib.common.ConnectionInformation;
@@ -45,9 +48,15 @@ public class OPCTest4
         ci.setPassword ( args[3] );
         ci.setClsid ( args[4] );
 
-        String itemId = "Saw-toothed Waves.Int2";
-        if ( args.length >= 6 )
-            itemId = args[5];
+        Set<String> items = new HashSet<String> ();
+        for ( int i = 5; i < args.length; i++ )
+        {
+            items.add ( args[i] );
+        }
+        if ( items.isEmpty () )
+        {
+            items.add ( "Saw-toothed Waves.Int2" );
+        }
 
         // create a new server
         Server server = new Server ( ci );
@@ -57,8 +66,11 @@ public class OPCTest4
             server.connect ();
 
             // add sync access
-            AccessBase access = new Async20Access ( server, 100, true );
-            access.addItem ( itemId, new DataCallbackDumper () );
+            AccessBase access = new Async20Access ( server, 100, false );
+            for ( String itemId : items )
+            {
+                access.addItem ( itemId, new DataCallbackDumper () );
+            }
 
             // start reading
             access.bind ();
