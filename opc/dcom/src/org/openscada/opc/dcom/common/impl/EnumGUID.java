@@ -30,21 +30,20 @@ import org.jinterop.dcom.core.JIArray;
 import org.jinterop.dcom.core.JICallObject;
 import org.jinterop.dcom.core.JIFlags;
 import org.jinterop.dcom.core.JIInterfacePointer;
-import org.jinterop.dcom.core.JIPointer;
-import org.jinterop.dcom.core.JIString;
 import org.jinterop.dcom.win32.ComFactory;
 
-public class EnumString extends BaseCOMObject
+import rpc.core.UUID;
+
+public class EnumGUID extends BaseCOMObject
 {
     public static final int DEFAULT_BATCH_SIZE = Integer.getInteger ( "openscada.dcom.enum-batch-size", 10 );
 
-    public EnumString ( IJIComObject enumStringObject ) throws IllegalArgumentException, UnknownHostException, JIException
+    public EnumGUID ( IJIComObject enumStringObject ) throws IllegalArgumentException, UnknownHostException, JIException
     {
-        super (
-                (IJIComObject)enumStringObject.queryInterface ( org.openscada.opc.dcom.common.Constants.IEnumString_IID ) );
+        super ( (IJIComObject)enumStringObject.queryInterface ( org.openscada.opc.dcom.common.Constants.IEnumGUID_IID ) );
     }
 
-    public int next ( List<String> list, int num ) throws JIException
+    public int next ( List<UUID> list, int num ) throws JIException
     {
         if ( num <= 0 )
         {
@@ -56,25 +55,25 @@ public class EnumString extends BaseCOMObject
 
         callObject.addInParamAsInt ( num, JIFlags.FLAG_NULL );
         callObject.addInParamAsInt ( num, JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIArray ( new JIPointer ( new JIString (
-                JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ), null, 1, true, true ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIArray (  ( UUID.class ), null, 1, true, true ),
+                JIFlags.FLAG_NULL );
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
 
         Object[] result = Helper.callRespectSFALSE ( getCOMObject (), callObject );
 
-        JIPointer[] resultData = (JIPointer[]) ( (JIArray) ( result[0] ) ).getArrayInstance ();
+        UUID[] resultData = (UUID[]) ( (JIArray) ( result[0] ) ).getArrayInstance ();
         Integer cnt = (Integer)result[1];
 
         for ( int i = 0; i < cnt; i++ )
         {
-            list.add ( ( (JIString)resultData[i].getReferent () ).getString () );
+            list.add ( resultData[i] );
         }
         return cnt;
     }
 
-    public Collection<String> next ( int num ) throws JIException
+    public Collection<UUID> next ( int num ) throws JIException
     {
-        List<String> list = new ArrayList<String> ( num );
+        List<UUID> list = new ArrayList<UUID> ( num );
         next ( list, num );
         return list;
     }
@@ -102,7 +101,7 @@ public class EnumString extends BaseCOMObject
         getCOMObject ().call ( callObject );
     }
 
-    public EnumString cloneObject () throws JIException, IllegalArgumentException, UnknownHostException
+    public EnumGUID cloneObject () throws JIException, IllegalArgumentException, UnknownHostException
     {
         JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
         callObject.setOpnum ( 3 );
@@ -113,14 +112,14 @@ public class EnumString extends BaseCOMObject
 
         IJIComObject object = ComFactory.createCOMInstance ( getCOMObject (), (JIInterfacePointer)result[0] );
 
-        return new EnumString ( object );
+        return new EnumGUID ( object );
     }
 
-    public Collection<String> asCollection ( int batchSize ) throws JIException
+    public Collection<UUID> asCollection ( int batchSize ) throws JIException
     {
         reset ();
 
-        List<String> data = new ArrayList<String> ();
+        List<UUID> data = new ArrayList<UUID> ();
         int i = 0;
         do
         {
@@ -130,7 +129,7 @@ public class EnumString extends BaseCOMObject
         return data;
     }
 
-    public Collection<String> asCollection () throws JIException
+    public Collection<UUID> asCollection () throws JIException
     {
         return asCollection ( DEFAULT_BATCH_SIZE );
     }

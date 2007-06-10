@@ -62,7 +62,7 @@ public class OPCTest7
         {
             // connect to server
             server.connect ();
-
+            
             // Add a new group
             Group group = server.addGroup ( "test" );
 
