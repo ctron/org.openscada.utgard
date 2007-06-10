@@ -82,7 +82,9 @@ public class EnumString extends BaseCOMObject
     public void skip ( int num ) throws JIException
     {
         if ( num <= 0 )
+        {
             return;
+        }
 
         JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
         callObject.setOpnum ( 1 );
