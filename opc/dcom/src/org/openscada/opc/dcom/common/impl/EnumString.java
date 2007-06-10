@@ -47,7 +47,9 @@ public class EnumString extends BaseCOMObject
     public int next ( List<String> list, int num ) throws JIException
     {
         if ( num <= 0 )
+        {
             return 0;
+        }
 
         JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
         callObject.setOpnum ( 0 );
