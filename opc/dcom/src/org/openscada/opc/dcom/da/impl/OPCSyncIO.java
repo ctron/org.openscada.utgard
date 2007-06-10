@@ -78,7 +78,7 @@ public class OPCSyncIO extends BaseCOMObject
 
         return results;
     }
-
+    
     public ResultSet<WriteRequest> write ( WriteRequest... requests ) throws JIException
     {
         if ( requests.length == 0 )
@@ -91,7 +91,7 @@ public class OPCSyncIO extends BaseCOMObject
         for ( int i = 0; i < requests.length; i++ )
         {
             items[i] = requests[i].getServerHandle ();
-            values[i] = requests[i].getValue ();
+            values[i] = Helper.fixVariant ( requests[i].getValue () );
         }
 
         JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );

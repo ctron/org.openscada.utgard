@@ -22,6 +22,8 @@ package org.openscada.opc.dcom.common.impl;
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.IJIComObject;
 import org.jinterop.dcom.core.JICallObject;
+import org.jinterop.dcom.core.JIFlags;
+import org.jinterop.dcom.core.JIVariant;
 import org.openscada.opc.dcom.da.Constants;
 
 public class Helper
@@ -45,5 +47,24 @@ public class Helper
                 throw e;
             return callObject.getResultsInCaseOfException ();
         }
+    }
+    
+    /**
+     * Perform some fixes on the variant when writing it to OPC items. This method
+     * only changes control information on the variant and not the value itself!
+     * @param value the value to fix
+     * @return the fixed value
+     * @throws JIException In case something goes wrong
+     */
+    public static JIVariant fixVariant ( JIVariant value ) throws JIException
+    {
+        if ( value.isArray () )
+        {
+            if ( value.getObjectAsArray ().getArrayInstance () instanceof Boolean[] )
+            {
+                value.setFlag ( JIFlags.FLAG_REPRESENTATION_VARIANT_BOOL );
+            }
+        }
+        return value;
     }
 }

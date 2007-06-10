@@ -19,10 +19,15 @@
 
 package org.openscada.opc.lib.test;
 
+import java.util.logging.Level;
+
 import org.jinterop.dcom.common.JIException;
+import org.jinterop.dcom.common.JISystem;
 import org.jinterop.dcom.core.JIArray;
 import org.jinterop.dcom.core.JIFlags;
 import org.jinterop.dcom.core.JIString;
+import org.jinterop.dcom.core.JIUnsignedShort;
+import org.jinterop.dcom.core.JIVariant;
 import org.openscada.opc.lib.common.ConnectionInformation;
 import org.openscada.opc.lib.da.Group;
 import org.openscada.opc.lib.da.Item;
@@ -40,6 +45,8 @@ public class OPCTest7
     @SuppressWarnings ( "unused" )
     public static void main ( String[] args ) throws Throwable
     {
+        JISystem.setLogLevel ( Level.ALL );
+
         // create connection information
         ConnectionInformation ci = new ConnectionInformation ();
         ci.setHost ( args[0] );
@@ -57,45 +64,49 @@ public class OPCTest7
             // connect to server
             server.connect ();
 
-            // add sync reader
-
             // Add a new group
             Group group = server.addGroup ( "test" );
-            // group is initially active ... just for demonstration
-            group.setActive ( true );
 
             // Add a new item to the group
             Item item = group.addItem ( itemName );
-            // Items are initially active ... just for demonstration
-            item.setActive ( true );
 
-            JIString[] data = new JIString[] {
-                    new JIString ( "ab", JIFlags.FLAG_REPRESENTATION_STRING_BSTR ),
-                    new JIString ( "cd", JIFlags.FLAG_REPRESENTATION_STRING_BSTR )
-                    };
-            Double [] ddata = new Double [] { 1.1, 2.2, 3.3 }; 
+            JIString[] sdata = new JIString[] { new JIString ( "ab", JIFlags.FLAG_REPRESENTATION_STRING_BSTR ),
+                    new JIString ( "cd", JIFlags.FLAG_REPRESENTATION_STRING_BSTR ),
+                    new JIString ( "ef", JIFlags.FLAG_REPRESENTATION_STRING_BSTR ) };
+            Double[] ddata = new Double[] { 1.1, 2.2, 3.3 };
+            Boolean[] bdata = new Boolean[] { true, false, true, false };
+            Integer[] idata = new Integer[] { 1202, 1203, 1204 };
+            Long[] ldata = new Long[] { 12020001L, 12030001L, 12040001L };
+            Float[] fdata = new Float[] { 1.1f, 1.2f, 1.3f };
+            Byte[] bydata = new Byte[] { 1, 2, 3 };
+            Character[] cdata = new Character[] { 'A', 'B', 'C' };
+
             JIArray array = new JIArray ( ddata, true );
+            JIVariant value = new JIVariant ( array );
 
-            // POINT: A
-            //VariantDumper.dumpValue ( "", new JIVariant ( array ) );
-            //item.write ( new JIVariant ( array ) );
-            // POINT: A
-            
-            // sync-read some values and write them back
-            for ( int i = 0; i < 3; i++ )
-            {
-                System.out.println ( String.format ( "Write step #%d", i ) );
-                ItemState itemState = item.read ( false );
-                VariantDumper.dumpValue ( "", itemState.getValue () );
-                
-                // POINT: B(1)
-                item.write ( itemState.getValue () );
-                // POINT: B(2)
-                //item.write ( new JIVariant ( array ) );
-                // POINT: B
-                
-                Thread.sleep ( 1000 );
-            }
+            System.out.println ( "============= PHASE 1 ============= " );
+
+            // dump the value
+            VariantDumper.dumpValue ( value );
+
+            System.out.println ( "============= PHASE 2 ============= " );
+
+            // now write it to the item
+            item.write ( value );
+            Thread.sleep ( 2500 );
+
+            System.out.println ( "============= PHASE 3 ============= " );
+
+            // now read the value back and dump it
+            ItemState itemState = item.read ( true );
+            VariantDumper.dumpValue ( itemState.getValue () );
+
+            System.out.println ( "============= PHASE 4 ============= " );
+
+            // and write the value just read in
+            item.write ( itemState.getValue () );
+
+            System.out.println ( "============= COMPLETE ============= " );
         }
         catch ( JIException e )
         {

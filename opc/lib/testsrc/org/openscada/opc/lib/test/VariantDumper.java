@@ -28,7 +28,7 @@ import org.jinterop.dcom.core.JIVariant;
 public class VariantDumper
 {
 
-    static public void dumpArray ( String prefix, JIArray array ) throws JIException
+    static protected void dumpArray ( String prefix, JIArray array ) throws JIException
     {
         System.out.println ( prefix
                 + String.format ( "IsConformant: %s, IsVarying: %s", array.isConformant () ? "yes" : "no",
@@ -51,46 +51,85 @@ public class VariantDumper
         }
     }
 
-    static void dumpValue ( String prefix, Object value ) throws JIException
+    static public void dumpValue ( Object value ) throws JIException
+    {
+        dumpValue ( "", value );
+    }
+    
+    static protected void dumpValue ( String prefix, Object value ) throws JIException
     {
         if ( value instanceof JIVariant )
         {
+            System.out.println ( prefix + "JIVariant" );
             JIVariant variant = (JIVariant)value;
-            System.out.println ( prefix + String.format ( "IsArray: %s, IsByRef: %s, IsNull: %s",
-                    variant.isArray () ? "yes" : "no", variant.isByRefFlagSet () ? "yes" : "no",
-                    variant.isNull () ? "yes" : "no" ) );
+            System.out.println ( prefix
+                    + String.format ( "IsArray: %s, IsByRef: %s, IsNull: %s", variant.isArray () ? "yes" : "no",
+                            variant.isByRefFlagSet () ? "yes" : "no", variant.isNull () ? "yes" : "no" ) );
+            
             if ( variant.isArray () )
             {
                 dumpArray ( prefix, variant.getObjectAsArray () );
+            }
+            else
+            {
+                dumpValue ( prefix + "\t", variant.getObject () );
             }
         }
         else if ( value instanceof JIString )
         {
             JIString string = (JIString)value;
-            System.out.println ( prefix + String.format ( "JIString: %s", string.getString () ) );
+
+            String strType;
             switch ( string.getType () )
             {
             case JIFlags.FLAG_REPRESENTATION_STRING_BSTR:
-                System.out.println ( prefix + "String Type: BSTR" );
+                strType = "BSTR";
                 break;
             case JIFlags.FLAG_REPRESENTATION_STRING_LPCTSTR:
-                System.out.println ( prefix + "String Type: LPCTSTR" );
+                strType = "LPCSTR";
                 break;
             case JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR:
-                System.out.println ( prefix + "String Type: LPWSTR" );
+                strType = "LPWSTR";
                 break;
-            default: 
-                System.out.println ( prefix + String.format ( "Unknown string type: %d", string.getType () ) );
+            default:
+                strType = "unknown";
                 break;
             }
+            System.out.println ( prefix + String.format ( "JIString: '%s' (%s)", string.getString (), strType ) );
         }
         else if ( value instanceof Double )
         {
             System.out.println ( prefix + "Double: " + value );
         }
+        else if ( value instanceof Float )
+        {
+            System.out.println ( prefix + "Float: " + value );
+        }
+        else if ( value instanceof Byte )
+        {
+            System.out.println ( prefix + "Byte: " + value );
+        }
+        else if ( value instanceof Character )
+        {
+            System.out.println ( prefix + "Character: " + value );
+        }
+        else if ( value instanceof Integer )
+        {
+            System.out.println ( prefix + "Integer: " + value );
+        }
+        else if ( value instanceof Long )
+        {
+            System.out.println ( prefix + "Long: " + value );
+        }
+        else if ( value instanceof Boolean )
+        {
+            System.out.println ( prefix + "Boolean: " + value );
+        }
+        
         else
         {
-            System.out.println ( prefix + String.format ( "Unknown value type (%s): %s", value.getClass (), value.toString () ) );
+            System.out.println ( prefix
+                    + String.format ( "Unknown value type (%s): %s", value.getClass (), value.toString () ) );
         }
     }
 
