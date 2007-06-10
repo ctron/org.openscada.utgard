@@ -26,7 +26,6 @@ import org.jinterop.dcom.common.JISystem;
 import org.jinterop.dcom.core.JIArray;
 import org.jinterop.dcom.core.JIFlags;
 import org.jinterop.dcom.core.JIString;
-import org.jinterop.dcom.core.JIUnsignedShort;
 import org.jinterop.dcom.core.JIVariant;
 import org.openscada.opc.lib.common.ConnectionInformation;
 import org.openscada.opc.lib.da.Group;
