@@ -30,8 +30,7 @@ import org.openscada.opc.lib.list.Category;
 import org.openscada.opc.lib.list.ServerList;
 
 /**
- * A sample that reads an item and writes back the result. You will need a
- * read/write item for this to work.
+ * A sample that queries the server browser interface
  * @author Jens Reimann &lt;jens.reimann@inavare.net&gt;
  *
  */
@@ -40,7 +39,14 @@ public class OPCTest8
     protected static void showDetails ( ServerList serverList, String clsid ) throws JIException
     {
         ClassDetails cd = serverList.getDetails ( clsid );
-        System.out.println ( cd.getProgId () + " = " + cd.getDescription () );
+        if ( cd != null )
+        {
+            System.out.println ( cd.getProgId () + " = " + cd.getDescription () );
+        }
+        else
+        {
+            System.out.println ( "unknown" );
+        }
     }
 
     @SuppressWarnings ( "unused" )

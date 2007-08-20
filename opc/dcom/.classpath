@@ -3,7 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="testsrc"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry exported="true" kind="lib" path="lib/j-interop.jar" sourcepath="/j-interop/src"/>
+	<classpathentry exported="true" kind="lib" path="lib/j-interop-openscada.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jarapac.jar"/>
 	<classpathentry kind="lib" path="lib/jcifs-1.2.9.jar"/>
 	<classpathentry kind="lib" path="lib/iwombat.jar"/>

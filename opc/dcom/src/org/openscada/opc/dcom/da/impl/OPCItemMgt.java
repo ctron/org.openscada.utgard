@@ -103,10 +103,18 @@ public class OPCItemMgt extends BaseCOMObject
 
         callObject.addInParamAsInt ( items.length, JIFlags.FLAG_NULL );
         callObject.addInParamAsArray ( itemArray, JIFlags.FLAG_NULL );
+        
+        /*
         callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( OPCITEMRESULT.getStruct (), null, 1, true ) ),
                 JIFlags.FLAG_NULL );
         callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ),
                 JIFlags.FLAG_NULL );
+                */
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( OPCITEMRESULT.getStruct (), null, 1, true ) ),
+                JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ),
+                JIFlags.FLAG_NULL );
+
 
         Object result[] = Helper.callRespectSFALSE ( getCOMObject (), callObject );
 
@@ -126,26 +134,26 @@ public class OPCItemMgt extends BaseCOMObject
         return resultList;
     }
 
-    public ResultSet<Integer> remove ( Integer... items ) throws JIException
+    public ResultSet<Integer> remove ( Integer... serverHandles ) throws JIException
     {
-        if ( items.length == 0 )
+        if ( serverHandles.length == 0 )
             return new ResultSet<Integer> ();
 
         JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
         callObject.setOpnum ( 2 );
 
-        callObject.addInParamAsInt ( items.length, JIFlags.FLAG_NULL );
-        callObject.addInParamAsArray ( new JIArray ( items, true ), JIFlags.FLAG_NULL );
+        callObject.addInParamAsInt ( serverHandles.length, JIFlags.FLAG_NULL );
+        callObject.addInParamAsArray ( new JIArray ( serverHandles, true ), JIFlags.FLAG_NULL );
         callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ),
                 JIFlags.FLAG_NULL );
 
         Object result[] = Helper.callRespectSFALSE ( getCOMObject (), callObject );
 
         Integer[] errorCodes = (Integer[]) ( (JIArray) ( (JIPointer)result[0] ).getReferent () ).getArrayInstance ();
-        ResultSet<Integer> results = new ResultSet<Integer> ( items.length );
-        for ( int i = 0; i < items.length; i++ )
+        ResultSet<Integer> results = new ResultSet<Integer> ( serverHandles.length );
+        for ( int i = 0; i < serverHandles.length; i++ )
         {
-            results.add ( new Result<Integer> ( items[i], errorCodes[i] ) );
+            results.add ( new Result<Integer> ( serverHandles[i], errorCodes[i] ) );
         }
         return results;
     }

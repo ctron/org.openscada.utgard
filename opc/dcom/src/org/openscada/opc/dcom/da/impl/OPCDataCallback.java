@@ -52,10 +52,13 @@ public class OPCDataCallback extends EventHandlerImpl
         super ();
     }
 
-    public synchronized Object[] OnDataChange ( int transactionId, int serverGroupHandle, int masterQuality, int masterErrorCode, int count, JIArray clientHandles, JIArray values, JIArray qualities, JIArray timestamps, JIArray errors )
+    public Object[] OnDataChange ( int transactionId, int serverGroupHandle, int masterQuality, int masterErrorCode, int count, JIArray clientHandles, JIArray values, JIArray qualities, JIArray timestamps, JIArray errors )
     {
-        if ( _callback == null )
-            return new Object[0];
+        IOPCDataCallback callback = _callback;
+        if ( callback == null )
+        {
+            return new Object[] { Constants.S_OK };
+        }
 
         // get arrays for more readable code later ;-)
         Integer[] errorCodes = (Integer[])errors.getArrayInstance ();
@@ -78,7 +81,7 @@ public class OPCDataCallback extends EventHandlerImpl
         // fire event
         try
         {
-            _callback.dataChange ( transactionId, serverGroupHandle, masterQuality, masterErrorCode, result );
+            callback.dataChange ( transactionId, serverGroupHandle, masterQuality, masterErrorCode, result );
         }
         catch ( Throwable e )
         {
@@ -92,7 +95,7 @@ public class OPCDataCallback extends EventHandlerImpl
     public synchronized Object[] OnReadComplete ( int transactionId, int serverGroupHandle, int masterQuality, int masterErrorCode, int count, JIArray clientHandles, JIArray values, JIArray qualities, JIArray timestamps, JIArray errors )
     {
         if ( _callback == null )
-            return new Object[0];
+            return new Object[] { Constants.S_OK };
 
         // get arrays for more readable code later ;-)
         Integer[] errorCodes = (Integer[])errors.getArrayInstance ();
@@ -129,7 +132,7 @@ public class OPCDataCallback extends EventHandlerImpl
     public synchronized Object[] OnWriteComplete ( int transactionId, int serverGroupHandle, int masterErrorCode, int count, JIArray clientHandles, JIArray errors )
     {
         if ( _callback == null )
-            return new Object[0];
+            return new Object[] { Constants.S_OK };
 
         // get arrays for more readable code later ;-)
         Integer[] errorCodes = (Integer[])errors.getArrayInstance ();
@@ -159,7 +162,7 @@ public class OPCDataCallback extends EventHandlerImpl
     public synchronized Object[] OnCancelComplete ( int transactionId, int serverGroupHandle )
     {
         if ( _callback == null )
-            return new Object[0];
+            return new Object[] { Constants.S_OK };
 
         _callback.cancelComplete ( transactionId, serverGroupHandle );
 
@@ -234,7 +237,7 @@ public class OPCDataCallback extends EventHandlerImpl
         return _coClass;
     }
 
-    public synchronized void setCallback ( IOPCDataCallback callback )
+    public void setCallback ( IOPCDataCallback callback )
     {
         _callback = callback;
     }

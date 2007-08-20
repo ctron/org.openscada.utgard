@@ -81,6 +81,12 @@ public class Server
         _scheduler = new Scheduler ( true );
     }
 
+    /**
+     * Gets the scheduler for the server. Note that this scheduler might get blocked for
+     * a short time if the connection breaks. It should not be used for time criticial
+     * operations.
+     * @return the scheduler for the server
+     */
     public Scheduler getScheduler ()
     {
         return _scheduler;
@@ -138,14 +144,20 @@ public class Server
         notifyConnectionStateChange ( true );
     }
     
+    /**
+     * cleanup after the connection is closed
+     */
     protected void cleanup ()
     {
         try
         {
+            _log.info ( "Destroying DCOM session..." );
             JISession.destroySession ( _session );
+            _log.info ( "Destroying DCOM session... complete" );
         }
         catch ( Throwable e )
         {
+            _log.warn ( "Failed to destroy DCOM session" );
         }
         
         _errorMessageResolver = null;
@@ -156,6 +168,9 @@ public class Server
         _groups.clear ();
     }
 
+    /**
+     * Disconnect the connection if it is connected
+     */
     public synchronized void disconnect ()
     {
         if ( !isConnected () )
@@ -172,6 +187,14 @@ public class Server
         }
 
         cleanup ();
+    }
+    
+    /**
+     * Dispose the connection in the case of an error
+     */
+    protected void dispose ()
+    {
+        disconnect ();
     }
 
     protected synchronized Group getGroup ( OPCGroupStateMgt groupMgt ) throws JIException, IllegalArgumentException, UnknownHostException
@@ -330,7 +353,9 @@ public class Server
     {
         OPCBrowseServerAddressSpace browser = _server.getBrowser ();
         if ( browser == null )
+        {
             return null;
+        }
 
         return new FlatBrowser ( browser );
     }
@@ -388,16 +413,21 @@ public class Server
         }
     }
 
+    public OPCSERVERSTATUS getServerState ( int timeout ) throws Throwable
+    {
+        return new ServerStateOperation ( _server ).getServerState ( timeout );
+    }
+    
     public OPCSERVERSTATUS getServerState ()
     {
         try
         {
-            return _server.getStatus ();
+            return getServerState ( 2500 );
         }
         catch ( Throwable e )
         {
             _log.info ( "Server connection failed", e );
-            disconnect ();
+            dispose ();
             return null;
         }
     }

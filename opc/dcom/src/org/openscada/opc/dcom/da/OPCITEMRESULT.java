@@ -20,6 +20,7 @@
 package org.openscada.opc.dcom.da;
 
 import org.jinterop.dcom.common.JIException;
+import org.jinterop.dcom.core.JIArray;
 import org.jinterop.dcom.core.JIPointer;
 import org.jinterop.dcom.core.JIStruct;
 import org.jinterop.dcom.core.JIVariant;
@@ -78,12 +79,13 @@ public class OPCITEMRESULT
     {
         JIStruct struct = new JIStruct ();
 
-        struct.addMember ( Integer.class );
-        struct.addMember ( Short.class );
-        struct.addMember ( Short.class );
-        struct.addMember ( Integer.class );
-        struct.addMember ( Integer.class );
-        struct.addMember ( new JIPointer ( null ) );
+        struct.addMember ( Integer.class ); // Server handle
+        struct.addMember ( Short.class );   // data type
+        struct.addMember ( Short.class );   // reserved
+        struct.addMember ( Integer.class ); // access rights
+        struct.addMember ( Integer.class ); // blob size
+        // grab the normally unused byte array
+        struct.addMember ( new JIPointer ( new JIArray ( Byte.class, null, 1, true, false ) ) );
 
         return struct;
     }

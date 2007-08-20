@@ -221,7 +221,14 @@ public abstract class AccessBase implements ServerConnectionStateListener
         _items.remove ( item );
         _itemCache.remove ( item );
 
-        // FIXME: remove from group
+        try
+        {
+        _group.removeItem ( itemId );
+        }
+        catch ( Throwable e )
+        {
+            _log.error ( String.format ( "Failed to unrealize item '%s'", itemId ) , e );
+        }
     }
 
     /*

@@ -81,6 +81,11 @@ public class OPCServerList extends BaseCOMObject
      */
     public ClassDetails getClassDetails ( JIClsid clsId ) throws JIException
     {
+        if ( clsId == null )
+        {
+            return null;
+        }
+        
         JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
         callObject.setOpnum ( 1 );
 

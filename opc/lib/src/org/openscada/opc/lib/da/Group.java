@@ -239,6 +239,8 @@ public class Group
 
     private synchronized void addItem ( Item item )
     {
+        _log.debug ( String.format ( "Adding item: '%s', %d", item.getId (), item.getServerHandle () ) );
+        
         _itemHandleMap.put ( item.getId (), item.getServerHandle () );
         _itemMap.put ( item.getServerHandle (), item );
         _itemClientMap.put ( item.getClientHandle (), item );
@@ -249,6 +251,18 @@ public class Group
         _itemHandleMap.remove ( item.getId () );
         _itemMap.remove ( item.getServerHandle () );
         _itemClientMap.remove ( item.getClientHandle () );
+    }
+    
+    protected Item getItemByOPCItemId ( String opcItemId )
+    {
+        Integer serverHandle = _itemHandleMap.get ( opcItemId );
+        if ( serverHandle == null )
+        {
+            _log.debug ( String.format ( "Failed to locate item with id '%s'", opcItemId ) );
+            return null;
+        }
+        _log.debug ( String.format ( "Item '%s' has server id '%d'", opcItemId, serverHandle ) );
+        return _itemMap.get ( serverHandle );
     }
 
     private synchronized Map<String, Integer> findItems ( String[] items )
@@ -374,6 +388,7 @@ public class Group
         }
         finally
         {
+            // in any case clear our maps
             _itemHandleMap.clear ();
             _itemMap.clear ();
             _itemClientMap.clear ();
@@ -390,7 +405,7 @@ public class Group
         return _group.attach ( dataCallback );
     }
 
-    public synchronized Item findItemByClientHandle ( int clientHandle )
+    public Item findItemByClientHandle ( int clientHandle )
     {
         return _itemClientMap.get ( clientHandle );
     }
@@ -398,6 +413,22 @@ public class Group
     public int getServerHandle ()
     {
         return _serverHandle;
+    }
+
+    public synchronized void removeItem ( String opcItemId ) throws IllegalArgumentException, UnknownHostException, JIException
+    {
+        _log.debug ( String.format ( "Removing item '%s'", opcItemId ) );
+        Item item = getItemByOPCItemId ( opcItemId );
+        if ( item != null )
+        {
+            _group.getItemManagement ().remove ( item.getServerHandle () );
+            removeItem ( item );
+            _log.debug ( String.format ( "Removed item '%s'", opcItemId ) );
+        }
+        else
+        {
+            _log.warn ( String.format ( "Unable to find item '%s'", opcItemId ) );
+        }
     }
 
 }

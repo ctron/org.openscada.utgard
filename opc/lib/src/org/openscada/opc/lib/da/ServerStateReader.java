@@ -22,18 +22,22 @@ package org.openscada.opc.lib.da;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.apache.log4j.Logger;
 import org.openscada.opc.dcom.da.OPCSERVERSTATUS;
 import org.openscada.utils.timing.Scheduler;
 import org.openscada.utils.timing.Scheduler.Job;
 
 public class ServerStateReader
 {
+    private static Logger _log = Logger.getLogger ( ServerStateReader.class );
+    
     private Server _server = null;
 
     private Scheduler _scheduler = null;
 
-    private List<ServerStateListener> _listeners = new LinkedList<ServerStateListener> ();
+    private List<ServerStateListener> _listeners = new CopyOnWriteArrayList<ServerStateListener> ();
 
     private Job _job = null;
 
@@ -44,6 +48,12 @@ public class ServerStateReader
         _scheduler = _server.getScheduler ();
     }
 
+    /**
+     * Create a new server state reader. Please note that the scheduler might get
+     * blocked for a short period of time in case of a connection failure!
+     * @param server the server to check
+     * @param scheduler the scheduler to use
+     */
     public ServerStateReader ( Server server, Scheduler scheduler )
     {
         super ();
@@ -71,22 +81,22 @@ public class ServerStateReader
         _job = null;
     }
 
-    protected synchronized void once ()
+    protected void once ()
     {
         OPCSERVERSTATUS state = _server.getServerState ();
-
+        
         for ( ServerStateListener listener : new ArrayList<ServerStateListener> ( _listeners ) )
         {
             listener.stateUpdate ( state );
         }
     }
 
-    public synchronized void addListener ( ServerStateListener listener )
+    public void addListener ( ServerStateListener listener )
     {
         _listeners.add ( listener );
     }
 
-    public synchronized void removeListener ( ServerStateListener listener )
+    public void removeListener ( ServerStateListener listener )
     {
         _listeners.remove ( listener );
     }
