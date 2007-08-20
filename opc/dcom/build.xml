@@ -22,7 +22,7 @@
 	<property name="export.dir" value="${export.base}/${tag}"/>
 	
 	<path id="classpath">
-		<pathelement location="lib/j-interop.jar"/>
+		<pathelement location="lib/j-interop-openscada.jar"/>
 		<pathelement location="lib/jarapac.jar"/>
 		<pathelement location="lib/jcifs-1.2.9.jar"/>
 		<pathelement location="lib/iwombat.jar"/>

@@ -19,4 +19,4 @@ PASSWORD=password
 VERSION=@@VERSION@@
 UUID=F8582CF2-88FB-11D0-B850-00C0F0104305
 
-TEST_CLASSPATH="../lib/j-interop.jar:../lib/jarapac.jar:../lib/jcifs-1.2.9.jar:../lib/iwombat.jar:../lib/ntlm-security.jar:../lib/ncacn_np.jar:../lib/ncacn_ip_tcp.jar:../lib/cifs-ntlm-auth.jar:../lib/log4j-1.2.13.jar:../lib/openscada-utils.jar:../lib/openscada-opc-dcom-$VERSION.jar:../bin/openscada-opc-lib-$VERSION.jar:../bin/openscada-opc-lib-test-$VERSION.jar:."
+TEST_CLASSPATH="../lib/j-interop-openscada.jar:../lib/jarapac.jar:../lib/jcifs-1.2.9.jar:../lib/iwombat.jar:../lib/ntlm-security.jar:../lib/ncacn_np.jar:../lib/ncacn_ip_tcp.jar:../lib/cifs-ntlm-auth.jar:../lib/log4j-1.2.13.jar:../lib/openscada-utils.jar:../lib/openscada-opc-dcom-$VERSION.jar:../bin/openscada-opc-lib-$VERSION.jar:../bin/openscada-opc-lib-test-$VERSION.jar:."
