@@ -4,7 +4,7 @@ JAVA=java
 # But your access data in the following variables
 # Please not that the UUID is set to the Matrikon Simulation Server
 
-# If the OPC server is accessable by an anonymous user
+# If the OPC server is accessible by an anonymous user
 # You don't need to set a username and password and can
 # leave the settings as they are.
 

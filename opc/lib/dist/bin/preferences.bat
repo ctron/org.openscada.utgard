@@ -3,7 +3,7 @@ set JAVA=java
 rem But your access data in the following variables
 rem Please not that the UUID is set to the Matrikon Simulation Server
 
-rem If the OPC server is accessable by an anonymous user
+rem If the OPC server is accessible by an anonymous user
 rem You don't need to set a username and password and can
 rem leave the settings as they are.
 
