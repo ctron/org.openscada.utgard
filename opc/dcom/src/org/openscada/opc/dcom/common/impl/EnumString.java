@@ -30,9 +30,7 @@ import org.jinterop.dcom.core.JIArray;
 import org.jinterop.dcom.core.JICallObject;
 import org.jinterop.dcom.core.JIFlags;
 import org.jinterop.dcom.core.JIInterfacePointer;
-import org.jinterop.dcom.core.JIPointer;
 import org.jinterop.dcom.core.JIString;
-import org.jinterop.dcom.core.JIVariant;
 import org.jinterop.dcom.win32.ComFactory;
 
 public class EnumString extends BaseCOMObject
