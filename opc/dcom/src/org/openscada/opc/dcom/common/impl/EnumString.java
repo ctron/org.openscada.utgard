@@ -32,6 +32,7 @@ import org.jinterop.dcom.core.JIFlags;
 import org.jinterop.dcom.core.JIInterfacePointer;
 import org.jinterop.dcom.core.JIPointer;
 import org.jinterop.dcom.core.JIString;
+import org.jinterop.dcom.core.JIVariant;
 import org.jinterop.dcom.win32.ComFactory;
 
 public class EnumString extends BaseCOMObject
@@ -55,19 +56,22 @@ public class EnumString extends BaseCOMObject
         callObject.setOpnum ( 0 );
 
         callObject.addInParamAsInt ( num, JIFlags.FLAG_NULL );
-        callObject.addInParamAsInt ( num, JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIArray ( new JIPointer ( new JIString (
-                JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ), null, 1, true, true ), JIFlags.FLAG_NULL );
+        //callObject.addInParamAsInt ( num, JIFlags.FLAG_NULL );
+        //callObject.addOutParamAsObject ( new JIArray ( new JIPointer ( new JIString (
+        //        JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ), null, 1, true, true ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIArray ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ), null, 1, true, true ),JIFlags.FLAG_NULL);
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
 
         Object[] result = Helper.callRespectSFALSE ( getCOMObject (), callObject );
 
-        JIPointer[] resultData = (JIPointer[]) ( (JIArray) ( result[0] ) ).getArrayInstance ();
+        //JIPointer[] resultData = (JIPointer[]) ( (JIArray) ( result[0] ) ).getArrayInstance ();
+        JIString[] resultData = (JIString[])( (JIArray) ( result[0] ) ).getArrayInstance ();
         Integer cnt = (Integer)result[1];
 
         for ( int i = 0; i < cnt; i++ )
         {
-            list.add ( ( (JIString)resultData[i].getReferent () ).getString () );
+            //list.add ( ( (JIString)resultData[i].getReferent () ).getString () );
+            list.add ( resultData[i].getString () );
         }
         return cnt;
     }
