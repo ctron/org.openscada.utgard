@@ -19,6 +19,9 @@
 
 package org.openscada.opc.lib.common;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Holds the connection information
  * @author Jens Reimann <jens.reimann@inavare.net>
@@ -39,6 +42,8 @@ public class ConnectionInformation
     private String _clsid = null;
 
     private String _progId = null;
+
+    private Set<String> _preferredHosts = null;
 
     public ConnectionInformation ()
     {
@@ -61,6 +66,7 @@ public class ConnectionInformation
         _host = arg0._host;
         _progId = arg0._progId;
         _clsid = arg0._clsid;
+        _preferredHosts = new HashSet<String> ( arg0._preferredHosts );
     }
 
     public String getDomain ()
@@ -139,5 +145,27 @@ public class ConnectionInformation
             return _progId;
         else
             return null;
+    }
+
+    public Set<String> getPreferredHosts ()
+    {
+        return _preferredHosts;
+    }
+
+    public void setPreferredHosts ( Set<String> preferredHosts )
+    {
+        _preferredHosts = preferredHosts;
+    }
+
+    public void setPreferredHosts ( String preferredHosts )
+    {
+        if ( preferredHosts != null )
+        {
+            setPreferredHosts ( OPC.createPreferredHosts ( preferredHosts ) );
+        }
+        else
+        {
+            _preferredHosts = null;
+        }
     }
 }
