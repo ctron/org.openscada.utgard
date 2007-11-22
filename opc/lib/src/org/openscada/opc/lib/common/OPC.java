@@ -4,17 +4,21 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.jinterop.dcom.core.IJIBindingSelector;
 import org.jinterop.dcom.core.JIDefaultBindingSelector;
 import org.jinterop.dcom.core.JITweakableBindingSelector;
 
 public class OPC
 {
+    private static Logger _log = Logger.getLogger ( OPC.class );
+    
     protected static IJIBindingSelector defaultBindingSelector = new JIDefaultBindingSelector ();
 
     static
     {
         defaultBindingSelector = createBindingSelector ( createPreferredHosts ( System.getProperty ( "openscada.opc.preferredHosts" ) ) );
+        _log.debug ( String.format ( "Using defaultBindingSelector class: %s", defaultBindingSelector.getClass () ) );
     }
 
     /**
