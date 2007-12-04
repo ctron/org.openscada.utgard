@@ -69,16 +69,23 @@ public class SyncAccess extends AccessBase implements Runnable
         }
     }
 
-    protected synchronized void runOnce () throws JIException
+    protected void runOnce () throws JIException
     {
         if ( !_active )
         {
             return;
         }
 
-        Item[] items = _items.keySet ().toArray ( new Item[_items.size ()] );
-
-        Map<Item, ItemState> result = _group.read ( false, items );
+        Map<Item, ItemState> result;
+        
+        // lock only this section since we could get into a deadlock otherwise
+        // calling updateItem
+        synchronized ( this )
+        {
+        	Item[] items = _items.keySet ().toArray ( new Item[_items.size ()] );
+        	result = _group.read ( false, items );
+        }
+        
         for ( Map.Entry<Item, ItemState> entry : result.entrySet () )
         {
             updateItem ( entry.getKey (), entry.getValue () );
