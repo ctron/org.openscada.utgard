@@ -20,7 +20,6 @@
 package org.openscada.opc.lib.da;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -64,7 +63,9 @@ public class ServerStateReader
     public synchronized void start ()
     {
         if ( _job != null )
+        {
             return;
+        }
 
         _job = _scheduler.addJob ( new Runnable () {
 
@@ -83,6 +84,8 @@ public class ServerStateReader
 
     protected void once ()
     {
+        _log.debug ( "Reading server state" );
+        
         OPCSERVERSTATUS state = _server.getServerState ();
         
         for ( ServerStateListener listener : new ArrayList<ServerStateListener> ( _listeners ) )
