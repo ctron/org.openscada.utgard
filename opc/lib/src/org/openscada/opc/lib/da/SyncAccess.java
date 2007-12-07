@@ -98,7 +98,7 @@ public class SyncAccess extends AccessBase implements Runnable
     {
         super.start ();
 
-        _runner = new Thread ( this );
+        _runner = new Thread ( this, "UtgardSyncReader" );
         _runner.setDaemon ( true );
         _runner.start ();
     }

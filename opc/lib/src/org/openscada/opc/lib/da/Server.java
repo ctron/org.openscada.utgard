@@ -80,12 +80,19 @@ public class Server
     {
         super ();
         _connectionInformation = connectionInformation;
-        _scheduler = new Scheduler ( true );
+        _scheduler = new Scheduler ( true, "UtgardServerScheduler" );
+    }
+    
+    public Server ( ConnectionInformation connectionInformation, Scheduler scheduler )
+    {
+        super ();
+        _connectionInformation = connectionInformation;
+        _scheduler = scheduler;
     }
 
     /**
      * Gets the scheduler for the server. Note that this scheduler might get blocked for
-     * a short time if the connection breaks. It should not be used for time criticial
+     * a short time if the connection breaks. It should not be used for time critical
      * operations.
      * @return the scheduler for the server
      */
