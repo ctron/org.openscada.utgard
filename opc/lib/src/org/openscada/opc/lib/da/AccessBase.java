@@ -22,9 +22,9 @@ package org.openscada.opc.lib.da;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.log4j.Logger;
 import org.jinterop.dcom.common.JIException;
@@ -40,7 +40,7 @@ public abstract class AccessBase implements ServerConnectionStateListener
 
     protected boolean _active = false;
 
-    private List<AccessStateListener> _stateListeners = new LinkedList<AccessStateListener> ();
+    private List<AccessStateListener> _stateListeners = new CopyOnWriteArrayList<AccessStateListener> ();
 
     private boolean _bound = false;
 
@@ -119,7 +119,7 @@ public abstract class AccessBase implements ServerConnectionStateListener
         }
     }
 
-    protected synchronized void notifyStateListenersError ( Throwable t )
+    protected void notifyStateListenersError ( Throwable t )
     {
         List<AccessStateListener> list = new ArrayList<AccessStateListener> ( _stateListeners );
 
