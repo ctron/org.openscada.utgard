@@ -21,6 +21,7 @@ package org.openscada.opc.lib.da;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import org.apache.log4j.Logger;
 
@@ -34,10 +35,10 @@ public class AutoReconnectController implements ServerConnectionStateListener
 
     private Server _server;
 
-    private Set<AutoReconnectListener> _listeners = new HashSet<AutoReconnectListener> ();
+    private Set<AutoReconnectListener> _listeners = new CopyOnWriteArraySet<AutoReconnectListener> ();
 
     private AutoReconnectState _state = AutoReconnectState.DISABLED;
-    
+
     public AutoReconnectController ( Server server )
     {
         this ( server, DEFAULT_DELAY );
@@ -52,7 +53,7 @@ public class AutoReconnectController implements ServerConnectionStateListener
         _server.addStateListener ( this );
     }
 
-    public synchronized void addListener ( AutoReconnectListener listener )
+    public void addListener ( AutoReconnectListener listener )
     {
         if ( listener != null )
         {
@@ -60,13 +61,13 @@ public class AutoReconnectController implements ServerConnectionStateListener
             listener.stateChanged ( _state );
         }
     }
-    
-    public synchronized void removeListener ( AutoReconnectListener listener )
+
+    public void removeListener ( AutoReconnectListener listener )
     {
         _listeners.remove ( listener );
     }
-    
-    protected synchronized void notifyStateChange ( AutoReconnectState state )
+
+    protected void notifyStateChange ( AutoReconnectState state )
     {
         _state = state;
         for ( AutoReconnectListener listener : _listeners )
@@ -74,7 +75,7 @@ public class AutoReconnectController implements ServerConnectionStateListener
             listener.stateChanged ( state );
         }
     }
-    
+
     public int getDelay ()
     {
         return _delay;
@@ -103,7 +104,7 @@ public class AutoReconnectController implements ServerConnectionStateListener
 
         _log.debug ( "Requesting connection" );
         notifyStateChange ( AutoReconnectState.DISCONNECTED );
-        
+
         triggerReconnect ( false );
     }
 
@@ -153,7 +154,7 @@ public class AutoReconnectController implements ServerConnectionStateListener
     private void triggerReconnect ( final boolean wait )
     {
         _log.debug ( "Trigger reconnect" );
-        
+
         Thread t = new Thread ( new Runnable () {
 
             public void run ()
@@ -172,7 +173,7 @@ public class AutoReconnectController implements ServerConnectionStateListener
             if ( wait )
             {
                 notifyStateChange ( AutoReconnectState.WAITING );
-                _log.debug ( "Delaying..." );
+                _log.debug ( String.format ( "Delaying (%s)...", _delay ) );
                 Thread.sleep ( _delay );
             }
         }
@@ -193,9 +194,9 @@ public class AutoReconnectController implements ServerConnectionStateListener
             _server.connect ();
             // CONNECTED state will be set by server callback
         }
-        catch ( Exception e )
+        catch ( Throwable e )
         {
-            _log.info ( "Re-connect failed", e  );
+            _log.info ( "Re-connect failed", e );
             notifyStateChange ( AutoReconnectState.DISCONNECTED );
             triggerReconnect ( true );
         }
