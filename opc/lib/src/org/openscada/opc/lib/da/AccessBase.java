@@ -223,7 +223,7 @@ public abstract class AccessBase implements ServerConnectionStateListener
 
         try
         {
-        _group.removeItem ( itemId );
+            _group.removeItem ( itemId );
         }
         catch ( Throwable e )
         {
