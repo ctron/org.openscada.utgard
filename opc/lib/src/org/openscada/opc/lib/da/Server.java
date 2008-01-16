@@ -22,7 +22,6 @@ package org.openscada.opc.lib.da;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -163,16 +162,32 @@ public class Server
      */
     protected void cleanup ()
     {
-        try
-        {
-            _log.info ( "Destroying DCOM session..." );
-            JISession.destroySession ( _session );
-            _log.info ( "Destroying DCOM session... complete" );
-        }
-        catch ( Throwable e )
-        {
-            _log.warn ( "Failed to destroy DCOM session" );
-        }
+        _log.info ( "Destroying DCOM session..." );
+        final JISession destructSession = _session;
+        Thread destructor = new Thread (new Runnable () {
+
+            public void run ()
+            {
+                long ts = System.currentTimeMillis ();
+                try
+                {
+                    _log.debug ( "Starting destruction of DCOM session" );
+                    JISession.destroySession ( destructSession );
+                    _log.info ( "Destructed DCOM session" );
+                }
+                catch ( Throwable e )
+                {
+                    _log.warn ( "Failed to destruct DCOM session", e );
+                }
+                finally
+                {
+                    _log.info ( String.format ( "Session destruction took %s ms", System.currentTimeMillis () - ts ) );
+                }
+            }});
+        destructor.setName ( "OPCSessionDestructor" );
+        destructor.setDaemon ( true );
+        destructor.start ();
+        _log.info ( "Destroying DCOM session... forked" );
         
         _errorMessageResolver = null;
         _session = null;
