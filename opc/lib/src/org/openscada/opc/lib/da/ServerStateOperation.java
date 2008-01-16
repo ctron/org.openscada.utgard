@@ -49,6 +49,7 @@ public class ServerStateOperation implements Runnable
         }
         catch ( Throwable e )
         {
+            _log.info ( "Failed to get server state", e );
             _error = e;
             _running = false;
             synchronized ( _lock )
@@ -69,10 +70,12 @@ public class ServerStateOperation implements Runnable
     {
         if ( _server == null )
         {
+            _log.info ( "No connection to server. Skipping..." );
             return null;
         }
                 
         Thread t = new Thread ( this );
+        t.setName ( "OPCServerStateReader" );
         
         synchronized ( _lock )
         {
