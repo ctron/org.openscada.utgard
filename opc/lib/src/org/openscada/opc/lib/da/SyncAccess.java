@@ -71,7 +71,7 @@ public class SyncAccess extends AccessBase implements Runnable
 
     protected void runOnce () throws JIException
     {
-        if ( !_active )
+        if ( !_active || _group == null )
         {
             return;
         }
