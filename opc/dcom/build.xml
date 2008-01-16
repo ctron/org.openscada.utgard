@@ -65,7 +65,8 @@
         	target="1.5"
         	encoding="utf-8"
         	destdir="bin"
-        	srcdir="src">
+        	srcdir="src"
+        	debug="on">
         		<classpath refid="classpath"/>
     	</javac>
     	
