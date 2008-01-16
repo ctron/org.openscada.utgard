@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.log4j.Logger;
 import org.jinterop.dcom.common.JIException;
@@ -72,7 +73,7 @@ public class Server
 
     private Map<Integer, Group> _groups = new HashMap<Integer, Group> ();
 
-    private List<ServerConnectionStateListener> _stateListeners = new LinkedList<ServerConnectionStateListener> ();
+    private List<ServerConnectionStateListener> _stateListeners = new CopyOnWriteArrayList<ServerConnectionStateListener> ();
 
     private Scheduler _scheduler = null;
 
@@ -417,7 +418,7 @@ public class Server
         _stateListeners.remove ( listener );
     }
 
-    protected synchronized void notifyConnectionStateChange ( boolean connected )
+    protected void notifyConnectionStateChange ( boolean connected )
     {
         List<ServerConnectionStateListener> list = new ArrayList<ServerConnectionStateListener> ( _stateListeners );
         for ( ServerConnectionStateListener listener : list )

@@ -191,7 +191,10 @@ public class AutoReconnectController implements ServerConnectionStateListener
         {
             _log.debug ( "Connecting to server" );
             notifyStateChange ( AutoReconnectState.CONNECTING );
-            _server.connect ();
+            synchronized ( this )
+            {
+                _server.connect ();
+            }
             // CONNECTED state will be set by server callback
         }
         catch ( Throwable e )
