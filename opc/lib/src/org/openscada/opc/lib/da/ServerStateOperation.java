@@ -70,7 +70,7 @@ public class ServerStateOperation implements Runnable
     {
         if ( _server == null )
         {
-            _log.info ( "No connection to server. Skipping..." );
+            _log.debug ( "No connection to server. Skipping..." );
             return null;
         }
                 
