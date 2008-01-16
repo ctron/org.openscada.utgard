@@ -19,7 +19,6 @@
 
 package org.openscada.opc.lib.da;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -38,6 +37,8 @@ public class AutoReconnectController implements ServerConnectionStateListener
     private Set<AutoReconnectListener> _listeners = new CopyOnWriteArraySet<AutoReconnectListener> ();
 
     private AutoReconnectState _state = AutoReconnectState.DISABLED;
+
+    private Thread _connectTask = null;
 
     public AutoReconnectController ( Server server )
     {
@@ -151,22 +152,41 @@ public class AutoReconnectController implements ServerConnectionStateListener
         }
     }
 
-    private void triggerReconnect ( final boolean wait )
+    private synchronized void triggerReconnect ( final boolean wait )
     {
+        if ( _connectTask != null )
+        {
+            _log.debug ( "Connect thread already running" );
+            return;
+        }
+        
         _log.debug ( "Trigger reconnect" );
 
-        Thread t = new Thread ( new Runnable () {
+        _connectTask = new Thread ( new Runnable () {
 
             public void run ()
             {
-                performReconnect ( wait );
+                boolean result = false;
+                try
+                {
+                    result = performReconnect ( wait );
+                }
+                finally
+                {
+                    AutoReconnectController.this._connectTask = null;
+                    _log.debug ( String.format ( "performReconnect completed : %s", result ) );
+                    if ( !result )
+                    {
+                        triggerReconnect ( true );
+                    }
+                }
             }
         } );
-        t.setDaemon ( true );
-        t.start ();
+        _connectTask.setDaemon ( true );
+        _connectTask.start ();
     }
 
-    private void performReconnect ( boolean wait )
+    private boolean performReconnect ( boolean wait )
     {
         try
         {
@@ -184,7 +204,7 @@ public class AutoReconnectController implements ServerConnectionStateListener
         if ( !isRequested () )
         {
             _log.debug ( "Request canceled during delay" );
-            return;
+            return true;
         }
 
         try
@@ -194,6 +214,7 @@ public class AutoReconnectController implements ServerConnectionStateListener
             synchronized ( this )
             {
                 _server.connect ();
+                return true;
             }
             // CONNECTED state will be set by server callback
         }
@@ -201,7 +222,7 @@ public class AutoReconnectController implements ServerConnectionStateListener
         {
             _log.info ( "Re-connect failed", e );
             notifyStateChange ( AutoReconnectState.DISCONNECTED );
-            triggerReconnect ( true );
+            return false;
         }
     }
 
