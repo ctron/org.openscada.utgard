@@ -98,18 +98,18 @@ public abstract class AccessBase implements ServerConnectionStateListener
         return _active;
     }
 
-    public synchronized void addStateListener ( AccessStateListener listener )
+    public void addStateListener ( AccessStateListener listener )
     {
         _stateListeners.add ( listener );
         listener.stateChanged ( isActive () );
     }
 
-    public synchronized void removeStateListener ( AccessStateListener listener )
+    public void removeStateListener ( AccessStateListener listener )
     {
         _stateListeners.remove ( listener );
     }
 
-    protected synchronized void notifyStateListenersState ( boolean state )
+    protected void notifyStateListenersState ( boolean state )
     {
         List<AccessStateListener> list = new ArrayList<AccessStateListener> ( _stateListeners );
 
