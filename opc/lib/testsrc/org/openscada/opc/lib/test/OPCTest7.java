@@ -32,6 +32,7 @@ import org.openscada.opc.lib.da.Group;
 import org.openscada.opc.lib.da.Item;
 import org.openscada.opc.lib.da.ItemState;
 import org.openscada.opc.lib.da.Server;
+import org.openscada.utils.timing.Scheduler;
 
 /**
  * A sample that reads an item and writes back the result. You will need a
@@ -57,7 +58,7 @@ public class OPCTest7
         String itemName = args[5];
 
         // create a new server
-        Server server = new Server ( ci );
+        Server server = new Server ( ci, new Scheduler ( true ) );
         try
         {
             // connect to server

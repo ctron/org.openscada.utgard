@@ -28,6 +28,7 @@ import org.openscada.opc.lib.common.ConnectionInformation;
 import org.openscada.opc.lib.da.AccessBase;
 import org.openscada.opc.lib.da.Async20Access;
 import org.openscada.opc.lib.da.Server;
+import org.openscada.utils.timing.Scheduler;
 
 /**
  * Another test showing the "Access" interface with the Async20Access implementation.
@@ -59,7 +60,7 @@ public class OPCTest4
         }
 
         // create a new server
-        Server server = new Server ( ci );
+        Server server = new Server ( ci, new Scheduler ( true ) );
         try
         {
             // connect to server

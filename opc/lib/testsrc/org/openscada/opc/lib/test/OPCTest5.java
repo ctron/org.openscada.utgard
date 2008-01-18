@@ -26,6 +26,7 @@ import org.jinterop.dcom.common.JIException;
 import org.openscada.opc.lib.common.ConnectionInformation;
 import org.openscada.opc.lib.da.Async20Access;
 import org.openscada.opc.lib.da.Server;
+import org.openscada.utils.timing.Scheduler;
 
 /**
  * Another test showing the "Access" interface with
@@ -57,7 +58,7 @@ public class OPCTest5
                 TestInfo ti = new TestInfo ();
                 ti._info = ci;
                 ti._itemId = args[ ( i * 2 ) + 5];
-                ti._server = new Server ( ci );
+                ti._server = new Server ( ci, new Scheduler ( true ) );
 
                 ti._server.connect ();
                 ti._access = new Async20Access ( ti._server, 100, false );

@@ -76,13 +76,6 @@ public class Server
 
     private Scheduler _scheduler = null;
 
-    public Server ( ConnectionInformation connectionInformation )
-    {
-        super ();
-        _connectionInformation = connectionInformation;
-        _scheduler = new Scheduler ( true, "UtgardServerScheduler" );
-    }
-    
     public Server ( ConnectionInformation connectionInformation, Scheduler scheduler )
     {
         super ();

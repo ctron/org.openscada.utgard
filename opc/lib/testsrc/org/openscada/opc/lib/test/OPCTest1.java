@@ -29,6 +29,7 @@ import org.openscada.opc.lib.da.ItemState;
 import org.openscada.opc.lib.da.Server;
 import org.openscada.opc.lib.da.browser.Branch;
 import org.openscada.opc.lib.da.browser.Leaf;
+import org.openscada.utils.timing.Scheduler;
 
 public class OPCTest1
 {
@@ -70,7 +71,7 @@ public class OPCTest1
         ci.setClsid ( args[4] );
 
         // create a new server
-        Server server = new Server ( ci );
+        Server server = new Server ( ci, new Scheduler ( true ) );
         try
         {
             // connect to server

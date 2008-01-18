@@ -27,6 +27,7 @@ import org.openscada.opc.lib.common.ConnectionInformation;
 import org.openscada.opc.lib.da.AccessBase;
 import org.openscada.opc.lib.da.Server;
 import org.openscada.opc.lib.da.SyncAccess;
+import org.openscada.utils.timing.Scheduler;
 
 /**
  * Another test showing the "Access" interface with the SyncAccess implementation.
@@ -52,7 +53,7 @@ public class OPCTest2
             itemId = args[5];
 
         // create a new server
-        Server server = new Server ( ci );
+        Server server = new Server ( ci, new Scheduler ( true ) );
         try
         {
             // connect to server
