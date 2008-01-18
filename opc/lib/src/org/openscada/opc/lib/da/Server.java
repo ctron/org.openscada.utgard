@@ -183,7 +183,7 @@ public class Server
                 {
                     _log.info ( String.format ( "Session destruction took %s ms", System.currentTimeMillis () - ts ) );
                 }
-            }});
+            }}, "UtgardSessionDestructor");
         destructor.setName ( "OPCSessionDestructor" );
         destructor.setDaemon ( true );
         destructor.start ();
