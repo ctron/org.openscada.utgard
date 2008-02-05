@@ -74,8 +74,7 @@ public class ServerStateOperation implements Runnable
             return null;
         }
                 
-        Thread t = new Thread ( this );
-        t.setName ( "OPCServerStateReader" );
+        Thread t = new Thread ( this, "OPCServerStateReader" );
         
         synchronized ( _lock )
         {
