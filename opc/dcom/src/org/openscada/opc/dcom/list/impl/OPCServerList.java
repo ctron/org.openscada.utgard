@@ -30,7 +30,7 @@ import org.jinterop.dcom.core.JIFlags;
 import org.jinterop.dcom.core.JIInterfacePointer;
 import org.jinterop.dcom.core.JIPointer;
 import org.jinterop.dcom.core.JIString;
-import org.jinterop.dcom.win32.ComFactory;
+import org.jinterop.dcom.win32.JIComFactory;
 import org.openscada.opc.dcom.common.impl.BaseCOMObject;
 import org.openscada.opc.dcom.common.impl.EnumGUID;
 import org.openscada.opc.dcom.common.impl.Helper;
@@ -167,6 +167,6 @@ public class OPCServerList extends BaseCOMObject
         // ** RESULT
         Object result[] = Helper.callRespectSFALSE ( getCOMObject (), callObject );
 
-        return new EnumGUID ( ComFactory.createCOMInstance ( getCOMObject (), (JIInterfacePointer)result[0] ) );
+        return new EnumGUID ( JIComFactory.createCOMInstance ( getCOMObject (), (JIInterfacePointer)result[0] ) );
     }
 }

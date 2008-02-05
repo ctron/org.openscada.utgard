@@ -183,7 +183,6 @@ public class Test2
         try
         {
             JISystem.setAutoRegisteration ( true );
-            JISystem.setLogLevel ( Level.ALL );
 
             _session = JISession.createSession ( args[1], args[2], args[3] );
 

@@ -28,7 +28,7 @@ import org.jinterop.dcom.core.JIFlags;
 import org.jinterop.dcom.core.JIInterfacePointer;
 import org.jinterop.dcom.core.JIPointer;
 import org.jinterop.dcom.core.JIString;
-import org.jinterop.dcom.win32.ComFactory;
+import org.jinterop.dcom.win32.JIComFactory;
 import org.openscada.opc.dcom.common.EventHandler;
 import org.openscada.opc.dcom.common.impl.BaseCOMObject;
 import org.openscada.opc.dcom.da.Constants;
@@ -155,7 +155,7 @@ public class OPCGroupStateMgt extends BaseCOMObject
 
         JIInterfacePointer ptr = (JIInterfacePointer)result[0];
 
-        return new OPCGroupStateMgt ( ComFactory.createCOMInstance ( getCOMObject (), ptr ) );
+        return new OPCGroupStateMgt ( JIComFactory.createCOMInstance ( getCOMObject (), ptr ) );
     }
 
     /**
@@ -176,7 +176,7 @@ public class OPCGroupStateMgt extends BaseCOMObject
         // the method attachEventHandler returns.
         synchronized ( callbackObject )
         {
-            String id = ComFactory.attachEventHandler ( getCOMObject (), Constants.IOPCDataCallback_IID,
+            String id = JIComFactory.attachEventHandler ( getCOMObject (), Constants.IOPCDataCallback_IID,
                     JIInterfacePointer.getInterfacePointer ( getCOMObject ().getAssociatedSession (),
                             callbackObject.getCoClass () ) );
 

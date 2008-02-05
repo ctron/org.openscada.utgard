@@ -97,7 +97,7 @@ public class ServerList
      */
     public ServerList ( String host, String user, String password, String domain ) throws IllegalArgumentException, UnknownHostException, JIException
     {
-        this ( JISession.createSession ( domain, user, password, false ), host, OPC.getDefaultBindingSelector () );
+        this ( JISession.createSession ( domain, user, password ), host, OPC.getDefaultBindingSelector () );
     }
 
     /**

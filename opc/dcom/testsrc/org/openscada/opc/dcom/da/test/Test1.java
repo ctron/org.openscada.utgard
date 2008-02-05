@@ -413,7 +413,6 @@ public class Test1
         try
         {
             JISystem.setAutoRegisteration ( true );
-            JISystem.setLogLevel ( Level.ALL );
 
             _session = JISession.createSession ( args[1], args[2], args[3] );
             // OPCServer server = new OPCServer ( "127.0.0.1", JIProgId.valueOf

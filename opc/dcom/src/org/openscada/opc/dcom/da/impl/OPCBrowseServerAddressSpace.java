@@ -28,7 +28,7 @@ import org.jinterop.dcom.core.JIFlags;
 import org.jinterop.dcom.core.JIInterfacePointer;
 import org.jinterop.dcom.core.JIPointer;
 import org.jinterop.dcom.core.JIString;
-import org.jinterop.dcom.win32.ComFactory;
+import org.jinterop.dcom.win32.JIComFactory;
 import org.openscada.opc.dcom.common.impl.BaseCOMObject;
 import org.openscada.opc.dcom.common.impl.EnumString;
 import org.openscada.opc.dcom.common.impl.Helper;
@@ -108,7 +108,7 @@ public class OPCBrowseServerAddressSpace extends BaseCOMObject
 
         Object result[] = Helper.callRespectSFALSE ( getCOMObject (), callObject );
 
-        return new EnumString ( ComFactory.createCOMInstance ( getCOMObject (), (JIInterfacePointer)result[0] ) );
+        return new EnumString ( JIComFactory.createCOMInstance ( getCOMObject (), (JIInterfacePointer)result[0] ) );
     }
 
     /**
@@ -129,7 +129,7 @@ public class OPCBrowseServerAddressSpace extends BaseCOMObject
 
         Object[] result = Helper.callRespectSFALSE ( getCOMObject (), callObject );
 
-        return new EnumString ( ComFactory.createCOMInstance ( getCOMObject (), (JIInterfacePointer)result[0] ) );
+        return new EnumString ( JIComFactory.createCOMInstance ( getCOMObject (), (JIInterfacePointer)result[0] ) );
     }
 
     /**

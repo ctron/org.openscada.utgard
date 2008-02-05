@@ -19,10 +19,7 @@
 
 package org.openscada.opc.lib.test;
 
-import java.util.logging.Level;
-
 import org.jinterop.dcom.common.JIException;
-import org.jinterop.dcom.common.JISystem;
 import org.openscada.opc.lib.common.ConnectionInformation;
 import org.openscada.opc.lib.da.AccessBase;
 import org.openscada.opc.lib.da.Server;
@@ -38,8 +35,6 @@ public class OPCTest2
 {
     public static void main ( String[] args ) throws Throwable
     {
-        JISystem.setLogLevel ( Level.FINEST );
-        
         // create connection information
         ConnectionInformation ci = new ConnectionInformation ();
         ci.setHost ( args[0] );

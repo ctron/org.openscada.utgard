@@ -113,7 +113,7 @@ public class Server
             if ( _connectionInformation.getClsid () != null )
             {
                 _session = JISession.createSession ( _connectionInformation.getDomain (),
-                        _connectionInformation.getUser (), _connectionInformation.getPassword (), false );
+                        _connectionInformation.getUser (), _connectionInformation.getPassword () );
                 _session.setBindingSelector ( selector );
                 _comServer = new JIComServer ( JIClsid.valueOf ( _connectionInformation.getClsid () ),
                         _connectionInformation.getHost (), _session );
@@ -121,7 +121,7 @@ public class Server
             else if ( _connectionInformation.getProgId () != null )
             {
                 _session = JISession.createSession ( _connectionInformation.getDomain (),
-                        _connectionInformation.getUser (), _connectionInformation.getPassword (), false );
+                        _connectionInformation.getUser (), _connectionInformation.getPassword () );
                 _session.setBindingSelector ( selector );
                 _comServer = new JIComServer ( JIProgId.valueOf ( _session, _connectionInformation.getClsid () ),
                         _connectionInformation.getHost (), _session );
@@ -130,6 +130,8 @@ public class Server
             {
                 throw new IllegalArgumentException ( "Neither clsid nor progid is valid!" );
             }
+            
+            _session.setGlobalSocketTimeout ( Integer.getInteger ( "rpc.socketTimeout", 0 ) );
 
             _server = new OPCServer ( _comServer.createInstance () );
             _errorMessageResolver = new ErrorMessageResolver ( _server.getCommon (), _defaultLocaleID );
@@ -145,6 +147,12 @@ public class Server
             _log.info ( "Failed to connect to server", e  );
             cleanup ();
             throw e; 
+        }
+        catch ( Throwable e )
+        {
+            _log.warn ( "Unknown error", e );
+            cleanup ();
+            throw new RuntimeException ( e );
         }
 
         notifyConnectionStateChange ( true );

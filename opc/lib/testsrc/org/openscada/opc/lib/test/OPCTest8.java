@@ -20,10 +20,8 @@
 package org.openscada.opc.lib.test;
 
 import java.util.Collection;
-import java.util.logging.Level;
 
 import org.jinterop.dcom.common.JIException;
-import org.jinterop.dcom.common.JISystem;
 import org.openscada.opc.dcom.list.ClassDetails;
 import org.openscada.opc.lib.list.Categories;
 import org.openscada.opc.lib.list.Category;
@@ -52,8 +50,6 @@ public class OPCTest8
     @SuppressWarnings ( "unused" )
     public static void main ( String[] args ) throws Throwable
     {
-        JISystem.setLogLevel ( Level.ALL );
-
         ServerList serverList = new ServerList ( args[0], args[2], args[3], args[1] );
 
         String cls = serverList.getClsIdFromProgId ( "Matrikon.OPC.Simulation.1" );

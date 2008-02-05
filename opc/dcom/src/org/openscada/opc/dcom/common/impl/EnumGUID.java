@@ -30,7 +30,7 @@ import org.jinterop.dcom.core.JIArray;
 import org.jinterop.dcom.core.JICallObject;
 import org.jinterop.dcom.core.JIFlags;
 import org.jinterop.dcom.core.JIInterfacePointer;
-import org.jinterop.dcom.win32.ComFactory;
+import org.jinterop.dcom.win32.JIComFactory;
 
 import rpc.core.UUID;
 
@@ -110,7 +110,7 @@ public class EnumGUID extends BaseCOMObject
 
         Object[] result = getCOMObject ().call ( callObject );
 
-        IJIComObject object = ComFactory.createCOMInstance ( getCOMObject (), (JIInterfacePointer)result[0] );
+        IJIComObject object = JIComFactory.createCOMInstance ( getCOMObject (), (JIInterfacePointer)result[0] );
 
         return new EnumGUID ( object );
     }

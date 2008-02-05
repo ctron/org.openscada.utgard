@@ -31,7 +31,7 @@ import org.jinterop.dcom.core.JICallObject;
 import org.jinterop.dcom.core.JIFlags;
 import org.jinterop.dcom.core.JIInterfacePointer;
 import org.jinterop.dcom.core.JIString;
-import org.jinterop.dcom.win32.ComFactory;
+import org.jinterop.dcom.win32.JIComFactory;
 
 public class EnumString extends BaseCOMObject
 {
@@ -113,7 +113,7 @@ public class EnumString extends BaseCOMObject
 
         Object[] result = getCOMObject ().call ( callObject );
 
-        IJIComObject object = ComFactory.createCOMInstance ( getCOMObject (), (JIInterfacePointer)result[0] );
+        IJIComObject object = JIComFactory.createCOMInstance ( getCOMObject (), (JIInterfacePointer)result[0] );
 
         return new EnumString ( object );
     }
