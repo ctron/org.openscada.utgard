@@ -242,9 +242,19 @@ public abstract class AccessBase implements ServerConnectionStateListener
             {
                 realizeItem ( itemId );
             }
+            catch ( AddFailedException e )
+            {
+                Integer rc = e.getErrors ().get ( itemId );
+                if ( rc == null )
+                {
+                    rc = -1;
+                }
+                _log.warn ( String.format ( "Failed to add item: %s (%08X)", itemId, rc ) );
+                
+            }
             catch ( Exception e )
             {
-                _log.warn ( "Failed to realize item", e );
+                _log.warn ( "Failed to realize item: " + itemId, e );
             }
         }
     }
