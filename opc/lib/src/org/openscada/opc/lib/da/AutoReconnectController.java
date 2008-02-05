@@ -156,7 +156,7 @@ public class AutoReconnectController implements ServerConnectionStateListener
     {
         if ( _connectTask != null )
         {
-            _log.debug ( "Connect thread already running" );
+            _log.info ( "Connect thread already running" );
             return;
         }
         
@@ -181,7 +181,7 @@ public class AutoReconnectController implements ServerConnectionStateListener
                     }
                 }
             }
-        } );
+        }, "OPCReconnectThread" );
         _connectTask.setDaemon ( true );
         _connectTask.start ();
     }
