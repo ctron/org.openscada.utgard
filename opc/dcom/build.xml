@@ -23,13 +23,8 @@
 	
 	<path id="classpath">
 		<pathelement location="lib/j-interop-openscada.jar"/>
-		<pathelement location="lib/jarapac.jar"/>
+		<pathelement location="lib/j-interopdeps.jar"/>
 		<pathelement location="lib/jcifs-1.2.9.jar"/>
-		<pathelement location="lib/iwombat.jar"/>
-		<pathelement location="lib/ntlm-security.jar"/>
-		<pathelement location="lib/ncacn_np.jar"/>
-		<pathelement location="lib/ncacn_ip_tcp.jar"/>
-		<pathelement location="lib/jcifs-ntlm-auth.jar"/>
 	</path>
 
     <!-- ================================= 
