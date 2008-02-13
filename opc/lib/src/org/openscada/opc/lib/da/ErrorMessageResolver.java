@@ -63,6 +63,7 @@ public class ErrorMessageResolver
             try
             {
                 message = _opcCommon.getErrorString ( errorCode, _localeId );
+                _log.info ( String.format ( "Resolved %08X to '%s'", errorCode, message ) );
             }
             catch ( JIException e )
             {
