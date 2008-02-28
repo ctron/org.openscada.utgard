@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2007 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2008 inavare GmbH (http://inavare.com)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,6 +45,12 @@ public class Async20Access extends AccessBase implements IOPCDataCallback
     public Async20Access ( Server server, int period, boolean initialRefresh ) throws IllegalArgumentException, UnknownHostException, NotConnectedException, JIException, DuplicateGroupException
     {
         super ( server, period );
+        _initialRefresh = initialRefresh;
+    }
+    
+    public Async20Access ( Server server, int period, boolean initialRefresh, String logTag ) throws IllegalArgumentException, UnknownHostException, NotConnectedException, JIException, DuplicateGroupException
+    {
+        super ( server, period, logTag );
         _initialRefresh = initialRefresh;
     }
 
