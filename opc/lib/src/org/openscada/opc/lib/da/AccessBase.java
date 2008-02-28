@@ -57,11 +57,27 @@ public abstract class AccessBase implements ServerConnectionStateListener
 
     protected Map<String, DataCallback> _itemSet = new HashMap<String, DataCallback> ();
 
+    protected String _logTag = null;
+
+    protected Logger _dataLogger = null;
+
     public AccessBase ( Server server, int period ) throws IllegalArgumentException, UnknownHostException, NotConnectedException, JIException, DuplicateGroupException
     {
         super ();
         _server = server;
         _period = period;
+    }
+
+    public AccessBase ( Server server, int period, String logTag )
+    {
+        super ();
+        _server = server;
+        _period = period;
+        _logTag = logTag;
+        if ( _logTag != null )
+        {
+            _dataLogger = Logger.getLogger ( "opc.data." + logTag );
+        }
     }
 
     public boolean isBound ()
@@ -186,7 +202,7 @@ public abstract class AccessBase implements ServerConnectionStateListener
     protected synchronized void start () throws JIException, IllegalArgumentException, UnknownHostException, NotConnectedException, DuplicateGroupException
     {
         if ( isActive () )
-        { 
+        {
             return;
         }
 
@@ -227,7 +243,7 @@ public abstract class AccessBase implements ServerConnectionStateListener
         }
         catch ( Throwable e )
         {
-            _log.error ( String.format ( "Failed to unrealize item '%s'", itemId ) , e );
+            _log.error ( String.format ( "Failed to unrealize item '%s'", itemId ), e );
         }
     }
 
@@ -250,7 +266,7 @@ public abstract class AccessBase implements ServerConnectionStateListener
                     rc = -1;
                 }
                 _log.warn ( String.format ( "Failed to add item: %s (%08X)", itemId, rc ) );
-                
+
             }
             catch ( Exception e )
             {
@@ -306,6 +322,8 @@ public abstract class AccessBase implements ServerConnectionStateListener
 
     protected void updateItem ( Item item, ItemState itemState )
     {
+        _dataLogger.info ( String.format ( "Update item: %s, %s", item.getId (), itemState ) );
+        
         DataCallback dataCallback = _items.get ( item );
         if ( dataCallback == null )
         {
