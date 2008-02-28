@@ -47,6 +47,12 @@ public class ItemState
         super ();
     }
 
+    @Override
+    public String toString ()
+    {
+        return String.format ( "Value: %s, Timestamp: %tc, Quality: %s, ErrorCode: %08x", _value, _timestamp, _quality, _errorCode );
+    }
+    
     public Short getQuality ()
     {
         return _quality;
