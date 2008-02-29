@@ -57,7 +57,7 @@ public class SyncAccess extends AccessBase implements Runnable
                     notifyStateListenersError ( null );
                 }
             }
-            catch ( Exception e )
+            catch ( Throwable e )
             {
                 _log.error ( "Sync read failed", e );
                 notifyStateListenersError ( e );
