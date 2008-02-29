@@ -54,13 +54,13 @@ public class SyncAccess extends AccessBase implements Runnable
                 if ( _lastError != null )
                 {
                     _lastError = null;
-                    notifyStateListenersError ( null );
+                    handleError ( null );
                 }
             }
             catch ( Throwable e )
             {
                 _log.error ( "Sync read failed", e );
-                notifyStateListenersError ( e );
+                handleError ( e );
                 _server.disconnect ();
             }
 
