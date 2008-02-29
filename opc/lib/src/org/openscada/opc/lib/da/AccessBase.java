@@ -352,7 +352,7 @@ public abstract class AccessBase implements ServerConnectionStateListener
     protected void handleError ( Throwable e )
     {
         notifyStateListenersError ( e );
-        connectionStateChanged ( false );
+        _server.dispose ();
     }
 
 }
