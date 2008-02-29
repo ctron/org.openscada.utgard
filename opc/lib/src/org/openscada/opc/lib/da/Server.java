@@ -227,7 +227,7 @@ public class Server
     /**
      * Dispose the connection in the case of an error
      */
-    protected void dispose ()
+    public void dispose ()
     {
         disconnect ();
     }
