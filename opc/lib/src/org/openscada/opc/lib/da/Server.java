@@ -108,12 +108,16 @@ public class Server
         
         IJIBindingSelector selector = OPC.createBindingSelector ( _connectionInformation.getPreferredHosts () );
 
+        int socketTimeout = Integer.getInteger ( "rpc.socketTimeout", 0 );
+        _log.info ( String.format ( "Socket timeout: %s ", socketTimeout ) ); 
+        
         try
         {
             if ( _connectionInformation.getClsid () != null )
             {
                 _session = JISession.createSession ( _connectionInformation.getDomain (),
                         _connectionInformation.getUser (), _connectionInformation.getPassword () );
+                _session.setGlobalSocketTimeout ( socketTimeout );
                 _session.setBindingSelector ( selector );
                 _comServer = new JIComServer ( JIClsid.valueOf ( _connectionInformation.getClsid () ),
                         _connectionInformation.getHost (), _session );
@@ -122,6 +126,7 @@ public class Server
             {
                 _session = JISession.createSession ( _connectionInformation.getDomain (),
                         _connectionInformation.getUser (), _connectionInformation.getPassword () );
+                _session.setGlobalSocketTimeout ( socketTimeout );
                 _session.setBindingSelector ( selector );
                 _comServer = new JIComServer ( JIProgId.valueOf ( _session, _connectionInformation.getClsid () ),
                         _connectionInformation.getHost (), _session );
@@ -131,7 +136,7 @@ public class Server
                 throw new IllegalArgumentException ( "Neither clsid nor progid is valid!" );
             }
             
-            _session.setGlobalSocketTimeout ( Integer.getInteger ( "rpc.socketTimeout", 0 ) );
+            
 
             _server = new OPCServer ( _comServer.createInstance () );
             _errorMessageResolver = new ErrorMessageResolver ( _server.getCommon (), _defaultLocaleID );
