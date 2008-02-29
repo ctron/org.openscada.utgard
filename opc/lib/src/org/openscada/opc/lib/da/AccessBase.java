@@ -324,7 +324,7 @@ public abstract class AccessBase implements ServerConnectionStateListener
     {
         if ( _dataLogger != null )
         {
-            _dataLogger.info ( String.format ( "Update item: %s, %s", item.getId (), itemState ) );
+            _dataLogger.debug ( String.format ( "Update item: %s, %s", item.getId (), itemState ) );
         }
         
         DataCallback dataCallback = _items.get ( item );
