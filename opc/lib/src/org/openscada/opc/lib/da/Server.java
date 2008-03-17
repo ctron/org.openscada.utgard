@@ -249,7 +249,7 @@ public class Server
 
     /**
      * Add a new named group to the server
-     * @param name The name of the group to use (must be unique)
+     * @param name The name of the group to use. Must be unique or <code>null</code> so that the server creates a unique name.
      * @return The new group
      * @throws NotConnectedException If the server is not connected using {@link Server#connect()}
      * @throws IllegalArgumentException
