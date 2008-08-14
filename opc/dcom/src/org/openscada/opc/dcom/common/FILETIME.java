@@ -125,7 +125,7 @@ public class FILETIME
         i = i << 32;
         BigDecimal d1 = new BigDecimal ( 0xFFFFFFFFFFFFFFFFL & i );
         
-        i = 0xFFFFFFFFL & ((long)_high);
+        i = 0xFFFFFFFFL & ((long)_low);
         d1 = d1.add ( new BigDecimal ( i) );
         d1 = d1.divide ( new BigDecimal ( 10000L ) );
         d1 = d1.subtract ( new BigDecimal ( 11644473600000L ) );
