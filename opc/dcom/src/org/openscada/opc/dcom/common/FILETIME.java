@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2008 inavare GmbH (http://inavare.com)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,6 +39,12 @@ public class FILETIME
     {
         _high = arg0._high;
         _low = arg0._low;
+    }
+    
+    public FILETIME ( int high, int low )
+    {
+        _high = high;
+        _low = low;
     }
 
     public int getHigh ()
@@ -115,16 +121,23 @@ public class FILETIME
         /*
          * The following "strange" stuff is needed since we miss a ulong type
          */
-        long i = 0xFFFFFFFF & _high;
+        long i = 0xFFFFFFFFL & ((long)_high);
         i = i << 32;
-
         BigDecimal d1 = new BigDecimal ( 0xFFFFFFFFFFFFFFFFL & i );
-        d1 = d1.add ( new BigDecimal ( 0xFFFFFFFF & _low ) );
+        
+        i = 0xFFFFFFFFL & ((long)_high);
+        d1 = d1.add ( new BigDecimal ( i) );
         d1 = d1.divide ( new BigDecimal ( 10000L ) );
         d1 = d1.subtract ( new BigDecimal ( 11644473600000L ) );
 
         c.setTimeInMillis ( d1.longValue () );
 
         return c;
+    }
+    
+    @Override
+    public String toString ()
+    {
+        return String.format ( "%s/%s", _high, _low );
     }
 }
