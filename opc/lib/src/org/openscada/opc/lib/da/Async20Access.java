@@ -35,7 +35,6 @@ import org.openscada.opc.lib.common.NotConnectedException;
 
 public class Async20Access extends AccessBase implements IOPCDataCallback
 {
-    @SuppressWarnings ( "unused" )
     private static Logger _log = Logger.getLogger ( Async20Access.class );
 
     private EventHandler _eventHandler = null;

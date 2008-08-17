@@ -21,7 +21,7 @@ package org.openscada.opc.dcom.common.impl;
 
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.IJIComObject;
-import org.jinterop.dcom.core.JICallObject;
+import org.jinterop.dcom.core.JICallBuilder;
 import org.jinterop.dcom.core.JIFlags;
 import org.jinterop.dcom.core.JIVariant;
 import org.openscada.opc.dcom.da.Constants;
@@ -35,7 +35,7 @@ public class Helper
      * @return the result of the call
      * @throws JIException
      */
-    public static Object[] callRespectSFALSE ( IJIComObject object, JICallObject callObject ) throws JIException
+    public static Object[] callRespectSFALSE ( IJIComObject object, JICallBuilder callObject ) throws JIException
     {
         try
         {

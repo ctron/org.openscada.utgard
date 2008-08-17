@@ -24,7 +24,7 @@ import java.net.UnknownHostException;
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.IJIComObject;
 import org.jinterop.dcom.core.JIArray;
-import org.jinterop.dcom.core.JICallObject;
+import org.jinterop.dcom.core.JICallBuilder;
 import org.jinterop.dcom.core.JIFlags;
 import org.jinterop.dcom.core.JIPointer;
 import org.jinterop.dcom.core.JIStruct;
@@ -50,7 +50,7 @@ public class OPCItemMgt extends BaseCOMObject
         if ( items.length == 0 )
             return new KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> ();
 
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+        JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 1 );
 
         JIStruct struct[] = new JIStruct[items.length];
@@ -91,7 +91,7 @@ public class OPCItemMgt extends BaseCOMObject
         if ( items.length == 0 )
             return new KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> ();
 
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+        JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 0 );
 
         JIStruct struct[] = new JIStruct[items.length];
@@ -139,7 +139,7 @@ public class OPCItemMgt extends BaseCOMObject
         if ( serverHandles.length == 0 )
             return new ResultSet<Integer> ();
 
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+        JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 2 );
 
         callObject.addInParamAsInt ( serverHandles.length, JIFlags.FLAG_NULL );
@@ -163,7 +163,7 @@ public class OPCItemMgt extends BaseCOMObject
         if ( items.length == 0 )
             return new ResultSet<Integer> ();
 
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+        JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 3 );
 
         callObject.addInParamAsInt ( items.length, JIFlags.FLAG_NULL );
@@ -190,7 +190,7 @@ public class OPCItemMgt extends BaseCOMObject
         if ( serverHandles.length == 0 )
             return new ResultSet<Integer> ();
 
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+        JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 4 );
 
         callObject.addInParamAsInt ( serverHandles.length, JIFlags.FLAG_NULL );

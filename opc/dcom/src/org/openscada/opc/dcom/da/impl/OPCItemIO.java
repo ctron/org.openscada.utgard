@@ -24,7 +24,7 @@ import java.net.UnknownHostException;
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.IJIComObject;
 import org.jinterop.dcom.core.JIArray;
-import org.jinterop.dcom.core.JICallObject;
+import org.jinterop.dcom.core.JICallBuilder;
 import org.jinterop.dcom.core.JIFlags;
 import org.jinterop.dcom.core.JIPointer;
 import org.jinterop.dcom.core.JIString;
@@ -46,7 +46,7 @@ public class OPCItemIO extends BaseCOMObject
         if ( requests.length == 0 )
             return;
 
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+        JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 0 );
 
         JIString itemIDs[] = new JIString[requests.length];

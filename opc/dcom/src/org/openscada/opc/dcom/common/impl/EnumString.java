@@ -27,11 +27,9 @@ import java.util.List;
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.IJIComObject;
 import org.jinterop.dcom.core.JIArray;
-import org.jinterop.dcom.core.JICallObject;
+import org.jinterop.dcom.core.JICallBuilder;
 import org.jinterop.dcom.core.JIFlags;
-import org.jinterop.dcom.core.JIInterfacePointer;
 import org.jinterop.dcom.core.JIString;
-import org.jinterop.dcom.win32.JIComFactory;
 
 public class EnumString extends BaseCOMObject
 {
@@ -50,7 +48,7 @@ public class EnumString extends BaseCOMObject
             return 0;
         }
 
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+        JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 0 );
 
         callObject.addInParamAsInt ( num, JIFlags.FLAG_NULL );
@@ -88,7 +86,7 @@ public class EnumString extends BaseCOMObject
             return;
         }
 
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+        JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 1 );
 
         callObject.addInParamAsInt ( num, JIFlags.FLAG_NULL );
@@ -98,7 +96,7 @@ public class EnumString extends BaseCOMObject
 
     public void reset () throws JIException
     {
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+    	JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 2 );
 
         getCOMObject ().call ( callObject );
@@ -106,15 +104,14 @@ public class EnumString extends BaseCOMObject
 
     public EnumString cloneObject () throws JIException, IllegalArgumentException, UnknownHostException
     {
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+    	JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 3 );
 
-        callObject.addOutParamAsType ( JIInterfacePointer.class, JIFlags.FLAG_NULL );
+        callObject.addOutParamAsType ( IJIComObject.class, JIFlags.FLAG_NULL );
 
         Object[] result = getCOMObject ().call ( callObject );
 
-        IJIComObject object = JIComFactory.createCOMInstance ( getCOMObject (), (JIInterfacePointer)result[0] );
-
+        IJIComObject object = (IJIComObject)result[0];
         return new EnumString ( object );
     }
 

@@ -24,13 +24,11 @@ import java.net.UnknownHostException;
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.IJIComObject;
 import org.jinterop.dcom.core.JIArray;
-import org.jinterop.dcom.core.JICallObject;
+import org.jinterop.dcom.core.JICallBuilder;
 import org.jinterop.dcom.core.JIClsid;
 import org.jinterop.dcom.core.JIFlags;
-import org.jinterop.dcom.core.JIInterfacePointer;
 import org.jinterop.dcom.core.JIPointer;
 import org.jinterop.dcom.core.JIString;
-import org.jinterop.dcom.win32.JIComFactory;
 import org.openscada.opc.dcom.common.impl.BaseCOMObject;
 import org.openscada.opc.dcom.common.impl.EnumGUID;
 import org.openscada.opc.dcom.common.impl.Helper;
@@ -53,7 +51,7 @@ public class OPCServerList extends BaseCOMObject
 
     public JIClsid getCLSIDFromProgID ( String progId ) throws JIException
     {
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+    	JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 2 );
 
         callObject.addInParamAsString ( progId, JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR );
@@ -86,7 +84,7 @@ public class OPCServerList extends BaseCOMObject
             return null;
         }
         
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+        JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 1 );
 
         callObject.addInParamAsUUID ( clsId.getCLSID (), JIFlags.FLAG_NULL );
@@ -137,7 +135,7 @@ public class OPCServerList extends BaseCOMObject
     public EnumGUID enumClassesOfCategories ( UUID[] implemented, UUID[] required ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         // ** CALL
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+    	JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 0 );
 
         // ** IN
@@ -162,11 +160,11 @@ public class OPCServerList extends BaseCOMObject
         }
 
         // ** OUT
-        callObject.addOutParamAsType ( JIInterfacePointer.class, JIFlags.FLAG_NULL );
+        callObject.addOutParamAsType ( IJIComObject.class, JIFlags.FLAG_NULL );
 
         // ** RESULT
         Object result[] = Helper.callRespectSFALSE ( getCOMObject (), callObject );
 
-        return new EnumGUID ( JIComFactory.createCOMInstance ( getCOMObject (), (JIInterfacePointer)result[0] ) );
+        return new EnumGUID ( (IJIComObject)result[0] );
     }
 }

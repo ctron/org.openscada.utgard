@@ -23,12 +23,10 @@ import java.net.UnknownHostException;
 
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.IJIComObject;
-import org.jinterop.dcom.core.JICallObject;
+import org.jinterop.dcom.core.JICallBuilder;
 import org.jinterop.dcom.core.JIFlags;
-import org.jinterop.dcom.core.JIInterfacePointer;
 import org.jinterop.dcom.core.JIPointer;
 import org.jinterop.dcom.core.JIString;
-import org.jinterop.dcom.win32.JIComFactory;
 import org.openscada.opc.dcom.common.impl.BaseCOMObject;
 import org.openscada.opc.dcom.common.impl.EnumString;
 import org.openscada.opc.dcom.common.impl.Helper;
@@ -56,7 +54,7 @@ public class OPCBrowseServerAddressSpace extends BaseCOMObject
      */
     public OPCNAMESPACETYPE queryOrganization () throws JIException
     {
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+    	JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 0 );
 
         callObject.addOutParamAsType ( Short.class, JIFlags.FLAG_NULL );
@@ -85,7 +83,7 @@ public class OPCBrowseServerAddressSpace extends BaseCOMObject
      */
     public void changePosition ( String position, OPCBROWSEDIRECTION direction ) throws JIException
     {
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+    	JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 1 );
 
         callObject.addInParamAsShort ( (short)direction.id (), JIFlags.FLAG_NULL );
@@ -97,18 +95,18 @@ public class OPCBrowseServerAddressSpace extends BaseCOMObject
 
     public EnumString browse ( OPCBROWSETYPE browseType, String filterCriteria, int accessRights, int dataType ) throws JIException, IllegalArgumentException, UnknownHostException
     {
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+    	JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 2 );
 
         callObject.addInParamAsShort ( (short)browseType.id (), JIFlags.FLAG_NULL );
         callObject.addInParamAsString ( filterCriteria, JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR );
         callObject.addInParamAsShort ( (short)dataType, JIFlags.FLAG_NULL );
         callObject.addInParamAsInt ( accessRights, JIFlags.FLAG_NULL );
-        callObject.addOutParamAsType ( JIInterfacePointer.class, JIFlags.FLAG_NULL );
+        callObject.addOutParamAsType ( IJIComObject.class, JIFlags.FLAG_NULL );
 
         Object result[] = Helper.callRespectSFALSE ( getCOMObject (), callObject );
 
-        return new EnumString ( JIComFactory.createCOMInstance ( getCOMObject (), (JIInterfacePointer)result[0] ) );
+        return new EnumString ( (IJIComObject)result[0] );
     }
 
     /**
@@ -121,15 +119,15 @@ public class OPCBrowseServerAddressSpace extends BaseCOMObject
      */
     public EnumString browseAccessPaths ( String itemID ) throws JIException, IllegalArgumentException, UnknownHostException
     {
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+    	JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 4 );
 
         callObject.addInParamAsString ( itemID, JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR );
-        callObject.addOutParamAsType ( JIInterfacePointer.class, JIFlags.FLAG_NULL );
+        callObject.addOutParamAsType ( IJIComObject.class, JIFlags.FLAG_NULL );
 
         Object[] result = Helper.callRespectSFALSE ( getCOMObject (), callObject );
 
-        return new EnumString ( JIComFactory.createCOMInstance ( getCOMObject (), (JIInterfacePointer)result[0] ) );
+        return new EnumString ( (IJIComObject)result[0] );
     }
 
     /**
@@ -146,7 +144,7 @@ public class OPCBrowseServerAddressSpace extends BaseCOMObject
      */
     public String getItemID ( String item ) throws JIException
     {
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+    	JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 3 );
 
         callObject.addInParamAsString ( item, JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR );

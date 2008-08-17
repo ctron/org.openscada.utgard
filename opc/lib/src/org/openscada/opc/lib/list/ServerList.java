@@ -25,14 +25,12 @@ import java.util.Collection;
 import java.util.List;
 
 import org.jinterop.dcom.common.JIException;
-import org.jinterop.dcom.core.IJIBindingSelector;
 import org.jinterop.dcom.core.JIClsid;
 import org.jinterop.dcom.core.JIComServer;
 import org.jinterop.dcom.core.JISession;
 import org.openscada.opc.dcom.list.ClassDetails;
 import org.openscada.opc.dcom.list.Constants;
 import org.openscada.opc.dcom.list.impl.OPCServerList;
-import org.openscada.opc.lib.common.OPC;
 
 import rpc.core.UUID;
 
@@ -51,22 +49,13 @@ public class ServerList
      * Create a new instance with an already existing session
      * @param session the DCOM session
      * @param host the host to query
-     * @param preferredHosts hosts which are preferred
      * @throws IllegalArgumentException
      * @throws UnknownHostException
      * @throws JIException
      */
-    public ServerList ( JISession session, String host, IJIBindingSelector bindingSelector ) throws IllegalArgumentException, UnknownHostException, JIException
+    public ServerList ( JISession session, String host ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         _session = session;
-        if ( bindingSelector != null )
-        {
-            _session.setBindingSelector ( bindingSelector );
-        }
-        else
-        {
-            _session.setBindingSelector ( OPC.getDefaultBindingSelector () );
-        }
         JIComServer comServer = new JIComServer ( JIClsid.valueOf ( Constants.OPCServerList_CLSID ), host, _session );
         _serverList = new OPCServerList ( comServer.createInstance () );
     }
@@ -97,7 +86,7 @@ public class ServerList
      */
     public ServerList ( String host, String user, String password, String domain ) throws IllegalArgumentException, UnknownHostException, JIException
     {
-        this ( JISession.createSession ( domain, user, password ), host, OPC.getDefaultBindingSelector () );
+        this ( JISession.createSession ( domain, user, password ), host );
     }
 
     /**

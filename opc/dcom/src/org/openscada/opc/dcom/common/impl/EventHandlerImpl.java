@@ -21,7 +21,7 @@ package org.openscada.opc.dcom.common.impl;
 
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.IJIComObject;
-import org.jinterop.dcom.win32.JIComFactory;
+import org.jinterop.dcom.core.JIFrameworkHelper;
 import org.openscada.opc.dcom.common.EventHandler;
 
 public class EventHandlerImpl implements EventHandler
@@ -52,7 +52,7 @@ public class EventHandlerImpl implements EventHandler
         {
             try
             {
-                JIComFactory.detachEventHandler ( _object, _identifier );
+                JIFrameworkHelper.detachEventHandler ( _object, _identifier );
             }
             finally
             {

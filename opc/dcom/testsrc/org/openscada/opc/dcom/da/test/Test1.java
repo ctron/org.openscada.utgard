@@ -420,7 +420,7 @@ public class Test1
             // session );
 
             //JIComServer comServer = new JIComServer ( JIClsid.valueOf ( configuration.getCLSID () ), args[0], _session );
-            JIComServer comServer = new JIComServer ( JIProgId.valueOf ( _session, configuration.getProgId () ),
+            JIComServer comServer = new JIComServer ( JIProgId.valueOf ( configuration.getProgId () ),
                     args[0], _session );
 
             IJIComObject serverObject = comServer.createInstance ();

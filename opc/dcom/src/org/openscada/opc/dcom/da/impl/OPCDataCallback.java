@@ -23,12 +23,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.jinterop.dcom.common.JIException;
-import org.jinterop.dcom.common.JIInterfaceDefinition;
-import org.jinterop.dcom.common.JIJavaCoClass;
-import org.jinterop.dcom.common.JIMethodDescriptor;
 import org.jinterop.dcom.core.JIArray;
 import org.jinterop.dcom.core.JIFlags;
-import org.jinterop.dcom.core.JIParameterObject;
+import org.jinterop.dcom.core.JILocalCoClass;
+import org.jinterop.dcom.core.JILocalInterfaceDefinition;
+import org.jinterop.dcom.core.JILocalMethodDescriptor;
+import org.jinterop.dcom.core.JILocalParamsDescriptor;
 import org.jinterop.dcom.core.JIStruct;
 import org.jinterop.dcom.core.JIVariant;
 import org.openscada.opc.dcom.common.FILETIME;
@@ -45,7 +45,7 @@ public class OPCDataCallback extends EventHandlerImpl
 {
     private IOPCDataCallback _callback = null;
 
-    private JIJavaCoClass _coClass = null;
+    private JILocalCoClass _coClass = null;
 
     public OPCDataCallback ()
     {
@@ -170,18 +170,18 @@ public class OPCDataCallback extends EventHandlerImpl
         return new Object[] { Constants.S_OK };
     }
 
-    public synchronized JIJavaCoClass getCoClass () throws JIException
+    public synchronized JILocalCoClass getCoClass () throws JIException
     {
         if ( _coClass != null )
             return _coClass;
 
-        _coClass = new JIJavaCoClass ( new JIInterfaceDefinition ( Constants.IOPCDataCallback_IID, false ), this );
+        _coClass = new JILocalCoClass ( new JILocalInterfaceDefinition ( Constants.IOPCDataCallback_IID, false ), this, false );
 
-        JIParameterObject params;
-        JIMethodDescriptor method;
+        JILocalParamsDescriptor params;
+        JILocalMethodDescriptor method;
 
         // OnDataChange
-        params = new JIParameterObject ();
+        params = new JILocalParamsDescriptor ();
         params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL ); // trans id
         params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL ); // group handle
         params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL ); // master quality
@@ -193,11 +193,11 @@ public class OPCDataCallback extends EventHandlerImpl
         params.addInParamAsObject ( ( new JIArray ( FILETIME.getStruct (), null, 1, true ) ), JIFlags.FLAG_NULL ); // timestamps
         params.addInParamAsObject ( ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL ); // errors
 
-        method = new JIMethodDescriptor ( "OnDataChange", params );
+        method = new JILocalMethodDescriptor ( "OnDataChange", params );
         _coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
 
         // OnReadComplete
-        params = new JIParameterObject ();
+        params = new JILocalParamsDescriptor ();
         params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL );
         params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL );
         params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL );
@@ -208,25 +208,25 @@ public class OPCDataCallback extends EventHandlerImpl
         params.addInParamAsObject ( new JIArray ( Short.class, null, 1, true ), JIFlags.FLAG_NULL );
         params.addInParamAsObject ( new JIArray ( FILETIME.getStruct (), null, 1, true ), JIFlags.FLAG_NULL );
         params.addInParamAsObject ( new JIArray ( Integer.class, null, 1, true ), JIFlags.FLAG_NULL );
-        method = new JIMethodDescriptor ( "OnReadComplete", params );
+        method = new JILocalMethodDescriptor ( "OnReadComplete", params );
         _coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
 
         // OnWriteComplete
-        params = new JIParameterObject ();
+        params = new JILocalParamsDescriptor ();
         params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL );
         params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL );
         params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL );
         params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL );
         params.addInParamAsObject ( new JIArray ( Integer.class, null, 1, true ), JIFlags.FLAG_NULL );
         params.addInParamAsObject ( new JIArray ( Integer.class, null, 1, true ), JIFlags.FLAG_NULL );
-        method = new JIMethodDescriptor ( "OnWriteComplete", params );
+        method = new JILocalMethodDescriptor ( "OnWriteComplete", params );
         _coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
 
         // OnCancelComplete
-        params = new JIParameterObject ();
+        params = new JILocalParamsDescriptor ();
         params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL );
         params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL );
-        method = new JIMethodDescriptor ( "OnCancelComplete", params );
+        method = new JILocalMethodDescriptor ( "OnCancelComplete", params );
         _coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
 
         // Add supported event interfaces

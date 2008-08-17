@@ -25,7 +25,7 @@ public class WriteTest
 {
     private String _itemID = "";
 
-    private JIVariant _value = JIVariant.EMPTY;
+    private JIVariant _value = JIVariant.EMPTY();
 
     public WriteTest ( String itemID, JIVariant value )
     {

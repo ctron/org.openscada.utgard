@@ -187,7 +187,7 @@ public class Test2
             _session = JISession.createSession ( args[1], args[2], args[3] );
 
             //JIComServer comServer = new JIComServer ( JIClsid.valueOf ( configuration.getCLSID () ), args[0], _session );
-            JIComServer comServer = new JIComServer ( JIProgId.valueOf ( _session, configuration.getProgId () ),
+            JIComServer comServer = new JIComServer ( JIProgId.valueOf ( configuration.getProgId () ),
                     args[0], _session );
 
             IJIComObject serverObject = comServer.createInstance ();

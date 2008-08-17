@@ -22,7 +22,7 @@ package org.openscada.opc.dcom.da.impl;
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.IJIComObject;
 import org.jinterop.dcom.core.JIArray;
-import org.jinterop.dcom.core.JICallObject;
+import org.jinterop.dcom.core.JICallBuilder;
 import org.jinterop.dcom.core.JIFlags;
 import org.jinterop.dcom.core.JIPointer;
 import org.jinterop.dcom.core.JIStruct;
@@ -52,7 +52,7 @@ public class OPCSyncIO extends BaseCOMObject
             return new KeyedResultSet<Integer, OPCITEMSTATE> ();
         }
 
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+        JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 0 );
 
         callObject.addInParamAsShort ( (short)source.id (), JIFlags.FLAG_NULL );
@@ -94,7 +94,7 @@ public class OPCSyncIO extends BaseCOMObject
             values[i] = Helper.fixVariant ( requests[i].getValue () );
         }
 
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+        JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 1 );
 
         callObject.addInParamAsInt ( requests.length, JIFlags.FLAG_NULL );

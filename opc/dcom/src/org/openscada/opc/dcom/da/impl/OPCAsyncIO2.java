@@ -24,7 +24,7 @@ import java.net.UnknownHostException;
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.IJIComObject;
 import org.jinterop.dcom.core.JIArray;
-import org.jinterop.dcom.core.JICallObject;
+import org.jinterop.dcom.core.JICallBuilder;
 import org.jinterop.dcom.core.JIFlags;
 import org.jinterop.dcom.core.JIPointer;
 import org.openscada.opc.dcom.common.Result;
@@ -73,7 +73,7 @@ public class OPCAsyncIO2 extends BaseCOMObject
 
     public void setEnable ( boolean state ) throws JIException
     {
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+    	JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 4 );
 
         callObject.addInParamAsInt ( state ? 1 : 0, JIFlags.FLAG_NULL );
@@ -83,7 +83,7 @@ public class OPCAsyncIO2 extends BaseCOMObject
 
     public int refresh ( OPCDATASOURCE dataSource, int transactionID ) throws JIException
     {
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+    	JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 2 );
 
         callObject.addInParamAsShort ( (short)dataSource.id (), JIFlags.FLAG_NULL );
@@ -97,7 +97,7 @@ public class OPCAsyncIO2 extends BaseCOMObject
 
     public void cancel ( int cancelId ) throws JIException
     {
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+    	JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 3 );
 
         callObject.addInParamAsInt ( cancelId, JIFlags.FLAG_NULL );
@@ -110,7 +110,7 @@ public class OPCAsyncIO2 extends BaseCOMObject
         if ( serverHandles == null || serverHandles.length == 0 )
             return new AsyncResult ();
 
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+        JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 0 );
 
         callObject.addInParamAsInt ( serverHandles.length, JIFlags.FLAG_NULL );

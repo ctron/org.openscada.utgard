@@ -30,7 +30,7 @@ public class WriteRequest
 {
     private int _serverHandle = 0;
 
-    private JIVariant _value = JIVariant.EMPTY;
+    private JIVariant _value = JIVariant.EMPTY();
 
     public WriteRequest ()
     {

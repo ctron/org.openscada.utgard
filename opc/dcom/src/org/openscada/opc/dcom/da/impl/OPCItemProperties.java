@@ -27,7 +27,7 @@ import java.util.List;
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.IJIComObject;
 import org.jinterop.dcom.core.JIArray;
-import org.jinterop.dcom.core.JICallObject;
+import org.jinterop.dcom.core.JICallBuilder;
 import org.jinterop.dcom.core.JIFlags;
 import org.jinterop.dcom.core.JIPointer;
 import org.jinterop.dcom.core.JIString;
@@ -48,7 +48,7 @@ public class OPCItemProperties extends BaseCOMObject
 
     public Collection<PropertyDescription> queryAvailableProperties ( String itemID ) throws JIException
     {
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+    	JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 0 );
 
         callObject.addInParamAsString ( itemID, JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR );
@@ -93,7 +93,7 @@ public class OPCItemProperties extends BaseCOMObject
             ids[i] = properties[i];
         }
 
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+        JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 1 );
 
         callObject.addInParamAsString ( itemID, JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR );
@@ -129,7 +129,7 @@ public class OPCItemProperties extends BaseCOMObject
             ids[i] = properties[i];
         }
 
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+        JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 2 );
 
         callObject.addInParamAsString ( itemID, JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR );

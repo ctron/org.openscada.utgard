@@ -26,7 +26,7 @@ import java.util.Collection;
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.IJIComObject;
 import org.jinterop.dcom.core.JIArray;
-import org.jinterop.dcom.core.JICallObject;
+import org.jinterop.dcom.core.JICallBuilder;
 import org.jinterop.dcom.core.JIFlags;
 import org.jinterop.dcom.core.JIPointer;
 import org.jinterop.dcom.core.JIString;
@@ -40,7 +40,7 @@ public class OPCCommon extends BaseCOMObject
 
     public void setLocaleID ( int localeID ) throws JIException
     {
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+    	JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 0 );
 
         callObject.addInParamAsInt ( localeID, JIFlags.FLAG_NULL );
@@ -50,7 +50,7 @@ public class OPCCommon extends BaseCOMObject
 
     public int getLocaleID () throws JIException
     {
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+    	JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 1 );
 
         callObject.addOutParamAsObject ( Integer.class, JIFlags.FLAG_NULL );
@@ -61,7 +61,7 @@ public class OPCCommon extends BaseCOMObject
 
     public String getErrorString ( int errorCode, int localeID ) throws JIException
     {
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+    	JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 3 );
 
         callObject.addInParamAsInt ( errorCode, JIFlags.FLAG_NULL );
@@ -75,7 +75,7 @@ public class OPCCommon extends BaseCOMObject
 
     public void setClientName ( String clientName ) throws JIException
     {
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+    	JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 4 );
 
         callObject.addInParamAsString ( clientName, JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR );
@@ -85,7 +85,7 @@ public class OPCCommon extends BaseCOMObject
 
     public Collection<Integer> queryAvailableLocaleIDs () throws JIException
     {
-        JICallObject callObject = new JICallObject ( getCOMObject ().getIpid (), true );
+    	JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 2 );
 
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );

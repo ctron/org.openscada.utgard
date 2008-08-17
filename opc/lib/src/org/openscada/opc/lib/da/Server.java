@@ -28,7 +28,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.log4j.Logger;
 import org.jinterop.dcom.common.JIException;
-import org.jinterop.dcom.core.IJIBindingSelector;
 import org.jinterop.dcom.core.JIClsid;
 import org.jinterop.dcom.core.JIComServer;
 import org.jinterop.dcom.core.JIProgId;
@@ -41,7 +40,6 @@ import org.openscada.opc.dcom.da.impl.OPCServer;
 import org.openscada.opc.lib.common.AlreadyConnectedException;
 import org.openscada.opc.lib.common.ConnectionInformation;
 import org.openscada.opc.lib.common.NotConnectedException;
-import org.openscada.opc.lib.common.OPC;
 import org.openscada.opc.lib.da.browser.FlatBrowser;
 import org.openscada.opc.lib.da.browser.TreeBrowser;
 import org.openscada.utils.timing.Scheduler;
@@ -106,8 +104,6 @@ public class Server
             throw new AlreadyConnectedException ();
         }
         
-        IJIBindingSelector selector = OPC.createBindingSelector ( _connectionInformation.getPreferredHosts () );
-
         int socketTimeout = Integer.getInteger ( "rpc.socketTimeout", 0 );
         _log.info ( String.format ( "Socket timeout: %s ", socketTimeout ) ); 
         
@@ -118,7 +114,6 @@ public class Server
                 _session = JISession.createSession ( _connectionInformation.getDomain (),
                         _connectionInformation.getUser (), _connectionInformation.getPassword () );
                 _session.setGlobalSocketTimeout ( socketTimeout );
-                _session.setBindingSelector ( selector );
                 _comServer = new JIComServer ( JIClsid.valueOf ( _connectionInformation.getClsid () ),
                         _connectionInformation.getHost (), _session );
             }
@@ -127,8 +122,7 @@ public class Server
                 _session = JISession.createSession ( _connectionInformation.getDomain (),
                         _connectionInformation.getUser (), _connectionInformation.getPassword () );
                 _session.setGlobalSocketTimeout ( socketTimeout );
-                _session.setBindingSelector ( selector );
-                _comServer = new JIComServer ( JIProgId.valueOf ( _session, _connectionInformation.getClsid () ),
+                _comServer = new JIComServer ( JIProgId.valueOf ( _connectionInformation.getClsid () ),
                         _connectionInformation.getHost (), _session );
             }
             else
