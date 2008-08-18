@@ -117,6 +117,10 @@ public class VariantDumper
         {
             System.out.println ( prefix + "Integer: " + value );
         }
+        else if ( value instanceof Short )
+        {
+            System.out.println ( prefix + "Short: " + value );
+        }
         else if ( value instanceof Long )
         {
             System.out.println ( prefix + "Long: " + value );
