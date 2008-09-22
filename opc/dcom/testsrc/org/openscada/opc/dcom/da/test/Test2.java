@@ -49,20 +49,20 @@ public class Test2
 {
     private static JISession _session = null;
 
-    public static void showError ( OPCCommon common, int errorCode ) throws JIException
+    public static void showError ( final OPCCommon common, final int errorCode ) throws JIException
     {
         System.out.println ( String.format ( "Error (%X): '%s'", errorCode, common.getErrorString ( errorCode, 1033 ) ) );
     }
 
-    public static void showError ( OPCServer server, int errorCode ) throws JIException
+    public static void showError ( final OPCServer server, final int errorCode ) throws JIException
     {
         showError ( server.getCommon (), errorCode );
     }
 
-    public static boolean dumpOPCITEMRESULT ( KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> result )
+    public static boolean dumpOPCITEMRESULT ( final KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> result )
     {
         int failed = 0;
-        for ( KeyedResult<OPCITEMDEF, OPCITEMRESULT> resultEntry : result )
+        for ( final KeyedResult<OPCITEMDEF, OPCITEMRESULT> resultEntry : result )
         {
             System.out.println ( "==================================" );
             System.out.println ( String.format ( "Item: '%s' ", resultEntry.getKey ().getItemID () ) );
@@ -76,38 +76,44 @@ public class Test2
                 System.out.println ( String.format ( "Reserved: %d", resultEntry.getValue ().getReserved () ) );
             }
             else
+            {
                 failed++;
+            }
         }
         return failed == 0;
     }
 
-    public static void testItems ( OPCServer server, OPCGroupStateMgt group, String... itemIDs ) throws IllegalArgumentException, UnknownHostException, JIException
+    public static void testItems ( final OPCServer server, final OPCGroupStateMgt group, final String... itemIDs ) throws IllegalArgumentException, UnknownHostException, JIException
     {
-        OPCItemMgt itemManagement = group.getItemManagement ();
-        List<OPCITEMDEF> items = new ArrayList<OPCITEMDEF> ( itemIDs.length );
-        for ( String id : itemIDs )
+        final OPCItemMgt itemManagement = group.getItemManagement ();
+        final List<OPCITEMDEF> items = new ArrayList<OPCITEMDEF> ( itemIDs.length );
+        for ( final String id : itemIDs )
         {
-            OPCITEMDEF item = new OPCITEMDEF ();
+            final OPCITEMDEF item = new OPCITEMDEF ();
             item.setItemID ( id );
             item.setClientHandle ( new Random ().nextInt () );
             items.add ( item );
         }
 
-        OPCITEMDEF[] itemArray = items.toArray ( new OPCITEMDEF[0] );
+        final OPCITEMDEF[] itemArray = items.toArray ( new OPCITEMDEF[0] );
 
         System.out.println ( "Validate" );
         KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> result = itemManagement.validate ( itemArray );
         if ( !dumpOPCITEMRESULT ( result ) )
+        {
             return;
+        }
 
         // now add them to the group
         System.out.println ( "Add" );
         result = itemManagement.add ( itemArray );
         if ( !dumpOPCITEMRESULT ( result ) )
+        {
             return;
+        }
 
         // get the server handle array
-        Integer[] serverHandles = new Integer[itemArray.length];
+        final Integer[] serverHandles = new Integer[itemArray.length];
         for ( int i = 0; i < itemArray.length; i++ )
         {
             serverHandles[i] = new Integer ( result.get ( i ).getValue ().getServerHandle () );
@@ -115,16 +121,15 @@ public class Test2
 
         // set them active
         System.out.println ( "Activate" );
-        ResultSet<Integer> resultSet = itemManagement.setActiveState ( true, serverHandles );
-        for ( Result<Integer> resultEntry : resultSet )
+        final ResultSet<Integer> resultSet = itemManagement.setActiveState ( true, serverHandles );
+        for ( final Result<Integer> resultEntry : resultSet )
         {
-            System.out.println ( String.format ( "Item: %08X, Error: %08X", resultEntry.getValue (),
-                    resultEntry.getErrorCode () ) );
+            System.out.println ( String.format ( "Item: %08X, Error: %08X", resultEntry.getValue (), resultEntry.getErrorCode () ) );
         }
 
         // set client handles
         System.out.println ( "Set client handles" );
-        Integer[] clientHandles = new Integer[serverHandles.length];
+        final Integer[] clientHandles = new Integer[serverHandles.length];
         for ( int i = 0; i < serverHandles.length; i++ )
         {
             clientHandles[i] = i;
@@ -132,21 +137,21 @@ public class Test2
         itemManagement.setClientHandles ( serverHandles, clientHandles );
 
         System.out.println ( "Create async IO 2.0 object" );
-        OPCAsyncIO2 asyncIO2 = group.getAsyncIO2 ();
+        final OPCAsyncIO2 asyncIO2 = group.getAsyncIO2 ();
 
         // connect handler
         System.out.println ( "attach" );
-        EventHandler eventHandler = group.attach ( new DumpDataCallback () );
+        final EventHandler eventHandler = group.attach ( new DumpDataCallback () );
 
         System.out.println ( "attach..enable" );
         asyncIO2.setEnable ( true );
 
         System.out.println ( "attach..refresh" );
-        int cancelId = asyncIO2.refresh ( OPCDATASOURCE.OPC_DS_DEVICE, 1 );
+        final int cancelId = asyncIO2.refresh ( OPCDATASOURCE.OPC_DS_DEVICE, 1 );
         System.out.println ( "Cancel ID: " + cancelId );
 
         System.out.println ( "attach..read" );
-        AsyncResult asyncResult = asyncIO2.read ( 2, serverHandles );
+        final AsyncResult asyncResult = asyncIO2.read ( 2, serverHandles );
         System.out.println ( String.format ( "attach..read..cancelId: %08X", asyncResult.getCancelId () ) );
 
         // sleep
@@ -155,7 +160,7 @@ public class Test2
             System.out.println ( "Waiting..." );
             Thread.sleep ( 10 * 1000 );
         }
-        catch ( InterruptedException e )
+        catch ( final InterruptedException e )
         {
             // TODO Auto-generated catch block
             e.printStackTrace ();
@@ -173,10 +178,9 @@ public class Test2
         itemManagement.remove ( serverHandles );
     }
 
-    @SuppressWarnings ( "unused" )
-    public static void main ( String[] args ) throws IllegalArgumentException, UnknownHostException, JIException
+    public static void main ( final String[] args ) throws IllegalArgumentException, UnknownHostException, JIException
     {
-        TestConfiguration configuration = new MatrikonSimulationServerConfiguration ();
+        final TestConfiguration configuration = new MatrikonSimulationServerConfiguration ();
 
         OPCServer server = null;
         try
@@ -186,18 +190,17 @@ public class Test2
             _session = JISession.createSession ( args[1], args[2], args[3] );
 
             //JIComServer comServer = new JIComServer ( JIClsid.valueOf ( configuration.getCLSID () ), args[0], _session );
-            JIComServer comServer = new JIComServer ( JIProgId.valueOf ( configuration.getProgId () ),
-                    args[0], _session );
+            final JIComServer comServer = new JIComServer ( JIProgId.valueOf ( configuration.getProgId () ), args[0], _session );
 
-            IJIComObject serverObject = comServer.createInstance ();
+            final IJIComObject serverObject = comServer.createInstance ();
             server = new OPCServer ( serverObject );
 
-            OPCGroupStateMgt group = server.addGroup ( "test", true, 100, 1234, 60, 0.0f, 1033 );
+            final OPCGroupStateMgt group = server.addGroup ( "test", true, 100, 1234, 60, 0.0f, 1033 );
 
             testItems ( server, group, configuration.getReadItems () );
             server.removeGroup ( group, true );
         }
-        catch ( JIException e )
+        catch ( final JIException e )
         {
             e.printStackTrace ();
             showError ( server, e.getErrorCode () );
@@ -205,7 +208,9 @@ public class Test2
         finally
         {
             if ( _session != null )
+            {
                 JISession.destroySession ( _session );
+            }
             _session = null;
         }
     }
