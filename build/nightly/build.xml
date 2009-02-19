@@ -10,15 +10,19 @@
             The OpenSCADA OPC Nightly build file - Project Utgard
     </description>
 	
+	<property name="deploy.path" value="download/utgard/integration"/>
+	<property name="deploy.href" value="http://openscada.org/${deploy.path}"/>
+	<property name="deploy.base" location="/var/vhosts/openscada/${deploy.path}"/>
+	
 	<!-- ================================= 
           target: default              
          ================================= -->
     <target name="default" depends="init" description="--> The OpenSCADA OPC Nightly build file - Project Utgard">
-    	<delete dir="/var/vhosts/openscada/download/utgard/integration/nightly-${DSTAMP}"/>
+    	<delete dir="${deploy.base}/nightly-${DSTAMP}"/>
         <ant dir="../release">
-        	<property name="upload.base" value="/var/vhosts/openscada/download/utgard/integration/nightly-${DSTAMP}"/>
+        	<property name="upload.base" value="${deploy.base}/nightly-${DSTAMP}"/>
         	<property name="release" value="-${DSTAMP}-nightly"/>
-        	<property name="api.href.base" value="http://openscada.org/download/utgard/integration/nightly-${DSTAMP}"/>
+        	<property name="api.href.base" value="${deploy.href}/nightly-${DSTAMP}"/>
     	</ant>
     </target>
 
