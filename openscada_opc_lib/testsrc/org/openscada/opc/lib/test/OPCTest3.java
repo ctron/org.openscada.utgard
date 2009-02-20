@@ -37,41 +37,41 @@ import org.openscada.utils.timing.Scheduler;
  */
 public class OPCTest3
 {
-    
-    private static void dumpLeaf ( String prefix, Leaf leaf )
+
+    private static void dumpLeaf ( final String prefix, final Leaf leaf )
     {
         System.out.println ( prefix + "Leaf: " + leaf.getName () + " [" + leaf.getItemId () + "]" );
     }
-    
-    private static void dumpBranch ( String prefix, Branch branch )
+
+    private static void dumpBranch ( final String prefix, final Branch branch )
     {
         System.out.println ( prefix + "Branch: " + branch.getName () );
     }
-    
-    public static void dumpTree ( Branch branch, int level )
+
+    public static void dumpTree ( final Branch branch, final int level )
     {
-        StringBuilder sb = new StringBuilder ();
+        final StringBuilder sb = new StringBuilder ();
         for ( int i = 0; i < level; i++ )
         {
             sb.append ( "  " );
         }
-        String indent = sb.toString ();
+        final String indent = sb.toString ();
 
-        for ( Leaf leaf : branch.getLeaves () )
+        for ( final Leaf leaf : branch.getLeaves () )
         {
             dumpLeaf ( indent, leaf );
         }
-        for ( Branch subBranch : branch.getBranches () )
+        for ( final Branch subBranch : branch.getBranches () )
         {
             dumpBranch ( indent, subBranch );
             dumpTree ( subBranch, level + 1 );
         }
     }
 
-    public static void main ( String[] args ) throws Throwable
+    public static void main ( final String[] args ) throws Throwable
     {
         // create connection information
-        ConnectionInformation ci = new ConnectionInformation ();
+        final ConnectionInformation ci = new ConnectionInformation ();
         ci.setHost ( args[0] );
         ci.setDomain ( args[1] );
         ci.setUser ( args[2] );
@@ -79,53 +79,52 @@ public class OPCTest3
         ci.setClsid ( args[4] );
 
         // create a new server
-        Server server = new Server ( ci, new Scheduler ( true ) );
+        final Server server = new Server ( ci, new Scheduler ( true, "Test" ) );
         try
         {
             // connect to server
             server.connect ();
 
             // browse flat
-            BaseBrowser flatBrowser = server.getFlatBrowser ();
+            final BaseBrowser flatBrowser = server.getFlatBrowser ();
             if ( flatBrowser != null )
             {
-                for ( String item : server.getFlatBrowser ().browse ( "" ) )
+                for ( final String item : server.getFlatBrowser ().browse ( "" ) )
                 {
                     System.out.println ( item );
                 }
             }
 
             // browse tree
-            TreeBrowser treeBrowser = server.getTreeBrowser ();
+            final TreeBrowser treeBrowser = server.getTreeBrowser ();
             if ( treeBrowser != null )
             {
                 dumpTree ( treeBrowser.browse (), 0 );
             }
-            
+
             // browse tree manually
             browseTree ( "", treeBrowser, new Branch () );
         }
-        catch ( JIException e )
+        catch ( final JIException e )
         {
             e.printStackTrace ();
-            System.out.println ( String.format ( "%08X: %s", e.getErrorCode (),
-                    server.getErrorMessage ( e.getErrorCode () ) ) );
+            System.out.println ( String.format ( "%08X: %s", e.getErrorCode (), server.getErrorMessage ( e.getErrorCode () ) ) );
         }
     }
 
-    private static void browseTree ( String prefix, TreeBrowser treeBrowser, Branch branch ) throws IllegalArgumentException, UnknownHostException, JIException
+    private static void browseTree ( final String prefix, final TreeBrowser treeBrowser, final Branch branch ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         treeBrowser.fillLeaves ( branch );
         treeBrowser.fillBranches ( branch );
-        
-        for ( Leaf leaf : branch.getLeaves () )
+
+        for ( final Leaf leaf : branch.getLeaves () )
         {
-            dumpLeaf ( "M - " + prefix+" ", leaf );
+            dumpLeaf ( "M - " + prefix + " ", leaf );
         }
-        for ( Branch subBranch : branch.getBranches () )
+        for ( final Branch subBranch : branch.getBranches () )
         {
-            dumpBranch ( "M - " + prefix+" ", subBranch );
-            browseTree ( prefix+" ", treeBrowser, subBranch );
+            dumpBranch ( "M - " + prefix + " ", subBranch );
+            browseTree ( prefix + " ", treeBrowser, subBranch );
         }
     }
 }

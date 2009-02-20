@@ -36,29 +36,29 @@ import org.openscada.utils.timing.Scheduler;
  */
 public class OPCTest5
 {
-    public static void main ( String[] args ) throws Throwable
+    public static void main ( final String[] args ) throws Throwable
     {
         // create connection information
-        ConnectionInformation baseInfo = new ConnectionInformation ();
+        final ConnectionInformation baseInfo = new ConnectionInformation ();
         baseInfo.setHost ( args[0] );
         baseInfo.setDomain ( args[1] );
         baseInfo.setUser ( args[2] );
         baseInfo.setPassword ( args[3] );
 
-        List<TestInfo> testInfo = new LinkedList<TestInfo> ();
+        final List<TestInfo> testInfo = new LinkedList<TestInfo> ();
         int i = 0;
 
         try
         {
 
-            while ( args.length > ( ( i * 2 ) + 4 ) )
+            while ( args.length > i * 2 + 4 )
             {
-                ConnectionInformation ci = new ConnectionInformation ( baseInfo );
-                ci.setClsid ( args[ ( i * 2 ) + 4] );
-                TestInfo ti = new TestInfo ();
+                final ConnectionInformation ci = new ConnectionInformation ( baseInfo );
+                ci.setClsid ( args[i * 2 + 4] );
+                final TestInfo ti = new TestInfo ();
                 ti._info = ci;
-                ti._itemId = args[ ( i * 2 ) + 5];
-                ti._server = new Server ( ci, new Scheduler ( true ) );
+                ti._itemId = args[i * 2 + 5];
+                ti._server = new Server ( ci, new Scheduler ( true, "Test" ) );
 
                 ti._server.connect ();
                 ti._access = new Async20Access ( ti._server, 100, false );
@@ -72,7 +72,7 @@ public class OPCTest5
             // wait a little bit
             Thread.sleep ( 10 * 1000 );
         }
-        catch ( JIException e )
+        catch ( final JIException e )
         {
             System.out.println ( String.format ( "%08X", e.getErrorCode () ) );
         }

@@ -40,44 +40,42 @@ import org.openscada.utils.timing.Scheduler;
 public class OPCTest7
 {
     @SuppressWarnings ( "unused" )
-    public static void main ( String[] args ) throws Throwable
+    public static void main ( final String[] args ) throws Throwable
     {
         // create connection information
-        ConnectionInformation ci = new ConnectionInformation ();
+        final ConnectionInformation ci = new ConnectionInformation ();
         ci.setHost ( args[0] );
         ci.setDomain ( args[1] );
         ci.setUser ( args[2] );
         ci.setPassword ( args[3] );
         ci.setClsid ( args[4] );
 
-        String itemName = args[5];
+        final String itemName = args[5];
 
         // create a new server
-        Server server = new Server ( ci, new Scheduler ( true ) );
+        final Server server = new Server ( ci, new Scheduler ( true, "Test" ) );
         try
         {
             // connect to server
             server.connect ();
-            
+
             // Add a new group
-            Group group = server.addGroup ( "test" );
+            final Group group = server.addGroup ( "test" );
 
             // Add a new item to the group
-            Item item = group.addItem ( itemName );
+            final Item item = group.addItem ( itemName );
 
-            JIString[] sdata = new JIString[] { new JIString ( "ab", JIFlags.FLAG_REPRESENTATION_STRING_BSTR ),
-                    new JIString ( "cd", JIFlags.FLAG_REPRESENTATION_STRING_BSTR ),
-                    new JIString ( "ef", JIFlags.FLAG_REPRESENTATION_STRING_BSTR ) };
-            Double[] ddata = new Double[] { 1.1, 2.2, 3.3 };
-            Boolean[] bdata = new Boolean[] { true, false, true, false };
-            Integer[] idata = new Integer[] { 1202, 1203, 1204 };
-            Long[] ldata = new Long[] { 12020001L, 12030001L, 12040001L };
-            Float[] fdata = new Float[] { 1.1f, 1.2f, 1.3f };
-            Byte[] bydata = new Byte[] { 1, 2, 3 };
-            Character[] cdata = new Character[] { 'A', 'B', 'C' };
+            final JIString[] sdata = new JIString[] { new JIString ( "ab", JIFlags.FLAG_REPRESENTATION_STRING_BSTR ), new JIString ( "cd", JIFlags.FLAG_REPRESENTATION_STRING_BSTR ), new JIString ( "ef", JIFlags.FLAG_REPRESENTATION_STRING_BSTR ) };
+            final Double[] ddata = new Double[] { 1.1, 2.2, 3.3 };
+            final Boolean[] bdata = new Boolean[] { true, false, true, false };
+            final Integer[] idata = new Integer[] { 1202, 1203, 1204 };
+            final Long[] ldata = new Long[] { 12020001L, 12030001L, 12040001L };
+            final Float[] fdata = new Float[] { 1.1f, 1.2f, 1.3f };
+            final Byte[] bydata = new Byte[] { 1, 2, 3 };
+            final Character[] cdata = new Character[] { 'A', 'B', 'C' };
 
-            JIArray array = new JIArray ( ddata, true );
-            JIVariant value = new JIVariant ( array );
+            final JIArray array = new JIArray ( ddata, true );
+            final JIVariant value = new JIVariant ( array );
 
             System.out.println ( "============= PHASE 1 ============= " );
 
@@ -93,7 +91,7 @@ public class OPCTest7
             System.out.println ( "============= PHASE 3 ============= " );
 
             // now read the value back and dump it
-            ItemState itemState = item.read ( true );
+            final ItemState itemState = item.read ( true );
             VariantDumper.dumpValue ( itemState.getValue () );
 
             System.out.println ( "============= PHASE 4 ============= " );
@@ -103,10 +101,9 @@ public class OPCTest7
 
             System.out.println ( "============= COMPLETE ============= " );
         }
-        catch ( JIException e )
+        catch ( final JIException e )
         {
-            System.out.println ( String.format ( "%08X: %s", e.getErrorCode (),
-                    server.getErrorMessage ( e.getErrorCode () ) ) );
+            System.out.println ( String.format ( "%08X: %s", e.getErrorCode (), server.getErrorMessage ( e.getErrorCode () ) ) );
         }
     }
 }

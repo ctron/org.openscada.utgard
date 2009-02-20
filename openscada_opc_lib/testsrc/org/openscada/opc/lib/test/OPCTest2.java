@@ -33,10 +33,10 @@ import org.openscada.utils.timing.Scheduler;
  */
 public class OPCTest2
 {
-    public static void main ( String[] args ) throws Throwable
+    public static void main ( final String[] args ) throws Throwable
     {
         // create connection information
-        ConnectionInformation ci = new ConnectionInformation ();
+        final ConnectionInformation ci = new ConnectionInformation ();
         ci.setHost ( args[0] );
         ci.setDomain ( args[1] );
         ci.setUser ( args[2] );
@@ -45,10 +45,12 @@ public class OPCTest2
 
         String itemId = "Saw-toothed Waves.Int2";
         if ( args.length >= 6 )
+        {
             itemId = args[5];
+        }
 
         // create a new server
-        Server server = new Server ( ci, new Scheduler ( true ) );
+        final Server server = new Server ( ci, new Scheduler ( true, "Test" ) );
         try
         {
             // connect to server
@@ -56,7 +58,7 @@ public class OPCTest2
 
             // add sync access
 
-            AccessBase access = new SyncAccess ( server, 100 );
+            final AccessBase access = new SyncAccess ( server, 100 );
             access.addItem ( itemId, new DataCallbackDumper () );
 
             // start reading
@@ -68,10 +70,9 @@ public class OPCTest2
             // stop reading
             access.unbind ();
         }
-        catch ( JIException e )
+        catch ( final JIException e )
         {
-            System.out.println ( String.format ( "%08X: %s", e.getErrorCode (),
-                    server.getErrorMessage ( e.getErrorCode () ) ) );
+            System.out.println ( String.format ( "%08X: %s", e.getErrorCode (), server.getErrorMessage ( e.getErrorCode () ) ) );
         }
     }
 }

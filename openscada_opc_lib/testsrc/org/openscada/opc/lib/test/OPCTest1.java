@@ -33,26 +33,25 @@ import org.openscada.utils.timing.Scheduler;
 
 public class OPCTest1
 {
-    public static void dumpItemState ( Item item, ItemState state )
+    public static void dumpItemState ( final Item item, final ItemState state )
     {
-        System.out.println ( String.format ( "Item: %s, Value: %s, Timestamp: %tc, Quality: %d", item.getId (),
-                state.getValue (), state.getTimestamp (), state.getQuality () ) );
+        System.out.println ( String.format ( "Item: %s, Value: %s, Timestamp: %tc, Quality: %d", item.getId (), state.getValue (), state.getTimestamp (), state.getQuality () ) );
     }
 
-    public static void dumpTree ( Branch branch, int level )
+    public static void dumpTree ( final Branch branch, final int level )
     {
-        StringBuilder sb = new StringBuilder ();
+        final StringBuilder sb = new StringBuilder ();
         for ( int i = 0; i < level; i++ )
         {
             sb.append ( "  " );
         }
-        String indent = sb.toString ();
+        final String indent = sb.toString ();
 
-        for ( Leaf leaf : branch.getLeaves () )
+        for ( final Leaf leaf : branch.getLeaves () )
         {
             System.out.println ( indent + "Leaf: " + leaf.getName () + " [" + leaf.getItemId () + "]" );
         }
-        for ( Branch subBranch : branch.getBranches () )
+        for ( final Branch subBranch : branch.getBranches () )
         {
             System.out.println ( indent + "Branch: " + subBranch.getName () );
             dumpTree ( subBranch, level + 1 );
@@ -60,10 +59,10 @@ public class OPCTest1
     }
 
     @SuppressWarnings ( "unused" )
-    public static void main ( String[] args ) throws Throwable
+    public static void main ( final String[] args ) throws Throwable
     {
         // create connection information
-        ConnectionInformation ci = new ConnectionInformation ();
+        final ConnectionInformation ci = new ConnectionInformation ();
         ci.setHost ( args[0] );
         ci.setDomain ( args[1] );
         ci.setUser ( args[2] );
@@ -71,7 +70,7 @@ public class OPCTest1
         ci.setClsid ( args[4] );
 
         // create a new server
-        Server server = new Server ( ci, new Scheduler ( true ) );
+        final Server server = new Server ( ci, new Scheduler ( true, "Test" ) );
         try
         {
             // connect to server
@@ -91,12 +90,12 @@ public class OPCTest1
             group = server.findGroup ( "test" );
 
             // Add a new item to the group
-            Item item = group.addItem ( "Saw-toothed Waves.Int2" );
+            final Item item = group.addItem ( "Saw-toothed Waves.Int2" );
             // Items are initially active ... just for demonstration
             item.setActive ( true );
 
             // Add some more items ... including one that is already existing
-            Map<String, Item> items = group.addItems ( "Saw-toothed Waves.Int2", "Saw-toothed Waves.Int4" );
+            final Map<String, Item> items = group.addItems ( "Saw-toothed Waves.Int2", "Saw-toothed Waves.Int4" );
 
             // sync-read some values
             for ( int i = 0; i < 10; i++ )
@@ -105,10 +104,9 @@ public class OPCTest1
                 dumpItemState ( item, item.read ( false ) );
             }
         }
-        catch ( JIException e )
+        catch ( final JIException e )
         {
-            System.out.println ( String.format ( "%08X: %s", e.getErrorCode (),
-                    server.getErrorMessage ( e.getErrorCode () ) ) );
+            System.out.println ( String.format ( "%08X: %s", e.getErrorCode (), server.getErrorMessage ( e.getErrorCode () ) ) );
         }
     }
 }

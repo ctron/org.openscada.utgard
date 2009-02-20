@@ -36,10 +36,10 @@ import org.openscada.utils.timing.Scheduler;
  */
 public class OPCTest6
 {
-    public static void main ( String[] args ) throws Throwable
+    public static void main ( final String[] args ) throws Throwable
     {
         // create connection information
-        ConnectionInformation ci = new ConnectionInformation ();
+        final ConnectionInformation ci = new ConnectionInformation ();
         ci.setHost ( args[0] );
         ci.setDomain ( args[1] );
         ci.setUser ( args[2] );
@@ -53,8 +53,8 @@ public class OPCTest6
         }
 
         // create a new server
-        Server server = new Server ( ci, new Scheduler ( true ) );
-        AutoReconnectController autoReconnectController = new AutoReconnectController ( server );
+        final Server server = new Server ( ci, new Scheduler ( true, "Test" ) );
+        final AutoReconnectController autoReconnectController = new AutoReconnectController ( server );
         try
         {
             // connect to server
@@ -62,29 +62,30 @@ public class OPCTest6
 
             // add sync access
 
-            AccessBase access = new SyncAccess ( server, 100 );
+            final AccessBase access = new SyncAccess ( server, 100 );
             access.addItem ( itemId, new DataCallbackDumper () );
 
             // start reading
             access.bind ();
 
             // run forever
-            boolean running = true;
+            final boolean running = true;
             while ( running )
             {
                 Thread.sleep ( 10 * 1000 );
             }
 
+            /*
             // stop reading
             access.unbind ();
 
             // disconnect
             autoReconnectController.disconnect ();
+            */
         }
-        catch ( JIException e )
+        catch ( final JIException e )
         {
-            System.out.println ( String.format ( "%08X: %s", e.getErrorCode (),
-                    server.getErrorMessage ( e.getErrorCode () ) ) );
+            System.out.println ( String.format ( "%08X: %s", e.getErrorCode (), server.getErrorMessage ( e.getErrorCode () ) ) );
         }
     }
 }

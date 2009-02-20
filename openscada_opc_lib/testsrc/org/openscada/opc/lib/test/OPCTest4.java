@@ -39,17 +39,17 @@ public class OPCTest4
 {
     private static Logger _log = Logger.getLogger ( OPCTest4.class );
 
-    public static void main ( String[] args ) throws Throwable
+    public static void main ( final String[] args ) throws Throwable
     {
         // create connection information
-        ConnectionInformation ci = new ConnectionInformation ();
+        final ConnectionInformation ci = new ConnectionInformation ();
         ci.setHost ( args[0] );
         ci.setDomain ( args[1] );
         ci.setUser ( args[2] );
         ci.setPassword ( args[3] );
         ci.setClsid ( args[4] );
 
-        Set<String> items = new HashSet<String> ();
+        final Set<String> items = new HashSet<String> ();
         for ( int i = 5; i < args.length; i++ )
         {
             items.add ( args[i] );
@@ -60,15 +60,15 @@ public class OPCTest4
         }
 
         // create a new server
-        Server server = new Server ( ci, new Scheduler ( true ) );
+        final Server server = new Server ( ci, new Scheduler ( true, "Test" ) );
         try
         {
             // connect to server
             server.connect ();
 
             // add sync access
-            AccessBase access = new Async20Access ( server, 100, false );
-            for ( String itemId : items )
+            final AccessBase access = new Async20Access ( server, 100, false );
+            for ( final String itemId : items )
             {
                 access.addItem ( itemId, new DataCallbackDumper () );
             }
@@ -84,10 +84,9 @@ public class OPCTest4
             // stop reading
             access.unbind ();
         }
-        catch ( JIException e )
+        catch ( final JIException e )
         {
-            System.out.println ( String.format ( "%08X: %s", e.getErrorCode (),
-                    server.getErrorMessage ( e.getErrorCode () ) ) );
+            System.out.println ( String.format ( "%08X: %s", e.getErrorCode (), server.getErrorMessage ( e.getErrorCode () ) ) );
         }
     }
 }
