@@ -45,7 +45,7 @@ public class OPCTest5
         baseInfo.setUser ( args[2] );
         baseInfo.setPassword ( args[3] );
 
-        final List<TestInfo> testInfo = new LinkedList<TestInfo> ();
+        final List<OPCTestInfo> testInfo = new LinkedList<OPCTestInfo> ();
         int i = 0;
 
         try
@@ -55,7 +55,7 @@ public class OPCTest5
             {
                 final ConnectionInformation ci = new ConnectionInformation ( baseInfo );
                 ci.setClsid ( args[i * 2 + 4] );
-                final TestInfo ti = new TestInfo ();
+                final OPCTestInfo ti = new OPCTestInfo ();
                 ti._info = ci;
                 ti._itemId = args[i * 2 + 5];
                 ti._server = new Server ( ci, new Scheduler ( true, "Test" ) );

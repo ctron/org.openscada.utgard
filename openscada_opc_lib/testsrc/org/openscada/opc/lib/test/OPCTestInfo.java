@@ -23,7 +23,7 @@ import org.openscada.opc.lib.common.ConnectionInformation;
 import org.openscada.opc.lib.da.AccessBase;
 import org.openscada.opc.lib.da.Server;
 
-class TestInfo
+class OPCTestInfo
 {
     ConnectionInformation _info = null;
 
