@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!-- ====================================================================== 
+     OpenSCADA OPC    
+     The OpenSCADA OPC Build File - Project Utgard
+
+	 Jens Reimann <jens.reimann@inavare.net>
+     ====================================================================== -->
+<project name="OpenSCADA OPC" default="default">
+    <description>
+            The OpenSCADA OPC Build File - Project Utgard
+    </description>
+
+	<property name="version" value="0.4.1"/>
+	<property name="release" value=""/>
+	<property name="upload.base" value="/var/vhosts/openscada/download/utgard"/>
+	<property name="upload.dir" value="${upload.base}/${version}"/>
+	<property name="source.base" value="../.."/>
+	<property name="external.base" value="../../external"/>
+	<property name="api.href.dir" value="${api.href.base}/${version}/api"/>
+	<property name="svn.base" value="https://svn.inavare.net/openscada"/>
+	<property name="svn.base.utgard" value="${svn.base}/modules/utgard/trunk"/>
+	
+    <!-- ================================= 
+          target: default              
+         ================================= -->
+    <target name="default" depends="init" description="--> The OpenSCADA OPC Build File - Project Utgard">
+    	<ant dir="${source.base}/opc/dcom"/>
+    	<ant dir="${source.base}/opc/lib"/>
+    </target>
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: init                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="init" depends="clean">
+    	<tstamp/>
+    </target>
+	
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: clean                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="clean">
+            <delete dir="${upload.dir}"/>
+    </target>
+
+
+</project>
