@@ -24,8 +24,8 @@
           target: default              
          ================================= -->
     <target name="default" depends="init" description="--> The OpenSCADA OPC Build File - Project Utgard">
-    	<ant dir="${source.base}/opc/dcom"/>
-    	<ant dir="${source.base}/opc/lib"/>
+    	<ant dir="${source.base}/openscada_opc_dcom"/>
+    	<ant dir="${source.base}/openscada_opc_lib"/>
     </target>
 
     <!-- - - - - - - - - - - - - - - - - - 
