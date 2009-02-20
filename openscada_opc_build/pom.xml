@@ -4,7 +4,7 @@
   <artifactId>utgard.build</artifactId>
   <packaging>pom</packaging>
   <name>OpenSCADA Utgard OPC Master Build</name>
-  <version>0.4.2</version>
+  <version>${utgard.version}</version>
   <description>This is the master build module for project "Utgard"</description>
   <modules>
   	<module>../openscada_opc_dcom</module>
@@ -35,7 +35,44 @@
 		</plugins>
 		
   </build>
+  <distributionManagement>
+  	<snapshotRepository>
+  		<id>openscada-utgard-integration-local</id>
+  		<name>openscada-utgard-integration-local</name>
+  		<url>http://carlton.local:8080/artifactory/openscada-utgard-integration-local/</url>
+  	</snapshotRepository>
+  </distributionManagement>
+  <properties>
+  	<utgard.version>0.4.2-SNAPSHOT</utgard.version>
+		
+		<atlantis.version>0.12.0-SNAPSHOT</atlantis.version>
+	</properties>
   
-  
+  <dependencies>
+<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.12</version>
+			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>jms</artifactId>
+					<groupId>javax.jms</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jmxtools</artifactId>
+					<groupId>com.sun.jdmk</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jmxri</artifactId>
+					<groupId>com.sun.jmx</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>mail</artifactId>
+					<groupId>javax.mail</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+  </dependencies>
   
 </project>
