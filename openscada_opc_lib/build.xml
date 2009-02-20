@@ -1,0 +1,244 @@
+<?xml version="1.0"?>
+<!-- ====================================================================== 
+     OpenSCADA Utgard - OPC Library   
+     The OpenSCADA Utgard OPC Library
+                   
+     Jens Reimann <jens.reimann@inavare.net>                                                                
+     ====================================================================== -->
+<project name="OpenSCADA Utgard - OPC Library" default="default">
+    <description>
+            The OpenSCADA Utgard OPC Library
+    </description>
+
+	
+	<property name="name" value="openscada-opc-lib"/>
+	<property name="tag" value="${name}-${version}${release}"/>
+	
+	<property name="deploy.base" value="deploy"/>
+	<property name="deploy.dir" value="${deploy.base}/${tag}"/>
+	
+	<property name="export.base" value="export"/>
+	<property name="export.dir" value="${export.base}/${tag}"/>
+
+	<property name="dcom.name" value="openscada-opc-dcom"/>
+	<property name="dcom.tag" value="${dcom.name}-${version}${release}"/>
+	
+	<property name="unpack.base" value="unpack"/>
+	<property name="unpack.module.dcom" value="${unpack.base}/${dcom.tag}"/>
+	
+    <!-- ================================= 
+          target: default              
+         ================================= -->
+    <target name="default" depends="build,deploy" description="--> The OpenSCADA Utgard OPC Library">
+        
+    </target>
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: init                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="init" depends="clean">
+		<delete dir="${unpack.base}"/>
+    	<mkdir dir="${unpack.base}"/>
+    	<unzip dest="${unpack.base}" src="${upload.dir}/${dcom.tag}.zip"/>
+    	
+    	<mkdir dir="unpack-lib"/>
+    	<copy todir="unpack-lib">
+    		<fileset dir="${unpack.module.dcom}/lib">
+    			<include name="*.jar"/>
+	   		</fileset>
+    		<fileset dir="${unpack.module.dcom}/bin">
+    			<include name="*.jar"/>
+    		</fileset>
+    		<fileset dir="${external.base}/log4j">
+    			<include name="*.jar"/>
+    		</fileset>
+    	</copy>
+    </target>
+	
+	<!-- ================================= 
+          target: clean              
+         ================================= -->
+    <target name="clean" depends="" description="--> Clean up">
+		<delete dir="${unpack.base}"/>
+    	<delete dir="bin"/>
+    	<delete dir="unpack-lib"/>
+       	<delete dir="${deploy.base}"/>
+    	<delete dir="${export.base}"/>
+    </target>
+	
+	<!-- ================================= 
+          target: build              
+         ================================= -->
+    <target name="build" depends="init" description="--> Build source">
+    	<mkdir dir="bin"/>
+        <javac
+        	source="1.5"
+        	target="1.5"
+        	encoding="utf-8"
+        	destdir="bin"
+        	srcdir="src"
+        	debug="on">
+        		<classpath>
+        			<fileset dir="lib">
+        				<include name="*.jar"/>
+        			</fileset>
+        			<fileset dir="unpack-lib">
+        				<include name="*.jar"/>
+        			</fileset>
+	        	</classpath>
+    	</javac>
+    	<mkdir dir="testbin"/>
+    	<javac
+   	        source="1.5"
+   	        target="1.5"
+   	        encoding="utf-8"
+   	        destdir="testbin"
+   	        srcdir="testsrc">
+   	        	<classpath>
+   	        		<fileset dir="lib">
+   	        			<include name="*.jar"/>
+   	        		</fileset>
+   	        		<fileset dir="unpack-lib">
+   	        			<include name="*.jar"/>
+   	        		</fileset>
+   	        		<pathelement location="bin"/>
+   		       	</classpath>
+    	</javac>
+    	
+    	<!-- generate javadoc -->
+    	<mkdir dir="docs/api"/>
+   		<javadoc destdir="docs/api"
+        	author="true"
+        	version="true"
+        	use="true"
+        	encoding="utf-8"
+        	>
+        	<tag name="note" description="Note" scope="all"/>
+        	<tag name="warning" description="Warning" scope="all"/>
+        	<packageset dir="src" defaultexcludes="yes">
+        		<include name="**"/>
+        	</packageset>
+   			<classpath>
+    			<fileset dir="lib">
+    				<include name="*.jar"/>
+    			</fileset>
+       			<fileset dir="unpack-lib">
+       				<include name="*.jar"/>
+       			</fileset>
+   			</classpath>
+   			<link href="${api.href.dir}/${dcom.name}" offline="true" packagelistloc="${upload.dir}/api/${dcom.name}"/>
+  		</javadoc>
+	
+    </target>
+	
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: export_project                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="export_project" depends="init">
+		<mkdir dir="${export.dir}"/>
+    	<exec dir="${export.dir}" failonerror="true" executable="svn">
+    		<arg value="--force"/>
+    		<arg value="export"/>
+			<arg value="${svn.base.utgard}/opc/lib"/>
+    		<arg value="."/>
+    	</exec>
+    </target>
+
+	<!-- ================================= 
+          target: deploy              
+         ================================= -->
+    <target name="deploy" depends="build,export_project" description="--> Pack and Deploy">
+    	<delete dir="${deploy.base}"/>
+    	
+    	<!-- deploy bin -->
+       	<mkdir dir="${deploy.dir}/bin"/>
+    	<jar destfile="${deploy.dir}/bin/${tag}.jar">
+    		<fileset dir="bin">
+    			<include name="**/*.class"/>
+    		</fileset>
+    	</jar>
+    	<jar destfile="${deploy.dir}/bin/${name}-test-${version}${release}.jar">
+	   		<fileset dir="testbin">
+    			<include name="**/*.class"/>
+    		</fileset>
+    	</jar>
+    	
+    	<!-- deploy libs -->
+    	<mkdir dir="${deploy.dir}/lib"/>
+    	<copy todir="${deploy.dir}/lib">
+    		<fileset dir="lib">
+    			<include name="**/*.jar"/>
+    		</fileset>
+    		<fileset dir="unpack-lib">
+    			<include name="**/*.jar"/>
+    		</fileset>
+    	</copy>
+    	
+       	<!-- deploy source -->
+       	<mkdir dir="${deploy.dir}/src"/>
+       	<copy todir="${deploy.dir}/src">
+       		<fileset dir="src">
+       			<include name="**/*.java"/>
+       		</fileset>
+       	</copy>
+    	
+    	<!-- deploy javadoc -->
+		<mkdir dir="${deploy.dir}/docs/api"/>
+    	<copy todir="${deploy.dir}/docs/api">
+    		<fileset dir="docs/api"/>
+    	</copy>
+    	<copy todir="${upload.dir}/api/${name}">
+    		<fileset dir="docs/api"/>
+    	</copy>
+
+    	<!-- add the license -->
+    	<copy todir="${deploy.dir}" file="COPYING"/>
+    	
+       	<!-- add source -->
+       	<mkdir dir="${deploy.dir}/src"/>
+       	<copy todir="${deploy.dir}/src">
+       		<fileset dir="src">
+       			<include name="**/*.java"/>
+       		</fileset>
+       	</copy>
+       	<!-- add test source -->
+       	<mkdir dir="${deploy.dir}/testsrc"/>
+       	<copy todir="${deploy.dir}/testsrc">
+       		<fileset dir="testsrc">
+       			<include name="**/*.java"/>
+       		</fileset>
+       	</copy>
+    	
+    	<!-- add extra dist files -->
+    	<copy todir="${deploy.dir}">
+    		<fileset dir="dist">
+    		</fileset>
+    	</copy>
+    	<replace
+    		dir="${deploy.dir}"
+    		>
+    		<include name="**/*.bat"/>
+       		<include name="**/*.sh"/>
+    		<replacefilter token="@@VERSION@@" value="${version}${release}"/>
+    	</replace>
+    	<chmod perm="a+rx">
+    		<fileset dir="${deploy.dir}">
+    			<include name="**/*.sh"/>
+    		</fileset>
+    	</chmod>
+    	
+    	<!-- make a zip -->
+    	<mkdir dir="${upload.dir}"/>
+    	<zip file="${upload.dir}/${tag}.zip" >
+    		<zipfileset dir="${deploy.base}">
+    		</zipfileset>
+    	</zip>
+    	
+    	<!-- make the project zip -->
+    	<zip file="${upload.dir}/prj-${tag}.zip">
+    		<zipfileset dir="${export.base}">
+    		</zipfileset>
+    	</zip>
+    </target>
+
+</project>
