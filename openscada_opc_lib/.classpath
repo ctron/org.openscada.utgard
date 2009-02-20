@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry excluding="org/openscada/opc/lib/test/OPCTest3a.java" kind="src" path="testsrc"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/openscada_opc_dcom"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ext_log4j"/>
-	<classpathentry kind="lib" path="lib/openscada-utils.jar"/>
+	<classpathentry kind="src" output="bin" path="src"/>
+	<classpathentry kind="src" output="testbin" path="testsrc"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
+	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

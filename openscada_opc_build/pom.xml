@@ -1,0 +1,41 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.openscada</groupId>
+  <artifactId>utgard.build</artifactId>
+  <packaging>pom</packaging>
+  <name>OpenSCADA Utgard OPC Master Build</name>
+  <version>0.4.2</version>
+  <description>This is the master build module for project "Utgard"</description>
+  <modules>
+  	<module>../openscada_opc_dcom</module>
+  	<module>../openscada_opc_lib</module>
+  </modules>
+  
+  <build>
+		<sourceDirectory>${basedir}/src</sourceDirectory>
+		<testSourceDirectory>${basedir}/testsrc
+		</testSourceDirectory>
+		<outputDirectory>${basedir}/bin</outputDirectory>
+		<testOutputDirectory>${basedir}/testbin
+		</testOutputDirectory>
+		
+		
+		<plugins>
+		
+		<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.0.2</version>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+		
+		</plugins>
+		
+  </build>
+  
+  
+  
+</project>
