@@ -1,28 +1,30 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.openscada</groupId>
-  <artifactId>utgard.build</artifactId>
-  <packaging>pom</packaging>
-  <name>OpenSCADA Utgard OPC Master Build</name>
-  <version>${utgard.version}</version>
-  <description>This is the master build module for project "Utgard"</description>
-  <modules>
-  	<module>../openscada_opc_dcom</module>
-  	<module>../openscada_opc_lib</module>
-  </modules>
-  
-  <build>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.openscada</groupId>
+	<artifactId>org.openscada.utgard</artifactId>
+	<packaging>pom</packaging>
+	<name>OpenSCADA Utgard OPC Master Build</name>
+	<version>0.4.2-SNAPSHOT</version>
+
+	<description>This is the master build module for project "Utgard"</description>
+
+	<modules>
+		<module>../openscada_opc_dcom</module>
+		<module>../openscada_opc_lib</module>
+	</modules>
+
+	<build>
 		<sourceDirectory>${basedir}/src</sourceDirectory>
 		<testSourceDirectory>${basedir}/testsrc
 		</testSourceDirectory>
 		<outputDirectory>${basedir}/bin</outputDirectory>
 		<testOutputDirectory>${basedir}/testbin
 		</testOutputDirectory>
-		
-		
+
+
 		<plugins>
-		
-		<plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.0.2</version>
@@ -31,25 +33,20 @@
 					<target>1.5</target>
 				</configuration>
 			</plugin>
-		
+
 		</plugins>
-		
-  </build>
-  <distributionManagement>
-  	<snapshotRepository>
-  		<id>openscada-utgard-integration-local</id>
-  		<name>openscada-utgard-integration-local</name>
-  		<url>http://carlton.local:8080/artifactory/openscada-utgard-integration-local/</url>
-  	</snapshotRepository>
-  </distributionManagement>
-  <properties>
-  	<utgard.version>0.4.2-SNAPSHOT</utgard.version>
-		
-		<atlantis.version>0.12.0-SNAPSHOT</atlantis.version>
-	</properties>
-  
-  <dependencies>
-<dependency>
+
+	</build>
+	<distributionManagement>
+		<snapshotRepository>
+			<id>openscada-utgard-integration-local</id>
+			<name>openscada-utgard-integration-local</name>
+			<url>http://carlton.local:8080/artifactory/openscada-utgard-integration-local/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<dependencies>
+		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.12</version>
@@ -73,6 +70,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-  </dependencies>
-  
+	</dependencies>
+
 </project>

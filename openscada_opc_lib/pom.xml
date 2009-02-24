@@ -1,26 +1,27 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.openscada</groupId>
-  <artifactId>utgard.opc.lib</artifactId>
+  <artifactId>org.openscada.utgard.opc.lib</artifactId>
   <name>OpenSCADA Utgard OPC DCOM Tools</name>
-  <version>${utgard.version}</version>
+  <version>0.4.2-SNAPSHOT</version>
   <description>Additional classes which aid in developing OPC based solutions with Utgard</description>
   <parent>
-  	<artifactId>utgard.build</artifactId>
+  	<artifactId>org.openscada.utgard</artifactId>
   	<groupId>org.openscada</groupId>
-  	<version>${utgard.version}</version>
+  	<version>0.4.2-SNAPSHOT</version>
   	<relativePath>../openscada_opc_build</relativePath>
   </parent>
   <dependencies>
     <dependency>
       <groupId>org.openscada</groupId>
-      <artifactId>utgard.opc.dcom</artifactId>
-      <version>${utgard.version}</version>
+      <artifactId>org.openscada.utgard.opc.dcom</artifactId>
+      <version>0.4.2-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>org.openscada</groupId>
-      <artifactId>atlantis.utils</artifactId>
-      <version>${atlantis.version}</version>
+    	<groupId>org.openscada.aurora</groupId>
+    	<artifactId>org.openscada.aurora.utils</artifactId>
+    	<version>0.12.0-SNAPSHOT</version>
     </dependency>
+    
   </dependencies>
 </project>
