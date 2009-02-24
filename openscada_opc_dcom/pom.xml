@@ -17,26 +17,35 @@
 		<url>http://inavare.net</url>
 	</organization>
 	<dependencies>
-		<dependency>
-			<groupId>jinterop</groupId>
-			<artifactId>jinterop</artifactId>
-			<version>2.0.0</version>
+		<!--
+			<dependency> <groupId>jinterop</groupId>
+			<artifactId>jinterop</artifactId> <version>2.0.0</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/lib/j-interop.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>jinterop</groupId>
-			<artifactId>jcifs</artifactId>
-			<version>1.2.9</version>
+			<systemPath>${basedir}/lib/j-interop.jar</systemPath> </dependency>
+			<dependency> <groupId>jinterop</groupId>
+			<artifactId>jcifs</artifactId> <version>1.2.9</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/lib/jcifs-1.2.9.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>jinterop</groupId>
-			<artifactId>jinteropdeps</artifactId>
-			<version>2.0.0</version>
+			<systemPath>${basedir}/lib/jcifs-1.2.9.jar</systemPath> </dependency>
+			<dependency> <groupId>jinterop</groupId>
+			<artifactId>jinteropdeps</artifactId> <version>2.0.0</version>
 			<scope>system</scope>
 			<systemPath>${basedir}/lib/j-interopdeps.jar</systemPath>
+			</dependency>
+		-->
+		<dependency>
+			<groupId>org.openscada.external</groupId>
+			<artifactId>j-interop</artifactId>
+			<version>2.01-RC6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openscada.external</groupId>
+			<artifactId>j-interopdeps</artifactId>
+			<version>1.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openscada.external</groupId>
+			<artifactId>jcifs</artifactId>
+			<version>1.2.9</version>
 		</dependency>
 	</dependencies>
 </project>
