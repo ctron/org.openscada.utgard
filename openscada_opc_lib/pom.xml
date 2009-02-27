@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.openscada</groupId>
   <artifactId>org.openscada.utgard.opc.lib</artifactId>
-  <name>OpenSCADA Utgard OPC DCOM Tools</name>
+  <name>OpenSCADA-OPC-DCOM-Lib</name>
   <version>0.4.2-SNAPSHOT</version>
   <description>Additional classes which aid in developing OPC based solutions with Utgard</description>
   <parent>
