@@ -1,14 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.openscada</groupId>
+	<groupId>org.openscada.utgard</groupId>
 	<artifactId>org.openscada.utgard.opc.dcom</artifactId>
 	<name>OpenSCADA-OPC-DCOM</name>
 	<version>0.4.2-SNAPSHOT</version>
 	<description>This project contains the OPC DCOM Mappings</description>
 	<parent>
 		<artifactId>org.openscada.utgard</artifactId>
-		<groupId>org.openscada</groupId>
+		<groupId>org.openscada.utgard</groupId>
 		<version>0.4.2-SNAPSHOT</version>
 		<relativePath>../openscada_opc_build</relativePath>
 	</parent>
@@ -17,21 +17,6 @@
 		<url>http://inavare.net</url>
 	</organization>
 	<dependencies>
-		<!--
-			<dependency> <groupId>jinterop</groupId>
-			<artifactId>jinterop</artifactId> <version>2.0.0</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/j-interop.jar</systemPath> </dependency>
-			<dependency> <groupId>jinterop</groupId>
-			<artifactId>jcifs</artifactId> <version>1.2.9</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/jcifs-1.2.9.jar</systemPath> </dependency>
-			<dependency> <groupId>jinterop</groupId>
-			<artifactId>jinteropdeps</artifactId> <version>2.0.0</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/j-interopdeps.jar</systemPath>
-			</dependency>
-		-->
 		<dependency>
 			<groupId>org.openscada.external</groupId>
 			<artifactId>j-interop</artifactId>
