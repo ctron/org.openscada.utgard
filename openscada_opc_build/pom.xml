@@ -60,17 +60,17 @@
 
 	<distributionManagement>
 		<snapshotRepository>
-			<id>openscada-utgard-integration-local</id>
-			<name>openscada-utgard-integration-local</name>
-			<url>http://carlton.local:8080/artifactory/openscada-utgard-integration-local/</url>
+			<id>openscada-snapshots</id>
+			<name>openscada-snapshots</name>
+			<url>http://carlton.local:8080/artifactory/openscada-snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
 
 	<repositories>
 		<repository>
-			<id>openscada-snapshots</id>
-			<name>openscada-snapshots</name>
-			<url>http://carlton.local:8080/artifactory/openscada-snapshots/</url>
+			<id>openscada-repos</id>
+			<name>openscada-repos</name>
+			<url>http://carlton.local:8080/artifactory/openscada-repos/</url>
 			<releases>
 				<enabled>true</enabled>
 				<updatePolicy>always</updatePolicy>
