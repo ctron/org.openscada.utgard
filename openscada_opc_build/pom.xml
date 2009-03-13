@@ -14,6 +14,19 @@
 		<module>../openscada_opc_lib</module>
 	</modules>
 
+	<distributionManagement>
+		<repository>
+			<id>openscada-releases</id>
+			<name>openscada-releases</name>
+			<url>${openscada.distrib.repository}</url>
+		</repository>
+		<snapshotRepository>
+			<id>openscada-snapshots</id>
+			<name>openscada-snapshots</name>
+			<url>${openscada.distrib.repository}</url>
+		</snapshotRepository>
+	</distributionManagement>
+
 	<repositories>
 		<repository>
 			<id>openscada-repos</id>
