@@ -4,7 +4,6 @@
 	<groupId>org.openscada.utgard</groupId>
 	<artifactId>org.openscada.utgard.opc.dcom</artifactId>
 	<name>OpenSCADA-OPC-DCOM</name>
-	<version>0.4.2-SNAPSHOT</version>
 	<description>This project contains the OPC DCOM Mappings</description>
 	<parent>
 		<artifactId>org.openscada.utgard</artifactId>
