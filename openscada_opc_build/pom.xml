@@ -185,4 +185,56 @@
 			</exclusions>
 		</dependency>
 	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>deploy-libs</id>
+			<build>
+				<defaultGoal>deploy:deploy-file</defaultGoal>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-deploy-plugin</artifactId>
+						<version>2.4</version>
+						<configuration>
+							<repositoryId>openscada-external</repositoryId>
+							<url>${openscada.distrib.repository}</url>
+						</configuration>
+						<executions>
+							<execution>
+								<id>j-interop</id>
+								<goals>
+									<goal>deploy-file</goal>
+								</goals>
+								<configuration>
+									<file>../openscada_opc_dcom/lib/j-interop.jar</file>
+									<pomFile>../openscada_opc_dcom/lib/j-interop.pom</pomFile>
+								</configuration>
+							</execution>
+							<execution>
+								<id>j-interopdeps</id>
+								<goals>
+									<goal>deploy-file</goal>
+								</goals>
+								<configuration>
+									<file>../openscada_opc_dcom/lib/j-interopdeps.jar</file>
+									<pomFile>../openscada_opc_dcom/lib/j-interopdeps.pom</pomFile>
+								</configuration>
+							</execution>
+							<execution>
+								<id>jcifs</id>
+								<goals>
+									<goal>deploy-file</goal>
+								</goals>
+								<configuration>
+									<file>../openscada_opc_dcom/lib/jcifs-1.2.9.jar</file>
+									<pomFile>../openscada_opc_dcom/lib/jcifs-1.2.9.pom</pomFile>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

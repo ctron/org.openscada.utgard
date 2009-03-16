@@ -16,6 +16,7 @@
 
 	<target name="usage">
 		<echo>install-libs : installs required libs in local repository</echo>
+		<echo>deploy-libs  : installs required libs in remote repository</echo>
 		<echo>make-package : makes a package in folder target/assembly which is fit for redistribution</echo>
 	</target>
 		
@@ -29,6 +30,37 @@
 		<artifact:install file="../openscada_opc_dcom/lib/jcifs-1.2.9.jar">
 			<artifact:pom file="../openscada_opc_dcom/lib/jcifs-1.2.9.pom" />
 		</artifact:install>
+	</target>
+
+	<macrodef name="deploy-single-file">
+		<attribute name="name" />
+		<sequential>
+			<exec executable="mvn">
+				<arg value="deploy:deploy-file" />
+				<arg value="-Durl=${openscada.distrib.repository}" />
+				<arg value="-DrepositoryId=openscada-external" />
+				<arg value="-Dfile=../openscada_opc_dcom/lib/@{name}.jar" />
+				<arg value="-DpomFile=../openscada_opc_dcom/lib/@{name}.pom" />
+			</exec>
+		</sequential>
+	</macrodef>
+
+	<target name="deploy-libs" description="description">
+		<!--
+		<artifact:deploy file="../openscada_opc_dcom/lib/j-interop.jar">
+			<artifact:pom file="../openscada_opc_dcom/lib/j-interop.pom" />
+		</artifact:deploy>
+		<artifact:deploy file="../openscada_opc_dcom/lib/j-interopdeps.jar">
+			<artifact:pom file="../openscada_opc_dcom/lib/j-interopdeps.pom" />
+		</artifact:deploy>
+		<artifact:deploy file="../openscada_opc_dcom/lib/jcifs-1.2.9.jar">
+			<artifact:pom file="../openscada_opc_dcom/lib/jcifs-1.2.9.pom" />
+		</artifact:deploy>
+		command="mvn deploy:deploy-file -DrepositoryId=openscada-external -Dfile=../openscada_opc_dcom/lib/j-interopdeps.jar -DpomFile=../openscada_opc_dcom/lib/j-interopdeps.pom"
+		-->
+		<deploy-single-file name="j-interop" />
+		<deploy-single-file name="j-interopdeps" />
+		<deploy-single-file name="jcifs-1.2.9" />
 	</target>
 
 	<macrodef name="make-single-package">

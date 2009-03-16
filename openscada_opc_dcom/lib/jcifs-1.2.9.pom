@@ -5,4 +5,13 @@
 	<groupId>org.openscada.external</groupId>
 	<artifactId>jcifs</artifactId>
 	<version>1.2.9</version>
+
+	<distributionManagement>
+		<repository>
+			<id>openscada-external</id>
+			<name>openscada-external</name>
+			<url>${openscada.distrib.repository}</url>
+		</repository>
+	</distributionManagement>
+
 </project>
