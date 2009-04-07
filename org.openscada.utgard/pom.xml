@@ -5,7 +5,7 @@
 
 	<groupId>org.openscada.utgard</groupId>
 	<artifactId>org.openscada.utgard</artifactId>
-	<version>0.4.2-SNAPSHOT</version>
+	<version>0.5.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>OpenSCADA-OPC</name>
 	<description>This is the master build module for project "Utgard"</description>
