@@ -1,235 +1,251 @@
+<?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<groupId>org.openscada.utgard</groupId>
 	<artifactId>org.openscada.utgard</artifactId>
+	<version>0.4.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>OpenSCADA-OPC</name>
-	<version>0.4.2-SNAPSHOT</version>
-
 	<description>This is the master build module for project "Utgard"</description>
+	<url>http://www.openscada.org</url>
+	<inceptionYear>2006</inceptionYear>
 
-	<modules>
-		<module>../openscada_opc_dcom</module>
-		<module>../openscada_opc_lib</module>
-	</modules>
-
-	<distributionManagement>
-		<repository>
-			<id>openscada-releases</id>
-			<name>openscada-releases</name>
-			<url>${openscada.distrib.repository}</url>
-		</repository>
-		<snapshotRepository>
-			<id>openscada-snapshots</id>
-			<name>openscada-snapshots</name>
-			<url>${openscada.distrib.repository}</url>
-		</snapshotRepository>
-	</distributionManagement>
-
-	<repositories>
-		<repository>
-			<id>openscada-repos</id>
-			<name>openscada-repos</name>
-			<url>${openscada.internal.repository}</url>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-				<checksumPolicy>warn</checksumPolicy>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-				<checksumPolicy>warn</checksumPolicy>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>openscada-public-repos</id>
-			<name>openscada-public-repos</name>
-			<url>http://www.openscada.org/download/maven-repo/</url>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-				<checksumPolicy>warn</checksumPolicy>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-				<checksumPolicy>warn</checksumPolicy>
-			</snapshots>
-		</repository>
-	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>openscada-repos</id>
-			<name>openscada-repos</name>
-			<url>${openscada.internal.repository}</url>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-				<checksumPolicy>warn</checksumPolicy>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-				<checksumPolicy>warn</checksumPolicy>
-			</snapshots>
-		</pluginRepository>
-		<pluginRepository>
-			<id>openscada-public-repos</id>
-			<name>openscada-public-repos</name>
-			<url>http://www.openscada.org/download/maven-repo/</url>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-				<checksumPolicy>warn</checksumPolicy>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-				<checksumPolicy>warn</checksumPolicy>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories>
-
-	<scm>
-		<connection>scm:svn:http://pubsvn.inavare.net/openscada/modules/utgard/trunk/openscada_opc_build</connection>
-		<developerConnection>scm:svn:https://svn.inavare.net/openscada/modules/utgard/trunk/openscada_opc_build</developerConnection>
-		<url>http://pubsvn.inavare.net/openscada/modules/utgard/trunk/openscada_opc_build</url>
-	</scm>
 	<organization>
 		<name>inavare GmbH</name>
 		<url>http://www.inavare.net</url>
 	</organization>
 
+	<licenses>
+		<license>
+			<name>GNU General Public License, version 2</name>
+			<url>http://www.gnu.org/licenses/gpl-2.0.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	
+	<modules>
+		<module>../org.openscada.utgard.opc.dcom</module>
+		<module>../org.openscada.utgard.opc.lib</module>
+	</modules>
+
+	<scm>
+		<connection>scm:svn:http://pubsvn.inavare.net/openscada/modules/utgard/trunk/org.openscada.utgard</connection>
+		<developerConnection>scm:svn:${inavare.svn.repository}/openscada/modules/utgard/trunk/org.openscada.utgard</developerConnection>
+		<url>http://pubsvn.inavare.net/openscada/modules/utgard/trunk/org.openscada.utgard</url>
+	</scm>
+	
 	<build>
-		<sourceDirectory>${basedir}/src</sourceDirectory>
-		<testSourceDirectory>${basedir}/testsrc
-		</testSourceDirectory>
-		<outputDirectory>${basedir}/bin</outputDirectory>
-		<testOutputDirectory>${basedir}/testbin
-		</testOutputDirectory>
-
-
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.0.2</version>
 				<configuration>
 					<source>1.5</source>
 					<target>1.5</target>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<inherited>true</inherited>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
 
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</reporting>
-
-	<dependencies>
-		<dependency>
-			<groupId>org.apache.log4j</groupId>
-			<artifactId>com.springsource.org.apache.log4j</artifactId>
-			<version>1.2.15</version>
-			<type>jar</type>
-			<scope>compile</scope>
-			<exclusions>
-				<exclusion>
-					<artifactId>jms</artifactId>
-					<groupId>javax.jms</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>jmxri</artifactId>
-					<groupId>com.sun.jmx</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>jmxtools</artifactId>
-					<groupId>com.sun.jdmk</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>mail</artifactId>
-					<groupId>javax.mail</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-	</dependencies>
-
 	<profiles>
+		<!-- profile is used in inavare internal environment -->
 		<profile>
-			<id>deploy-libs</id>
+			<id>inavare</id>
+			<pluginRepositories>
+				<pluginRepository>
+					<id>openscada-repos</id>
+					<name>openscada-repos</name>
+					<url>${openscada.internal.repository}</url>
+					<releases>
+						<enabled>true</enabled>
+						<updatePolicy>always</updatePolicy>
+						<checksumPolicy>warn</checksumPolicy>
+					</releases>
+					<snapshots>
+						<enabled>true</enabled>
+						<updatePolicy>always</updatePolicy>
+						<checksumPolicy>warn</checksumPolicy>
+					</snapshots>
+				</pluginRepository>
+			</pluginRepositories>
+			<repositories>
+				<repository>
+					<id>openscada-repos</id>
+					<name>openscada-repos</name>
+					<url>${openscada.internal.repository}</url>
+					<releases>
+						<enabled>true</enabled>
+						<updatePolicy>always</updatePolicy>
+						<checksumPolicy>warn</checksumPolicy>
+					</releases>
+					<snapshots>
+						<enabled>true</enabled>
+						<updatePolicy>always</updatePolicy>
+						<checksumPolicy>warn</checksumPolicy>
+					</snapshots>
+				</repository>
+			</repositories>
+			<distributionManagement>
+				<repository>
+					<id>openscada-releases</id>
+					<name>openscada-releases</name>
+					<url>${openscada.distrib.repository}</url>
+				</repository>
+				<snapshotRepository>
+					<id>openscada-snapshots</id>
+					<name>openscada-snapshots</name>
+					<url>${openscada.distrib.repository}</url>
+				</snapshotRepository>
+			</distributionManagement>
+		</profile>
+		<!-- profile is used in 3rdparty environment -->
+		<profile>
+			<id>public</id>
+			<pluginRepositories>
+				<pluginRepository>
+					<id>openscada-public-repos</id>
+					<name>openscada-public-repos</name>
+					<url>http://www.openscada.org/download/maven-repo/</url>
+					<releases>
+						<enabled>true</enabled>
+						<updatePolicy>always</updatePolicy>
+						<checksumPolicy>warn</checksumPolicy>
+					</releases>
+					<snapshots>
+						<enabled>true</enabled>
+						<updatePolicy>always</updatePolicy>
+						<checksumPolicy>warn</checksumPolicy>
+					</snapshots>
+				</pluginRepository>
+			</pluginRepositories>
+			<repositories>
+				<repository>
+					<id>openscada-public-repos</id>
+					<name>openscada-public-repos</name>
+					<url>http://www.openscada.org/download/maven-repo/</url>
+					<releases>
+						<enabled>true</enabled>
+						<updatePolicy>always</updatePolicy>
+						<checksumPolicy>warn</checksumPolicy>
+					</releases>
+					<snapshots>
+						<enabled>true</enabled>
+						<updatePolicy>always</updatePolicy>
+						<checksumPolicy>warn</checksumPolicy>
+					</snapshots>
+				</repository>
+				<!-- Spring Enterprise Repository -->
+				<repository>
+					<id>com.springsource.repository.bundles.release</id>
+					<name>SpringSource Enterprise Bundle Repository - SpringSource Bundle Releases</name>
+					<url>http://repository.springsource.com/maven/bundles/release</url>
+					<releases>
+						<enabled>true</enabled>
+						<updatePolicy>daily</updatePolicy>
+						<checksumPolicy>warn</checksumPolicy>
+					</releases>
+				</repository>
+				<repository>
+					<id>com.springsource.repository.bundles.external</id>
+					<name>SpringSource Enterprise Bundle Repository - External Bundle Releases</name>
+					<url>http://repository.springsource.com/maven/bundles/external</url>
+					<releases>
+						<enabled>true</enabled>
+						<updatePolicy>daily</updatePolicy>
+						<checksumPolicy>warn</checksumPolicy>
+					</releases>
+				</repository>
+				<repository>
+					<id>com.springsource.repository.libraries.release</id>
+					<name>SpringSource Enterprise Bundle Repository - SpringSource Library Releases</name>
+					<url>http://repository.springsource.com/maven/libraries/release</url>
+					<releases>
+						<enabled>true</enabled>
+						<updatePolicy>daily</updatePolicy>
+						<checksumPolicy>warn</checksumPolicy>
+					</releases>
+				</repository>
+				<repository>
+					<id>com.springsource.repository.libraries.external</id>
+					<name>SpringSource Enterprise Bundle Repository - External Library Releases</name>
+					<url>http://repository.springsource.com/maven/libraries/external</url>
+					<releases>
+						<enabled>true</enabled>
+						<updatePolicy>daily</updatePolicy>
+						<checksumPolicy>warn</checksumPolicy>
+					</releases>
+				</repository>
+			</repositories>
+		</profile>
+		<!-- profile used in deploy environment -->
+		<profile>
+			<id>deploy</id>
 			<build>
-				<defaultGoal>deploy:deploy-file</defaultGoal>
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-deploy-plugin</artifactId>
-						<version>2.4</version>
-						<configuration>
-							<repositoryId>openscada-external</repositoryId>
-							<url>${openscada.distrib.repository}</url>
-						</configuration>
+						<artifactId>maven-source-plugin</artifactId>
 						<executions>
 							<execution>
-								<id>j-interop</id>
+								<id>attach-sources</id>
+								<phase>package</phase>
 								<goals>
-									<goal>deploy-file</goal>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<phase>package</phase>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>copy-dependencies</id>
+								<phase>package</phase>
+								<goals>
+									<goal>copy-dependencies</goal>
 								</goals>
 								<configuration>
-									<file>../openscada_opc_dcom/lib/j-interop.jar</file>
-									<pomFile>../openscada_opc_dcom/lib/j-interop.pom</pomFile>
 								</configuration>
 							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
 							<execution>
-								<id>j-interopdeps</id>
+								<id>package-dependencies</id>
+								<phase>package</phase>
 								<goals>
-									<goal>deploy-file</goal>
+									<goal>run</goal>
 								</goals>
 								<configuration>
-									<file>../openscada_opc_dcom/lib/j-interopdeps.jar</file>
-									<pomFile>../openscada_opc_dcom/lib/j-interopdeps.pom</pomFile>
-								</configuration>
-							</execution>
-							<execution>
-								<id>jcifs</id>
-								<goals>
-									<goal>deploy-file</goal>
-								</goals>
-								<configuration>
-									<file>../openscada_opc_dcom/lib/jcifs-1.2.9.jar</file>
-									<pomFile>../openscada_opc_dcom/lib/jcifs-1.2.9.pom</pomFile>
+									<tasks>
+										<zip
+											destfile="target/${project.artifactId}-${project.version}-with-dependencies.zip"
+											whenempty="skip">
+											<fileset dir="target" erroronmissingdir="false">
+												<include name="*.jar" />
+												<include name="dependency/*.jar" />
+											</fileset>
+										</zip>
+									</tasks>
 								</configuration>
 							</execution>
 						</executions>
@@ -238,4 +254,5 @@
 			</build>
 		</profile>
 	</profiles>
+
 </project>
