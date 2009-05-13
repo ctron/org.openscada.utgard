@@ -38,8 +38,8 @@
 				<arg value="deploy:deploy-file" />
 				<arg value="-Durl=${openscada.distrib.repository}" />
 				<arg value="-DrepositoryId=openscada-external" />
-				<arg value="-Dfile=${basedir}/lib/@{name}.jar" />
-				<arg value="-DpomFile=${basedir}/lib/@{name}.pom" />
+				<arg value="-Dfile=${basedir}/lib/@{artifact}.jar" />
+				<arg value="-DgeneratePom=true" />
 			</exec>
 		</sequential>
 	</macrodef>
