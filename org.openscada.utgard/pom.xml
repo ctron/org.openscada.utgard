@@ -24,7 +24,11 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-	
+
+	<properties>
+		<update.policy>interval:10080</update.policy>
+	</properties>
+
 	<modules>
 		<module>../org.openscada.utgard.opc.dcom</module>
 		<module>../org.openscada.utgard.opc.lib</module>
@@ -35,7 +39,7 @@
 		<developerConnection>scm:svn:${inavare.svn.repository}/openscada/modules/utgard/trunk/org.openscada.utgard</developerConnection>
 		<url>http://pubsvn.inavare.net/openscada/modules/utgard/trunk/org.openscada.utgard</url>
 	</scm>
-	
+
 	<build>
 		<plugins>
 			<plugin>
@@ -60,12 +64,12 @@
 					<url>${openscada.internal.repository}</url>
 					<releases>
 						<enabled>true</enabled>
-						<updatePolicy>always</updatePolicy>
+						<updatePolicy>${update.policy}</updatePolicy>
 						<checksumPolicy>warn</checksumPolicy>
 					</releases>
 					<snapshots>
 						<enabled>true</enabled>
-						<updatePolicy>always</updatePolicy>
+						<updatePolicy>${update.policy}</updatePolicy>
 						<checksumPolicy>warn</checksumPolicy>
 					</snapshots>
 				</pluginRepository>
@@ -77,12 +81,12 @@
 					<url>${openscada.internal.repository}</url>
 					<releases>
 						<enabled>true</enabled>
-						<updatePolicy>always</updatePolicy>
+						<updatePolicy>${update.policy}</updatePolicy>
 						<checksumPolicy>warn</checksumPolicy>
 					</releases>
 					<snapshots>
 						<enabled>true</enabled>
-						<updatePolicy>always</updatePolicy>
+						<updatePolicy>${update.policy}</updatePolicy>
 						<checksumPolicy>warn</checksumPolicy>
 					</snapshots>
 				</repository>
@@ -98,12 +102,12 @@
 					<url>http://repo.openscada.org/maven2/</url>
 					<releases>
 						<enabled>true</enabled>
-						<updatePolicy>always</updatePolicy>
+						<updatePolicy>${update.policy}</updatePolicy>
 						<checksumPolicy>warn</checksumPolicy>
 					</releases>
 					<snapshots>
 						<enabled>true</enabled>
-						<updatePolicy>always</updatePolicy>
+						<updatePolicy>${update.policy}</updatePolicy>
 						<checksumPolicy>warn</checksumPolicy>
 					</snapshots>
 				</pluginRepository>
@@ -115,12 +119,12 @@
 					<url>http://repo.openscada.org/maven2/</url>
 					<releases>
 						<enabled>true</enabled>
-						<updatePolicy>always</updatePolicy>
+						<updatePolicy>${update.policy}</updatePolicy>
 						<checksumPolicy>warn</checksumPolicy>
 					</releases>
 					<snapshots>
 						<enabled>true</enabled>
-						<updatePolicy>always</updatePolicy>
+						<updatePolicy>${update.policy}</updatePolicy>
 						<checksumPolicy>warn</checksumPolicy>
 					</snapshots>
 				</repository>
