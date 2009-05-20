@@ -31,7 +31,7 @@
 		<dependency>
 			<groupId>org.openscada.aurora</groupId>
 			<artifactId>org.openscada.aurora.utils</artifactId>
-			<version>0.12.0</version>
+			<version>0.13.0-SNAPSHOT</version>
 			<scope>compile</scope>
 			<type>jar</type>
 		</dependency>
