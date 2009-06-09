@@ -24,14 +24,12 @@
 		<dependency>
 			<groupId>org.openscada.utgard</groupId>
 			<artifactId>org.openscada.utgard.opc.dcom</artifactId>
-			<version>${pom.version}</version>
 			<scope>compile</scope>
 			<type>jar</type>
 		</dependency>
 		<dependency>
 			<groupId>org.openscada.aurora</groupId>
 			<artifactId>org.openscada.aurora.utils</artifactId>
-			<version>0.13.0-SNAPSHOT</version>
 			<scope>compile</scope>
 			<type>jar</type>
 		</dependency>
