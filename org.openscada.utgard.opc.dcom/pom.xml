@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.openscada.utgard</groupId>
 	<artifactId>org.openscada.opc.dcom</artifactId>
-	<packaging>jar</packaging>
+	<packaging>bundle</packaging>
 	<name>OpenSCADA-OPC-DCOM</name>
 	<description>This project contains the OPC DCOM Mappings</description>
 
@@ -14,11 +14,35 @@
 		<relativePath>../org.openscada.utgard</relativePath>
 	</parent>
 
+	<properties>
+		<bundle.namespace>org.openscada.opc.dcom</bundle.namespace>
+	</properties>
+	
 	<scm>
 		<connection>scm:svn:http://pubsvn.inavare.net/openscada/modules/utgard/trunk/org.openscada.utgard.opc.dcom</connection>
 		<developerConnection>scm:svn:${inavare.svn.repository}/openscada/modules/utgard/trunk/org.openscada.utgard.opc.dcom</developerConnection>
 		<url>http://pubsvn.inavare.net/openscada/modules/utgard/trunk/org.openscada.utgard.opc.dcom</url>
 	</scm>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<inherited>true</inherited>
+				<configuration>
+					<manifestLocation>META-INF</manifestLocation>
+					<instructions>
+						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+						<Export-Package>!${bundle.namespace}.internal.*,${bundle.namespace}.*;version="${pom.version}"</Export-Package>
+						<Bundle-RequiredExecutionEnvironment>J2SE-1.5</Bundle-RequiredExecutionEnvironment>
+						<Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
+					</instructions>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 	
 	<dependencies>
 		<dependency>
