@@ -37,6 +37,7 @@
 						</goals>
 						<configuration>
 							<outputDirectory>target/dependencies</outputDirectory>
+							<stripVersion>true</stripVersion>
 						</configuration>
 					</execution>
 				</executions>
@@ -45,7 +46,6 @@
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
 				<extensions>true</extensions>
-				<inherited>true</inherited>
 				<configuration>
 					<manifestLocation>META-INF</manifestLocation>
 					<instructions>
@@ -54,7 +54,6 @@
 						<Bundle-RequiredExecutionEnvironment>J2SE-1.5</Bundle-RequiredExecutionEnvironment>
 						<Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
 						<Bundle-ClassPath>.,{maven-dependencies}</Bundle-ClassPath>
-						<unpackBundle>true</unpackBundle>						
 					</instructions>
 				</configuration>
 			</plugin>
