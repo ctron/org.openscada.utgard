@@ -17,7 +17,7 @@
 	<properties>
 		<bundle.namespace>org.openscada.opc.dcom</bundle.namespace>
 	</properties>
-	
+
 	<scm>
 		<connection>scm:svn:http://pubsvn.inavare.net/openscada/modules/utgard/trunk/org.openscada.utgard.opc.dcom</connection>
 		<developerConnection>scm:svn:${inavare.svn.repository}/openscada/modules/utgard/trunk/org.openscada.utgard.opc.dcom</developerConnection>
@@ -26,6 +26,21 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target/dependencies</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
@@ -38,12 +53,14 @@
 						<Export-Package>!${bundle.namespace}.internal.*,${bundle.namespace}.*;version="${pom.version}",org.jinterop.dcom.common;version="${pom.version}",org.jinterop.dcom.core;version="${pom.version}",rpc.core;version="${pom.version}"</Export-Package>
 						<Bundle-RequiredExecutionEnvironment>J2SE-1.5</Bundle-RequiredExecutionEnvironment>
 						<Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
+						<Bundle-ClassPath>.,{maven-dependencies}</Bundle-ClassPath>
+						<unpackBundle>true</unpackBundle>						
 					</instructions>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.openscada.external</groupId>
