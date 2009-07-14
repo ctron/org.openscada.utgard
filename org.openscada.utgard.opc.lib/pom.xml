@@ -10,7 +10,7 @@
 	<parent>
 		<artifactId>org.openscada.utgard</artifactId>
 		<groupId>org.openscada.utgard</groupId>
-		<version>0.5.0-SNAPSHOT</version>
+		<version>0.5.0</version>
 		<relativePath>../org.openscada.utgard</relativePath>
 	</parent>
 	
