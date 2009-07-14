@@ -87,7 +87,7 @@
 			<dependency>
 				<groupId>org.openscada.aurora</groupId>
 				<artifactId>org.openscada.utils</artifactId>
-				<version>0.13.0-SNAPSHOT</version>
+				<version>0.13.0</version>
 				<scope>compile</scope>
 				<type>jar</type>
 			</dependency>
