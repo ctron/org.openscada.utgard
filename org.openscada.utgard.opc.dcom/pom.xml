@@ -50,6 +50,7 @@
 					<manifestLocation>META-INF</manifestLocation>
 					<instructions>
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+						<Import-Package>*,javax.crypto;resolution:="optional",javax.crypto.spec;resolution:="optional"</Import-Package>
 						<Export-Package>!${bundle.namespace}.internal.*,${bundle.namespace}.*;version="${pom.version}",org.jinterop.dcom.common;version="${pom.version}",org.jinterop.dcom.core;version="${pom.version}",rpc.core;version="${pom.version}"</Export-Package>
 						<Bundle-RequiredExecutionEnvironment>J2SE-1.5</Bundle-RequiredExecutionEnvironment>
 						<Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
