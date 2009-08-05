@@ -132,6 +132,18 @@
 					</snapshots>
 				</repository>
 			</repositories>
+			<distributionManagement>
+				<repository>
+					<id>openscada-releases</id>
+					<name>openscada-releases</name>
+					<url>${openscada.distrib.repository}</url>
+				</repository>
+				<snapshotRepository>
+					<id>openscada-snapshots</id>
+					<name>openscada-snapshots</name>
+					<url>${openscada.distrib.repository}</url>
+				</snapshotRepository>
+			</distributionManagement>
 		</profile>
 		<!-- profile is used in 3rdparty environment -->
 		<profile>
@@ -215,18 +227,6 @@
 		<!-- profile used in deploy environment -->
 		<profile>
 			<id>deploy</id>
-			<distributionManagement>
-				<repository>
-					<id>openscada-releases</id>
-					<name>openscada-releases</name>
-					<url>${openscada.distrib.repository}</url>
-				</repository>
-				<snapshotRepository>
-					<id>openscada-snapshots</id>
-					<name>openscada-snapshots</name>
-					<url>${openscada.distrib.repository}</url>
-				</snapshotRepository>
-			</distributionManagement>
 			<build>
 				<plugins>
 					<plugin>
