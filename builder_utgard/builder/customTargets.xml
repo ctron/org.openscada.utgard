@@ -106,7 +106,7 @@
 	</copy>
   	
   	<openscada.builder.copyFeature id="org.openscada.external" />
-  	<openscada.builder.copyFeature id="org.openscada.external.slf4j" />
+  	<openscada.builder.copyPlugin id="org.openscada.external.slf4j" />
   	<openscada.builder.copyFeature id="org.openscada.external.spring" />
   	
   </target>

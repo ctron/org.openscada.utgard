@@ -32,7 +32,7 @@
 	<!-- ================================= 
           target: build              
          ================================= -->
-    <target name="build" depends="" description="OpenSCADA External">
+    <target name="build" depends="" description="OpenSCADA Utgard">
     	<openscada.bundleBuild builder="builder"/>
     </target>
 
@@ -46,7 +46,7 @@
           target: publish              
          ================================= -->
     <target name="publish" depends="" description="Publish artifacts">
-    	<openscada.publish.repository id="org.openscada.external" project="external"/>
+    	<openscada.publish.repository id="org.openscada.utgard" project="utgard"/>
     </target>
 	
 </project>
