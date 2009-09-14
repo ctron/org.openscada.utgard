@@ -76,6 +76,7 @@
 
 	
 	<target name="preProcessRepos">
+		<openscada.import.repository id="org.openscada.external" version="0.14.0" todir="${repoBaseLocation}"/>
   	</target>
 
 	<!-- - - - - - - - - - - - - - - - - - 
@@ -105,9 +106,9 @@
   		</fileset>
 	</copy>
   	
-  	<openscada.builder.copyFeature id="org.openscada.external" />
-  	<openscada.builder.copyPlugin id="org.openscada.external.slf4j" />
-  	<openscada.builder.copyFeature id="org.openscada.external.spring" />
+  	<openscada.builder.copyFeature id="org.openscada.utgard" />
+  	<openscada.builder.copyPlugin id="org.openscada.opc.dcom" />
+  	<openscada.builder.copyPlugin id="org.openscada.opc.lib" />
   	
   </target>
 
@@ -177,7 +178,7 @@
   <!-- ===================================================================== -->
   <target name="postBuild">
     <antcall target="gatherLogs" />
-	<openscada.deploy.repository name="org.openscada.external"/>
+	<openscada.deploy.repository name="org.openscada.utgard"/>
   </target>
 
   <!-- ===================================================================== -->
