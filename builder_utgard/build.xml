@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     Sep 9, 2009 2:53:07 PM                                                        
+
+     OpenSCADA Builder
+     The main OpenSCADA Builder file
+
+     Jens Reimann
+     ====================================================================== -->
+<project name="OpenSCADA Builder" default="default" basedir=".">
+    <description>
+            The main OpenSCADA Builder file
+    </description>
+
+	<property name="build.root" location="${basedir}"/>
+	<property name="source.root" location="${basedir}/.."/>
+	
+	<property environment="env" />
+	<property file="config/local.properties"/>
+	<property file="config/build.properties"/>
+	<property file="common/config/local.properties"/>
+	<property file="common/config/build.properties"/>
+		
+	<import file="${build.root}/common/lib/lib.xml"/>
+	
+    <!-- ================================= 
+          target: default              
+         ================================= -->
+    <target name="default" depends="clean,build,publish" description="The main OpenSCADA Builder file">
+    </target>
+	
+	<!-- ================================= 
+          target: build              
+         ================================= -->
+    <target name="build" depends="" description="OpenSCADA External">
+    	<openscada.bundleBuild builder="builder"/>
+    </target>
+
+	<!-- ================================= 
+          target: clean              
+         ================================= -->
+    <target name="clean" depends="" description="Clean up">
+    </target>
+
+	<!-- ================================= 
+          target: publish              
+         ================================= -->
+    <target name="publish" depends="" description="Publish artifacts">
+    	<openscada.publish.repository id="org.openscada.external" project="external"/>
+    </target>
+	
+</project>
