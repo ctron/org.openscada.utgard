@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-SymbolicName: org.openscada.utgard.opc.lib
+Bundle-SymbolicName: org.openscada.opc.lib
 Bundle-Version: 0.6.0
 Bundle-Name: OpenSCADA Utgard Library
 Bundle-Vendor: inavare GmbH
