@@ -76,7 +76,7 @@
 
 	
 	<target name="preProcessRepos">
-		<openscada.import.repository id="org.openscada.external" version="0.14.0" todir="${repoBaseLocation}"/>
+		<openscada.import.repository id="org.openscada.external" version="${external.version}" todir="${repoBaseLocation}"/>
   	</target>
 
 	<!-- - - - - - - - - - - - - - - - - - 

@@ -20,7 +20,9 @@
 	<property file="config/build.properties"/>
 	<property file="common/config/local.properties"/>
 	<property file="common/config/build.properties"/>
-		
+	
+	<property name="buildId" value="${utgard.version}"/>
+	
 	<import file="${build.root}/common/lib/lib.xml"/>
 	
     <!-- ================================= 
