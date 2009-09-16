@@ -5,16 +5,16 @@ Bundle-Version: 0.6.0
 Bundle-Name: OpenSCADA Utgard Library
 Bundle-Vendor: inavare GmbH
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Import-Package: org.jinterop.dcom.common,
- org.jinterop.dcom.core,
+Import-Package: org.jinterop.dcom.common;version="[2.0.0,3.0.0)",
+ org.jinterop.dcom.core;version="[2.0.0,3.0.0)",
  org.openscada.opc.dcom.common;version="0.6.0",
  org.openscada.opc.dcom.common.impl;version="0.6.0",
  org.openscada.opc.dcom.da;version="0.6.0",
  org.openscada.opc.dcom.da.impl;version="0.6.0",
  org.openscada.opc.dcom.list;version="0.6.0",
  org.openscada.opc.dcom.list.impl;version="0.6.0",
- org.openscada.utils.timing,
- org.slf4j,
+ org.openscada.utils.timing;version="[0.13.0,0.15.0)",
+ org.slf4j;version="[1.5.0,1.6.0)",
  rpc.core
 Export-Package: org.openscada.opc.lib.common;version="0.6.0",
  org.openscada.opc.lib.da;version="0.6.0";
