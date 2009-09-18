@@ -107,6 +107,7 @@
 	</copy>
   	
   	<openscada.builder.copyFeature id="org.openscada.utgard" />
+  	<openscada.builder.copyFeature id="org.openscada.utgard.sdk" />
   	<openscada.builder.copyPlugin id="org.openscada.opc.dcom" />
   	<openscada.builder.copyPlugin id="org.openscada.opc.lib" />
   	
@@ -178,7 +179,7 @@
   <!-- ===================================================================== -->
   <target name="postBuild">
     <antcall target="gatherLogs" />
-	<openscada.deploy.repository name="org.openscada.utgard"/>
+	<openscada.deploy.repository name="org.openscada.utgard.sdk"/>
   </target>
 
   <!-- ===================================================================== -->
