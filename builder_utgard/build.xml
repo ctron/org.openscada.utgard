@@ -48,7 +48,7 @@
           target: publish              
          ================================= -->
     <target name="publish" depends="" description="Publish artifacts">
-    	<openscada.publish.repository id="org.openscada.utgard" project="utgard"/>
+    	<openscada.publish.repository id="org.openscada.utgard.sdk" project="utgard"/>
     </target>
 	
 </project>
