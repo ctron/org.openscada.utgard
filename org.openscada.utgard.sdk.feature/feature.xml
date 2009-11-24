@@ -2,7 +2,7 @@
 <feature
       id="org.openscada.utgard.sdk"
       label="OpenSCADA Utgard SDK"
-      version="0.6.0.qualifier"
+      version="0.7.0.qualifier"
       provider-name="inavare GmbH">
 
    <description url="http://www.example.com/description">
@@ -20,8 +20,8 @@
    <includes
          id="org.openscada.utgard"
          version="0.0.0"/>
-         
-	<includes
+
+   <includes
          id="org.openscada.utgard.source"
          version="0.0.0"/>
 
