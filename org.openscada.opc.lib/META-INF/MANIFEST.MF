@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.openscada.opc.lib
-Bundle-Version: 0.6.0
+Bundle-Version: 0.7.0.qualifier
 Bundle-Name: OpenSCADA Utgard Library
 Bundle-Vendor: inavare GmbH
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
@@ -13,11 +13,10 @@ Import-Package: org.jinterop.dcom.common;version="[2.0.0,3.0.0)",
  org.openscada.opc.dcom.da.impl;version="0.6.0",
  org.openscada.opc.dcom.list;version="0.6.0",
  org.openscada.opc.dcom.list.impl;version="0.6.0",
- org.openscada.utils.timing;version="[0.13.0,0.15.0)",
  org.slf4j;version="[1.5.0,1.6.0)",
  rpc.core
-Export-Package: org.openscada.opc.lib.common;version="0.6.0",
- org.openscada.opc.lib.da;version="0.6.0";
+Export-Package: org.openscada.opc.lib.common;version="0.7.0",
+ org.openscada.opc.lib.da;version="0.7.0";
   uses:="org.jinterop.dcom.core,
    org.openscada.opc.lib.common,
    org.openscada.opc.dcom.da,
@@ -25,7 +24,6 @@ Export-Package: org.openscada.opc.lib.common;version="0.6.0",
    org.openscada.opc.lib.da.browser,
    org.openscada.opc.dcom.da.impl,
    org.slf4j,
-   org.openscada.opc.dcom.common,
-   org.openscada.utils.timing",
- org.openscada.opc.lib.da.browser;version="0.6.0";uses:="org.openscada.opc.dcom.da,org.openscada.opc.dcom.da.impl",
- org.openscada.opc.lib.list;version="0.6.0";uses:="org.jinterop.dcom.core,org.openscada.opc.dcom.list"
+   org.openscada.opc.dcom.common",
+ org.openscada.opc.lib.da.browser;version="0.7.0";uses:="org.openscada.opc.dcom.da,org.openscada.opc.dcom.da.impl",
+ org.openscada.opc.lib.list;version="0.7.0";uses:="org.jinterop.dcom.core,org.openscada.opc.dcom.list"

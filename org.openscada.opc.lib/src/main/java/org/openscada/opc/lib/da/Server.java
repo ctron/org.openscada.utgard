@@ -25,9 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ScheduledExecutorService;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.JIClsid;
 import org.jinterop.dcom.core.JIComServer;
@@ -43,12 +42,13 @@ import org.openscada.opc.lib.common.ConnectionInformation;
 import org.openscada.opc.lib.common.NotConnectedException;
 import org.openscada.opc.lib.da.browser.FlatBrowser;
 import org.openscada.opc.lib.da.browser.TreeBrowser;
-import org.openscada.utils.timing.Scheduler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Server
 {
     private static Logger _log = LoggerFactory.getLogger ( Server.class );
-    
+
     private ConnectionInformation _connectionInformation = null;
 
     private JISession _session = null;
@@ -69,17 +69,17 @@ public class Server
 
     private ErrorMessageResolver _errorMessageResolver = null;
 
-    private Map<Integer, Group> _groups = new HashMap<Integer, Group> ();
+    private final Map<Integer, Group> _groups = new HashMap<Integer, Group> ();
 
-    private List<ServerConnectionStateListener> _stateListeners = new CopyOnWriteArrayList<ServerConnectionStateListener> ();
+    private final List<ServerConnectionStateListener> _stateListeners = new CopyOnWriteArrayList<ServerConnectionStateListener> ();
 
-    private Scheduler _scheduler = null;
+    private ScheduledExecutorService _scheduler = null;
 
-    public Server ( ConnectionInformation connectionInformation, Scheduler scheduler )
+    public Server ( final ConnectionInformation connectionInformation, final ScheduledExecutorService scheduler )
     {
         super ();
-        _connectionInformation = connectionInformation;
-        _scheduler = scheduler;
+        this._connectionInformation = connectionInformation;
+        this._scheduler = scheduler;
     }
 
     /**
@@ -88,14 +88,14 @@ public class Server
      * operations.
      * @return the scheduler for the server
      */
-    public Scheduler getScheduler ()
+    public ScheduledExecutorService getScheduler ()
     {
-        return _scheduler;
+        return this._scheduler;
     }
 
     protected synchronized boolean isConnected ()
     {
-        return _session != null;
+        return this._session != null;
     }
 
     public synchronized void connect () throws IllegalArgumentException, UnknownHostException, JIException, AlreadyConnectedException
@@ -104,51 +104,45 @@ public class Server
         {
             throw new AlreadyConnectedException ();
         }
-        
-        int socketTimeout = Integer.getInteger ( "rpc.socketTimeout", 0 );
-        _log.info ( String.format ( "Socket timeout: %s ", socketTimeout ) ); 
-        
+
+        final int socketTimeout = Integer.getInteger ( "rpc.socketTimeout", 0 );
+        _log.info ( String.format ( "Socket timeout: %s ", socketTimeout ) );
+
         try
         {
-            if ( _connectionInformation.getClsid () != null )
+            if ( this._connectionInformation.getClsid () != null )
             {
-                _session = JISession.createSession ( _connectionInformation.getDomain (),
-                        _connectionInformation.getUser (), _connectionInformation.getPassword () );
-                _session.setGlobalSocketTimeout ( socketTimeout );
-                _comServer = new JIComServer ( JIClsid.valueOf ( _connectionInformation.getClsid () ),
-                        _connectionInformation.getHost (), _session );
+                this._session = JISession.createSession ( this._connectionInformation.getDomain (), this._connectionInformation.getUser (), this._connectionInformation.getPassword () );
+                this._session.setGlobalSocketTimeout ( socketTimeout );
+                this._comServer = new JIComServer ( JIClsid.valueOf ( this._connectionInformation.getClsid () ), this._connectionInformation.getHost (), this._session );
             }
-            else if ( _connectionInformation.getProgId () != null )
+            else if ( this._connectionInformation.getProgId () != null )
             {
-                _session = JISession.createSession ( _connectionInformation.getDomain (),
-                        _connectionInformation.getUser (), _connectionInformation.getPassword () );
-                _session.setGlobalSocketTimeout ( socketTimeout );
-                _comServer = new JIComServer ( JIProgId.valueOf ( _connectionInformation.getClsid () ),
-                        _connectionInformation.getHost (), _session );
+                this._session = JISession.createSession ( this._connectionInformation.getDomain (), this._connectionInformation.getUser (), this._connectionInformation.getPassword () );
+                this._session.setGlobalSocketTimeout ( socketTimeout );
+                this._comServer = new JIComServer ( JIProgId.valueOf ( this._connectionInformation.getClsid () ), this._connectionInformation.getHost (), this._session );
             }
             else
             {
                 throw new IllegalArgumentException ( "Neither clsid nor progid is valid!" );
             }
-            
-            
 
-            _server = new OPCServer ( _comServer.createInstance () );
-            _errorMessageResolver = new ErrorMessageResolver ( _server.getCommon (), _defaultLocaleID );
+            this._server = new OPCServer ( this._comServer.createInstance () );
+            this._errorMessageResolver = new ErrorMessageResolver ( this._server.getCommon (), this._defaultLocaleID );
         }
-        catch ( UnknownHostException e )
+        catch ( final UnknownHostException e )
         {
-            _log.info ( "Unknown host when connecting to server", e  );
+            _log.info ( "Unknown host when connecting to server", e );
             cleanup ();
             throw e;
         }
-        catch ( JIException e )
+        catch ( final JIException e )
         {
-            _log.info ( "Failed to connect to server", e  );
+            _log.info ( "Failed to connect to server", e );
             cleanup ();
-            throw e; 
+            throw e;
         }
-        catch ( Throwable e )
+        catch ( final Throwable e )
         {
             _log.warn ( "Unknown error", e );
             cleanup ();
@@ -157,26 +151,26 @@ public class Server
 
         notifyConnectionStateChange ( true );
     }
-    
+
     /**
      * cleanup after the connection is closed
      */
     protected void cleanup ()
     {
         _log.info ( "Destroying DCOM session..." );
-        final JISession destructSession = _session;
-        Thread destructor = new Thread (new Runnable () {
+        final JISession destructSession = this._session;
+        final Thread destructor = new Thread ( new Runnable () {
 
             public void run ()
             {
-                long ts = System.currentTimeMillis ();
+                final long ts = System.currentTimeMillis ();
                 try
                 {
                     _log.debug ( "Starting destruction of DCOM session" );
                     JISession.destroySession ( destructSession );
                     _log.info ( "Destructed DCOM session" );
                 }
-                catch ( Throwable e )
+                catch ( final Throwable e )
                 {
                     _log.warn ( "Failed to destruct DCOM session", e );
                 }
@@ -184,18 +178,19 @@ public class Server
                 {
                     _log.info ( String.format ( "Session destruction took %s ms", System.currentTimeMillis () - ts ) );
                 }
-            }}, "UtgardSessionDestructor");
+            }
+        }, "UtgardSessionDestructor" );
         destructor.setName ( "OPCSessionDestructor" );
         destructor.setDaemon ( true );
         destructor.start ();
         _log.info ( "Destroying DCOM session... forked" );
-        
-        _errorMessageResolver = null;
-        _session = null;
-        _comServer = null;
-        _server = null;
 
-        _groups.clear ();
+        this._errorMessageResolver = null;
+        this._session = null;
+        this._comServer = null;
+        this._server = null;
+
+        this._groups.clear ();
     }
 
     /**
@@ -212,13 +207,13 @@ public class Server
         {
             notifyConnectionStateChange ( false );
         }
-        catch ( Throwable t )
+        catch ( final Throwable t )
         {
         }
 
         cleanup ();
     }
-    
+
     /**
      * Dispose the connection in the case of an error
      */
@@ -227,17 +222,17 @@ public class Server
         disconnect ();
     }
 
-    protected synchronized Group getGroup ( OPCGroupStateMgt groupMgt ) throws JIException, IllegalArgumentException, UnknownHostException
+    protected synchronized Group getGroup ( final OPCGroupStateMgt groupMgt ) throws JIException, IllegalArgumentException, UnknownHostException
     {
-        Integer serverHandle = groupMgt.getState ().getServerHandle ();
-        if ( _groups.containsKey ( serverHandle ) )
+        final Integer serverHandle = groupMgt.getState ().getServerHandle ();
+        if ( this._groups.containsKey ( serverHandle ) )
         {
-            return _groups.get ( serverHandle );
+            return this._groups.get ( serverHandle );
         }
         else
         {
-            Group group = new Group ( this, serverHandle, groupMgt );
-            _groups.put ( serverHandle, group );
+            final Group group = new Group ( this, serverHandle, groupMgt );
+            this._groups.put ( serverHandle, group );
             return group;
         }
     }
@@ -252,18 +247,19 @@ public class Server
      * @throws JIException
      * @throws DuplicateGroupException If a group with this name already exists
      */
-    public synchronized Group addGroup ( String name ) throws NotConnectedException, IllegalArgumentException, UnknownHostException, JIException, DuplicateGroupException
+    public synchronized Group addGroup ( final String name ) throws NotConnectedException, IllegalArgumentException, UnknownHostException, JIException, DuplicateGroupException
     {
         if ( !isConnected () )
+        {
             throw new NotConnectedException ();
+        }
 
         try
         {
-            OPCGroupStateMgt groupMgt = _server.addGroup ( name, _defaultActive, _defaultUpdateRate, 0,
-                    _defaultTimeBias, _defaultPercentDeadband, _defaultLocaleID );
+            final OPCGroupStateMgt groupMgt = this._server.addGroup ( name, this._defaultActive, this._defaultUpdateRate, 0, this._defaultTimeBias, this._defaultPercentDeadband, this._defaultLocaleID );
             return getGroup ( groupMgt );
         }
-        catch ( JIException e )
+        catch ( final JIException e )
         {
             switch ( e.getErrorCode () )
             {
@@ -303,17 +299,19 @@ public class Server
      * @throws UnknownGroupException If the group was not found
      * @throws NotConnectedException If the server is not connected
      */
-    public Group findGroup ( String name ) throws IllegalArgumentException, UnknownHostException, JIException, UnknownGroupException, NotConnectedException
+    public Group findGroup ( final String name ) throws IllegalArgumentException, UnknownHostException, JIException, UnknownGroupException, NotConnectedException
     {
         if ( !isConnected () )
+        {
             throw new NotConnectedException ();
+        }
 
         try
         {
-            OPCGroupStateMgt groupMgt = _server.getGroupByName ( name );
+            final OPCGroupStateMgt groupMgt = this._server.getGroupByName ( name );
             return getGroup ( groupMgt );
         }
-        catch ( JIException e )
+        catch ( final JIException e )
         {
             switch ( e.getErrorCode () )
             {
@@ -327,52 +325,52 @@ public class Server
 
     public int getDefaultLocaleID ()
     {
-        return _defaultLocaleID;
+        return this._defaultLocaleID;
     }
 
-    public void setDefaultLocaleID ( int defaultLocaleID )
+    public void setDefaultLocaleID ( final int defaultLocaleID )
     {
-        _defaultLocaleID = defaultLocaleID;
+        this._defaultLocaleID = defaultLocaleID;
     }
 
     public Float getDefaultPercentDeadband ()
     {
-        return _defaultPercentDeadband;
+        return this._defaultPercentDeadband;
     }
 
-    public void setDefaultPercentDeadband ( Float defaultPercentDeadband )
+    public void setDefaultPercentDeadband ( final Float defaultPercentDeadband )
     {
-        _defaultPercentDeadband = defaultPercentDeadband;
+        this._defaultPercentDeadband = defaultPercentDeadband;
     }
 
     public Integer getDefaultTimeBias ()
     {
-        return _defaultTimeBias;
+        return this._defaultTimeBias;
     }
 
-    public void setDefaultTimeBias ( Integer defaultTimeBias )
+    public void setDefaultTimeBias ( final Integer defaultTimeBias )
     {
-        _defaultTimeBias = defaultTimeBias;
+        this._defaultTimeBias = defaultTimeBias;
     }
 
     public int getDefaultUpdateRate ()
     {
-        return _defaultUpdateRate;
+        return this._defaultUpdateRate;
     }
 
-    public void setDefaultUpdateRate ( int defaultUpdateRate )
+    public void setDefaultUpdateRate ( final int defaultUpdateRate )
     {
-        _defaultUpdateRate = defaultUpdateRate;
+        this._defaultUpdateRate = defaultUpdateRate;
     }
 
     public boolean isDefaultActive ()
     {
-        return _defaultActive;
+        return this._defaultActive;
     }
 
-    public void setDefaultActive ( boolean defaultActive )
+    public void setDefaultActive ( final boolean defaultActive )
     {
-        _defaultActive = defaultActive;
+        this._defaultActive = defaultActive;
     }
 
     /**
@@ -381,7 +379,7 @@ public class Server
      */
     public FlatBrowser getFlatBrowser ()
     {
-        OPCBrowseServerAddressSpace browser = _server.getBrowser ();
+        final OPCBrowseServerAddressSpace browser = this._server.getBrowser ();
         if ( browser == null )
         {
             return null;
@@ -397,64 +395,72 @@ public class Server
      */
     public TreeBrowser getTreeBrowser () throws JIException
     {
-        OPCBrowseServerAddressSpace browser = _server.getBrowser ();
+        final OPCBrowseServerAddressSpace browser = this._server.getBrowser ();
         if ( browser == null )
+        {
             return null;
+        }
 
         if ( browser.queryOrganization () != OPCNAMESPACETYPE.OPC_NS_HIERARCHIAL )
+        {
             return null;
+        }
 
         return new TreeBrowser ( browser );
     }
 
-    public synchronized String getErrorMessage ( int errorCode )
+    public synchronized String getErrorMessage ( final int errorCode )
     {
-        if ( _errorMessageResolver == null )
+        if ( this._errorMessageResolver == null )
+        {
             return String.format ( "Unknown error (%08X)", errorCode );
+        }
 
         // resolve message
-        String message = _errorMessageResolver.getMessage ( errorCode );
+        final String message = this._errorMessageResolver.getMessage ( errorCode );
 
         // and return if successfull
         if ( message != null )
+        {
             return message;
+        }
 
         // return default message
         return String.format ( "Unknown error (%08X)", errorCode );
     }
 
-    public synchronized void addStateListener ( ServerConnectionStateListener listener )
+    public synchronized void addStateListener ( final ServerConnectionStateListener listener )
     {
-        _stateListeners.add ( listener );
+        this._stateListeners.add ( listener );
         listener.connectionStateChanged ( isConnected () );
     }
 
-    public synchronized void removeStateListener ( ServerConnectionStateListener listener )
+    public synchronized void removeStateListener ( final ServerConnectionStateListener listener )
     {
-        _stateListeners.remove ( listener );
+        this._stateListeners.remove ( listener );
     }
 
-    protected void notifyConnectionStateChange ( boolean connected )
+    protected void notifyConnectionStateChange ( final boolean connected )
     {
-        List<ServerConnectionStateListener> list = new ArrayList<ServerConnectionStateListener> ( _stateListeners );
-        for ( ServerConnectionStateListener listener : list )
+        final List<ServerConnectionStateListener> list = new ArrayList<ServerConnectionStateListener> ( this._stateListeners );
+        for ( final ServerConnectionStateListener listener : list )
         {
             listener.connectionStateChanged ( connected );
         }
     }
 
-    public OPCSERVERSTATUS getServerState ( int timeout ) throws Throwable
+    public OPCSERVERSTATUS getServerState ( final int timeout ) throws Throwable
     {
-        return new ServerStateOperation ( _server ).getServerState ( timeout );
+        return new ServerStateOperation ( this._server ).getServerState ( timeout );
     }
-    
+
     public OPCSERVERSTATUS getServerState ()
     {
         try
         {
             return getServerState ( 2500 );
         }
-        catch ( Throwable e )
+        catch ( final Throwable e )
         {
             _log.info ( "Server connection failed", e );
             dispose ();
@@ -462,12 +468,12 @@ public class Server
         }
     }
 
-    public void removeGroup ( Group group, boolean force ) throws JIException
+    public void removeGroup ( final Group group, final boolean force ) throws JIException
     {
-        if ( _groups.containsKey ( group.getServerHandle () ) )
+        if ( this._groups.containsKey ( group.getServerHandle () ) )
         {
-            _server.removeGroup ( group.getServerHandle (), force );
-            _groups.remove ( group.getServerHandle () );
+            this._server.removeGroup ( group.getServerHandle (), force );
+            this._groups.remove ( group.getServerHandle () );
         }
     }
 }

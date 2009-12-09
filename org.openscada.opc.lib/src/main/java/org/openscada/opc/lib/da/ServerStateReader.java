@@ -22,30 +22,31 @@ package org.openscada.opc.lib.da;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
+import org.openscada.opc.dcom.da.OPCSERVERSTATUS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.openscada.opc.dcom.da.OPCSERVERSTATUS;
-import org.openscada.utils.timing.Scheduler;
-import org.openscada.utils.timing.Scheduler.Job;
 
 public class ServerStateReader
 {
     private static Logger _log = LoggerFactory.getLogger ( ServerStateReader.class );
-    
+
     private Server _server = null;
 
-    private Scheduler _scheduler = null;
+    private ScheduledExecutorService _scheduler = null;
 
-    private List<ServerStateListener> _listeners = new CopyOnWriteArrayList<ServerStateListener> ();
+    private final List<ServerStateListener> _listeners = new CopyOnWriteArrayList<ServerStateListener> ();
 
-    private Job _job = null;
+    private ScheduledFuture<?> _job = null;
 
-    public ServerStateReader ( Server server )
+    public ServerStateReader ( final Server server )
     {
         super ();
-        _server = server;
-        _scheduler = _server.getScheduler ();
+        this._server = server;
+        this._scheduler = this._server.getScheduler ();
     }
 
     /**
@@ -54,54 +55,54 @@ public class ServerStateReader
      * @param server the server to check
      * @param scheduler the scheduler to use
      */
-    public ServerStateReader ( Server server, Scheduler scheduler )
+    public ServerStateReader ( final Server server, final ScheduledExecutorService scheduler )
     {
         super ();
-        _server = server;
-        _scheduler = scheduler;
+        this._server = server;
+        this._scheduler = scheduler;
     }
 
     public synchronized void start ()
     {
-        if ( _job != null )
+        if ( this._job != null )
         {
             return;
         }
 
-        _job = _scheduler.addJob ( new Runnable () {
+        this._job = this._scheduler.scheduleAtFixedRate ( new Runnable () {
 
             public void run ()
             {
                 once ();
             }
-        }, 1000 );
+        }, 1000, 1000, TimeUnit.MILLISECONDS );
     }
 
     public synchronized void stop ()
     {
-        _scheduler.removeJob ( _job );
-        _job = null;
+        this._job.cancel ( false );
+        this._job = null;
     }
 
     protected void once ()
     {
         _log.debug ( "Reading server state" );
-        
-        OPCSERVERSTATUS state = _server.getServerState ();
-        
-        for ( ServerStateListener listener : new ArrayList<ServerStateListener> ( _listeners ) )
+
+        final OPCSERVERSTATUS state = this._server.getServerState ();
+
+        for ( final ServerStateListener listener : new ArrayList<ServerStateListener> ( this._listeners ) )
         {
             listener.stateUpdate ( state );
         }
     }
 
-    public void addListener ( ServerStateListener listener )
+    public void addListener ( final ServerStateListener listener )
     {
-        _listeners.add ( listener );
+        this._listeners.add ( listener );
     }
 
-    public void removeListener ( ServerStateListener listener )
+    public void removeListener ( final ServerStateListener listener )
     {
-        _listeners.remove ( listener );
+        this._listeners.remove ( listener );
     }
 }
