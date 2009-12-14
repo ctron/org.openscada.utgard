@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.openscada.utgard_0.7.0.qualifier.jar" id="org.openscada.utgard" version="0.7.0.qualifier">
+      <category name="org.openscada.utgard.category"/>
+   </feature>
+   <feature url="features/org.openscada.utgard.sdk_0.7.0.qualifier.jar" id="org.openscada.utgard.sdk" version="0.7.0.qualifier">
+      <category name="org.openscada.utgard.category"/>
+   </feature>
+   <category-def name="org.openscada.utgard.category" label="OpenSCADA Utgard"/>
+</site>
