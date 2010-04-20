@@ -1,20 +1,20 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
 package org.openscada.opc.dcom.common.impl;
@@ -24,7 +24,6 @@ import org.jinterop.dcom.core.IJIComObject;
 import org.jinterop.dcom.core.JICallBuilder;
 import org.jinterop.dcom.core.JIFlags;
 import org.jinterop.dcom.core.JIVariant;
-import org.openscada.opc.dcom.da.Constants;
 
 public class Helper
 {
@@ -35,7 +34,7 @@ public class Helper
      * @return the result of the call
      * @throws JIException
      */
-    public static Object[] callRespectSFALSE ( IJIComObject object, JICallBuilder callObject ) throws JIException
+    public static Object[] callRespectSFALSE ( final IJIComObject object, final JICallBuilder callObject ) throws JIException
     {
         try
         {
@@ -43,12 +42,14 @@ public class Helper
         }
         catch ( JIException e )
         {
-            if ( e.getErrorCode () != Constants.S_FALSE )
+            if ( e.getErrorCode () != org.openscada.opc.dcom.common.Constants.S_FALSE )
+            {
                 throw e;
+            }
             return callObject.getResultsInCaseOfException ();
         }
     }
-    
+
     /**
      * Perform some fixes on the variant when writing it to OPC items. This method
      * only changes control information on the variant and not the value itself!
@@ -56,7 +57,7 @@ public class Helper
      * @return the fixed value
      * @throws JIException In case something goes wrong
      */
-    public static JIVariant fixVariant ( JIVariant value ) throws JIException
+    public static JIVariant fixVariant ( final JIVariant value ) throws JIException
     {
         if ( value.isArray () )
         {

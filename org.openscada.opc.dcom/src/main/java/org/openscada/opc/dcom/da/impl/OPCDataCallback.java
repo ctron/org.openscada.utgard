@@ -1,20 +1,20 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
 package org.openscada.opc.dcom.da.impl;
@@ -52,12 +52,12 @@ public class OPCDataCallback extends EventHandlerImpl
         super ();
     }
 
-    public Object[] OnDataChange ( int transactionId, int serverGroupHandle, int masterQuality, int masterErrorCode, int count, JIArray clientHandles, JIArray values, JIArray qualities, JIArray timestamps, JIArray errors )
+    public Object[] OnDataChange ( final int transactionId, final int serverGroupHandle, final int masterQuality, final int masterErrorCode, final int count, final JIArray clientHandles, final JIArray values, final JIArray qualities, final JIArray timestamps, final JIArray errors )
     {
-        IOPCDataCallback callback = _callback;
+        IOPCDataCallback callback = this._callback;
         if ( callback == null )
         {
-            return new Object[] { Constants.S_OK };
+            return new Object[] { org.openscada.opc.dcom.common.Constants.S_OK };
         }
 
         // get arrays for more readable code later ;-)
@@ -89,13 +89,15 @@ public class OPCDataCallback extends EventHandlerImpl
         }
 
         // The client must always return S_OK
-        return new Object[] { Constants.S_OK };
+        return new Object[] { org.openscada.opc.dcom.common.Constants.S_OK };
     }
 
-    public synchronized Object[] OnReadComplete ( int transactionId, int serverGroupHandle, int masterQuality, int masterErrorCode, int count, JIArray clientHandles, JIArray values, JIArray qualities, JIArray timestamps, JIArray errors )
+    public synchronized Object[] OnReadComplete ( final int transactionId, final int serverGroupHandle, final int masterQuality, final int masterErrorCode, final int count, final JIArray clientHandles, final JIArray values, final JIArray qualities, final JIArray timestamps, final JIArray errors )
     {
-        if ( _callback == null )
-            return new Object[] { Constants.S_OK };
+        if ( this._callback == null )
+        {
+            return new Object[] { org.openscada.opc.dcom.common.Constants.S_OK };
+        }
 
         // get arrays for more readable code later ;-)
         Integer[] errorCodes = (Integer[])errors.getArrayInstance ();
@@ -118,7 +120,7 @@ public class OPCDataCallback extends EventHandlerImpl
         // fire event
         try
         {
-            _callback.readComplete ( transactionId, serverGroupHandle, masterQuality, masterErrorCode, result );
+            this._callback.readComplete ( transactionId, serverGroupHandle, masterQuality, masterErrorCode, result );
         }
         catch ( Throwable e )
         {
@@ -126,13 +128,15 @@ public class OPCDataCallback extends EventHandlerImpl
         }
 
         // The client must always return S_OK
-        return new Object[] { Constants.S_OK };
+        return new Object[] { org.openscada.opc.dcom.common.Constants.S_OK };
     }
 
-    public synchronized Object[] OnWriteComplete ( int transactionId, int serverGroupHandle, int masterErrorCode, int count, JIArray clientHandles, JIArray errors )
+    public synchronized Object[] OnWriteComplete ( final int transactionId, final int serverGroupHandle, final int masterErrorCode, final int count, final JIArray clientHandles, final JIArray errors )
     {
-        if ( _callback == null )
-            return new Object[] { Constants.S_OK };
+        if ( this._callback == null )
+        {
+            return new Object[] { org.openscada.opc.dcom.common.Constants.S_OK };
+        }
 
         // get arrays for more readable code later ;-)
         Integer[] errorCodes = (Integer[])errors.getArrayInstance ();
@@ -148,7 +152,7 @@ public class OPCDataCallback extends EventHandlerImpl
         // fire event
         try
         {
-            _callback.writeComplete ( transactionId, serverGroupHandle, masterErrorCode, result );
+            this._callback.writeComplete ( transactionId, serverGroupHandle, masterErrorCode, result );
         }
         catch ( Throwable e )
         {
@@ -156,26 +160,30 @@ public class OPCDataCallback extends EventHandlerImpl
         }
 
         // The client must always return S_OK
-        return new Object[] { Constants.S_OK };
+        return new Object[] { org.openscada.opc.dcom.common.Constants.S_OK };
     }
 
-    public synchronized Object[] OnCancelComplete ( int transactionId, int serverGroupHandle )
+    public synchronized Object[] OnCancelComplete ( final int transactionId, final int serverGroupHandle )
     {
-        if ( _callback == null )
-            return new Object[] { Constants.S_OK };
+        if ( this._callback == null )
+        {
+            return new Object[] { org.openscada.opc.dcom.common.Constants.S_OK };
+        }
 
-        _callback.cancelComplete ( transactionId, serverGroupHandle );
+        this._callback.cancelComplete ( transactionId, serverGroupHandle );
 
         // The client must always return S_OK
-        return new Object[] { Constants.S_OK };
+        return new Object[] { org.openscada.opc.dcom.common.Constants.S_OK };
     }
 
     public synchronized JILocalCoClass getCoClass () throws JIException
     {
-        if ( _coClass != null )
-            return _coClass;
+        if ( this._coClass != null )
+        {
+            return this._coClass;
+        }
 
-        _coClass = new JILocalCoClass ( new JILocalInterfaceDefinition ( Constants.IOPCDataCallback_IID, false ), this, false );
+        this._coClass = new JILocalCoClass ( new JILocalInterfaceDefinition ( Constants.IOPCDataCallback_IID, false ), this, false );
 
         JILocalParamsDescriptor params;
         JILocalMethodDescriptor method;
@@ -187,14 +195,14 @@ public class OPCDataCallback extends EventHandlerImpl
         params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL ); // master quality
         params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL ); // master error
         params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL ); // count
-        params.addInParamAsObject ( ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL ); // item handles
-        params.addInParamAsObject ( ( new JIArray ( JIVariant.class, null, 1, true ) ), JIFlags.FLAG_NULL ); // values
-        params.addInParamAsObject ( ( new JIArray ( Short.class, null, 1, true ) ), JIFlags.FLAG_NULL ); // qualities
-        params.addInParamAsObject ( ( new JIArray ( FILETIME.getStruct (), null, 1, true ) ), JIFlags.FLAG_NULL ); // timestamps
-        params.addInParamAsObject ( ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL ); // errors
+        params.addInParamAsObject ( new JIArray ( Integer.class, null, 1, true ), JIFlags.FLAG_NULL ); // item handles
+        params.addInParamAsObject ( new JIArray ( JIVariant.class, null, 1, true ), JIFlags.FLAG_NULL ); // values
+        params.addInParamAsObject ( new JIArray ( Short.class, null, 1, true ), JIFlags.FLAG_NULL ); // qualities
+        params.addInParamAsObject ( new JIArray ( FILETIME.getStruct (), null, 1, true ), JIFlags.FLAG_NULL ); // timestamps
+        params.addInParamAsObject ( new JIArray ( Integer.class, null, 1, true ), JIFlags.FLAG_NULL ); // errors
 
         method = new JILocalMethodDescriptor ( "OnDataChange", params );
-        _coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
+        this._coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
 
         // OnReadComplete
         params = new JILocalParamsDescriptor ();
@@ -209,7 +217,7 @@ public class OPCDataCallback extends EventHandlerImpl
         params.addInParamAsObject ( new JIArray ( FILETIME.getStruct (), null, 1, true ), JIFlags.FLAG_NULL );
         params.addInParamAsObject ( new JIArray ( Integer.class, null, 1, true ), JIFlags.FLAG_NULL );
         method = new JILocalMethodDescriptor ( "OnReadComplete", params );
-        _coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
+        this._coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
 
         // OnWriteComplete
         params = new JILocalParamsDescriptor ();
@@ -220,30 +228,30 @@ public class OPCDataCallback extends EventHandlerImpl
         params.addInParamAsObject ( new JIArray ( Integer.class, null, 1, true ), JIFlags.FLAG_NULL );
         params.addInParamAsObject ( new JIArray ( Integer.class, null, 1, true ), JIFlags.FLAG_NULL );
         method = new JILocalMethodDescriptor ( "OnWriteComplete", params );
-        _coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
+        this._coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
 
         // OnCancelComplete
         params = new JILocalParamsDescriptor ();
         params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL );
         params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL );
         method = new JILocalMethodDescriptor ( "OnCancelComplete", params );
-        _coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
+        this._coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
 
         // Add supported event interfaces
         List<String> eventInterfaces = new LinkedList<String> ();
         eventInterfaces.add ( Constants.IOPCDataCallback_IID );
-        _coClass.setSupportedEventInterfaces ( eventInterfaces );
+        this._coClass.setSupportedEventInterfaces ( eventInterfaces );
 
-        return _coClass;
+        return this._coClass;
     }
 
-    public void setCallback ( IOPCDataCallback callback )
+    public void setCallback ( final IOPCDataCallback callback )
     {
-        _callback = callback;
+        this._callback = callback;
     }
 
     public IOPCDataCallback getCallback ()
     {
-        return _callback;
+        return this._callback;
     }
 }

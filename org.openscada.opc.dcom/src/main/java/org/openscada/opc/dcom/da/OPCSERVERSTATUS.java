@@ -1,20 +1,20 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
 package org.openscada.opc.dcom.da;
@@ -52,110 +52,110 @@ public class OPCSERVERSTATUS
 
     public int getBandWidth ()
     {
-        return _bandWidth;
+        return this._bandWidth;
     }
 
-    public void setBandWidth ( int bandWidth )
+    public void setBandWidth ( final int bandWidth )
     {
-        _bandWidth = bandWidth;
+        this._bandWidth = bandWidth;
     }
 
     public short getBuildNumber ()
     {
-        return _buildNumber;
+        return this._buildNumber;
     }
 
-    public void setBuildNumber ( short buildNumber )
+    public void setBuildNumber ( final short buildNumber )
     {
-        _buildNumber = buildNumber;
+        this._buildNumber = buildNumber;
     }
 
     public FILETIME getCurrentTime ()
     {
-        return _currentTime;
+        return this._currentTime;
     }
 
-    public void setCurrentTime ( FILETIME currentTime )
+    public void setCurrentTime ( final FILETIME currentTime )
     {
-        _currentTime = currentTime;
+        this._currentTime = currentTime;
     }
 
     public int getGroupCount ()
     {
-        return _groupCount;
+        return this._groupCount;
     }
 
-    public void setGroupCount ( int groupCount )
+    public void setGroupCount ( final int groupCount )
     {
-        _groupCount = groupCount;
+        this._groupCount = groupCount;
     }
 
     public FILETIME getLastUpdateTime ()
     {
-        return _lastUpdateTime;
+        return this._lastUpdateTime;
     }
 
-    public void setLastUpdateTime ( FILETIME lastUpdateTime )
+    public void setLastUpdateTime ( final FILETIME lastUpdateTime )
     {
-        _lastUpdateTime = lastUpdateTime;
+        this._lastUpdateTime = lastUpdateTime;
     }
 
     public short getMajorVersion ()
     {
-        return _majorVersion;
+        return this._majorVersion;
     }
 
-    public void setMajorVersion ( short majorVersion )
+    public void setMajorVersion ( final short majorVersion )
     {
-        _majorVersion = majorVersion;
+        this._majorVersion = majorVersion;
     }
 
     public short getMinorVersion ()
     {
-        return _minorVersion;
+        return this._minorVersion;
     }
 
-    public void setMinorVersion ( short minorVersion )
+    public void setMinorVersion ( final short minorVersion )
     {
-        _minorVersion = minorVersion;
+        this._minorVersion = minorVersion;
     }
 
     public short getReserved ()
     {
-        return _reserved;
+        return this._reserved;
     }
 
-    public void setReserved ( short reserved )
+    public void setReserved ( final short reserved )
     {
-        _reserved = reserved;
+        this._reserved = reserved;
     }
 
     public FILETIME getStartTime ()
     {
-        return _startTime;
+        return this._startTime;
     }
 
-    public void setStartTime ( FILETIME startTime )
+    public void setStartTime ( final FILETIME startTime )
     {
-        _startTime = startTime;
+        this._startTime = startTime;
     }
 
     public String getVendorInfo ()
     {
-        return _vendorInfo;
+        return this._vendorInfo;
     }
 
-    public void setVendorInfo ( String vendorInfo )
+    public void setVendorInfo ( final String vendorInfo )
     {
-        _vendorInfo = vendorInfo;
+        this._vendorInfo = vendorInfo;
     }
 
     public OPCSERVERSTATE getServerState ()
     {
-        return _serverState;
+        return this._serverState;
     }
 
-    public void setServerState ( OPCSERVERSTATE dwServerState )
+    public void setServerState ( final OPCSERVERSTATE dwServerState )
     {
         this._serverState = dwServerState;
     }
@@ -179,7 +179,7 @@ public class OPCSERVERSTATUS
         return struct;
     }
 
-    public static OPCSERVERSTATUS fromStruct ( JIStruct struct )
+    public static OPCSERVERSTATUS fromStruct ( final JIStruct struct )
     {
         OPCSERVERSTATUS status = new OPCSERVERSTATUS ();
 

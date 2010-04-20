@@ -1,20 +1,20 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
 package org.openscada.opc.dcom.da.impl;
@@ -44,36 +44,36 @@ public class OPCAsyncIO2 extends BaseCOMObject
         public AsyncResult ()
         {
             super ();
-            _result = new ResultSet<Integer> ();
-            _cancelId = null;
+            this._result = new ResultSet<Integer> ();
+            this._cancelId = null;
         }
 
-        public AsyncResult ( ResultSet<Integer> result, Integer cancelId )
+        public AsyncResult ( final ResultSet<Integer> result, final Integer cancelId )
         {
             super ();
-            _result = result;
-            _cancelId = cancelId;
+            this._result = result;
+            this._cancelId = cancelId;
         }
 
         public Integer getCancelId ()
         {
-            return _cancelId;
+            return this._cancelId;
         }
 
         public ResultSet<Integer> getResult ()
         {
-            return _result;
+            return this._result;
         }
     }
 
-    public OPCAsyncIO2 ( IJIComObject opcAsyncIO2 ) throws IllegalArgumentException, UnknownHostException, JIException
+    public OPCAsyncIO2 ( final IJIComObject opcAsyncIO2 ) throws IllegalArgumentException, UnknownHostException, JIException
     {
-        super ( (IJIComObject)opcAsyncIO2.queryInterface ( Constants.IOPCAsyncIO2_IID ) );
+        super ( opcAsyncIO2.queryInterface ( Constants.IOPCAsyncIO2_IID ) );
     }
 
-    public void setEnable ( boolean state ) throws JIException
+    public void setEnable ( final boolean state ) throws JIException
     {
-    	JICallBuilder callObject = new JICallBuilder ( true );
+        JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 4 );
 
         callObject.addInParamAsInt ( state ? 1 : 0, JIFlags.FLAG_NULL );
@@ -81,9 +81,9 @@ public class OPCAsyncIO2 extends BaseCOMObject
         getCOMObject ().call ( callObject );
     }
 
-    public int refresh ( OPCDATASOURCE dataSource, int transactionID ) throws JIException
+    public int refresh ( final OPCDATASOURCE dataSource, final int transactionID ) throws JIException
     {
-    	JICallBuilder callObject = new JICallBuilder ( true );
+        JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 2 );
 
         callObject.addInParamAsShort ( (short)dataSource.id (), JIFlags.FLAG_NULL );
@@ -95,9 +95,9 @@ public class OPCAsyncIO2 extends BaseCOMObject
         return (Integer)result[0];
     }
 
-    public void cancel ( int cancelId ) throws JIException
+    public void cancel ( final int cancelId ) throws JIException
     {
-    	JICallBuilder callObject = new JICallBuilder ( true );
+        JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 3 );
 
         callObject.addInParamAsInt ( cancelId, JIFlags.FLAG_NULL );
@@ -105,10 +105,12 @@ public class OPCAsyncIO2 extends BaseCOMObject
         getCOMObject ().call ( callObject );
     }
 
-    public AsyncResult read ( int transactionId, Integer... serverHandles ) throws JIException
+    public AsyncResult read ( final int transactionId, final Integer... serverHandles ) throws JIException
     {
         if ( serverHandles == null || serverHandles.length == 0 )
+        {
             return new AsyncResult ();
+        }
 
         JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 0 );
@@ -118,8 +120,7 @@ public class OPCAsyncIO2 extends BaseCOMObject
         callObject.addInParamAsInt ( transactionId, JIFlags.FLAG_NULL );
 
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ),
-                JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
 
         Object[] result = getCOMObject ().call ( callObject );
 

@@ -1,20 +1,20 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
 package org.openscada.opc.lib.da;
@@ -22,10 +22,10 @@ package org.openscada.opc.lib.da;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.jinterop.dcom.common.JIException;
 import org.openscada.opc.dcom.common.impl.OPCCommon;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * An error message resolver that will lookup the error code using the
@@ -39,15 +39,15 @@ public class ErrorMessageResolver
 
     private OPCCommon _opcCommon = null;
 
-    private Map<Integer, String> _messageCache = new HashMap<Integer, String> ();
+    private final Map<Integer, String> _messageCache = new HashMap<Integer, String> ();
 
     private int _localeId = 0;
 
-    public ErrorMessageResolver ( OPCCommon opcCommon, int localeId )
+    public ErrorMessageResolver ( final OPCCommon opcCommon, final int localeId )
     {
         super ();
-        _opcCommon = opcCommon;
-        _localeId = localeId;
+        this._opcCommon = opcCommon;
+        this._localeId = localeId;
     }
 
     /**
@@ -55,15 +55,15 @@ public class ErrorMessageResolver
      * @param errorCode The error code to look up
      * @return the error message or <code>null</code> if no message could be looked up
      */
-    public synchronized String getMessage ( int errorCode )
+    public synchronized String getMessage ( final int errorCode )
     {
-        String message = _messageCache.get ( Integer.valueOf ( errorCode ) );
+        String message = this._messageCache.get ( Integer.valueOf ( errorCode ) );
 
         if ( message == null )
         {
             try
             {
-                message = _opcCommon.getErrorString ( errorCode, _localeId );
+                message = this._opcCommon.getErrorString ( errorCode, this._localeId );
                 _log.info ( String.format ( "Resolved %08X to '%s'", errorCode, message ) );
             }
             catch ( JIException e )
@@ -71,7 +71,9 @@ public class ErrorMessageResolver
                 _log.warn ( String.format ( "Failed to resolve error code for %08X", errorCode ), e );
             }
             if ( message != null )
-                _messageCache.put ( errorCode, message );
+            {
+                this._messageCache.put ( errorCode, message );
+            }
         }
         return message;
     }

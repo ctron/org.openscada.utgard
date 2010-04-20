@@ -1,20 +1,20 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
 package org.openscada.opc.dcom.list.impl;
@@ -44,14 +44,14 @@ import rpc.core.UUID;
  */
 public class OPCServerList extends BaseCOMObject
 {
-    public OPCServerList ( IJIComObject listObject ) throws JIException
+    public OPCServerList ( final IJIComObject listObject ) throws JIException
     {
-        super ( (IJIComObject)listObject.queryInterface ( Constants.IOPCServerList_IID ) );
+        super ( listObject.queryInterface ( Constants.IOPCServerList_IID ) );
     }
 
-    public JIClsid getCLSIDFromProgID ( String progId ) throws JIException
+    public JIClsid getCLSIDFromProgID ( final String progId ) throws JIException
     {
-    	JICallBuilder callObject = new JICallBuilder ( true );
+        JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 2 );
 
         callObject.addInParamAsString ( progId, JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR );
@@ -60,7 +60,7 @@ public class OPCServerList extends BaseCOMObject
         try
         {
             Object[] result = getCOMObject ().call ( callObject );
-            return JIClsid.valueOf ( ( (UUID) ( result[0] ) ).toString () );
+            return JIClsid.valueOf ( ( (UUID)result[0] ).toString () );
         }
         catch ( JIException e )
         {
@@ -77,22 +77,20 @@ public class OPCServerList extends BaseCOMObject
      * @param clsId A server class
      * @throws JIException
      */
-    public ClassDetails getClassDetails ( JIClsid clsId ) throws JIException
+    public ClassDetails getClassDetails ( final JIClsid clsId ) throws JIException
     {
         if ( clsId == null )
         {
             return null;
         }
-        
+
         JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 1 );
 
         callObject.addInParamAsUUID ( clsId.getCLSID (), JIFlags.FLAG_NULL );
 
-        callObject.addOutParamAsObject ( new JIPointer ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ),
-                JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ),
-                JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ), JIFlags.FLAG_NULL );
 
         Object[] result = Helper.callRespectSFALSE ( getCOMObject (), callObject );
 
@@ -114,7 +112,7 @@ public class OPCServerList extends BaseCOMObject
      );
      */
 
-    public EnumGUID enumClassesOfCategories ( String[] implemented, String[] required ) throws IllegalArgumentException, UnknownHostException, JIException
+    public EnumGUID enumClassesOfCategories ( final String[] implemented, final String[] required ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         UUID[] u1 = new UUID[implemented.length];
         UUID[] u2 = new UUID[required.length];
@@ -132,10 +130,10 @@ public class OPCServerList extends BaseCOMObject
         return enumClassesOfCategories ( u1, u2 );
     }
 
-    public EnumGUID enumClassesOfCategories ( UUID[] implemented, UUID[] required ) throws IllegalArgumentException, UnknownHostException, JIException
+    public EnumGUID enumClassesOfCategories ( final UUID[] implemented, final UUID[] required ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         // ** CALL
-    	JICallBuilder callObject = new JICallBuilder ( true );
+        JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 0 );
 
         // ** IN

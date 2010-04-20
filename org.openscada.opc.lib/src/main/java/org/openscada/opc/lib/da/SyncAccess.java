@@ -1,20 +1,20 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
 package org.openscada.opc.lib.da;
@@ -22,10 +22,10 @@ package org.openscada.opc.lib.da;
 import java.net.UnknownHostException;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.jinterop.dcom.common.JIException;
 import org.openscada.opc.lib.common.NotConnectedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SyncAccess extends AccessBase implements Runnable
 {
@@ -35,26 +35,26 @@ public class SyncAccess extends AccessBase implements Runnable
 
     private Throwable _lastError = null;
 
-    public SyncAccess ( Server server, int period ) throws IllegalArgumentException, UnknownHostException, NotConnectedException, JIException, DuplicateGroupException
+    public SyncAccess ( final Server server, final int period ) throws IllegalArgumentException, UnknownHostException, NotConnectedException, JIException, DuplicateGroupException
     {
         super ( server, period );
     }
-    
-    public SyncAccess ( Server server, int period, String logTag ) throws IllegalArgumentException, UnknownHostException, NotConnectedException, JIException, DuplicateGroupException
+
+    public SyncAccess ( final Server server, final int period, final String logTag ) throws IllegalArgumentException, UnknownHostException, NotConnectedException, JIException, DuplicateGroupException
     {
         super ( server, period, logTag );
     }
 
     public void run ()
     {
-        while ( _active )
+        while ( this._active )
         {
             try
             {
                 runOnce ();
-                if ( _lastError != null )
+                if ( this._lastError != null )
                 {
-                    _lastError = null;
+                    this._lastError = null;
                     handleError ( null );
                 }
             }
@@ -62,7 +62,7 @@ public class SyncAccess extends AccessBase implements Runnable
             {
                 _log.error ( "Sync read failed", e );
                 handleError ( e );
-                _server.disconnect ();
+                this._server.disconnect ();
             }
 
             try
@@ -77,21 +77,21 @@ public class SyncAccess extends AccessBase implements Runnable
 
     protected void runOnce () throws JIException
     {
-        if ( !_active || _group == null )
+        if ( !this._active || this._group == null )
         {
             return;
         }
 
         Map<Item, ItemState> result;
-        
+
         // lock only this section since we could get into a deadlock otherwise
         // calling updateItem
         synchronized ( this )
         {
-        	Item[] items = _items.keySet ().toArray ( new Item[_items.size ()] );
-        	result = _group.read ( false, items );
+            Item[] items = this._items.keySet ().toArray ( new Item[this._items.size ()] );
+            result = this._group.read ( false, items );
         }
-        
+
         for ( Map.Entry<Item, ItemState> entry : result.entrySet () )
         {
             updateItem ( entry.getKey (), entry.getValue () );
@@ -104,9 +104,9 @@ public class SyncAccess extends AccessBase implements Runnable
     {
         super.start ();
 
-        _runner = new Thread ( this, "UtgardSyncReader" );
-        _runner.setDaemon ( true );
-        _runner.start ();
+        this._runner = new Thread ( this, "UtgardSyncReader" );
+        this._runner.setDaemon ( true );
+        this._runner.start ();
     }
 
     @Override
@@ -114,7 +114,7 @@ public class SyncAccess extends AccessBase implements Runnable
     {
         super.stop ();
 
-        _runner = null;
-        _items.clear ();
+        this._runner = null;
+        this._items.clear ();
     }
 }

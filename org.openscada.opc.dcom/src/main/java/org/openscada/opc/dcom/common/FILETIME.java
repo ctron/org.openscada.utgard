@@ -1,20 +1,20 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
 package org.openscada.opc.dcom.common;
@@ -35,36 +35,36 @@ public class FILETIME
     {
     }
 
-    public FILETIME ( FILETIME arg0 )
+    public FILETIME ( final FILETIME arg0 )
     {
-        _high = arg0._high;
-        _low = arg0._low;
+        this._high = arg0._high;
+        this._low = arg0._low;
     }
-    
-    public FILETIME ( int high, int low )
+
+    public FILETIME ( final int high, final int low )
     {
-        _high = high;
-        _low = low;
+        this._high = high;
+        this._low = low;
     }
 
     public int getHigh ()
     {
-        return _high;
+        return this._high;
     }
 
-    public void setHigh ( int high )
+    public void setHigh ( final int high )
     {
-        _high = high;
+        this._high = high;
     }
 
     public int getLow ()
     {
-        return _low;
+        return this._low;
     }
 
-    public void setLow ( int low )
+    public void setLow ( final int low )
     {
-        _low = low;
+        this._low = low;
     }
 
     @Override
@@ -72,25 +72,35 @@ public class FILETIME
     {
         final int PRIME = 31;
         int result = 1;
-        result = PRIME * result + _high;
-        result = PRIME * result + _low;
+        result = PRIME * result + this._high;
+        result = PRIME * result + this._low;
         return result;
     }
 
     @Override
-    public boolean equals ( Object obj )
+    public boolean equals ( final Object obj )
     {
         if ( this == obj )
+        {
             return true;
+        }
         if ( obj == null )
+        {
             return false;
+        }
         if ( getClass () != obj.getClass () )
+        {
             return false;
+        }
         final FILETIME other = (FILETIME)obj;
-        if ( _high != other._high )
+        if ( this._high != other._high )
+        {
             return false;
-        if ( _low != other._low )
+        }
+        if ( this._low != other._low )
+        {
             return false;
+        }
         return true;
     }
 
@@ -104,7 +114,7 @@ public class FILETIME
         return struct;
     }
 
-    public static FILETIME fromStruct ( JIStruct struct )
+    public static FILETIME fromStruct ( final JIStruct struct )
     {
         FILETIME ft = new FILETIME ();
 
@@ -121,12 +131,12 @@ public class FILETIME
         /*
          * The following "strange" stuff is needed since we miss a ulong type
          */
-        long i = 0xFFFFFFFFL & ((long)_high);
+        long i = 0xFFFFFFFFL & this._high;
         i = i << 32;
         BigDecimal d1 = new BigDecimal ( 0xFFFFFFFFFFFFFFFFL & i );
-        
-        i = 0xFFFFFFFFL & ((long)_low);
-        d1 = d1.add ( new BigDecimal ( i) );
+
+        i = 0xFFFFFFFFL & this._low;
+        d1 = d1.add ( new BigDecimal ( i ) );
         d1 = d1.divide ( new BigDecimal ( 10000L ) );
         d1 = d1.subtract ( new BigDecimal ( 11644473600000L ) );
 
@@ -134,10 +144,10 @@ public class FILETIME
 
         return c;
     }
-    
+
     @Override
     public String toString ()
     {
-        return String.format ( "%s/%s", _high, _low );
+        return String.format ( "%s/%s", this._high, this._low );
     }
 }

@@ -1,20 +1,20 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
 package org.openscada.opc.lib.da.browser;
@@ -35,12 +35,12 @@ import org.openscada.opc.dcom.da.impl.OPCBrowseServerAddressSpace;
  */
 public class FlatBrowser extends BaseBrowser
 {
-    public FlatBrowser ( OPCBrowseServerAddressSpace browser )
+    public FlatBrowser ( final OPCBrowseServerAddressSpace browser )
     {
         super ( browser );
     }
 
-    public FlatBrowser ( OPCBrowseServerAddressSpace browser, int batchSize )
+    public FlatBrowser ( final OPCBrowseServerAddressSpace browser, final int batchSize )
     {
         super ( browser, batchSize );
     }
@@ -55,12 +55,12 @@ public class FlatBrowser extends BaseBrowser
      * @throws UnknownHostException
      * @throws JIException
      */
-    public Collection<String> browse ( String filterCriteria, EnumSet<Access> accessMask, int variantType ) throws IllegalArgumentException, UnknownHostException, JIException
+    public Collection<String> browse ( final String filterCriteria, final EnumSet<Access> accessMask, final int variantType ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         return browse ( OPCBROWSETYPE.OPC_FLAT, filterCriteria, accessMask, variantType );
     }
 
-    public Collection<String> browse ( String filterCriteria ) throws IllegalArgumentException, UnknownHostException, JIException
+    public Collection<String> browse ( final String filterCriteria ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         return browse ( filterCriteria, EnumSet.noneOf ( Access.class ), JIVariant.VT_EMPTY );
     }
@@ -70,7 +70,7 @@ public class FlatBrowser extends BaseBrowser
         return browse ( "", EnumSet.noneOf ( Access.class ), JIVariant.VT_EMPTY );
     }
 
-    public Collection<String> browse ( EnumSet<Access> accessMask ) throws IllegalArgumentException, UnknownHostException, JIException
+    public Collection<String> browse ( final EnumSet<Access> accessMask ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         return browse ( "", accessMask, JIVariant.VT_EMPTY );
     }

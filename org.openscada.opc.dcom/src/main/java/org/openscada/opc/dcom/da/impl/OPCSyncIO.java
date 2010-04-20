@@ -1,20 +1,20 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
 package org.openscada.opc.dcom.da.impl;
@@ -40,12 +40,12 @@ import org.openscada.opc.dcom.da.WriteRequest;
 
 public class OPCSyncIO extends BaseCOMObject
 {
-    public OPCSyncIO ( IJIComObject opcSyncIO ) throws JIException
+    public OPCSyncIO ( final IJIComObject opcSyncIO ) throws JIException
     {
-        super ( (IJIComObject)opcSyncIO.queryInterface ( Constants.IOPCSyncIO_IID ) );
+        super ( opcSyncIO.queryInterface ( Constants.IOPCSyncIO_IID ) );
     }
 
-    public KeyedResultSet<Integer, OPCITEMSTATE> read ( OPCDATASOURCE source, Integer... serverHandles ) throws JIException
+    public KeyedResultSet<Integer, OPCITEMSTATE> read ( final OPCDATASOURCE source, final Integer... serverHandles ) throws JIException
     {
         if ( serverHandles == null || serverHandles.length == 0 )
         {
@@ -59,10 +59,8 @@ public class OPCSyncIO extends BaseCOMObject
         callObject.addInParamAsInt ( serverHandles.length, JIFlags.FLAG_NULL );
         callObject.addInParamAsArray ( new JIArray ( serverHandles, true ), JIFlags.FLAG_NULL );
 
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( OPCITEMSTATE.getStruct (), null, 1, true ) ),
-                JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ),
-                JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( OPCITEMSTATE.getStruct (), null, 1, true ) ), JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
 
         Object result[] = Helper.callRespectSFALSE ( getCOMObject (), callObject );
 
@@ -72,14 +70,13 @@ public class OPCSyncIO extends BaseCOMObject
 
         for ( int i = 0; i < serverHandles.length; i++ )
         {
-            results.add ( new KeyedResult<Integer, OPCITEMSTATE> ( serverHandles[i],
-                    OPCITEMSTATE.fromStruct ( states[i] ), errorCodes[i] ) );
+            results.add ( new KeyedResult<Integer, OPCITEMSTATE> ( serverHandles[i], OPCITEMSTATE.fromStruct ( states[i] ), errorCodes[i] ) );
         }
 
         return results;
     }
-    
-    public ResultSet<WriteRequest> write ( WriteRequest... requests ) throws JIException
+
+    public ResultSet<WriteRequest> write ( final WriteRequest... requests ) throws JIException
     {
         if ( requests.length == 0 )
         {
@@ -100,8 +97,7 @@ public class OPCSyncIO extends BaseCOMObject
         callObject.addInParamAsInt ( requests.length, JIFlags.FLAG_NULL );
         callObject.addInParamAsArray ( new JIArray ( items, true ), JIFlags.FLAG_NULL );
         callObject.addInParamAsArray ( new JIArray ( values, true ), JIFlags.FLAG_NULL );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ),
-                JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
 
         Object result[] = Helper.callRespectSFALSE ( getCOMObject (), callObject );
 

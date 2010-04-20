@@ -1,20 +1,20 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
 package org.openscada.opc.lib.da.browser;
@@ -40,12 +40,14 @@ import org.openscada.opc.dcom.da.impl.OPCBrowseServerAddressSpace;
  *
  */
 public class TreeBrowser extends BaseBrowser
-{    
-    
+{
+
     private String _filterCriteria = "";
+
     private EnumSet<Access> _accessMask = EnumSet.noneOf ( Access.class );
+
     private int _variantType = JIVariant.VT_EMPTY;
-    
+
     /**
      * Browse for all items without search parameters.
      * <br/>
@@ -56,7 +58,7 @@ public class TreeBrowser extends BaseBrowser
      * </code>
      * @param browser The browser to use for browsing
      */
-    public TreeBrowser ( OPCBrowseServerAddressSpace browser )
+    public TreeBrowser ( final OPCBrowseServerAddressSpace browser )
     {
         super ( browser );
     }
@@ -68,12 +70,12 @@ public class TreeBrowser extends BaseBrowser
      * @param accessMask The access mask (use <code>EnumSet.noneOf ( Access.class )</code> for all)
      * @param variantType The variant type (use <code>JIVariant.VT_EMPTY</code> for all)
      */
-    public TreeBrowser ( OPCBrowseServerAddressSpace browser, String filterCriteria, EnumSet<Access> accessMask, int variantType )
+    public TreeBrowser ( final OPCBrowseServerAddressSpace browser, final String filterCriteria, final EnumSet<Access> accessMask, final int variantType )
     {
         super ( browser );
-        _filterCriteria = filterCriteria;
-        _accessMask = accessMask;
-        _variantType = variantType;
+        this._filterCriteria = filterCriteria;
+        this._accessMask = accessMask;
+        this._variantType = variantType;
     }
 
     /**
@@ -82,25 +84,25 @@ public class TreeBrowser extends BaseBrowser
      */
     protected void moveToRoot () throws JIException
     {
-        _browser.changePosition ( null, OPCBROWSEDIRECTION.OPC_BROWSE_TO );
+        this._browser.changePosition ( null, OPCBROWSEDIRECTION.OPC_BROWSE_TO );
     }
-    
+
     /**
      * Move the tree browser to a branch
      * @param branch The branch to move to
      * @throws JIException
      */
-    protected void moveToBranch ( Branch branch ) throws JIException
+    protected void moveToBranch ( final Branch branch ) throws JIException
     {
         Collection<String> branchStack = branch.getBranchStack ();
-        
+
         moveToRoot ();
         for ( String branchName : branchStack )
         {
-            _browser.changePosition ( branchName, OPCBROWSEDIRECTION.OPC_BROWSE_DOWN );
+            this._browser.changePosition ( branchName, OPCBROWSEDIRECTION.OPC_BROWSE_DOWN );
         }
     }
-    
+
     /**
      * Browse the root branch for its sub-branches.
      * @return The list of sub branches
@@ -112,9 +114,9 @@ public class TreeBrowser extends BaseBrowser
     {
         Branch branch = new Branch ();
         fillBranches ( branch );
-        return branch;        
+        return branch;
     }
-    
+
     /**
      * Browse the root branch for this leaves.
      * @return The list of leaves
@@ -128,7 +130,7 @@ public class TreeBrowser extends BaseBrowser
         fillLeaves ( branch );
         return branch;
     }
-    
+
     /**
      * Fill the branch list of the provided branch.
      * @param branch The branch to fill.
@@ -136,12 +138,12 @@ public class TreeBrowser extends BaseBrowser
      * @throws IllegalArgumentException
      * @throws UnknownHostException
      */
-    public void fillBranches ( Branch branch ) throws JIException, IllegalArgumentException, UnknownHostException
+    public void fillBranches ( final Branch branch ) throws JIException, IllegalArgumentException, UnknownHostException
     {
         moveToBranch ( branch );
         browse ( branch, false, true, false );
     }
-    
+
     /**
      * Fill the leaf list of the provided branch. 
      * @param branch The branch to fill.
@@ -149,12 +151,12 @@ public class TreeBrowser extends BaseBrowser
      * @throws UnknownHostException
      * @throws JIException
      */
-    public void fillLeaves ( Branch branch ) throws IllegalArgumentException, UnknownHostException, JIException
+    public void fillLeaves ( final Branch branch ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         moveToBranch ( branch );
         browse ( branch, true, false, false );
     }
-    
+
     /**
      * Browse through all levels of the tree browser.
      * @return The whole expanded server address space
@@ -168,7 +170,7 @@ public class TreeBrowser extends BaseBrowser
         fill ( branch );
         return branch;
     }
-    
+
     /**
      * Fill the leaves and branches of the branch provided branches including
      * alls sub-branches. 
@@ -177,7 +179,7 @@ public class TreeBrowser extends BaseBrowser
      * @throws UnknownHostException
      * @throws JIException
      */
-    public void fill ( Branch branch ) throws IllegalArgumentException, UnknownHostException, JIException
+    public void fill ( final Branch branch ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         moveToBranch ( branch );
         browse ( branch, true, true, true );
@@ -192,43 +194,43 @@ public class TreeBrowser extends BaseBrowser
      * @throws UnknownHostException
      * @throws JIException
      */
-    protected void browseLeaves ( Branch branch ) throws IllegalArgumentException, UnknownHostException, JIException
+    protected void browseLeaves ( final Branch branch ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         branch.setLeaves ( new LinkedList<Leaf> () );
-        
-        for ( String item : browse ( OPCBROWSETYPE.OPC_LEAF, _filterCriteria, _accessMask, _variantType ) )
+
+        for ( String item : browse ( OPCBROWSETYPE.OPC_LEAF, this._filterCriteria, this._accessMask, this._variantType ) )
         {
-            Leaf leaf = new Leaf ( branch, item, _browser.getItemID ( item ) );
+            Leaf leaf = new Leaf ( branch, item, this._browser.getItemID ( item ) );
             branch.getLeaves ().add ( leaf );
         }
     }
-    
-    protected void browseBranches ( Branch branch, boolean leaves, boolean descend ) throws IllegalArgumentException, UnknownHostException, JIException
+
+    protected void browseBranches ( final Branch branch, final boolean leaves, final boolean descend ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         branch.setBranches ( new LinkedList<Branch> () );
-        
-        for ( String item : browse ( OPCBROWSETYPE.OPC_BRANCH, _filterCriteria, _accessMask, _variantType ) )
+
+        for ( String item : browse ( OPCBROWSETYPE.OPC_BRANCH, this._filterCriteria, this._accessMask, this._variantType ) )
         {
             Branch subBranch = new Branch ( branch, item );
             // descend only if we should
             if ( descend )
             {
-                _browser.changePosition ( item, OPCBROWSEDIRECTION.OPC_BROWSE_DOWN );
+                this._browser.changePosition ( item, OPCBROWSEDIRECTION.OPC_BROWSE_DOWN );
                 browse ( subBranch, leaves, true, true );
-                _browser.changePosition ( null, OPCBROWSEDIRECTION.OPC_BROWSE_UP );
+                this._browser.changePosition ( null, OPCBROWSEDIRECTION.OPC_BROWSE_UP );
             }
             branch.getBranches ().add ( subBranch );
         }
     }
-    
-    protected void browse ( Branch branch, boolean leaves, boolean branches, boolean descend ) throws IllegalArgumentException, UnknownHostException, JIException
+
+    protected void browse ( final Branch branch, final boolean leaves, final boolean branches, final boolean descend ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         // process leaves
         if ( leaves )
         {
             browseLeaves ( branch );
         }
-        
+
         // process branches
         if ( branches )
         {

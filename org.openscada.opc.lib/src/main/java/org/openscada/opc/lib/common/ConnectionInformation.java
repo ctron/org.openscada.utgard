@@ -1,24 +1,23 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
 package org.openscada.opc.lib.common;
-
 
 /**
  * Holds the connection information
@@ -46,99 +45,105 @@ public class ConnectionInformation
         super ();
     }
 
-    public ConnectionInformation ( String user, String password )
+    public ConnectionInformation ( final String user, final String password )
     {
         super ();
-        _user = user;
-        _password = password;
+        this._user = user;
+        this._password = password;
     }
 
-    public ConnectionInformation ( ConnectionInformation arg0 )
+    public ConnectionInformation ( final ConnectionInformation arg0 )
     {
         super ();
-        _user = arg0._user;
-        _password = arg0._password;
-        _domain = arg0._domain;
-        _host = arg0._host;
-        _progId = arg0._progId;
-        _clsid = arg0._clsid;
+        this._user = arg0._user;
+        this._password = arg0._password;
+        this._domain = arg0._domain;
+        this._host = arg0._host;
+        this._progId = arg0._progId;
+        this._clsid = arg0._clsid;
     }
 
     public String getDomain ()
     {
-        return _domain;
+        return this._domain;
     }
 
     /**
      * Set the domain of the user used for logging on
      * @param domain
      */
-    public void setDomain ( String domain )
+    public void setDomain ( final String domain )
     {
-        _domain = domain;
+        this._domain = domain;
     }
 
     public String getHost ()
     {
-        return _host;
+        return this._host;
     }
 
     /**
      * Set the host on which the server is located
      * @param host The host to use, either an IP address oder hostname
      */
-    public void setHost ( String host )
+    public void setHost ( final String host )
     {
-        _host = host;
+        this._host = host;
     }
 
     public String getPassword ()
     {
-        return _password;
+        return this._password;
     }
 
-    public void setPassword ( String password )
+    public void setPassword ( final String password )
     {
-        _password = password;
+        this._password = password;
     }
 
     public String getUser ()
     {
-        return _user;
+        return this._user;
     }
 
-    public void setUser ( String user )
+    public void setUser ( final String user )
     {
-        _user = user;
+        this._user = user;
     }
 
     public String getClsid ()
     {
-        return _clsid;
+        return this._clsid;
     }
 
-    public void setClsid ( String clsid )
+    public void setClsid ( final String clsid )
     {
-        _clsid = clsid;
+        this._clsid = clsid;
     }
 
     public String getProgId ()
     {
-        return _progId;
+        return this._progId;
     }
 
-    public void setProgId ( String progId )
+    public void setProgId ( final String progId )
     {
-        _progId = progId;
+        this._progId = progId;
     }
 
     public String getClsOrProgId ()
     {
-        if ( _clsid != null )
-            return _clsid;
-        else if ( _progId != null )
-            return _progId;
+        if ( this._clsid != null )
+        {
+            return this._clsid;
+        }
+        else if ( this._progId != null )
+        {
+            return this._progId;
+        }
         else
+        {
             return null;
+        }
     }
 }

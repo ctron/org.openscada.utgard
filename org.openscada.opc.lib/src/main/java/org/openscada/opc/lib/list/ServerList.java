@@ -1,20 +1,20 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
 package org.openscada.opc.lib.list;
@@ -42,8 +42,9 @@ import rpc.core.UUID;
  */
 public class ServerList
 {
-    private JISession _session;
-    private OPCServerList _serverList;
+    private final JISession _session;
+
+    private final OPCServerList _serverList;
 
     /**
      * Create a new instance with an already existing session
@@ -53,11 +54,11 @@ public class ServerList
      * @throws UnknownHostException
      * @throws JIException
      */
-    public ServerList ( JISession session, String host ) throws IllegalArgumentException, UnknownHostException, JIException
+    public ServerList ( final JISession session, final String host ) throws IllegalArgumentException, UnknownHostException, JIException
     {
-        _session = session;
-        JIComServer comServer = new JIComServer ( JIClsid.valueOf ( Constants.OPCServerList_CLSID ), host, _session );
-        _serverList = new OPCServerList ( comServer.createInstance () );
+        this._session = session;
+        JIComServer comServer = new JIComServer ( JIClsid.valueOf ( Constants.OPCServerList_CLSID ), host, this._session );
+        this._serverList = new OPCServerList ( comServer.createInstance () );
     }
 
     /**
@@ -69,7 +70,7 @@ public class ServerList
      * @throws UnknownHostException
      * @throws JIException
      */
-    public ServerList ( String host, String user, String password ) throws IllegalArgumentException, UnknownHostException, JIException
+    public ServerList ( final String host, final String user, final String password ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         this ( host, user, password, null );
     }
@@ -84,7 +85,7 @@ public class ServerList
      * @throws UnknownHostException
      * @throws JIException
      */
-    public ServerList ( String host, String user, String password, String domain ) throws IllegalArgumentException, UnknownHostException, JIException
+    public ServerList ( final String host, final String user, final String password, final String domain ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         this ( JISession.createSession ( domain, user, password ), host );
     }
@@ -95,9 +96,9 @@ public class ServerList
      * @return The class details
      * @throws JIException
      */
-    public ClassDetails getDetails ( String clsId ) throws JIException
+    public ClassDetails getDetails ( final String clsId ) throws JIException
     {
-        return _serverList.getClassDetails ( JIClsid.valueOf ( clsId ) );
+        return this._serverList.getClassDetails ( JIClsid.valueOf ( clsId ) );
     }
 
     /**
@@ -106,9 +107,9 @@ public class ServerList
      * @return the class id or <code>null</code> if none could be found.
      * @throws JIException
      */
-    public String getClsIdFromProgId ( String progId ) throws JIException
+    public String getClsIdFromProgId ( final String progId ) throws JIException
     {
-        JIClsid cls = _serverList.getCLSIDFromProgID ( progId );
+        JIClsid cls = this._serverList.getCLSIDFromProgID ( progId );
         if ( cls == null )
         {
             return null;
@@ -125,7 +126,7 @@ public class ServerList
      * @throws UnknownHostException
      * @throws JIException
      */
-    public Collection<String> listServers ( Category[] implemented, Category[] required ) throws IllegalArgumentException, UnknownHostException, JIException
+    public Collection<String> listServers ( final Category[] implemented, final Category[] required ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         // convert the type safe categories to plain UUIDs
         UUID[] u1 = new UUID[implemented.length];
@@ -142,7 +143,7 @@ public class ServerList
         }
 
         // get them as UUIDs
-        Collection<UUID> resultU = _serverList.enumClassesOfCategories ( u1, u2 ).asCollection ();
+        Collection<UUID> resultU = this._serverList.enumClassesOfCategories ( u1, u2 ).asCollection ();
 
         // and convert to easier usable strings
         Collection<String> result = new ArrayList<String> ( resultU.size () );
@@ -162,7 +163,7 @@ public class ServerList
      * @throws UnknownHostException
      * @throws JIException
      */
-    public Collection<ClassDetails> listServersWithDetails ( Category[] implemented, Category[] required ) throws IllegalArgumentException, UnknownHostException, JIException
+    public Collection<ClassDetails> listServersWithDetails ( final Category[] implemented, final Category[] required ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         Collection<String> resultString = listServers ( implemented, required );
 

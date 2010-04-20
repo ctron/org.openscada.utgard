@@ -1,41 +1,44 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
 package org.openscada.opc.dcom.da;
 
 public enum OPCBROWSEDIRECTION
 {
-    OPC_BROWSE_UP ( 1 ), OPC_BROWSE_DOWN ( 2 ), OPC_BROWSE_TO ( 3 ), OPC_BROWSE_UNKNOWN ( 0 );
+    OPC_BROWSE_UP ( 1 ),
+    OPC_BROWSE_DOWN ( 2 ),
+    OPC_BROWSE_TO ( 3 ),
+    OPC_BROWSE_UNKNOWN ( 0 );
 
     private int _id;
 
-    private OPCBROWSEDIRECTION ( int id )
+    private OPCBROWSEDIRECTION ( final int id )
     {
-        _id = id;
+        this._id = id;
     }
 
     public int id ()
     {
-        return _id;
+        return this._id;
     }
 
-    public static OPCBROWSEDIRECTION fromID ( int id )
+    public static OPCBROWSEDIRECTION fromID ( final int id )
     {
         switch ( id )
         {

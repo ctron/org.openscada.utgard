@@ -1,20 +1,20 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
 package org.openscada.opc.lib.da;
@@ -33,13 +33,13 @@ public class ItemState
 
     private Short _quality = null;
 
-    public ItemState ( int errorCode, JIVariant value, Calendar timestamp, Short quality )
+    public ItemState ( final int errorCode, final JIVariant value, final Calendar timestamp, final Short quality )
     {
         super ();
-        _errorCode = errorCode;
-        _value = value;
-        _timestamp = timestamp;
-        _quality = quality;
+        this._errorCode = errorCode;
+        this._value = value;
+        this._timestamp = timestamp;
+        this._quality = quality;
     }
 
     public ItemState ()
@@ -50,47 +50,47 @@ public class ItemState
     @Override
     public String toString ()
     {
-        return String.format ( "Value: %s, Timestamp: %tc, Quality: %s, ErrorCode: %08x", _value, _timestamp, _quality, _errorCode );
-    }
-    
-    public Short getQuality ()
-    {
-        return _quality;
+        return String.format ( "Value: %s, Timestamp: %tc, Quality: %s, ErrorCode: %08x", this._value, this._timestamp, this._quality, this._errorCode );
     }
 
-    public void setQuality ( Short quality )
+    public Short getQuality ()
     {
-        _quality = quality;
+        return this._quality;
+    }
+
+    public void setQuality ( final Short quality )
+    {
+        this._quality = quality;
     }
 
     public Calendar getTimestamp ()
     {
-        return _timestamp;
+        return this._timestamp;
     }
 
-    public void setTimestamp ( Calendar timestamp )
+    public void setTimestamp ( final Calendar timestamp )
     {
-        _timestamp = timestamp;
+        this._timestamp = timestamp;
     }
 
     public JIVariant getValue ()
     {
-        return _value;
+        return this._value;
     }
 
-    public void setValue ( JIVariant value )
+    public void setValue ( final JIVariant value )
     {
-        _value = value;
+        this._value = value;
     }
 
     public int getErrorCode ()
     {
-        return _errorCode;
+        return this._errorCode;
     }
 
-    public void setErrorCode ( int errorCode )
+    public void setErrorCode ( final int errorCode )
     {
-        _errorCode = errorCode;
+        this._errorCode = errorCode;
     }
 
     @Override
@@ -98,46 +98,66 @@ public class ItemState
     {
         final int PRIME = 31;
         int result = 1;
-        result = PRIME * result + _errorCode;
-        result = PRIME * result + ( ( _quality == null ) ? 0 : _quality.hashCode () );
-        result = PRIME * result + ( ( _timestamp == null ) ? 0 : _timestamp.hashCode () );
-        result = PRIME * result + ( ( _value == null ) ? 0 : _value.hashCode () );
+        result = PRIME * result + this._errorCode;
+        result = PRIME * result + ( this._quality == null ? 0 : this._quality.hashCode () );
+        result = PRIME * result + ( this._timestamp == null ? 0 : this._timestamp.hashCode () );
+        result = PRIME * result + ( this._value == null ? 0 : this._value.hashCode () );
         return result;
     }
 
     @Override
-    public boolean equals ( Object obj )
+    public boolean equals ( final Object obj )
     {
         if ( this == obj )
+        {
             return true;
+        }
         if ( obj == null )
+        {
             return false;
+        }
         if ( getClass () != obj.getClass () )
+        {
             return false;
+        }
         final ItemState other = (ItemState)obj;
-        if ( _errorCode != other._errorCode )
+        if ( this._errorCode != other._errorCode )
+        {
             return false;
-        if ( _quality == null )
+        }
+        if ( this._quality == null )
         {
             if ( other._quality != null )
+            {
                 return false;
+            }
         }
-        else if ( !_quality.equals ( other._quality ) )
+        else if ( !this._quality.equals ( other._quality ) )
+        {
             return false;
-        if ( _timestamp == null )
+        }
+        if ( this._timestamp == null )
         {
             if ( other._timestamp != null )
+            {
                 return false;
+            }
         }
-        else if ( !_timestamp.equals ( other._timestamp ) )
+        else if ( !this._timestamp.equals ( other._timestamp ) )
+        {
             return false;
-        if ( _value == null )
+        }
+        if ( this._value == null )
         {
             if ( other._value != null )
+            {
                 return false;
+            }
         }
-        else if ( !_value.equals ( other._value ) )
+        else if ( !this._value.equals ( other._value ) )
+        {
             return false;
+        }
         return true;
     }
 }

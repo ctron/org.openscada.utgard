@@ -1,20 +1,20 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
 package org.openscada.opc.dcom.da;
@@ -30,16 +30,16 @@ public class WriteRequest
 {
     private int _serverHandle = 0;
 
-    private JIVariant _value = JIVariant.EMPTY();
+    private JIVariant _value = JIVariant.EMPTY ();
 
     public WriteRequest ()
     {
     }
 
-    public WriteRequest ( WriteRequest arg0 )
+    public WriteRequest ( final WriteRequest arg0 )
     {
-        _serverHandle = arg0._serverHandle;
-        _value = arg0._value;
+        this._serverHandle = arg0._serverHandle;
+        this._value = arg0._value;
     }
 
     /**
@@ -47,29 +47,29 @@ public class WriteRequest
      * @param serverHandle the server handle of the item to write to
      * @param value the value to write.
      */
-    public WriteRequest ( int serverHandle, JIVariant value )
+    public WriteRequest ( final int serverHandle, final JIVariant value )
     {
-        _serverHandle = serverHandle;
-        _value = value;
+        this._serverHandle = serverHandle;
+        this._value = value;
     }
 
     public int getServerHandle ()
     {
-        return _serverHandle;
+        return this._serverHandle;
     }
 
-    public void setServerHandle ( int serverHandle )
+    public void setServerHandle ( final int serverHandle )
     {
-        _serverHandle = serverHandle;
+        this._serverHandle = serverHandle;
     }
 
     public JIVariant getValue ()
     {
-        return _value;
+        return this._value;
     }
 
-    public void setValue ( JIVariant value )
+    public void setValue ( final JIVariant value )
     {
-        _value = value;
+        this._value = value;
     }
 }

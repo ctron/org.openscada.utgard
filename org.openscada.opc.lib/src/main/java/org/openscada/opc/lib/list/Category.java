@@ -1,20 +1,20 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
 package org.openscada.opc.lib.list;
@@ -22,16 +22,16 @@ package org.openscada.opc.lib.list;
 public class Category
 {
     private String _catId = null;
-    
-    public Category ( String catId )
+
+    public Category ( final String catId )
     {
-        _catId = catId;
+        this._catId = catId;
     }
-    
+
     @Override
     public String toString ()
     {
-        return _catId;
+        return this._catId;
     }
 
     @Override
@@ -39,29 +39,38 @@ public class Category
     {
         final int PRIME = 31;
         int result = 1;
-        result = PRIME * result + ( ( _catId == null ) ? 0 : _catId.hashCode () );
+        result = PRIME * result + ( this._catId == null ? 0 : this._catId.hashCode () );
         return result;
     }
 
     @Override
-    public boolean equals ( Object obj )
+    public boolean equals ( final Object obj )
     {
         if ( this == obj )
+        {
             return true;
+        }
         if ( obj == null )
+        {
             return false;
+        }
         if ( getClass () != obj.getClass () )
+        {
             return false;
+        }
         final Category other = (Category)obj;
-        if ( _catId == null )
+        if ( this._catId == null )
         {
             if ( other._catId != null )
+            {
                 return false;
+            }
         }
-        else if ( !_catId.equals ( other._catId ) )
+        else if ( !this._catId.equals ( other._catId ) )
+        {
             return false;
+        }
         return true;
     }
-    
-    
+
 }

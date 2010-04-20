@@ -1,20 +1,20 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
 package org.openscada.opc.dcom.da;
@@ -42,62 +42,62 @@ public class OPCITEMDEF
 
     public String getAccessPath ()
     {
-        return _accessPath;
+        return this._accessPath;
     }
 
-    public void setAccessPath ( String accessPath )
+    public void setAccessPath ( final String accessPath )
     {
-        _accessPath = accessPath;
+        this._accessPath = accessPath;
     }
 
     public int getClientHandle ()
     {
-        return _clientHandle;
+        return this._clientHandle;
     }
 
-    public void setClientHandle ( int clientHandle )
+    public void setClientHandle ( final int clientHandle )
     {
-        _clientHandle = clientHandle;
+        this._clientHandle = clientHandle;
     }
 
     public boolean isActive ()
     {
-        return _active;
+        return this._active;
     }
 
-    public void setActive ( boolean ctive )
+    public void setActive ( final boolean ctive )
     {
-        _active = ctive;
+        this._active = ctive;
     }
 
     public String getItemID ()
     {
-        return _itemID;
+        return this._itemID;
     }
 
-    public void setItemID ( String itemID )
+    public void setItemID ( final String itemID )
     {
-        _itemID = itemID;
+        this._itemID = itemID;
     }
 
     public short getRequestedDataType ()
     {
-        return _requestedDataType;
+        return this._requestedDataType;
     }
 
-    public void setRequestedDataType ( short requestedDataType )
+    public void setRequestedDataType ( final short requestedDataType )
     {
-        _requestedDataType = requestedDataType;
+        this._requestedDataType = requestedDataType;
     }
 
     public short getReserved ()
     {
-        return _reserved;
+        return this._reserved;
     }
 
-    public void setReserved ( short reserved )
+    public void setReserved ( final short reserved )
     {
-        _reserved = reserved;
+        this._reserved = reserved;
     }
 
     /**

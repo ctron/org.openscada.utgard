@@ -1,28 +1,28 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
 package org.openscada.opc.lib.da;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.openscada.opc.dcom.da.OPCSERVERSTATUS;
 import org.openscada.opc.dcom.da.impl.OPCServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A server state operation which can be interruped
@@ -32,19 +32,23 @@ import org.openscada.opc.dcom.da.impl.OPCServer;
 public class ServerStateOperation implements Runnable
 {
     private static Logger _log = LoggerFactory.getLogger ( ServerStateOperation.class );
-    
+
     public OPCSERVERSTATUS _serverStatus = null;
+
     public OPCServer _server;
+
     public Throwable _error;
+
     public Object _lock = new Object ();
+
     public boolean _running = false;
 
-    public ServerStateOperation ( OPCServer server )
+    public ServerStateOperation ( final OPCServer server )
     {
         super ();
-        _server = server;
+        this._server = server;
     }
-    
+
     /**
      * Perform the operation.
      * <p>
@@ -54,66 +58,66 @@ public class ServerStateOperation implements Runnable
      */
     public void run ()
     {
-        synchronized ( _lock )
+        synchronized ( this._lock )
         {
-            _running = true;
+            this._running = true;
         }
         try
         {
-            _serverStatus = _server.getStatus ();
-            synchronized ( _lock )
+            this._serverStatus = this._server.getStatus ();
+            synchronized ( this._lock )
             {
-                _running = false;
-                _lock.notify ();
+                this._running = false;
+                this._lock.notify ();
             }
         }
         catch ( Throwable e )
         {
             _log.info ( "Failed to get server state", e );
-            _error = e;
-            _running = false;
-            synchronized ( _lock )
+            this._error = e;
+            this._running = false;
+            synchronized ( this._lock )
             {
-                _lock.notify ();
+                this._lock.notify ();
             }
         }
 
     }
-    
+
     /**
      * Get the server state with a timeout.
      * @return the server state or <code>null</code> if the server is not set.
      * @param timeout the timeout in ms
      * @throws Throwable any error that occurred
      */
-    public OPCSERVERSTATUS getServerState ( int timeout ) throws Throwable
+    public OPCSERVERSTATUS getServerState ( final int timeout ) throws Throwable
     {
-        if ( _server == null )
+        if ( this._server == null )
         {
             _log.debug ( "No connection to server. Skipping..." );
             return null;
         }
-                
+
         Thread t = new Thread ( this, "OPCServerStateReader" );
-        
-        synchronized ( _lock )
+
+        synchronized ( this._lock )
         {
             t.start ();
-            _lock.wait ( timeout );
-            if ( _running )
+            this._lock.wait ( timeout );
+            if ( this._running )
             {
                 _log.warn ( "State operation still running. Interrupting..." );
                 t.interrupt ();
                 throw new InterruptedException ( "Interrupted getting server state" );
             }
         }
-        if ( _error != null )
+        if ( this._error != null )
         {
-            _log.warn ( "An error occurred while getting server state", _error );
-            throw _error;
+            _log.warn ( "An error occurred while getting server state", this._error );
+            throw this._error;
         }
-         
-        return _serverStatus;
+
+        return this._serverStatus;
     }
 
 }

@@ -1,20 +1,20 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
 package org.openscada.opc.dcom.da.impl;
@@ -42,9 +42,9 @@ import org.openscada.opc.dcom.da.OPCNAMESPACETYPE;
  */
 public class OPCBrowseServerAddressSpace extends BaseCOMObject
 {
-    public OPCBrowseServerAddressSpace ( IJIComObject opcServer ) throws IllegalArgumentException, UnknownHostException, JIException
+    public OPCBrowseServerAddressSpace ( final IJIComObject opcServer ) throws IllegalArgumentException, UnknownHostException, JIException
     {
-        super ( (IJIComObject)opcServer.queryInterface ( Constants.IOPCBrowseServerAddressSpace_IID ) );
+        super ( opcServer.queryInterface ( Constants.IOPCBrowseServerAddressSpace_IID ) );
     }
 
     /**
@@ -54,7 +54,7 @@ public class OPCBrowseServerAddressSpace extends BaseCOMObject
      */
     public OPCNAMESPACETYPE queryOrganization () throws JIException
     {
-    	JICallBuilder callObject = new JICallBuilder ( true );
+        JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 0 );
 
         callObject.addOutParamAsType ( Short.class, JIFlags.FLAG_NULL );
@@ -81,9 +81,9 @@ public class OPCBrowseServerAddressSpace extends BaseCOMObject
      * @param direction The direction to go based on the position
      * @throws JIException
      */
-    public void changePosition ( String position, OPCBROWSEDIRECTION direction ) throws JIException
+    public void changePosition ( final String position, final OPCBROWSEDIRECTION direction ) throws JIException
     {
-    	JICallBuilder callObject = new JICallBuilder ( true );
+        JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 1 );
 
         callObject.addInParamAsShort ( (short)direction.id (), JIFlags.FLAG_NULL );
@@ -93,9 +93,9 @@ public class OPCBrowseServerAddressSpace extends BaseCOMObject
 
     }
 
-    public EnumString browse ( OPCBROWSETYPE browseType, String filterCriteria, int accessRights, int dataType ) throws JIException, IllegalArgumentException, UnknownHostException
+    public EnumString browse ( final OPCBROWSETYPE browseType, final String filterCriteria, final int accessRights, final int dataType ) throws JIException, IllegalArgumentException, UnknownHostException
     {
-    	JICallBuilder callObject = new JICallBuilder ( true );
+        JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 2 );
 
         callObject.addInParamAsShort ( (short)browseType.id (), JIFlags.FLAG_NULL );
@@ -117,9 +117,9 @@ public class OPCBrowseServerAddressSpace extends BaseCOMObject
      * @throws IllegalArgumentException
      * @throws UnknownHostException
      */
-    public EnumString browseAccessPaths ( String itemID ) throws JIException, IllegalArgumentException, UnknownHostException
+    public EnumString browseAccessPaths ( final String itemID ) throws JIException, IllegalArgumentException, UnknownHostException
     {
-    	JICallBuilder callObject = new JICallBuilder ( true );
+        JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 4 );
 
         callObject.addInParamAsString ( itemID, JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR );
@@ -142,14 +142,13 @@ public class OPCBrowseServerAddressSpace extends BaseCOMObject
      * @return the complete item ID
      * @throws JIException
      */
-    public String getItemID ( String item ) throws JIException
+    public String getItemID ( final String item ) throws JIException
     {
-    	JICallBuilder callObject = new JICallBuilder ( true );
+        JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 3 );
 
         callObject.addInParamAsString ( item, JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR );
-        callObject.addOutParamAsObject ( new JIPointer ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ),
-                JIFlags.FLAG_NULL );
+        callObject.addOutParamAsObject ( new JIPointer ( new JIString ( JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) ), JIFlags.FLAG_NULL );
 
         Object[] result = getCOMObject ().call ( callObject );
 

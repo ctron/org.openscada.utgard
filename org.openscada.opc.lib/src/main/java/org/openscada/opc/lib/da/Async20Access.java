@@ -1,28 +1,26 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
 package org.openscada.opc.lib.da;
 
 import java.net.UnknownHostException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.jinterop.dcom.common.JIException;
 import org.openscada.opc.dcom.common.EventHandler;
 import org.openscada.opc.dcom.common.KeyedResult;
@@ -33,6 +31,8 @@ import org.openscada.opc.dcom.da.OPCDATASOURCE;
 import org.openscada.opc.dcom.da.ValueData;
 import org.openscada.opc.dcom.da.impl.OPCAsyncIO2;
 import org.openscada.opc.lib.common.NotConnectedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Async20Access extends AccessBase implements IOPCDataCallback
 {
@@ -42,16 +42,16 @@ public class Async20Access extends AccessBase implements IOPCDataCallback
 
     private boolean _initialRefresh = false;
 
-    public Async20Access ( Server server, int period, boolean initialRefresh ) throws IllegalArgumentException, UnknownHostException, NotConnectedException, JIException, DuplicateGroupException
+    public Async20Access ( final Server server, final int period, final boolean initialRefresh ) throws IllegalArgumentException, UnknownHostException, NotConnectedException, JIException, DuplicateGroupException
     {
         super ( server, period );
-        _initialRefresh = initialRefresh;
+        this._initialRefresh = initialRefresh;
     }
-    
-    public Async20Access ( Server server, int period, boolean initialRefresh, String logTag ) throws IllegalArgumentException, UnknownHostException, NotConnectedException, JIException, DuplicateGroupException
+
+    public Async20Access ( final Server server, final int period, final boolean initialRefresh, final String logTag ) throws IllegalArgumentException, UnknownHostException, NotConnectedException, JIException, DuplicateGroupException
     {
         super ( server, period, logTag );
-        _initialRefresh = initialRefresh;
+        this._initialRefresh = initialRefresh;
     }
 
     @Override
@@ -64,16 +64,16 @@ public class Async20Access extends AccessBase implements IOPCDataCallback
 
         super.start ();
 
-        _eventHandler = _group.attach ( this );
-        if ( ( !_items.isEmpty () ) && _initialRefresh )
+        this._eventHandler = this._group.attach ( this );
+        if ( !this._items.isEmpty () && this._initialRefresh )
         {
-            OPCAsyncIO2 async20 = _group.getAsyncIO20 ();
+            OPCAsyncIO2 async20 = this._group.getAsyncIO20 ();
             if ( async20 == null )
             {
                 throw new NotConnectedException ();
             }
 
-            _group.getAsyncIO20 ().refresh ( OPCDATASOURCE.OPC_DS_CACHE, 0 );
+            this._group.getAsyncIO20 ().refresh ( OPCDATASOURCE.OPC_DS_CACHE, 0 );
         }
     }
 
@@ -81,34 +81,36 @@ public class Async20Access extends AccessBase implements IOPCDataCallback
     protected synchronized void stop () throws JIException
     {
         if ( !isActive () )
+        {
             return;
+        }
 
-        if ( _eventHandler != null )
+        if ( this._eventHandler != null )
         {
             try
             {
-                _eventHandler.detach ();
+                this._eventHandler.detach ();
             }
             catch ( Throwable e )
             {
                 _log.warn ( "Failed to detach group", e );
             }
-            
-            _eventHandler = null;
+
+            this._eventHandler = null;
         }
-        
-        super.stop ();        
+
+        super.stop ();
     }
 
-    public void cancelComplete ( int transactionId, int serverGroupHandle )
+    public void cancelComplete ( final int transactionId, final int serverGroupHandle )
     {
     }
 
-    public void dataChange ( int transactionId, int serverGroupHandle, int masterQuality, int masterErrorCode, KeyedResultSet<Integer, ValueData> result )
+    public void dataChange ( final int transactionId, final int serverGroupHandle, final int masterQuality, final int masterErrorCode, final KeyedResultSet<Integer, ValueData> result )
     {
         _log.debug ( String.format ( "dataChange - transId %d, items: %d", transactionId, result.size () ) );
 
-        Group group = _group;
+        Group group = this._group;
         if ( group == null )
         {
             return;
@@ -117,18 +119,17 @@ public class Async20Access extends AccessBase implements IOPCDataCallback
         for ( KeyedResult<Integer, ValueData> entry : result )
         {
             Item item = group.findItemByClientHandle ( entry.getKey () );
-            _log.debug ( String.format ( "Update for '%s'", item.getId () ) ); 
-            updateItem ( item, new ItemState ( entry.getErrorCode (), entry.getValue ().getValue (),
-                    entry.getValue ().getTimestamp (), entry.getValue ().getQuality () ) );
+            _log.debug ( String.format ( "Update for '%s'", item.getId () ) );
+            updateItem ( item, new ItemState ( entry.getErrorCode (), entry.getValue ().getValue (), entry.getValue ().getTimestamp (), entry.getValue ().getQuality () ) );
         }
     }
 
-    public void readComplete ( int transactionId, int serverGroupHandle, int masterQuality, int masterErrorCode, KeyedResultSet<Integer, ValueData> result )
+    public void readComplete ( final int transactionId, final int serverGroupHandle, final int masterQuality, final int masterErrorCode, final KeyedResultSet<Integer, ValueData> result )
     {
         _log.debug ( String.format ( "readComplete - transId %d", transactionId ) );
     }
 
-    public void writeComplete ( int transactionId, int serverGroupHandle, int masterErrorCode, ResultSet<Integer> result )
+    public void writeComplete ( final int transactionId, final int serverGroupHandle, final int masterErrorCode, final ResultSet<Integer> result )
     {
     }
 }

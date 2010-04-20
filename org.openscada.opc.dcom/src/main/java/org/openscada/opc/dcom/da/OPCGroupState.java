@@ -1,20 +1,20 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
 package org.openscada.opc.dcom.da;
@@ -39,81 +39,81 @@ public class OPCGroupState
 
     public boolean isActive ()
     {
-        return _active;
+        return this._active;
     }
 
-    public void setActive ( boolean active )
+    public void setActive ( final boolean active )
     {
-        _active = active;
+        this._active = active;
     }
 
     public int getClientHandle ()
     {
-        return _clientHandle;
+        return this._clientHandle;
     }
 
-    public void setClientHandle ( int clientHandle )
+    public void setClientHandle ( final int clientHandle )
     {
-        _clientHandle = clientHandle;
+        this._clientHandle = clientHandle;
     }
 
     public int getLocaleID ()
     {
-        return _localeID;
+        return this._localeID;
     }
 
-    public void setLocaleID ( int localeID )
+    public void setLocaleID ( final int localeID )
     {
-        _localeID = localeID;
+        this._localeID = localeID;
     }
 
     public String getName ()
     {
-        return _name;
+        return this._name;
     }
 
-    public void setName ( String name )
+    public void setName ( final String name )
     {
-        _name = name;
+        this._name = name;
     }
 
     public float getPercentDeadband ()
     {
-        return _percentDeadband;
+        return this._percentDeadband;
     }
 
-    public void setPercentDeadband ( float percentDeadband )
+    public void setPercentDeadband ( final float percentDeadband )
     {
-        _percentDeadband = percentDeadband;
+        this._percentDeadband = percentDeadband;
     }
 
     public int getServerHandle ()
     {
-        return _serverHandle;
+        return this._serverHandle;
     }
 
-    public void setServerHandle ( int serverHandle )
+    public void setServerHandle ( final int serverHandle )
     {
-        _serverHandle = serverHandle;
+        this._serverHandle = serverHandle;
     }
 
     public int getTimeBias ()
     {
-        return _timeBias;
+        return this._timeBias;
     }
 
-    public void setTimeBias ( int timeBias )
+    public void setTimeBias ( final int timeBias )
     {
-        _timeBias = timeBias;
+        this._timeBias = timeBias;
     }
 
     public int getUpdateRate ()
     {
-        return _updateRate;
+        return this._updateRate;
     }
 
-    public void setUpdateRate ( int updateRate )
+    public void setUpdateRate ( final int updateRate )
     {
-        _updateRate = updateRate;
+        this._updateRate = updateRate;
     }
 }

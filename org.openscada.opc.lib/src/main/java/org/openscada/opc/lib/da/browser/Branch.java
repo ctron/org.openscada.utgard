@@ -1,20 +1,20 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
 package org.openscada.opc.lib.da.browser;
@@ -41,17 +41,17 @@ public class Branch
     {
         super ();
     }
-    
+
     /**
      * Create a branch with a parent branch and a name of this branch.
      * @param parent The parent of this branch
      * @param name The name of this branch
      */
-    public Branch ( Branch parent, String name )
+    public Branch ( final Branch parent, final String name )
     {
         super ();
-        _name = name;
-        _parent = parent;
+        this._name = name;
+        this._parent = parent;
     }
 
     /**
@@ -62,12 +62,12 @@ public class Branch
      */
     public Collection<Branch> getBranches ()
     {
-        return _branches;
+        return this._branches;
     }
 
-    public void setBranches ( Collection<Branch> branches )
+    public void setBranches ( final Collection<Branch> branches )
     {
-        _branches = branches;
+        this._branches = branches;
     }
 
     /**
@@ -78,29 +78,29 @@ public class Branch
      */
     public Collection<Leaf> getLeaves ()
     {
-        return _leaves;
+        return this._leaves;
     }
 
-    public void setLeaves ( Collection<Leaf> leaves )
+    public void setLeaves ( final Collection<Leaf> leaves )
     {
-        _leaves = leaves;
+        this._leaves = leaves;
     }
 
     public String getName ()
     {
-        return _name;
+        return this._name;
     }
 
-    public void setName ( String name )
+    public void setName ( final String name )
     {
-        _name = name;
+        this._name = name;
     }
 
     public Branch getParent ()
     {
-        return _parent;
+        return this._parent;
     }
-    
+
     /**
      * Get the list of names from the parent up to this branch
      * @return The stack of branch names from the parent up this one
@@ -108,14 +108,14 @@ public class Branch
     public Collection<String> getBranchStack ()
     {
         LinkedList<String> branches = new LinkedList<String> ();
-        
+
         Branch currentBranch = this;
         while ( currentBranch.getParent () != null )
         {
             branches.add ( currentBranch.getName () );
             currentBranch = currentBranch.getParent ();
         }
-        
+
         Collections.reverse ( branches );
         return branches;
     }

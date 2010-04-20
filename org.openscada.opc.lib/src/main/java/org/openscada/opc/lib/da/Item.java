@@ -1,28 +1,28 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
 package org.openscada.opc.lib.da;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.JIVariant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Item
 {
@@ -36,48 +36,48 @@ public class Item
 
     private String _id = null;
 
-    Item ( Group group, int serverHandle, int clientHandle, String id )
+    Item ( final Group group, final int serverHandle, final int clientHandle, final String id )
     {
         super ();
         _log.debug ( String.format ( "Adding new item '%s' (0x%08X) for group %s", id, serverHandle, group.toString () ) );
-        _group = group;
-        _serverHandle = serverHandle;
-        _clientHandle = clientHandle;
-        _id = id;
+        this._group = group;
+        this._serverHandle = serverHandle;
+        this._clientHandle = clientHandle;
+        this._id = id;
     }
 
     public Group getGroup ()
     {
-        return _group;
+        return this._group;
     }
 
     public int getServerHandle ()
     {
-        return _serverHandle;
+        return this._serverHandle;
     }
 
     public int getClientHandle ()
     {
-        return _clientHandle;
+        return this._clientHandle;
     }
 
     public String getId ()
     {
-        return _id;
+        return this._id;
     }
 
-    public void setActive ( boolean state ) throws JIException
+    public void setActive ( final boolean state ) throws JIException
     {
-        _group.setActive ( state, this );
+        this._group.setActive ( state, this );
     }
 
-    public ItemState read ( boolean device ) throws JIException
+    public ItemState read ( final boolean device ) throws JIException
     {
-        return _group.read ( device, this ).get ( this );
+        return this._group.read ( device, this ).get ( this );
     }
 
-    public Integer write ( JIVariant value ) throws JIException
+    public Integer write ( final JIVariant value ) throws JIException
     {
-        return _group.write ( new WriteRequest[] { new WriteRequest ( this, value ) } ).get ( this );
+        return this._group.write ( new WriteRequest[] { new WriteRequest ( this, value ) } ).get ( this );
     }
 }

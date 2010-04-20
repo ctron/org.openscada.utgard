@@ -1,20 +1,20 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
 package org.openscada.opc.dcom.da;
@@ -38,52 +38,52 @@ public class OPCITEMSTATE
 
     public int getClientHandle ()
     {
-        return _clientHandle;
+        return this._clientHandle;
     }
 
-    public void setClientHandle ( int clientHandle )
+    public void setClientHandle ( final int clientHandle )
     {
-        _clientHandle = clientHandle;
+        this._clientHandle = clientHandle;
     }
 
     public short getQuality ()
     {
-        return _quality;
+        return this._quality;
     }
 
-    public void setQuality ( short quality )
+    public void setQuality ( final short quality )
     {
-        _quality = quality;
+        this._quality = quality;
     }
 
     public short getReserved ()
     {
-        return _reserved;
+        return this._reserved;
     }
 
-    public void setReserved ( short reserved )
+    public void setReserved ( final short reserved )
     {
-        _reserved = reserved;
+        this._reserved = reserved;
     }
 
     public FILETIME getTimestamp ()
     {
-        return _timestamp;
+        return this._timestamp;
     }
 
-    public void setTimestamp ( FILETIME timestamp )
+    public void setTimestamp ( final FILETIME timestamp )
     {
-        _timestamp = timestamp;
+        this._timestamp = timestamp;
     }
 
     public JIVariant getValue ()
     {
-        return _value;
+        return this._value;
     }
 
-    public void setValue ( JIVariant value )
+    public void setValue ( final JIVariant value )
     {
-        _value = value;
+        this._value = value;
     }
 
     public static JIStruct getStruct () throws JIException
@@ -99,7 +99,7 @@ public class OPCITEMSTATE
         return struct;
     }
 
-    public static OPCITEMSTATE fromStruct ( JIStruct struct )
+    public static OPCITEMSTATE fromStruct ( final JIStruct struct )
     {
         OPCITEMSTATE itemState = new OPCITEMSTATE ();
 
