@@ -19,14 +19,48 @@
 
 package org.openscada.opc.dcom.common;
 
+import junit.framework.Assert;
+
+import org.junit.Test;
+
 public class FiletimeTest1
 {
-    public static void main ( String[] args )
+    public static void main ( final String[] args )
     {
         FILETIME ft = new FILETIME ( 29949427, 2139800608 );
         System.out.println ( String.format ( "%s, %tc", ft, ft.asCalendar () ) );
 
         ft = new FILETIME ( 29949427, -2145016688 );
         System.out.println ( String.format ( "%s, %tc", ft, ft.asCalendar () ) );
+    }
+
+    @Test
+    public void test ()
+    {
+        assertEquals ( "Thu Aug 14 11:52:43 CEST 2008", new FILETIME ( 29949427, 2139800608 ) );
+        assertEquals ( "Thu Aug 14 11:52:44 CEST 2008", new FILETIME ( 29949427, -2145016688 ) );
+    }
+
+    protected void assertEquals ( final String expected, final FILETIME actual )
+    {
+        Assert.assertEquals ( expected, String.format ( "%tc", actual.asCalendar () ) );
+    }
+
+    @Test
+    public void test2 ()
+    {
+        FILETIME last = null;
+        for ( int i = 0; i < 10000; i++ )
+        {
+            final FILETIME ft = new FILETIME ( 29949427 + i, 2139800608 + i );
+            Assert.assertEquals ( ft.asBigDecimalCalendar (), ft.asCalendar () );
+
+            if ( last != null )
+            {
+                Assert.assertTrue ( last.asCalendar ().before ( ft.asCalendar () ) );
+            }
+
+            last = ft;
+        }
     }
 }
