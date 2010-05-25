@@ -29,11 +29,11 @@ import org.slf4j.LoggerFactory;
 
 public class SyncAccess extends AccessBase implements Runnable
 {
-    private static Logger _log = LoggerFactory.getLogger ( SyncAccess.class );
+    private static Logger logger = LoggerFactory.getLogger ( SyncAccess.class );
 
-    private Thread _runner = null;
+    private Thread runner = null;
 
-    private Throwable _lastError = null;
+    private Throwable lastError = null;
 
     public SyncAccess ( final Server server, final int period ) throws IllegalArgumentException, UnknownHostException, NotConnectedException, JIException, DuplicateGroupException
     {
@@ -47,22 +47,22 @@ public class SyncAccess extends AccessBase implements Runnable
 
     public void run ()
     {
-        while ( this._active )
+        while ( this.active )
         {
             try
             {
                 runOnce ();
-                if ( this._lastError != null )
+                if ( this.lastError != null )
                 {
-                    this._lastError = null;
+                    this.lastError = null;
                     handleError ( null );
                 }
             }
             catch ( Throwable e )
             {
-                _log.error ( "Sync read failed", e );
+                logger.error ( "Sync read failed", e );
                 handleError ( e );
-                this._server.disconnect ();
+                this.server.disconnect ();
             }
 
             try
@@ -77,7 +77,7 @@ public class SyncAccess extends AccessBase implements Runnable
 
     protected void runOnce () throws JIException
     {
-        if ( !this._active || this._group == null )
+        if ( !this.active || this.group == null )
         {
             return;
         }
@@ -88,8 +88,8 @@ public class SyncAccess extends AccessBase implements Runnable
         // calling updateItem
         synchronized ( this )
         {
-            Item[] items = this._items.keySet ().toArray ( new Item[this._items.size ()] );
-            result = this._group.read ( false, items );
+            Item[] items = this.items.keySet ().toArray ( new Item[this.items.size ()] );
+            result = this.group.read ( false, items );
         }
 
         for ( Map.Entry<Item, ItemState> entry : result.entrySet () )
@@ -104,9 +104,9 @@ public class SyncAccess extends AccessBase implements Runnable
     {
         super.start ();
 
-        this._runner = new Thread ( this, "UtgardSyncReader" );
-        this._runner.setDaemon ( true );
-        this._runner.start ();
+        this.runner = new Thread ( this, "UtgardSyncReader" );
+        this.runner.setDaemon ( true );
+        this.runner.start ();
     }
 
     @Override
@@ -114,7 +114,7 @@ public class SyncAccess extends AccessBase implements Runnable
     {
         super.stop ();
 
-        this._runner = null;
-        this._items.clear ();
+        this.runner = null;
+        this.items.clear ();
     }
 }
