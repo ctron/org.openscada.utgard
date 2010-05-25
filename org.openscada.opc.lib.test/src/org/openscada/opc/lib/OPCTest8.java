@@ -17,7 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.openscada.opc.lib.test;
+package org.openscada.opc.lib;
 
 import java.util.Collection;
 
@@ -34,9 +34,9 @@ import org.openscada.opc.lib.list.ServerList;
  */
 public class OPCTest8
 {
-    protected static void showDetails ( ServerList serverList, String clsid ) throws JIException
+    protected static void showDetails ( final ServerList serverList, final String clsid ) throws JIException
     {
-        ClassDetails cd = serverList.getDetails ( clsid );
+        final ClassDetails cd = serverList.getDetails ( clsid );
         if ( cd != null )
         {
             System.out.println ( cd.getProgId () + " = " + cd.getDescription () );
@@ -47,18 +47,17 @@ public class OPCTest8
         }
     }
 
-    public static void main ( String[] args ) throws Throwable
+    public static void main ( final String[] args ) throws Throwable
     {
-        ServerList serverList = new ServerList ( args[0], args[2], args[3], args[1] );
+        final ServerList serverList = new ServerList ( args[0], args[2], args[3], args[1] );
 
-        String cls = serverList.getClsIdFromProgId ( "Matrikon.OPC.Simulation.1" );
+        final String cls = serverList.getClsIdFromProgId ( "Matrikon.OPC.Simulation.1" );
         System.out.println ( "Matrikon OPC Simulation Server: " + cls );
         showDetails ( serverList, cls );
 
-        Collection<ClassDetails> detailsList = serverList.listServersWithDetails (
-                new Category[] { Categories.OPCDAServer20 }, new Category[] {} );
+        final Collection<ClassDetails> detailsList = serverList.listServersWithDetails ( new Category[] { Categories.OPCDAServer20 }, new Category[] {} );
 
-        for ( ClassDetails details : detailsList )
+        for ( final ClassDetails details : detailsList )
         {
             System.out.println ( String.format ( "Found: %s", details.getClsId () ) );
             System.out.println ( String.format ( "\tProgID: %s", details.getProgId () ) );

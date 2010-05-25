@@ -17,16 +17,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.openscada.opc.lib.test;
+package org.openscada.opc.lib;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.Executors;
 
 import org.jinterop.dcom.common.JIException;
 import org.openscada.opc.lib.common.ConnectionInformation;
 import org.openscada.opc.lib.da.Async20Access;
 import org.openscada.opc.lib.da.Server;
-import org.openscada.utils.timing.Scheduler;
 
 /**
  * Another test showing the "Access" interface with
@@ -58,7 +58,7 @@ public class OPCTest5
                 final OPCTestInfo ti = new OPCTestInfo ();
                 ti._info = ci;
                 ti._itemId = args[i * 2 + 5];
-                ti._server = new Server ( ci, new Scheduler ( true, "Test" ) );
+                ti._server = new Server ( ci, Executors.newSingleThreadScheduledExecutor () );
 
                 ti._server.connect ();
                 ti._access = new Async20Access ( ti._server, 100, false );

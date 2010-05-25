@@ -17,7 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.openscada.opc.lib.test;
+package org.openscada.opc.lib;
 
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.JIArray;
@@ -28,44 +28,39 @@ import org.jinterop.dcom.core.JIVariant;
 public class VariantDumper
 {
 
-    static protected void dumpArray ( String prefix, JIArray array ) throws JIException
+    static protected void dumpArray ( final String prefix, final JIArray array ) throws JIException
     {
-        System.out.println ( prefix
-                + String.format ( "IsConformant: %s, IsVarying: %s", array.isConformant () ? "yes" : "no",
-                        array.isVarying () ? "yes" : "no" ) );
+        System.out.println ( prefix + String.format ( "IsConformant: %s, IsVarying: %s", array.isConformant () ? "yes" : "no", array.isVarying () ? "yes" : "no" ) );
         System.out.println ( prefix + String.format ( "Dimensions: %d", array.getDimensions () ) );
         for ( int i = 0; i < array.getDimensions (); i++ )
         {
-            System.out.println ( prefix
-                    + String.format ( "Dimension #%d: Upper Bound: %d", i, array.getUpperBounds ()[i] ) );
+            System.out.println ( prefix + String.format ( "Dimension #%d: Upper Bound: %d", i, array.getUpperBounds ()[i] ) );
         }
 
-        Object o = array.getArrayInstance ();
+        final Object o = array.getArrayInstance ();
         System.out.println ( prefix + "Array Instance: " + o.getClass () );
-        Object[] a = (Object[])o;
+        final Object[] a = (Object[])o;
         System.out.println ( prefix + "Array Size: " + a.length );
 
-        for ( Object value : a )
+        for ( final Object value : a )
         {
             dumpValue ( prefix + "\t", value );
         }
     }
 
-    static public void dumpValue ( Object value ) throws JIException
+    static public void dumpValue ( final Object value ) throws JIException
     {
         dumpValue ( "", value );
     }
-    
-    static protected void dumpValue ( String prefix, Object value ) throws JIException
+
+    static protected void dumpValue ( final String prefix, final Object value ) throws JIException
     {
         if ( value instanceof JIVariant )
         {
             System.out.println ( prefix + "JIVariant" );
-            JIVariant variant = (JIVariant)value;
-            System.out.println ( prefix
-                    + String.format ( "IsArray: %s, IsByRef: %s, IsNull: %s", variant.isArray () ? "yes" : "no",
-                            variant.isByRefFlagSet () ? "yes" : "no", variant.isNull () ? "yes" : "no" ) );
-            
+            final JIVariant variant = (JIVariant)value;
+            System.out.println ( prefix + String.format ( "IsArray: %s, IsByRef: %s, IsNull: %s", variant.isArray () ? "yes" : "no", variant.isByRefFlagSet () ? "yes" : "no", variant.isNull () ? "yes" : "no" ) );
+
             if ( variant.isArray () )
             {
                 dumpArray ( prefix, variant.getObjectAsArray () );
@@ -77,7 +72,7 @@ public class VariantDumper
         }
         else if ( value instanceof JIString )
         {
-            JIString string = (JIString)value;
+            final JIString string = (JIString)value;
 
             String strType;
             switch ( string.getType () )
@@ -129,11 +124,10 @@ public class VariantDumper
         {
             System.out.println ( prefix + "Boolean: " + value );
         }
-        
+
         else
         {
-            System.out.println ( prefix
-                    + String.format ( "Unknown value type (%s): %s", value.getClass (), value.toString () ) );
+            System.out.println ( prefix + String.format ( "Unknown value type (%s): %s", value.getClass (), value.toString () ) );
         }
     }
 

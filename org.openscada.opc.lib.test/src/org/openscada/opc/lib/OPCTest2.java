@@ -17,14 +17,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.openscada.opc.lib.test;
+package org.openscada.opc.lib;
+
+import java.util.concurrent.Executors;
 
 import org.jinterop.dcom.common.JIException;
 import org.openscada.opc.lib.common.ConnectionInformation;
 import org.openscada.opc.lib.da.AccessBase;
 import org.openscada.opc.lib.da.Server;
 import org.openscada.opc.lib.da.SyncAccess;
-import org.openscada.utils.timing.Scheduler;
 
 /**
  * Another test showing the "Access" interface with the SyncAccess implementation.
@@ -50,7 +51,7 @@ public class OPCTest2
         }
 
         // create a new server
-        final Server server = new Server ( ci, new Scheduler ( true, "Test" ) );
+        final Server server = new Server ( ci, Executors.newSingleThreadScheduledExecutor () );
         try
         {
             // connect to server

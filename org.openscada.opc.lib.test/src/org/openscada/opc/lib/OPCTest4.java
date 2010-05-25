@@ -17,19 +17,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.openscada.opc.lib.test;
+package org.openscada.opc.lib;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.Executors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.jinterop.dcom.common.JIException;
 import org.openscada.opc.lib.common.ConnectionInformation;
 import org.openscada.opc.lib.da.AccessBase;
 import org.openscada.opc.lib.da.Async20Access;
 import org.openscada.opc.lib.da.Server;
-import org.openscada.utils.timing.Scheduler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Another test showing the "Access" interface with the Async20Access implementation.
@@ -61,7 +61,7 @@ public class OPCTest4
         }
 
         // create a new server
-        final Server server = new Server ( ci, new Scheduler ( true, "Test" ) );
+        final Server server = new Server ( ci, Executors.newSingleThreadScheduledExecutor () );
         try
         {
             // connect to server

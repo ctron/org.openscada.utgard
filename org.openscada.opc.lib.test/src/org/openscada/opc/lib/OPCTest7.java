@@ -17,7 +17,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.openscada.opc.lib.test;
+package org.openscada.opc.lib;
+
+import java.util.concurrent.Executors;
 
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.JIArray;
@@ -29,7 +31,6 @@ import org.openscada.opc.lib.da.Group;
 import org.openscada.opc.lib.da.Item;
 import org.openscada.opc.lib.da.ItemState;
 import org.openscada.opc.lib.da.Server;
-import org.openscada.utils.timing.Scheduler;
 
 /**
  * A sample that reads an item and writes back the result. You will need a
@@ -53,7 +54,7 @@ public class OPCTest7
         final String itemName = args[5];
 
         // create a new server
-        final Server server = new Server ( ci, new Scheduler ( true, "Test" ) );
+        final Server server = new Server ( ci, Executors.newSingleThreadScheduledExecutor () );
         try
         {
             // connect to server

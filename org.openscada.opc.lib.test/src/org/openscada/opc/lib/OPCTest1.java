@@ -17,9 +17,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.openscada.opc.lib.test;
+package org.openscada.opc.lib;
 
 import java.util.Map;
+import java.util.concurrent.Executors;
 
 import org.jinterop.dcom.common.JIException;
 import org.openscada.opc.lib.common.ConnectionInformation;
@@ -29,7 +30,6 @@ import org.openscada.opc.lib.da.ItemState;
 import org.openscada.opc.lib.da.Server;
 import org.openscada.opc.lib.da.browser.Branch;
 import org.openscada.opc.lib.da.browser.Leaf;
-import org.openscada.utils.timing.Scheduler;
 
 public class OPCTest1
 {
@@ -70,7 +70,7 @@ public class OPCTest1
         ci.setClsid ( args[4] );
 
         // create a new server
-        final Server server = new Server ( ci, new Scheduler ( true, "Test" ) );
+        final Server server = new Server ( ci, Executors.newSingleThreadScheduledExecutor () );
         try
         {
             // connect to server

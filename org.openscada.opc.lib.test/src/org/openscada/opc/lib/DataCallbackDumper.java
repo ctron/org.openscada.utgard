@@ -17,7 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.openscada.opc.lib.test;
+package org.openscada.opc.lib;
 
 import org.jinterop.dcom.common.JIException;
 import org.openscada.opc.lib.da.DataCallback;
@@ -27,16 +27,15 @@ import org.openscada.opc.lib.da.ItemState;
 public class DataCallbackDumper implements DataCallback
 {
 
-    public void changed ( Item item, ItemState itemState )
+    public void changed ( final Item item, final ItemState itemState )
     {
-        System.out.println ( String.format ( "Item: %s, Value: %s, Timestamp: %tc, Quality: %d", item.getId (),
-                itemState.getValue (), itemState.getTimestamp (), itemState.getQuality () ) );
+        System.out.println ( String.format ( "Item: %s, Value: %s, Timestamp: %tc, Quality: %d", item.getId (), itemState.getValue (), itemState.getTimestamp (), itemState.getQuality () ) );
 
         try
         {
             VariantDumper.dumpValue ( "\t", itemState.getValue () );
         }
-        catch ( JIException e )
+        catch ( final JIException e )
         {
             e.printStackTrace ();
         }
