@@ -33,57 +33,57 @@ import org.slf4j.LoggerFactory;
 
 public abstract class AccessBase implements ServerConnectionStateListener
 {
-    private static Logger _log = LoggerFactory.getLogger ( AccessBase.class );
+    private static Logger logger = LoggerFactory.getLogger ( AccessBase.class );
 
-    protected Server _server = null;
+    protected Server server = null;
 
-    protected Group _group = null;
+    protected Group group = null;
 
-    protected boolean _active = false;
+    protected boolean active = false;
 
-    private final List<AccessStateListener> _stateListeners = new CopyOnWriteArrayList<AccessStateListener> ();
+    private final List<AccessStateListener> stateListeners = new CopyOnWriteArrayList<AccessStateListener> ();
 
-    private boolean _bound = false;
+    private boolean bound = false;
 
     /**
      * Holds the item to callback assignment
      */
-    protected Map<Item, DataCallback> _items = new HashMap<Item, DataCallback> ();
+    protected Map<Item, DataCallback> items = new HashMap<Item, DataCallback> ();
 
-    protected Map<String, Item> _itemMap = new HashMap<String, Item> ();
+    protected Map<String, Item> itemMap = new HashMap<String, Item> ();
 
-    protected Map<Item, ItemState> _itemCache = new HashMap<Item, ItemState> ();
+    protected Map<Item, ItemState> itemCache = new HashMap<Item, ItemState> ();
 
-    private int _period = 0;
+    private int period = 0;
 
-    protected Map<String, DataCallback> _itemSet = new HashMap<String, DataCallback> ();
+    protected Map<String, DataCallback> itemSet = new HashMap<String, DataCallback> ();
 
-    protected String _logTag = null;
+    protected String logTag = null;
 
-    protected Logger _dataLogger = null;
+    protected Logger dataLogger = null;
 
     public AccessBase ( final Server server, final int period ) throws IllegalArgumentException, UnknownHostException, NotConnectedException, JIException, DuplicateGroupException
     {
         super ();
-        this._server = server;
-        this._period = period;
+        this.server = server;
+        this.period = period;
     }
 
     public AccessBase ( final Server server, final int period, final String logTag )
     {
         super ();
-        this._server = server;
-        this._period = period;
-        this._logTag = logTag;
-        if ( this._logTag != null )
+        this.server = server;
+        this.period = period;
+        this.logTag = logTag;
+        if ( this.logTag != null )
         {
-            this._dataLogger = LoggerFactory.getLogger ( "opc.data." + logTag );
+            this.dataLogger = LoggerFactory.getLogger ( "opc.data." + logTag );
         }
     }
 
     public boolean isBound ()
     {
-        return this._bound;
+        return this.bound;
     }
 
     public synchronized void bind ()
@@ -93,8 +93,8 @@ public abstract class AccessBase implements ServerConnectionStateListener
             return;
         }
 
-        this._server.addStateListener ( this );
-        this._bound = true;
+        this.server.addStateListener ( this );
+        this.bound = true;
     }
 
     public synchronized void unbind () throws JIException
@@ -104,33 +104,33 @@ public abstract class AccessBase implements ServerConnectionStateListener
             return;
         }
 
-        this._server.removeStateListener ( this );
-        this._bound = false;
+        this.server.removeStateListener ( this );
+        this.bound = false;
 
         stop ();
     }
 
     public boolean isActive ()
     {
-        return this._active;
+        return this.active;
     }
 
     public void addStateListener ( final AccessStateListener listener )
     {
-        this._stateListeners.add ( listener );
+        this.stateListeners.add ( listener );
         listener.stateChanged ( isActive () );
     }
 
     public void removeStateListener ( final AccessStateListener listener )
     {
-        this._stateListeners.remove ( listener );
+        this.stateListeners.remove ( listener );
     }
 
     protected void notifyStateListenersState ( final boolean state )
     {
-        List<AccessStateListener> list = new ArrayList<AccessStateListener> ( this._stateListeners );
+        final List<AccessStateListener> list = new ArrayList<AccessStateListener> ( this.stateListeners );
 
-        for ( AccessStateListener listener : list )
+        for ( final AccessStateListener listener : list )
         {
             listener.stateChanged ( state );
         }
@@ -138,9 +138,9 @@ public abstract class AccessBase implements ServerConnectionStateListener
 
     protected void notifyStateListenersError ( final Throwable t )
     {
-        List<AccessStateListener> list = new ArrayList<AccessStateListener> ( this._stateListeners );
+        final List<AccessStateListener> list = new ArrayList<AccessStateListener> ( this.stateListeners );
 
-        for ( AccessStateListener listener : list )
+        for ( final AccessStateListener listener : list )
         {
             listener.errorOccured ( t );
         }
@@ -148,17 +148,17 @@ public abstract class AccessBase implements ServerConnectionStateListener
 
     public int getPeriod ()
     {
-        return this._period;
+        return this.period;
     }
 
     public synchronized void addItem ( final String itemId, final DataCallback dataCallback ) throws JIException, AddFailedException
     {
-        if ( this._itemSet.containsKey ( itemId ) )
+        if ( this.itemSet.containsKey ( itemId ) )
         {
             return;
         }
 
-        this._itemSet.put ( itemId, dataCallback );
+        this.itemSet.put ( itemId, dataCallback );
 
         if ( isActive () )
         {
@@ -168,12 +168,12 @@ public abstract class AccessBase implements ServerConnectionStateListener
 
     public synchronized void removeItem ( final String itemId )
     {
-        if ( !this._itemSet.containsKey ( itemId ) )
+        if ( !this.itemSet.containsKey ( itemId ) )
         {
             return;
         }
 
-        this._itemSet.remove ( itemId );
+        this.itemSet.remove ( itemId );
 
         if ( isActive () )
         {
@@ -194,9 +194,9 @@ public abstract class AccessBase implements ServerConnectionStateListener
                 stop ();
             }
         }
-        catch ( Exception e )
+        catch ( final Exception e )
         {
-            _log.error ( String.format ( "Failed to change state (%s)", connected ), e );
+            logger.error ( String.format ( "Failed to change state (%s)", connected ), e );
         }
     }
 
@@ -207,10 +207,10 @@ public abstract class AccessBase implements ServerConnectionStateListener
             return;
         }
 
-        _log.debug ( "Create a new group" );
-        this._group = this._server.addGroup ();
-        this._group.setActive ( true );
-        this._active = true;
+        logger.debug ( "Create a new group" );
+        this.group = this.server.addGroup ();
+        this.group.setActive ( true );
+        this.active = true;
 
         notifyStateListenersState ( true );
 
@@ -219,32 +219,32 @@ public abstract class AccessBase implements ServerConnectionStateListener
 
     protected void realizeItem ( final String itemId ) throws JIException, AddFailedException
     {
-        _log.debug ( String.format ( "Realizing item: %s", itemId ) );
+        logger.debug ( String.format ( "Realizing item: %s", itemId ) );
 
-        DataCallback dataCallback = this._itemSet.get ( itemId );
+        final DataCallback dataCallback = this.itemSet.get ( itemId );
         if ( dataCallback == null )
         {
             return;
         }
 
-        Item item = this._group.addItem ( itemId );
-        this._items.put ( item, dataCallback );
-        this._itemMap.put ( itemId, item );
+        final Item item = this.group.addItem ( itemId );
+        this.items.put ( item, dataCallback );
+        this.itemMap.put ( itemId, item );
     }
 
     protected void unrealizeItem ( final String itemId )
     {
-        Item item = this._itemMap.remove ( itemId );
-        this._items.remove ( item );
-        this._itemCache.remove ( item );
+        final Item item = this.itemMap.remove ( itemId );
+        this.items.remove ( item );
+        this.itemCache.remove ( item );
 
         try
         {
-            this._group.removeItem ( itemId );
+            this.group.removeItem ( itemId );
         }
-        catch ( Throwable e )
+        catch ( final Throwable e )
         {
-            _log.error ( String.format ( "Failed to unrealize item '%s'", itemId ), e );
+            logger.error ( String.format ( "Failed to unrealize item '%s'", itemId ), e );
         }
     }
 
@@ -253,40 +253,40 @@ public abstract class AccessBase implements ServerConnectionStateListener
      */
     protected void realizeAll ()
     {
-        for ( String itemId : this._itemSet.keySet () )
+        for ( final String itemId : this.itemSet.keySet () )
         {
             try
             {
                 realizeItem ( itemId );
             }
-            catch ( AddFailedException e )
+            catch ( final AddFailedException e )
             {
                 Integer rc = e.getErrors ().get ( itemId );
                 if ( rc == null )
                 {
                     rc = -1;
                 }
-                _log.warn ( String.format ( "Failed to add item: %s (%08X)", itemId, rc ) );
+                logger.warn ( String.format ( "Failed to add item: %s (%08X)", itemId, rc ) );
 
             }
-            catch ( Exception e )
+            catch ( final Exception e )
             {
-                _log.warn ( "Failed to realize item: " + itemId, e );
+                logger.warn ( "Failed to realize item: " + itemId, e );
             }
         }
     }
 
     protected void unrealizeAll ()
     {
-        this._items.clear ();
-        this._itemCache.clear ();
+        this.items.clear ();
+        this.itemCache.clear ();
         try
         {
-            this._group.clear ();
+            this.group.clear ();
         }
-        catch ( JIException e )
+        catch ( final JIException e )
         {
-            _log.info ( "Failed to clear group. No problem if we already lost the connection", e );
+            logger.info ( "Failed to clear group. No problem if we already lost the connection", e );
         }
     }
 
@@ -299,52 +299,52 @@ public abstract class AccessBase implements ServerConnectionStateListener
 
         unrealizeAll ();
 
-        this._active = false;
+        this.active = false;
         notifyStateListenersState ( false );
 
         try
         {
-            this._group.remove ();
+            this.group.remove ();
         }
-        catch ( Throwable t )
+        catch ( final Throwable t )
         {
-            _log.warn ( "Failed to disable group. No problem if we already lost connection" );
+            logger.warn ( "Failed to disable group. No problem if we already lost connection" );
         }
-        this._group = null;
+        this.group = null;
     }
 
     public synchronized void clear ()
     {
-        this._itemSet.clear ();
-        this._items.clear ();
-        this._itemMap.clear ();
-        this._itemCache.clear ();
+        this.itemSet.clear ();
+        this.items.clear ();
+        this.itemMap.clear ();
+        this.itemCache.clear ();
     }
 
     protected void updateItem ( final Item item, final ItemState itemState )
     {
-        if ( this._dataLogger != null )
+        if ( this.dataLogger != null )
         {
-            this._dataLogger.debug ( String.format ( "Update item: %s, %s", item.getId (), itemState ) );
+            this.dataLogger.debug ( "Update item: {}, {}", item.getId (), itemState );
         }
 
-        DataCallback dataCallback = this._items.get ( item );
+        final DataCallback dataCallback = this.items.get ( item );
         if ( dataCallback == null )
         {
             return;
         }
 
-        ItemState cachedState = this._itemCache.get ( item );
+        final ItemState cachedState = this.itemCache.get ( item );
         if ( cachedState == null )
         {
-            this._itemCache.put ( item, itemState );
+            this.itemCache.put ( item, itemState );
             dataCallback.changed ( item, itemState );
         }
         else
         {
             if ( !cachedState.equals ( itemState ) )
             {
-                this._itemCache.put ( item, itemState );
+                this.itemCache.put ( item, itemState );
                 dataCallback.changed ( item, itemState );
             }
         }
@@ -353,7 +353,7 @@ public abstract class AccessBase implements ServerConnectionStateListener
     protected void handleError ( final Throwable e )
     {
         notifyStateListenersError ( e );
-        this._server.dispose ();
+        this.server.dispose ();
     }
 
 }
