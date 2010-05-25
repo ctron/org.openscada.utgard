@@ -64,16 +64,16 @@ public class Async20Access extends AccessBase implements IOPCDataCallback
 
         super.start ();
 
-        this._eventHandler = this._group.attach ( this );
-        if ( !this._items.isEmpty () && this._initialRefresh )
+        this._eventHandler = this.group.attach ( this );
+        if ( !this.items.isEmpty () && this._initialRefresh )
         {
-            OPCAsyncIO2 async20 = this._group.getAsyncIO20 ();
+            OPCAsyncIO2 async20 = this.group.getAsyncIO20 ();
             if ( async20 == null )
             {
                 throw new NotConnectedException ();
             }
 
-            this._group.getAsyncIO20 ().refresh ( OPCDATASOURCE.OPC_DS_CACHE, 0 );
+            this.group.getAsyncIO20 ().refresh ( OPCDATASOURCE.OPC_DS_CACHE, 0 );
         }
     }
 
@@ -110,7 +110,7 @@ public class Async20Access extends AccessBase implements IOPCDataCallback
     {
         _log.debug ( String.format ( "dataChange - transId %d, items: %d", transactionId, result.size () ) );
 
-        Group group = this._group;
+        Group group = this.group;
         if ( group == null )
         {
             return;
