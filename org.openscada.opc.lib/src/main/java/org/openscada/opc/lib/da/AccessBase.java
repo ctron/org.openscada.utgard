@@ -219,7 +219,7 @@ public abstract class AccessBase implements ServerConnectionStateListener
 
     protected void realizeItem ( final String itemId ) throws JIException, AddFailedException
     {
-        logger.debug ( String.format ( "Realizing item: %s", itemId ) );
+        logger.debug ( "Realizing item: {}", itemId );
 
         final DataCallback dataCallback = this.itemSet.get ( itemId );
         if ( dataCallback == null )
