@@ -63,4 +63,24 @@ public class FiletimeTest1
             last = ft;
         }
     }
+
+    @Test
+    public void test3a ()
+    {
+        for ( int i = 0; i < 10000; i++ )
+        {
+            final FILETIME ft = new FILETIME ( 29949427 + i, 2139800608 + i );
+            ft.asCalendar ();
+        }
+    }
+
+    @Test
+    public void test3b ()
+    {
+        for ( int i = 0; i < 10000; i++ )
+        {
+            final FILETIME ft = new FILETIME ( 29949427 + i, 2139800608 + i );
+            ft.asBigDecimalCalendar ();
+        }
+    }
 }
