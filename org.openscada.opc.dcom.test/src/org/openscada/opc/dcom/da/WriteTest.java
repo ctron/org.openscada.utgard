@@ -17,32 +17,40 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.openscada.opc.dcom.da.test;
+package org.openscada.opc.dcom.da;
 
 import org.jinterop.dcom.core.JIVariant;
 
-public class MatrikonSimulationServerConfiguration implements TestConfiguration
+public class WriteTest
 {
+    private String _itemID = "";
 
-    public String getCLSID ()
+    private JIVariant _value = JIVariant.EMPTY ();
+
+    public WriteTest ( final String itemID, final JIVariant value )
     {
-        return "F8582CF2-88FB-11D0-B850-00C0F0104305";
+        super ();
+        this._itemID = itemID;
+        this._value = value;
     }
 
-    public String getProgId ()
+    public String getItemID ()
     {
-        return "Matrikon.OPC.Simulation.1";
+        return this._itemID;
     }
 
-    public String[] getReadItems ()
+    public void setItemID ( final String itemID )
     {
-        return new String[] { "Saw-toothed Waves.Int2", "Saw-toothed Waves.Int4" };
+        this._itemID = itemID;
     }
 
-    public WriteTest[] getWriteItems ()
+    public JIVariant getValue ()
     {
-        return new WriteTest[] { new WriteTest ( "Write Only.Int2", new JIVariant ( (short)1202, false ) ),
-                new WriteTest ( "Write Only.Int4", new JIVariant ( 1202, false ) ) };
+        return this._value;
     }
 
+    public void setValue ( final JIVariant value )
+    {
+        this._value = value;
+    }
 }

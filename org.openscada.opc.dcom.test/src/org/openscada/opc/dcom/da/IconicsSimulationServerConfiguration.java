@@ -17,15 +17,30 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.openscada.opc.dcom.da.test;
+package org.openscada.opc.dcom.da;
 
-public interface TestConfiguration
+
+public class IconicsSimulationServerConfiguration implements TestConfiguration
 {
-    public String getCLSID ();
 
-    public String getProgId ();
+    public String getCLSID ()
+    {
+        return "A879768A-7387-11D4-B0D8-009027242C59";
+    }
 
-    public String[] getReadItems ();
+    public String getProgId ()
+    {
+        return "ICONICS.SimulatorOPCDA.2";
+    }
 
-    public WriteTest[] getWriteItems ();
+    public String[] getReadItems ()
+    {
+        return new String[] { "Logical._BOOL" };
+    }
+
+    public WriteTest[] getWriteItems ()
+    {
+        return new WriteTest[]{};
+    }
+
 }

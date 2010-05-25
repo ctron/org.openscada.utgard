@@ -17,7 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.openscada.opc.dcom.da.test;
+package org.openscada.opc.dcom.da;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -36,9 +36,6 @@ import org.openscada.opc.dcom.common.KeyedResultSet;
 import org.openscada.opc.dcom.common.Result;
 import org.openscada.opc.dcom.common.ResultSet;
 import org.openscada.opc.dcom.common.impl.OPCCommon;
-import org.openscada.opc.dcom.da.OPCDATASOURCE;
-import org.openscada.opc.dcom.da.OPCITEMDEF;
-import org.openscada.opc.dcom.da.OPCITEMRESULT;
 import org.openscada.opc.dcom.da.impl.OPCAsyncIO2;
 import org.openscada.opc.dcom.da.impl.OPCGroupStateMgt;
 import org.openscada.opc.dcom.da.impl.OPCItemMgt;

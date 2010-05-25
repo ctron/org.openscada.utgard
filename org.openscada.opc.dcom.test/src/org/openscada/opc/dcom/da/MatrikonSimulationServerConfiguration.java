@@ -17,29 +17,31 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.openscada.opc.dcom.da.test;
+package org.openscada.opc.dcom.da;
 
-public class SoftingDemoServerConfiguration implements TestConfiguration
+import org.jinterop.dcom.core.JIVariant;
+
+public class MatrikonSimulationServerConfiguration implements TestConfiguration
 {
 
     public String getCLSID ()
     {
-        return "2E565242-B238-11D3-842D-0008C779D775";
+        return "F8582CF2-88FB-11D0-B850-00C0F0104305";
     }
 
     public String getProgId ()
     {
-        return "Softing.OPCToolboxDemo_ServerDA.1";
+        return "Matrikon.OPC.Simulation.1";
     }
 
     public String[] getReadItems ()
     {
-        return new String[] { "increment.I2", "increment.I4" };
+        return new String[] { "Saw-toothed Waves.Int2", "Saw-toothed Waves.Int4" };
     }
 
     public WriteTest[] getWriteItems ()
     {
-        return null;
+        return new WriteTest[] { new WriteTest ( "Write Only.Int2", new JIVariant ( (short)1202, false ) ), new WriteTest ( "Write Only.Int4", new JIVariant ( 1202, false ) ) };
     }
 
 }

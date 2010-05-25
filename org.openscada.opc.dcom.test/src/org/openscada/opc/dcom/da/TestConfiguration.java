@@ -17,40 +17,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.openscada.opc.dcom.da.test;
+package org.openscada.opc.dcom.da;
 
-import org.jinterop.dcom.core.JIVariant;
-
-public class WriteTest
+public interface TestConfiguration
 {
-    private String _itemID = "";
+    public String getCLSID ();
 
-    private JIVariant _value = JIVariant.EMPTY();
+    public String getProgId ();
 
-    public WriteTest ( String itemID, JIVariant value )
-    {
-        super ();
-        _itemID = itemID;
-        _value = value;
-    }
+    public String[] getReadItems ();
 
-    public String getItemID ()
-    {
-        return _itemID;
-    }
-
-    public void setItemID ( String itemID )
-    {
-        _itemID = itemID;
-    }
-
-    public JIVariant getValue ()
-    {
-        return _value;
-    }
-
-    public void setValue ( JIVariant value )
-    {
-        _value = value;
-    }
+    public WriteTest[] getWriteItems ();
 }

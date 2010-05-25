@@ -17,7 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.openscada.opc.dcom.da.test;
+package org.openscada.opc.dcom.da;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -39,19 +39,6 @@ import org.openscada.opc.dcom.common.KeyedResultSet;
 import org.openscada.opc.dcom.common.Result;
 import org.openscada.opc.dcom.common.ResultSet;
 import org.openscada.opc.dcom.common.impl.OPCCommon;
-import org.openscada.opc.dcom.da.IORequest;
-import org.openscada.opc.dcom.da.OPCBROWSEDIRECTION;
-import org.openscada.opc.dcom.da.OPCBROWSETYPE;
-import org.openscada.opc.dcom.da.OPCDATASOURCE;
-import org.openscada.opc.dcom.da.OPCENUMSCOPE;
-import org.openscada.opc.dcom.da.OPCGroupState;
-import org.openscada.opc.dcom.da.OPCITEMDEF;
-import org.openscada.opc.dcom.da.OPCITEMRESULT;
-import org.openscada.opc.dcom.da.OPCITEMSTATE;
-import org.openscada.opc.dcom.da.OPCNAMESPACETYPE;
-import org.openscada.opc.dcom.da.OPCSERVERSTATUS;
-import org.openscada.opc.dcom.da.PropertyDescription;
-import org.openscada.opc.dcom.da.WriteRequest;
 import org.openscada.opc.dcom.da.impl.OPCBrowseServerAddressSpace;
 import org.openscada.opc.dcom.da.impl.OPCGroupStateMgt;
 import org.openscada.opc.dcom.da.impl.OPCItemIO;
@@ -64,50 +51,52 @@ public class Test1
 {
     private static JISession _session = null;
 
-    public static void showError ( OPCCommon common, int errorCode ) throws JIException
+    public static void showError ( final OPCCommon common, final int errorCode ) throws JIException
     {
         System.out.println ( String.format ( "Error (%X): '%s'", errorCode, common.getErrorString ( errorCode, 1033 ) ) );
     }
 
-    public static void showError ( OPCServer server, int errorCode ) throws JIException
+    public static void showError ( final OPCServer server, final int errorCode ) throws JIException
     {
         showError ( server.getCommon (), errorCode );
     }
 
-    public static void showAccessPaths ( OPCBrowseServerAddressSpace browser, String id ) throws IllegalArgumentException, UnknownHostException, JIException
+    public static void showAccessPaths ( final OPCBrowseServerAddressSpace browser, final String id ) throws IllegalArgumentException, UnknownHostException, JIException
     {
-        for ( String i : browser.browseAccessPaths ( id ).asCollection () )
+        for ( final String i : browser.browseAccessPaths ( id ).asCollection () )
         {
             System.out.println ( "AccessPath Entry: " + i );
         }
     }
 
-    public static void browseTree ( OPCBrowseServerAddressSpace browser ) throws IllegalArgumentException, UnknownHostException, JIException
+    public static void browseTree ( final OPCBrowseServerAddressSpace browser ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         System.out.println ( "Showing hierarchial address space" );
         System.out.println ( String.format ( "Organization: %s", browser.queryOrganization () ) );
 
         if ( !browser.queryOrganization ().equals ( OPCNAMESPACETYPE.OPC_NS_HIERARCHIAL ) )
+        {
             return;
+        }
 
         browser.changePosition ( null, OPCBROWSEDIRECTION.OPC_BROWSE_TO );
         browseTree ( browser, 0 );
     }
 
-    protected static void browseTree ( OPCBrowseServerAddressSpace browser, int level ) throws JIException, IllegalArgumentException, UnknownHostException
+    protected static void browseTree ( final OPCBrowseServerAddressSpace browser, final int level ) throws JIException, IllegalArgumentException, UnknownHostException
     {
-        StringBuilder indent = new StringBuilder ( level );
+        final StringBuilder indent = new StringBuilder ( level );
         for ( int i = 0; i < level; i++ )
         {
             indent.append ( '\t' );
         }
-        for ( String item : browser.browse ( OPCBROWSETYPE.OPC_LEAF, "", 0, JIVariant.VT_EMPTY ).asCollection () )
+        for ( final String item : browser.browse ( OPCBROWSETYPE.OPC_LEAF, "", 0, JIVariant.VT_EMPTY ).asCollection () )
         {
             System.out.println ( indent + "Leaf: " + item );
             System.out.println ( indent + "\tName: " + browser.getItemID ( item ) );
         }
 
-        for ( String item : browser.browse ( OPCBROWSETYPE.OPC_BRANCH, "", 0, JIVariant.VT_EMPTY ).asCollection () )
+        for ( final String item : browser.browse ( OPCBROWSETYPE.OPC_BRANCH, "", 0, JIVariant.VT_EMPTY ).asCollection () )
         {
             System.out.println ( indent + "Branch: " + item );
             browser.changePosition ( item, OPCBROWSEDIRECTION.OPC_BROWSE_DOWN );
@@ -116,22 +105,22 @@ public class Test1
         }
     }
 
-    public static void browseFlat ( OPCBrowseServerAddressSpace browser ) throws JIException, IllegalArgumentException, UnknownHostException
+    public static void browseFlat ( final OPCBrowseServerAddressSpace browser ) throws JIException, IllegalArgumentException, UnknownHostException
     {
         System.out.println ( String.format ( "Organization: %s", browser.queryOrganization () ) );
         browser.changePosition ( null, OPCBROWSEDIRECTION.OPC_BROWSE_TO );
 
         System.out.println ( "Showing flat address space" );
-        for ( String id : browser.browse ( OPCBROWSETYPE.OPC_FLAT, "", 0, JIVariant.VT_EMPTY ).asCollection () )
+        for ( final String id : browser.browse ( OPCBROWSETYPE.OPC_FLAT, "", 0, JIVariant.VT_EMPTY ).asCollection () )
         {
             System.out.println ( "Item: " + id );
             //showAccessPaths ( browser, id );
         }
     }
 
-    public static void dumpGroupState ( OPCGroupStateMgt group ) throws JIException
+    public static void dumpGroupState ( final OPCGroupStateMgt group ) throws JIException
     {
-        OPCGroupState state = group.getState ();
+        final OPCGroupState state = group.getState ();
 
         System.out.println ( "Name: " + state.getName () );
         System.out.println ( "Active: " + state.isActive () );
@@ -143,34 +132,32 @@ public class Test1
         System.out.println ( "Server Handle: " + state.getServerHandle () );
     }
 
-    public static void dumpItemProperties2 ( OPCItemProperties itemProperties, String itemID, int... ids ) throws JIException
+    public static void dumpItemProperties2 ( final OPCItemProperties itemProperties, final String itemID, final int... ids ) throws JIException
     {
-        KeyedResultSet<Integer, JIVariant> values = itemProperties.getItemProperties ( itemID, ids );
-        for ( KeyedResult<Integer, JIVariant> entry : values )
+        final KeyedResultSet<Integer, JIVariant> values = itemProperties.getItemProperties ( itemID, ids );
+        for ( final KeyedResult<Integer, JIVariant> entry : values )
         {
-            System.out.println ( String.format ( "ID: %d, Value: %s, Error Code: %08x", entry.getKey (),
-                    entry.getValue ().toString (), entry.getErrorCode () ) );
+            System.out.println ( String.format ( "ID: %d, Value: %s, Error Code: %08x", entry.getKey (), entry.getValue ().toString (), entry.getErrorCode () ) );
         }
     }
 
-    public static void dumpItemPropertiesLookup ( OPCItemProperties itemProperties, String itemID, int... ids ) throws JIException
+    public static void dumpItemPropertiesLookup ( final OPCItemProperties itemProperties, final String itemID, final int... ids ) throws JIException
     {
-        KeyedResultSet<Integer, String> values = itemProperties.lookupItemIDs ( itemID, ids );
-        for ( KeyedResult<Integer, String> entry : values )
+        final KeyedResultSet<Integer, String> values = itemProperties.lookupItemIDs ( itemID, ids );
+        for ( final KeyedResult<Integer, String> entry : values )
         {
-            System.out.println ( String.format ( "ID: %d, Item ID: %s, Error Code: %08x", entry.getKey (),
-                    entry.getValue (), entry.getErrorCode () ) );
+            System.out.println ( String.format ( "ID: %d, Item ID: %s, Error Code: %08x", entry.getKey (), entry.getValue (), entry.getErrorCode () ) );
         }
     }
 
-    public static void dumpItemProperties ( OPCItemProperties itemProperties, String itemID ) throws JIException
+    public static void dumpItemProperties ( final OPCItemProperties itemProperties, final String itemID ) throws JIException
     {
-        Collection<PropertyDescription> properties = itemProperties.queryAvailableProperties ( itemID );
-        int[] ids = new int[properties.size ()];
+        final Collection<PropertyDescription> properties = itemProperties.queryAvailableProperties ( itemID );
+        final int[] ids = new int[properties.size ()];
 
         System.out.println ( String.format ( "Item Properties for '%s' (count:%d)", itemID, properties.size () ) );
         int i = 0;
-        for ( PropertyDescription pd : properties )
+        for ( final PropertyDescription pd : properties )
         {
             ids[i] = pd.getId ();
             System.out.println ( "ID: " + pd.getId () );
@@ -186,20 +173,20 @@ public class Test1
         dumpItemProperties2 ( itemProperties, itemID, ids );
     }
 
-    public static void queryItems ( OPCItemIO itemIO, String... items ) throws JIException
+    public static void queryItems ( final OPCItemIO itemIO, final String... items ) throws JIException
     {
-        List<IORequest> requests = new LinkedList<IORequest> ();
-        for ( String item : items )
+        final List<IORequest> requests = new LinkedList<IORequest> ();
+        for ( final String item : items )
         {
             requests.add ( new IORequest ( item, 0 ) );
         }
         itemIO.read ( requests.toArray ( new IORequest[0] ) );
     }
 
-    public static boolean dumpOPCITEMRESULT ( KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> result )
+    public static boolean dumpOPCITEMRESULT ( final KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> result )
     {
         int failed = 0;
-        for ( KeyedResult<OPCITEMDEF, OPCITEMRESULT> resultEntry : result )
+        for ( final KeyedResult<OPCITEMDEF, OPCITEMRESULT> resultEntry : result )
         {
             System.out.println ( "==================================" );
             System.out.println ( String.format ( "Item: '%s' ", resultEntry.getKey ().getItemID () ) );
@@ -213,56 +200,58 @@ public class Test1
                 System.out.println ( String.format ( "Reserved: %d", resultEntry.getValue ().getReserved () ) );
             }
             else
+            {
                 failed++;
+            }
         }
         return failed == 0;
     }
 
-    public static void writeItems ( OPCServer server, OPCGroupStateMgt group, WriteTest... writeTests ) throws IllegalArgumentException, UnknownHostException, JIException
+    public static void writeItems ( final OPCServer server, final OPCGroupStateMgt group, final WriteTest... writeTests ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         System.out.println ( "Write items" );
 
-        OPCItemMgt itemManagement = group.getItemManagement ();
-        OPCITEMDEF[] defs = new OPCITEMDEF[writeTests.length];
+        final OPCItemMgt itemManagement = group.getItemManagement ();
+        final OPCITEMDEF[] defs = new OPCITEMDEF[writeTests.length];
         for ( int i = 0; i < writeTests.length; i++ )
         {
-            OPCITEMDEF def = new OPCITEMDEF ();
+            final OPCITEMDEF def = new OPCITEMDEF ();
             def.setActive ( true );
             def.setItemID ( writeTests[i].getItemID () );
             //def.setRequestedDataType ( (short)writeTests[i].getValue ().getType () );
             defs[i] = def;
 
-            System.out.println ( String.format ( "%s <= (%d) %s", writeTests[i].getItemID (),
-                    writeTests[i].getValue ().getType (), writeTests[i].getValue ().toString () ) );
+            System.out.println ( String.format ( "%s <= (%d) %s", writeTests[i].getItemID (), writeTests[i].getValue ().getType (), writeTests[i].getValue ().toString () ) );
         }
 
         System.out.println ( "Add to group" );
-        KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> result = itemManagement.add ( defs );
-        WriteRequest[] writeRequests = new WriteRequest[writeTests.length];
-        Integer[] serverHandles = new Integer[writeTests.length];
+        final KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> result = itemManagement.add ( defs );
+        final WriteRequest[] writeRequests = new WriteRequest[writeTests.length];
+        final Integer[] serverHandles = new Integer[writeTests.length];
         for ( int i = 0; i < writeTests.length; i++ )
         {
             if ( result.get ( i ).getErrorCode () != 0 )
+            {
                 throw new JIException ( result.get ( i ).getErrorCode () );
+            }
 
-            writeRequests[i] = new WriteRequest ( result.get ( i ).getValue ().getServerHandle (),
-                    writeTests[i].getValue () );
+            writeRequests[i] = new WriteRequest ( result.get ( i ).getValue ().getServerHandle (), writeTests[i].getValue () );
             serverHandles[i] = writeRequests[i].getServerHandle ();
 
-            System.out.println ( String.format ( "Item: %s, VT: %d", writeTests[i].getItemID (),
-                    result.get ( i ).getValue ().getCanonicalDataType () ) );
+            System.out.println ( String.format ( "Item: %s, VT: %d", writeTests[i].getItemID (), result.get ( i ).getValue ().getCanonicalDataType () ) );
         }
 
         System.out.println ( "Perform write" );
-        OPCSyncIO syncIO = group.getSyncIO ();
-        ResultSet<WriteRequest> writeResults = syncIO.write ( writeRequests );
+        final OPCSyncIO syncIO = group.getSyncIO ();
+        final ResultSet<WriteRequest> writeResults = syncIO.write ( writeRequests );
         for ( int i = 0; i < writeTests.length; i++ )
         {
-            Result<WriteRequest> writeResult = writeResults.get ( i );
-            System.out.println ( String.format ( "ItemID: %s, ErrorCode: %08X", writeTests[i].getItemID (),
-                    writeResult.getErrorCode () ) );
+            final Result<WriteRequest> writeResult = writeResults.get ( i );
+            System.out.println ( String.format ( "ItemID: %s, ErrorCode: %08X", writeTests[i].getItemID (), writeResult.getErrorCode () ) );
             if ( writeResult.getErrorCode () != 0 )
+            {
                 showError ( server, writeResult.getErrorCode () );
+            }
         }
 
         // finally remove them again
@@ -272,33 +261,37 @@ public class Test1
         System.out.println ( "Write items...complete" );
     }
 
-    public static void testItems ( OPCServer server, OPCGroupStateMgt group, String... itemIDs ) throws IllegalArgumentException, UnknownHostException, JIException
+    public static void testItems ( final OPCServer server, final OPCGroupStateMgt group, final String... itemIDs ) throws IllegalArgumentException, UnknownHostException, JIException
     {
-        OPCItemMgt itemManagement = group.getItemManagement ();
-        List<OPCITEMDEF> items = new ArrayList<OPCITEMDEF> ( itemIDs.length );
-        for ( String id : itemIDs )
+        final OPCItemMgt itemManagement = group.getItemManagement ();
+        final List<OPCITEMDEF> items = new ArrayList<OPCITEMDEF> ( itemIDs.length );
+        for ( final String id : itemIDs )
         {
-            OPCITEMDEF item = new OPCITEMDEF ();
+            final OPCITEMDEF item = new OPCITEMDEF ();
             item.setItemID ( id );
             item.setClientHandle ( new Random ().nextInt () );
             items.add ( item );
         }
 
-        OPCITEMDEF[] itemArray = items.toArray ( new OPCITEMDEF[0] );
+        final OPCITEMDEF[] itemArray = items.toArray ( new OPCITEMDEF[0] );
 
         System.out.println ( "Validate" );
         KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> result = itemManagement.validate ( itemArray );
         if ( !dumpOPCITEMRESULT ( result ) )
+        {
             return;
+        }
 
         // now add them to the group
         System.out.println ( "Add" );
         result = itemManagement.add ( itemArray );
         if ( !dumpOPCITEMRESULT ( result ) )
+        {
             return;
+        }
 
         // get the server handle array
-        Integer[] serverHandles = new Integer[itemArray.length];
+        final Integer[] serverHandles = new Integer[itemArray.length];
         for ( int i = 0; i < itemArray.length; i++ )
         {
             serverHandles[i] = new Integer ( result.get ( i ).getValue ().getServerHandle () );
@@ -306,16 +299,15 @@ public class Test1
 
         // set them active
         System.out.println ( "Activate" );
-        ResultSet<Integer> resultSet = itemManagement.setActiveState ( true, serverHandles );
-        for ( Result<Integer> resultEntry : resultSet )
+        final ResultSet<Integer> resultSet = itemManagement.setActiveState ( true, serverHandles );
+        for ( final Result<Integer> resultEntry : resultSet )
         {
-            System.out.println ( String.format ( "Item: %08X, Error: %08X", resultEntry.getValue (),
-                    resultEntry.getErrorCode () ) );
+            System.out.println ( String.format ( "Item: %08X, Error: %08X", resultEntry.getValue (), resultEntry.getErrorCode () ) );
         }
 
         // set client handles
         System.out.println ( "Set client handles" );
-        Integer[] clientHandles = new Integer[serverHandles.length];
+        final Integer[] clientHandles = new Integer[serverHandles.length];
         for ( int i = 0; i < serverHandles.length; i++ )
         {
             clientHandles[i] = i;
@@ -327,7 +319,7 @@ public class Test1
         // connect handler
 
         System.out.println ( "attach" );
-        EventHandler eventHandler = group.attach ( new DumpDataCallback () );
+        final EventHandler eventHandler = group.attach ( new DumpDataCallback () );
         /*
          System.out.println ( "attach..enable" );
          asyncIO2.setEnable ( true );
@@ -340,7 +332,7 @@ public class Test1
             System.out.println ( "Waiting..." );
             Thread.sleep ( 10 * 1000 );
         }
-        catch ( InterruptedException e )
+        catch ( final InterruptedException e )
         {
             // TODO Auto-generated catch block
             e.printStackTrace ();
@@ -349,18 +341,12 @@ public class Test1
         eventHandler.detach ();
 
         // sync IO - read
-        OPCSyncIO syncIO = group.getSyncIO ();
-        KeyedResultSet<Integer, OPCITEMSTATE> itemState = syncIO.read ( OPCDATASOURCE.OPC_DS_DEVICE, serverHandles );
-        for ( KeyedResult<Integer, OPCITEMSTATE> itemStateEntry : itemState )
+        final OPCSyncIO syncIO = group.getSyncIO ();
+        final KeyedResultSet<Integer, OPCITEMSTATE> itemState = syncIO.read ( OPCDATASOURCE.OPC_DS_DEVICE, serverHandles );
+        for ( final KeyedResult<Integer, OPCITEMSTATE> itemStateEntry : itemState )
         {
-            int errorCode = itemStateEntry.getErrorCode ();
-            System.out.println ( String.format (
-                    "Server ID: %08X, Value: %s, Timestamp: %d/%d (%Tc), Quality: %d, Error: %08X",
-                    itemStateEntry.getKey (), itemStateEntry.getValue ().getValue (),
-                    itemStateEntry.getValue ().getTimestamp ().getHigh (),
-                    itemStateEntry.getValue ().getTimestamp ().getLow (),
-                    itemStateEntry.getValue ().getTimestamp ().asCalendar (), itemStateEntry.getValue ().getQuality (),
-                    errorCode ) );
+            final int errorCode = itemStateEntry.getErrorCode ();
+            System.out.println ( String.format ( "Server ID: %08X, Value: %s, Timestamp: %d/%d (%Tc), Quality: %d, Error: %08X", itemStateEntry.getKey (), itemStateEntry.getValue ().getValue (), itemStateEntry.getValue ().getTimestamp ().getHigh (), itemStateEntry.getValue ().getTimestamp ().getLow (), itemStateEntry.getValue ().getTimestamp ().asCalendar (), itemStateEntry.getValue ().getQuality (), errorCode ) );
             if ( errorCode != 0 )
             {
                 showError ( server, errorCode );
@@ -376,15 +362,14 @@ public class Test1
         itemManagement.remove ( serverHandles );
     }
 
-    public static void dumpServerStatus ( OPCServer server ) throws JIException
+    public static void dumpServerStatus ( final OPCServer server ) throws JIException
     {
-        OPCSERVERSTATUS status = server.getStatus ();
+        final OPCSERVERSTATUS status = server.getStatus ();
 
         System.out.println ( "===== SERVER STATUS ======" );
         System.out.println ( "State: " + status.getServerState ().toString () );
         System.out.println ( "Vendor: " + status.getVendorInfo () );
-        System.out.println ( String.format ( "Version: %d.%d.%d", status.getMajorVersion (), status.getMinorVersion (),
-                status.getBuildNumber () ) );
+        System.out.println ( String.format ( "Version: %d.%d.%d", status.getMajorVersion (), status.getMinorVersion (), status.getBuildNumber () ) );
         System.out.println ( "Groups: " + status.getGroupCount () );
         System.out.println ( "Bandwidth: " + status.getBandWidth () );
         System.out.println ( String.format ( "Start Time: %tc", status.getStartTime ().asCalendar () ) );
@@ -393,20 +378,20 @@ public class Test1
         System.out.println ( "===== SERVER STATUS ======" );
     }
 
-    public static void enumerateGroups ( OPCServer server, OPCENUMSCOPE scope ) throws IllegalArgumentException, UnknownHostException, JIException
+    public static void enumerateGroups ( final OPCServer server, final OPCENUMSCOPE scope ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         System.out.println ( "Enum Groups: " + scope.toString () );
 
-        for ( String group : server.getGroups ( scope ).asCollection () )
+        for ( final String group : server.getGroups ( scope ).asCollection () )
         {
             System.out.println ( "Group: " + group );
         }
     }
 
     @SuppressWarnings ( "unused" )
-    public static void main ( String[] args ) throws IllegalArgumentException, UnknownHostException, JIException
+    public static void main ( final String[] args ) throws IllegalArgumentException, UnknownHostException, JIException
     {
-        TestConfiguration configuration = new MatrikonSimulationServerConfiguration ();
+        final TestConfiguration configuration = new MatrikonSimulationServerConfiguration ();
 
         OPCServer server = null;
         try
@@ -419,10 +404,9 @@ public class Test1
             // session );
 
             //JIComServer comServer = new JIComServer ( JIClsid.valueOf ( configuration.getCLSID () ), args[0], _session );
-            JIComServer comServer = new JIComServer ( JIProgId.valueOf ( configuration.getProgId () ),
-                    args[0], _session );
+            final JIComServer comServer = new JIComServer ( JIProgId.valueOf ( configuration.getProgId () ), args[0], _session );
 
-            IJIComObject serverObject = comServer.createInstance ();
+            final IJIComObject serverObject = comServer.createInstance ();
             server = new OPCServer ( serverObject );
             dumpServerStatus ( server );
 
@@ -437,13 +421,13 @@ public class Test1
              }
              */
 
-            OPCBrowseServerAddressSpace serverBrowser = server.getBrowser ();
+            final OPCBrowseServerAddressSpace serverBrowser = server.getBrowser ();
             browseFlat ( serverBrowser );
             /*
              browseTree ( serverBrowser );
              */
 
-            OPCGroupStateMgt group = server.addGroup ( "test", true, 100, 1234, 60, 0.0f, 1033 );
+            final OPCGroupStateMgt group = server.addGroup ( "test", true, 100, 1234, 60, 0.0f, 1033 );
             /*
              group.setName ( "test2" );
              OPCGroupStateMgt group2 = group.clone ( "test" );
@@ -459,10 +443,10 @@ public class Test1
                 writeItems ( server, group, configuration.getWriteItems () );
             }
 
-            OPCItemProperties itemProperties = server.getItemPropertiesService ();
+            final OPCItemProperties itemProperties = server.getItemPropertiesService ();
             //dumpItemProperties ( itemProperties, "Saw-toothed Waves.Int" );
 
-            OPCItemIO itemIO = server.getItemIOService ();
+            final OPCItemIO itemIO = server.getItemIOService ();
             //queryItems ( itemIO, "Saw-toothed Waves.Int" );
 
             enumerateGroups ( server, OPCENUMSCOPE.OPC_ENUM_PUBLIC );
@@ -474,7 +458,7 @@ public class Test1
             //server.removeGroup ( group2, true );
 
         }
-        catch ( JIException e )
+        catch ( final JIException e )
         {
             e.printStackTrace ();
             showError ( server, e.getErrorCode () );
@@ -482,7 +466,9 @@ public class Test1
         finally
         {
             if ( _session != null )
+            {
                 JISession.destroySession ( _session );
+            }
             _session = null;
         }
     }
