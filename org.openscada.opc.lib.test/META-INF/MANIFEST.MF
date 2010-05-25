@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: TestCases for org.openscada.opc.lib
+Bundle-SymbolicName: org.openscada.opc.lib.test
+Bundle-Version: 0.7.0.qualifier
+Bundle-Vendor: inavare GmbH
+Fragment-Host: org.openscada.opc.lib;bundle-version="0.7.0"
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
