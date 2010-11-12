@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 TH4 SYSTEMS GmbH (http://inavare.com)
+ * Copyright (C) 2006-2009 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ import org.openscada.opc.lib.da.SyncAccess;
  * Another test showing the "Access" interface with the SyncAccess implementation
  * including the AutoReconnectController which should re-establish the connection
  * if it breaks.
- * @author Jens Reimann <jens.reimann@inavare.net>
+ * @author Jens Reimann <jens.reimann@th4-systems.com>
  *
  */
 public class OPCTest6

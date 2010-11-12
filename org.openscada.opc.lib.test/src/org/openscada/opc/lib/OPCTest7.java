@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 TH4 SYSTEMS GmbH (http://inavare.com)
+ * Copyright (C) 2006-2009 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ import org.openscada.opc.lib.da.Server;
 /**
  * A sample that reads an item and writes back the result. You will need a
  * read/write item for this to work.
- * @author Jens Reimann &lt;jens.reimann@inavare.net&gt;
+ * @author Jens Reimann &lt;jens.reimann@th4-systems.com&gt;
  *
  */
 public class OPCTest7

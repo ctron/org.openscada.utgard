@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -36,7 +36,7 @@ import org.openscada.opc.dcom.da.impl.OPCBrowseServerAddressSpace;
  * The operations on the address space browser browser are not synchronized
  * as is the TreeBrowser itself. The user must take care of preventing
  * simultanious access to this instance and the server address space browser.
- * @author Jens Reimann <jens.reimann@inavare.net>
+ * @author Jens Reimann <jens.reimann@th4-systems.com>
  *
  */
 public class TreeBrowser extends BaseBrowser
