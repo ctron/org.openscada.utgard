@@ -4,7 +4,7 @@ Bundle-SymbolicName: org.openscada.opc.lib
 Bundle-Version: 0.7.0.qualifier
 Bundle-Name: OpenSCADA Utgard Library
 Bundle-Vendor: TH4 SYSTEMS GmbH
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.jinterop.dcom.common;version="[2.0.0,3.0.0)",
  org.jinterop.dcom.core;version="[2.0.0,3.0.0)",
  org.openscada.opc.dcom.common;version="0.6.0",
