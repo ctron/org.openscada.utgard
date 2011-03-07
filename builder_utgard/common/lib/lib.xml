@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     Sep 9, 2009 4:03:30 PM                                                        
+
+     OpenSCADA Builder    
+     Library File
+                   
+     jens                                                                
+     ====================================================================== -->
+<project name="OpenSCADA Builder Common Library" default="default" xmlns:ivy="antlib:org.apache.ivy.ant">
+    <description>
+            Library File
+    </description>
+
+	<property name="build.root" location="../.."/>
+	
+	<!-- ================================= 
+          target: default              
+         ================================= -->
+    <target name="default" depends="" description="No Default">
+        <fail message="This file is only a task loader"/>
+    </target>
+	
+	<!-- taskdefs -->
+	
+	<!-- ivy -->
+		
+	<path id="ivy.lib.path">
+		<fileset dir="${build.root}/common/lib/ivy" includes="*.jar"/>
+    </path>
+	
+	<taskdef resource="org/apache/ivy/ant/antlib.xml"
+	    	uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>
+	
+	<!-- macrodefs -->
+	
+	<!-- = = = = = = = = = = = = = = = = =
+          macrodef: openscada.builder.copyFeature          
+         = = = = = = = = = = = = = = = = = -->
+    <macrodef name="openscada.builder.copyFeature">
+        <attribute name="id" />
+    	<attribute name="root" default="${source.root}"/>
+    	<attribute name="buildRoot" default="${buildDirectory}"/>
+        <sequential>
+          	<copy todir="@{buildRoot}/features/@{id}">
+          		<fileset dir="@{root}/@{id}.feature" />
+        	</copy>
+        </sequential>
+    </macrodef>
+
+	<!-- = = = = = = = = = = = = = = = = =
+          macrodef: openscada.builder.copyPlugin          
+         = = = = = = = = = = = = = = = = = -->
+    <macrodef name="openscada.builder.copyPlugin">
+        <attribute name="id" />
+    	<attribute name="root" default="${source.root}"/>
+    	<attribute name="buildRoot" default="${buildDirectory}"/>
+    	<attribute name="project" default="@{id}"/>
+        <sequential>
+          	<copy todir="@{buildRoot}/plugins/@{id}">
+          		<fileset dir="@{root}/@{project}">
+          		</fileset>
+        	</copy>
+        </sequential>
+    </macrodef>
+	
+
+	<!-- = = = = = = = = = = = = = = = = =
+          macrodef: openscada.bundleBuild          
+         = = = = = = = = = = = = = = = = = -->
+    <macrodef name="openscada.bundleBuild">
+        <attribute name="builder" />
+        <sequential>
+        	<delete dir="@{builder}/build" failonerror="false"/>
+        	<mkdir dir="@{builder}/build" />
+        	<java jar="${startup}" failonerror="true" maxmemory="1024m" fork="true" dir="${eclipse.home.dir}/plugins/org.eclipse.pde.build${eclipse.builder.version}/scripts">
+	    		<jvmarg value="-XX:MaxPermSize=256m"/>
+	    		
+				<arg value="-application" />
+			    <arg value="org.eclipse.ant.core.antRunner" />
+        		
+        		<!--
+        		<arg value="-verbose"/>
+        		-->
+        		
+				<arg value="-Dbuilder=${basedir}/@{builder}"/>
+        		<arg value="-Dbuild.root=${build.root}"/>
+        		<arg value="-Dsource.root=${source.root}"/>
+	    		<arg value="-DbaseLocation=${eclipse.home.dir}"/>
+				<arg value="-DbuildDirectory=${basedir}/@{builder}/build"/>
+        		
+        		<arg value="-DbuildType=${buildType}"/>
+        		<arg value="-DbuildId=${buildId}"/>
+        		
+        		<arg value="-Ddeploy.repo.root=${deploy.repo.root}"/>
+        		<arg value="-Dexternal.repo.root=${external.repo.root}"/>
+			</java>
+        </sequential>
+    </macrodef>
+
+	<!-- = = = = = = = = = = = = = = = = =
+          macrodef: openscada.productBuild          
+         = = = = = = = = = = = = = = = = = -->
+    <macrodef name="openscada.productBuild">
+        <attribute name="builder" />
+        <sequential>
+        	<delete dir="@{builder}/build" failonerror="false"/>
+        	<mkdir dir="@{builder}/build" />
+        	<java jar="${startup}" failonerror="true" maxmemory="1024m" fork="true" dir="${eclipse.home.dir}/plugins/org.eclipse.pde.build${eclipse.builder.version}/scripts">
+	    		<jvmarg value="-XX:MaxPermSize=256m"/>
+	    		
+				<arg value="-application" />
+			    <arg value="org.eclipse.ant.core.antRunner" />
+        		
+		    	<arg value="-buildfile" />
+		   		<arg value="${eclipse.home.dir}/plugins/org.eclipse.pde.build${eclipse.builder.version}/scripts/productBuild/productBuild.xml" />
+        		
+        		<!--
+        		<arg value="-verbose"/>
+        		-->
+        		
+				<arg value="-Dbuilder=${basedir}/@{builder}"/>
+        		<arg value="-Dbuild.root=${build.root}"/>
+        		<arg value="-Dsource.root=${source.root}"/>
+	    		<arg value="-DbaseLocation=${eclipse.home.dir}"/>
+				<arg value="-DbuildDirectory=${basedir}/@{builder}/build"/>
+        		
+        		<arg value="-DbuildType=${buildType}"/>
+        		<arg value="-DbuildId=${buildId}"/>
+        		
+        		<arg value="-Dconfigs=${configs}"/>
+        		
+        		<arg value="-Ddeploy.repo.root=${deploy.repo.root}"/>
+        		<arg value="-Dexternal.repo.root=${external.repo.root}"/>
+			</java>
+        </sequential>
+    </macrodef>
+	
+	<!-- = = = = = = = = = = = = = = = = =
+          macrodef: openscada.deploy.repository          
+         = = = = = = = = = = = = = = = = = -->
+    <macrodef name="openscada.deploy.repository">
+        <attribute name="name"/>
+        <sequential>
+        	<echo message="Publish repository to: ${deploy.repo.root}"/>
+        	<mkdir dir="${deploy.repo.root}"/>
+       	  	<copy file="${buildDirectory}/${buildLabel}/@{name}-${buildId}-group.group.group.zip" tofile="${deploy.repo.root}/@{name}-${buildId}-p2repo.zip" failonerror="true"/>
+        </sequential>
+    </macrodef>
+
+	<!-- = = = = = = = = = = = = = = = = =
+          macrodef: openscada.publish.repository
+         = = = = = = = = = = = = = = = = = -->
+    <macrodef name="openscada.publish.repository">
+    	<!-- the id of the main feature -->
+    	<attribute name="id" />
+    	<!-- the name of the project -->
+        <attribute name="project" />
+        <sequential>
+        	<delete dir="${publish.download.root}/@{project}/${buildType}/${buildId}"/>
+        	<mkdir dir="${publish.download.root}/@{project}/${buildType}/${buildId}"/>
+        	
+        	<copy file="${deploy.repo.root}/@{id}-${buildId}-p2repo.zip" todir="${publish.download.root}/@{project}/${buildType}/${buildId}" failonerror="true"/>
+        	
+        	<delete dir="${publish.repo.root}/@{project}/${buildType}/${buildId}"/>
+        	<mkdir dir="${publish.repo.root}/@{project}/${buildType}/${buildId}"/>
+        	<unzip src="${deploy.repo.root}/@{id}-${buildId}-p2repo.zip" dest="${publish.repo.root}/@{project}/${buildType}/${buildId}"/>
+        	
+        	<!-- make a plain zip file -->
+        	<zip destfile="${publish.download.root}/@{project}/${buildType}/${buildId}/openscada-@{project}-${buildType}.${buildId}.zip">
+        		<fileset dir="${publish.repo.root}/@{project}/${buildType}/${buildId}/plugins">
+        			<include name="*.jar"/>
+        		</fileset>
+        	</zip>
+        </sequential>
+    </macrodef>
+	
+	<!-- = = = = = = = = = = = = = = = = =
+	          macrodef: openscada.publish.product
+         = = = = = = = = = = = = = = = = = -->
+    <macrodef name="openscada.publish.product">
+    	<attribute name="name" />
+    	<attribute name="project" />
+    	<attribute name="builder" />
+        <sequential>
+        	<delete dir="${publish.download.root}/@{project}/${buildType}/${buildId}/@{name}"/>
+        	<mkdir dir="${publish.download.root}/@{project}/${buildType}/${buildId}/@{name}"/>
+        	
+        	<copy todir="${publish.download.root}/@{project}/${buildType}/${buildId}/@{name}">
+        		<fileset dir="${build.root}/@{builder}/build/${buildLabel}">
+        			<include name="**/@{name}-*.zip"/>
+        		</fileset>
+        	</copy>
+        </sequential>
+    </macrodef>
+
+	<!-- = = = = = = = = = = = = = = = = =
+          macrodef: openscada.import.repository          
+         = = = = = = = = = = = = = = = = = -->
+    <macrodef name="openscada.import.repository">
+        <attribute name="id" />
+    	<attribute name="version"/>
+    	<attribute name="todir" default="${repoBaseLocation}"/>
+        <sequential>
+        	<echo message="Import P2 repository: ${deploy.repo.root}/@{id}-@{version}-p2repo.zip"/>
+        	<mkdir dir="${repoBaseLocation}"/>
+    		<copy file="${deploy.repo.root}/@{id}-@{version}-p2repo.zip" todir="${repoBaseLocation}" failonerror="true"/>
+        </sequential>
+    </macrodef>
+	
+	<!-- = = = = = = = = = = = = = = = = =
+          macrodef: openscada.importEclipseArchive          
+         = = = = = = = = = = = = = = = = = -->
+    <macrodef name="openscada.importEclipseArchive">
+        <attribute name="file" />
+        <sequential>
+        	<echo message="Import external eclipse archive (non-P2): ${external.repo.root}/@{file}"/>
+            <unzip src="${external.repo.root}/@{file}" dest="${buildDirectory}">
+				<globmapper from="eclipse/*" to="*"/>
+        	</unzip>
+        </sequential>
+    </macrodef>
+	
+	<!-- = = = = = = = = = = = = = = = = =
+          macrodef: openscada.import.externalRepository          
+         = = = = = = = = = = = = = = = = = -->
+    <macrodef name="openscada.import.externalRepository">
+    	<attribute name="file"/>
+    	<attribute name="todir" default="${repoBaseLocation}"/>
+        <sequential>
+        	<echo message="Import external P2 repository: ${external.repo.root}/@{file}"/>
+        	<mkdir dir="${repoBaseLocation}"/>
+    		<copy file="${external.repo.root}/@{file}" todir="${repoBaseLocation}" failonerror="true"/>
+        </sequential>
+    </macrodef>
+
+	<!-- = = = = = = = = = = = = = = = = =
+          macrodef: openscada.publish.convertRepos          
+         = = = = = = = = = = = = = = = = = -->
+    <macrodef name="openscada.publish.convertRepos">
+    	<attribute name="targetPath"/>
+    	<attribute name="sourcePath" default="${deploy.repo.root}"/>
+    	<attribute name="makeSnapshot" default="true"/>
+        <sequential>
+        	<java jar="${startup}" failonerror="true" maxmemory="1024m" fork="true">
+	    		<jvmarg value="-XX:MaxPermSize=256m"/>
+	    		
+        		<arg value="-consoleLog"/>
+        		<arg value="-console"/>
+        		
+				<arg value="-application" />
+			    <arg value="org.openscada.bob.p2convert" />
+        		<arg value="-bob.dump"/>
+        		<arg value="-bob.targetPath"/>
+        		<arg value="@{targetPath}"/>
+        		<arg value="-bob.targetType" />
+        		<arg value="maven"/>
+        		
+        		<arg value="-bob.p2repository"/>
+        		<arg value="org.openscada.external=jar:file:@{sourcePath}/org.openscada.external-${external.version}-p2repo.zip/!"/>
+        		<arg value="-bob.p2repository"/>
+        		<arg value="org.openscada.aurora=jar:file:@{sourcePath}/org.openscada.aurora.sdk-${aurora.version}-p2repo.zip/!"/>
+				<arg value="-bob.p2repository"/>
+        		<arg value="org.openscada.utgard=jar:file:@{sourcePath}/org.openscada.utgard.sdk-${utgard.version}-p2repo.zip/!"/>
+        		<arg value="-bob.p2repository"/>
+        		<arg value="org.openscada.atlantis=jar:file:@{sourcePath}/org.openscada.oxygen.sdk-${oxygen.version}-p2repo.zip/!"/>
+        		<arg value="-bob.p2repository"/>
+        		<arg value="org.openscada.atlantis=jar:file:@{sourcePath}/org.openscada.atlantis.sdk-${atlantis.version}-p2repo.zip/!"/>
+        		
+        		<sysproperty key="bob.maven.makeSnapshot" value="@{makeSnapshot}"/>
+			</java>
+        </sequential>
+    </macrodef>
+
+	<!-- ================================= 
+          target: populateOpenSCADA              
+         ================================= -->
+    <target name="populateOpenSCADA" depends="" description="Download OpenSCADA stuff">
+    	<mkdir dir="${external.repo.root}"/>
+    	<get usetimestamp="true" src="http://download.openscada.org/external/${openscada.release}/${external.version}/org.openscada.external-${external.version}-p2repo.zip" dest="${external.repo.root}/org.openscada.external-${external.version}-p2repo.zip"/>
+    	<get usetimestamp="true" src="http://download.openscada.org/aurora/${openscada.release}/${aurora.version}/org.openscada.aurora.sdk-${aurora.version}-p2repo.zip" dest="${external.repo.root}/org.openscada.aurora.sdk-${aurora.version}-p2repo.zip"/>
+    	<get usetimestamp="true" src="http://download.openscada.org/utgard/${openscada.release}/${utgard.version}/org.openscada.utgard.sdk-${utgard.version}-p2repo.zip" dest="${external.repo.root}/org.openscada.utgard.sdk-${utgard.version}-p2repo.zip"/>
+    	<get usetimestamp="true" src="http://download.openscada.org/atlantis/${openscada.release}/${atlantis.version}/org.openscada.atlantis.sdk-${atlantis.version}-p2repo.zip" dest="${external.repo.root}/org.openscada.atlantis.sdk-${atlantis.version}-p2repo.zip"/>
+		<get usetimestamp="true" src="http://download.openscada.org/orilla/${openscada.release}/${orilla.version}/org.openscada.orilla.sdk-${orilla.version}-p2repo.zip" dest="${external.repo.root}/org.openscada.orilla.sdk-${orilla.version}-p2repo.zip"/>
+    	<get usetimestamp="true" src="http://download.openscada.org/oxygen/${openscada.release}/${oxygen.version}/org.openscada.oxygen.sdk-${oxygen.version}-p2repo.zip" dest="${external.repo.root}/org.openscada.oxygen.sdk-${oxygen.version}-p2repo.zip"/>
+    </target>
+	
+	<!-- ================================= 
+          target: populateEclipse              
+         ================================= -->
+    <target name="populateEclipse" depends="" description="Download eclipse stuff">
+    	<mkdir dir="${external.repo.root}"/>
+    	
+    	<parallel threadcount="2">
+	        <get usetimestamp="true" src="http://download.openscada.org/mirror/GEF-Update-3.6.1.zip" dest="${external.repo.root}/GEF-Update-3.6.1.zip"/>
+	    	<get usetimestamp="true" src="http://download.openscada.org/mirror/emf-xsd-Update-2.5.0.zip" dest="${external.repo.root}/emf-xsd-Update-2.5.0.zip"/>
+	    	<get usetimestamp="true" src="http://download.openscada.org/mirror/org.eclipse.rcp-3.6.1.zip" dest="${external.repo.root}/org.eclipse.rcp-3.6.1.zip"/>
+	    	<get usetimestamp="true" src="http://download.openscada.org/mirror/org.eclipse.platform-3.6.1.zip" dest="${external.repo.root}/org.eclipse.platform-3.6.1.zip"/>
+    		<get usetimestamp="true" src="http://download.openscada.org/mirror/org.eclipse.ecf.sdk_3.2.0.v20100219-1253.zip" dest="${external.repo.root}/org.eclipse.ecf.sdk_3.2.0.v20100219-1253.zip"/>
+	   	   	<get usetimestamp="true" src="http://download.openscada.org/mirror/equinox-SDK-3.5.2.zip" dest="${external.repo.root}/equinox-SDK-3.5.2.zip"/>
+	    	
+	    	<get usetimestamp="true" src="http://download.openscada.org/mirror/org.eclipse.albireo.rcp_v20081031.zip" dest="${external.repo.root}/org.eclipse.albireo.rcp_v20081031.zip"/>
+    		<get usetimestamp="true" src="http://download.openscada.org/mirror/BabelLanguagePack-eclipse-de_3.6.0.v20100814043401.zip" dest="${external.repo.root}/BabelLanguagePack-eclipse-de_3.6.0.v20100814043401.zip"/>
+		</parallel>
+    	
+    	<!-- fix ECF "repository" -->
+    	<!--
+    	<property name="ecf.repack.dir" location="${external.repo.root}/temp"/>
+    	<delete dir="${ecf.repack.dir}"/>
+    	<mkdir dir="${ecf.repack.dir}"/>
+    	
+    	<unzip dest="${ecf.repack.dir}" src="${external.repo.root}/org.eclipse.ecf.sdk-3.1.0.v20091012-1618.zip">
+    	</unzip>
+    	<zip destfile="${external.repo.root}/org.eclipse.ecf.sdk-3.1.0.v20091012-1618-p2repo.zip">
+    		<fileset dir="${ecf.repack.dir}/repo">
+    		</fileset>
+    	</zip>
+    	<delete dir="${ecf.repack.dir}"/>
+    	-->
+    </target>
+
+	
+</project>
+
