@@ -100,11 +100,6 @@
   <!-- ===================================================================== -->
   <target name="postSetup">
     <antcall target="getBaseComponents" />
-  	<copy todir="${builder}/build/plugins">
-  		<fileset dir="${builder}/lib">
-  			<include name="*.jar"/>
-  		</fileset>
-	</copy>
   	
   	<openscada.builder.copyFeature id="org.openscada.utgard" />
   	<openscada.builder.copyFeature id="org.openscada.utgard.sdk" />
