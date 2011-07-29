@@ -2,7 +2,7 @@
 <feature
       id="org.openscada.utgard"
       label="OpenSCADA Utgard"
-      version="0.7.0.qualifier"
+      version="0.9.0.qualifier"
       provider-name="TH4 SYSTEMS GmbH">
 
    <description>
