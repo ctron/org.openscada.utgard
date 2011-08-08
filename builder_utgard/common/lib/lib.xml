@@ -292,31 +292,16 @@
     	<mkdir dir="${external.repo.root}"/>
     	
     	<parallel threadcount="2">
-	        <get usetimestamp="true" src="http://download.openscada.org/mirror/GEF-Update-3.6.1.zip" dest="${external.repo.root}/GEF-Update-3.6.1.zip"/>
-	    	<get usetimestamp="true" src="http://download.openscada.org/mirror/emf-xsd-Update-2.5.0.zip" dest="${external.repo.root}/emf-xsd-Update-2.5.0.zip"/>
-	    	<get usetimestamp="true" src="http://download.openscada.org/mirror/org.eclipse.rcp-3.6.1.zip" dest="${external.repo.root}/org.eclipse.rcp-3.6.1.zip"/>
-	    	<get usetimestamp="true" src="http://download.openscada.org/mirror/org.eclipse.platform-3.6.1.zip" dest="${external.repo.root}/org.eclipse.platform-3.6.1.zip"/>
+	        <get usetimestamp="true" src="http://download.openscada.org/mirror/GEF-Update-3.7.0.zip" dest="${external.repo.root}/GEF-Update-3.7.0.zip"/>
+	    	<get usetimestamp="true" src="http://download.openscada.org/mirror/emf-xsd-Update-2.7.0.zip" dest="${external.repo.root}/emf-xsd-Update-2.7.0.zip"/>
+	    	<get usetimestamp="true" src="http://download.openscada.org/mirror/org.eclipse.rcp-3.7.zip" dest="${external.repo.root}/org.eclipse.rcp-3.7.zip"/>
+	    	<get usetimestamp="true" src="http://download.openscada.org/mirror/org.eclipse.platform-3.7.zip" dest="${external.repo.root}/org.eclipse.platform-3.7.zip"/>
     		<get usetimestamp="true" src="http://download.openscada.org/mirror/org.eclipse.ecf.sdk_3.2.0.v20100219-1253.zip" dest="${external.repo.root}/org.eclipse.ecf.sdk_3.2.0.v20100219-1253.zip"/>
-	   	   	<get usetimestamp="true" src="http://download.openscada.org/mirror/equinox-SDK-3.5.2.zip" dest="${external.repo.root}/equinox-SDK-3.5.2.zip"/>
+	   	   	<get usetimestamp="true" src="http://download.openscada.org/mirror/equinox-SDK-3.7.zip" dest="${external.repo.root}/equinox-SDK-3.7.zip"/>
 	    	
 	    	<get usetimestamp="true" src="http://download.openscada.org/mirror/org.eclipse.albireo.rcp_v20081031.zip" dest="${external.repo.root}/org.eclipse.albireo.rcp_v20081031.zip"/>
     		<get usetimestamp="true" src="http://download.openscada.org/mirror/BabelLanguagePack-eclipse-de_3.6.0.v20100814043401.zip" dest="${external.repo.root}/BabelLanguagePack-eclipse-de_3.6.0.v20100814043401.zip"/>
 		</parallel>
-    	
-    	<!-- fix ECF "repository" -->
-    	<!--
-    	<property name="ecf.repack.dir" location="${external.repo.root}/temp"/>
-    	<delete dir="${ecf.repack.dir}"/>
-    	<mkdir dir="${ecf.repack.dir}"/>
-    	
-    	<unzip dest="${ecf.repack.dir}" src="${external.repo.root}/org.eclipse.ecf.sdk-3.1.0.v20091012-1618.zip">
-    	</unzip>
-    	<zip destfile="${external.repo.root}/org.eclipse.ecf.sdk-3.1.0.v20091012-1618-p2repo.zip">
-    		<fileset dir="${ecf.repack.dir}/repo">
-    		</fileset>
-    	</zip>
-    	<delete dir="${ecf.repack.dir}"/>
-    	-->
     </target>
 
 	
