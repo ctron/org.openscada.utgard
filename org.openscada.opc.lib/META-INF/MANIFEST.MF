@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.openscada.opc.lib
-Bundle-Version: 0.7.0.qualifier
+Bundle-Version: 0.9.0.qualifier
 Bundle-Name: OpenSCADA Utgard Library
 Bundle-Vendor: TH4 SYSTEMS GmbH
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

@@ -1,19 +1,19 @@
 /*
- * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * This file is part of the openSCADA project
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
- * OpenSCADA is free software: you can redistribute it and/or modify
+ * openSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
  * only, as published by the Free Software Foundation.
  *
- * OpenSCADA is distributed in the hope that it will be useful,
+ * openSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License version 3 for more details
  * (a copy is included in the LICENSE file that accompanied this code).
  *
  * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenSCADA. If not, see
+ * version 3 along with openSCADA. If not, see
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
@@ -47,39 +47,39 @@ import org.slf4j.LoggerFactory;
 
 public class Server
 {
-    private static Logger _log = LoggerFactory.getLogger ( Server.class );
+    private static Logger logger = LoggerFactory.getLogger ( Server.class );
 
-    private ConnectionInformation _connectionInformation = null;
+    private final ConnectionInformation connectionInformation;
 
-    private JISession _session = null;
+    private JISession session;
 
-    private JIComServer _comServer = null;
+    private JIComServer comServer;
 
-    private OPCServer _server = null;
+    private OPCServer server;
 
-    private boolean _defaultActive = true;
+    private boolean defaultActive = true;
 
-    private int _defaultUpdateRate = 1000;
+    private int defaultUpdateRate = 1000;
 
-    private Integer _defaultTimeBias = null;
+    private Integer defaultTimeBias;
 
-    private Float _defaultPercentDeadband = null;
+    private Float defaultPercentDeadband;
 
-    private int _defaultLocaleID = 0;
+    private int defaultLocaleID = 0;
 
-    private ErrorMessageResolver _errorMessageResolver = null;
+    private ErrorMessageResolver errorMessageResolver;
 
-    private final Map<Integer, Group> _groups = new HashMap<Integer, Group> ();
+    private final Map<Integer, Group> groups = new HashMap<Integer, Group> ();
 
-    private final List<ServerConnectionStateListener> _stateListeners = new CopyOnWriteArrayList<ServerConnectionStateListener> ();
+    private final List<ServerConnectionStateListener> stateListeners = new CopyOnWriteArrayList<ServerConnectionStateListener> ();
 
-    private ScheduledExecutorService _scheduler = null;
+    private final ScheduledExecutorService scheduler;
 
     public Server ( final ConnectionInformation connectionInformation, final ScheduledExecutorService scheduler )
     {
         super ();
-        this._connectionInformation = connectionInformation;
-        this._scheduler = scheduler;
+        this.connectionInformation = connectionInformation;
+        this.scheduler = scheduler;
     }
 
     /**
@@ -90,12 +90,12 @@ public class Server
      */
     public ScheduledExecutorService getScheduler ()
     {
-        return this._scheduler;
+        return this.scheduler;
     }
 
     protected synchronized boolean isConnected ()
     {
-        return this._session != null;
+        return this.session != null;
     }
 
     public synchronized void connect () throws IllegalArgumentException, UnknownHostException, JIException, AlreadyConnectedException
@@ -106,45 +106,45 @@ public class Server
         }
 
         final int socketTimeout = Integer.getInteger ( "rpc.socketTimeout", 0 );
-        _log.info ( String.format ( "Socket timeout: %s ", socketTimeout ) );
+        logger.info ( String.format ( "Socket timeout: %s ", socketTimeout ) );
 
         try
         {
-            if ( this._connectionInformation.getClsid () != null )
+            if ( this.connectionInformation.getClsid () != null )
             {
-                this._session = JISession.createSession ( this._connectionInformation.getDomain (), this._connectionInformation.getUser (), this._connectionInformation.getPassword () );
-                this._session.setGlobalSocketTimeout ( socketTimeout );
-                this._comServer = new JIComServer ( JIClsid.valueOf ( this._connectionInformation.getClsid () ), this._connectionInformation.getHost (), this._session );
+                this.session = JISession.createSession ( this.connectionInformation.getDomain (), this.connectionInformation.getUser (), this.connectionInformation.getPassword () );
+                this.session.setGlobalSocketTimeout ( socketTimeout );
+                this.comServer = new JIComServer ( JIClsid.valueOf ( this.connectionInformation.getClsid () ), this.connectionInformation.getHost (), this.session );
             }
-            else if ( this._connectionInformation.getProgId () != null )
+            else if ( this.connectionInformation.getProgId () != null )
             {
-                this._session = JISession.createSession ( this._connectionInformation.getDomain (), this._connectionInformation.getUser (), this._connectionInformation.getPassword () );
-                this._session.setGlobalSocketTimeout ( socketTimeout );
-                this._comServer = new JIComServer ( JIProgId.valueOf ( this._connectionInformation.getClsid () ), this._connectionInformation.getHost (), this._session );
+                this.session = JISession.createSession ( this.connectionInformation.getDomain (), this.connectionInformation.getUser (), this.connectionInformation.getPassword () );
+                this.session.setGlobalSocketTimeout ( socketTimeout );
+                this.comServer = new JIComServer ( JIProgId.valueOf ( this.connectionInformation.getProgId () ), this.connectionInformation.getHost (), this.session );
             }
             else
             {
                 throw new IllegalArgumentException ( "Neither clsid nor progid is valid!" );
             }
 
-            this._server = new OPCServer ( this._comServer.createInstance () );
-            this._errorMessageResolver = new ErrorMessageResolver ( this._server.getCommon (), this._defaultLocaleID );
+            this.server = new OPCServer ( this.comServer.createInstance () );
+            this.errorMessageResolver = new ErrorMessageResolver ( this.server.getCommon (), this.defaultLocaleID );
         }
         catch ( final UnknownHostException e )
         {
-            _log.info ( "Unknown host when connecting to server", e );
+            logger.info ( "Unknown host when connecting to server", e );
             cleanup ();
             throw e;
         }
         catch ( final JIException e )
         {
-            _log.info ( "Failed to connect to server", e );
+            logger.info ( "Failed to connect to server", e );
             cleanup ();
             throw e;
         }
         catch ( final Throwable e )
         {
-            _log.warn ( "Unknown error", e );
+            logger.warn ( "Unknown error", e );
             cleanup ();
             throw new RuntimeException ( e );
         }
@@ -157,40 +157,41 @@ public class Server
      */
     protected void cleanup ()
     {
-        _log.info ( "Destroying DCOM session..." );
-        final JISession destructSession = this._session;
+        logger.info ( "Destroying DCOM session..." );
+        final JISession destructSession = this.session;
         final Thread destructor = new Thread ( new Runnable () {
 
+            @Override
             public void run ()
             {
                 final long ts = System.currentTimeMillis ();
                 try
                 {
-                    _log.debug ( "Starting destruction of DCOM session" );
+                    logger.debug ( "Starting destruction of DCOM session" );
                     JISession.destroySession ( destructSession );
-                    _log.info ( "Destructed DCOM session" );
+                    logger.info ( "Destructed DCOM session" );
                 }
                 catch ( final Throwable e )
                 {
-                    _log.warn ( "Failed to destruct DCOM session", e );
+                    logger.warn ( "Failed to destruct DCOM session", e );
                 }
                 finally
                 {
-                    _log.info ( String.format ( "Session destruction took %s ms", System.currentTimeMillis () - ts ) );
+                    logger.info ( String.format ( "Session destruction took %s ms", System.currentTimeMillis () - ts ) );
                 }
             }
         }, "UtgardSessionDestructor" );
         destructor.setName ( "OPCSessionDestructor" );
         destructor.setDaemon ( true );
         destructor.start ();
-        _log.info ( "Destroying DCOM session... forked" );
+        logger.info ( "Destroying DCOM session... forked" );
 
-        this._errorMessageResolver = null;
-        this._session = null;
-        this._comServer = null;
-        this._server = null;
+        this.errorMessageResolver = null;
+        this.session = null;
+        this.comServer = null;
+        this.server = null;
 
-        this._groups.clear ();
+        this.groups.clear ();
     }
 
     /**
@@ -225,14 +226,14 @@ public class Server
     protected synchronized Group getGroup ( final OPCGroupStateMgt groupMgt ) throws JIException, IllegalArgumentException, UnknownHostException
     {
         final Integer serverHandle = groupMgt.getState ().getServerHandle ();
-        if ( this._groups.containsKey ( serverHandle ) )
+        if ( this.groups.containsKey ( serverHandle ) )
         {
-            return this._groups.get ( serverHandle );
+            return this.groups.get ( serverHandle );
         }
         else
         {
             final Group group = new Group ( this, serverHandle, groupMgt );
-            this._groups.put ( serverHandle, group );
+            this.groups.put ( serverHandle, group );
             return group;
         }
     }
@@ -256,7 +257,7 @@ public class Server
 
         try
         {
-            final OPCGroupStateMgt groupMgt = this._server.addGroup ( name, this._defaultActive, this._defaultUpdateRate, 0, this._defaultTimeBias, this._defaultPercentDeadband, this._defaultLocaleID );
+            final OPCGroupStateMgt groupMgt = this.server.addGroup ( name, this.defaultActive, this.defaultUpdateRate, 0, this.defaultTimeBias, this.defaultPercentDeadband, this.defaultLocaleID );
             return getGroup ( groupMgt );
         }
         catch ( final JIException e )
@@ -308,7 +309,7 @@ public class Server
 
         try
         {
-            final OPCGroupStateMgt groupMgt = this._server.getGroupByName ( name );
+            final OPCGroupStateMgt groupMgt = this.server.getGroupByName ( name );
             return getGroup ( groupMgt );
         }
         catch ( final JIException e )
@@ -325,52 +326,52 @@ public class Server
 
     public int getDefaultLocaleID ()
     {
-        return this._defaultLocaleID;
+        return this.defaultLocaleID;
     }
 
     public void setDefaultLocaleID ( final int defaultLocaleID )
     {
-        this._defaultLocaleID = defaultLocaleID;
+        this.defaultLocaleID = defaultLocaleID;
     }
 
     public Float getDefaultPercentDeadband ()
     {
-        return this._defaultPercentDeadband;
+        return this.defaultPercentDeadband;
     }
 
     public void setDefaultPercentDeadband ( final Float defaultPercentDeadband )
     {
-        this._defaultPercentDeadband = defaultPercentDeadband;
+        this.defaultPercentDeadband = defaultPercentDeadband;
     }
 
     public Integer getDefaultTimeBias ()
     {
-        return this._defaultTimeBias;
+        return this.defaultTimeBias;
     }
 
     public void setDefaultTimeBias ( final Integer defaultTimeBias )
     {
-        this._defaultTimeBias = defaultTimeBias;
+        this.defaultTimeBias = defaultTimeBias;
     }
 
     public int getDefaultUpdateRate ()
     {
-        return this._defaultUpdateRate;
+        return this.defaultUpdateRate;
     }
 
     public void setDefaultUpdateRate ( final int defaultUpdateRate )
     {
-        this._defaultUpdateRate = defaultUpdateRate;
+        this.defaultUpdateRate = defaultUpdateRate;
     }
 
     public boolean isDefaultActive ()
     {
-        return this._defaultActive;
+        return this.defaultActive;
     }
 
     public void setDefaultActive ( final boolean defaultActive )
     {
-        this._defaultActive = defaultActive;
+        this.defaultActive = defaultActive;
     }
 
     /**
@@ -379,7 +380,7 @@ public class Server
      */
     public FlatBrowser getFlatBrowser ()
     {
-        final OPCBrowseServerAddressSpace browser = this._server.getBrowser ();
+        final OPCBrowseServerAddressSpace browser = this.server.getBrowser ();
         if ( browser == null )
         {
             return null;
@@ -395,7 +396,7 @@ public class Server
      */
     public TreeBrowser getTreeBrowser () throws JIException
     {
-        final OPCBrowseServerAddressSpace browser = this._server.getBrowser ();
+        final OPCBrowseServerAddressSpace browser = this.server.getBrowser ();
         if ( browser == null )
         {
             return null;
@@ -411,13 +412,13 @@ public class Server
 
     public synchronized String getErrorMessage ( final int errorCode )
     {
-        if ( this._errorMessageResolver == null )
+        if ( this.errorMessageResolver == null )
         {
             return String.format ( "Unknown error (%08X)", errorCode );
         }
 
         // resolve message
-        final String message = this._errorMessageResolver.getMessage ( errorCode );
+        final String message = this.errorMessageResolver.getMessage ( errorCode );
 
         // and return if successfull
         if ( message != null )
@@ -431,18 +432,18 @@ public class Server
 
     public synchronized void addStateListener ( final ServerConnectionStateListener listener )
     {
-        this._stateListeners.add ( listener );
+        this.stateListeners.add ( listener );
         listener.connectionStateChanged ( isConnected () );
     }
 
     public synchronized void removeStateListener ( final ServerConnectionStateListener listener )
     {
-        this._stateListeners.remove ( listener );
+        this.stateListeners.remove ( listener );
     }
 
     protected void notifyConnectionStateChange ( final boolean connected )
     {
-        final List<ServerConnectionStateListener> list = new ArrayList<ServerConnectionStateListener> ( this._stateListeners );
+        final List<ServerConnectionStateListener> list = new ArrayList<ServerConnectionStateListener> ( this.stateListeners );
         for ( final ServerConnectionStateListener listener : list )
         {
             listener.connectionStateChanged ( connected );
@@ -451,7 +452,7 @@ public class Server
 
     public OPCSERVERSTATUS getServerState ( final int timeout ) throws Throwable
     {
-        return new ServerStateOperation ( this._server ).getServerState ( timeout );
+        return new ServerStateOperation ( this.server ).getServerState ( timeout );
     }
 
     public OPCSERVERSTATUS getServerState ()
@@ -462,7 +463,7 @@ public class Server
         }
         catch ( final Throwable e )
         {
-            _log.info ( "Server connection failed", e );
+            logger.info ( "Server connection failed", e );
             dispose ();
             return null;
         }
@@ -470,10 +471,10 @@ public class Server
 
     public void removeGroup ( final Group group, final boolean force ) throws JIException
     {
-        if ( this._groups.containsKey ( group.getServerHandle () ) )
+        if ( this.groups.containsKey ( group.getServerHandle () ) )
         {
-            this._server.removeGroup ( group.getServerHandle (), force );
-            this._groups.remove ( group.getServerHandle () );
+            this.server.removeGroup ( group.getServerHandle (), force );
+            this.groups.remove ( group.getServerHandle () );
         }
     }
 }
