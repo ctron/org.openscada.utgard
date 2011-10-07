@@ -13,7 +13,7 @@ Import-Package: org.jinterop.dcom.common;version="[2.0.0,3.0.0)",
  org.openscada.opc.dcom.da.impl;version="0.6.0",
  org.openscada.opc.dcom.list;version="0.6.0",
  org.openscada.opc.dcom.list.impl;version="0.6.0",
- org.slf4j;version="[1.5.0,1.6.0)",
+ org.slf4j;version="[1.5.0,2.0.0)",
  rpc.core
 Export-Package: org.openscada.opc.lib.common;version="0.7.0",
  org.openscada.opc.lib.da;version="0.7.0";
