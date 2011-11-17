@@ -1,82 +1,77 @@
 <project name="Build specific targets and properties" default="noDefault" xmlns:ivy="antlib:org.apache.ivy.ant">
 
 	<property name="build.root" location=".."/>
-	<import file="${build.root}/lib/lib.xml"/>
-	
-	<property file="${builder}/../config/local.properties"/>
-	<property file="${builder}/../config/build.properties"/>
-	<property file="${builder}/../common/config/local.properties"/>
-	<property file="${builder}/../common/config/build.properties"/>
+		
+	<import file="${build.root}/global/lib.xml"/>
 	
 	<!-- ===================================================================== -->
-		<!-- Run a given ${target} on all elements being built -->
-		<!-- Add on <ant> task for each top level element being built. -->
-		<!-- ===================================================================== -->
-		<!--<available property="allElementsFile" file="${builder}/allElements.xml" value="${builder}/allElements.xml"/>-->
-		<property name="allElementsFile" location="${eclipse.pdebuild.templates}/headless-build/allElements.xml"/>
+	<!-- Run a given ${target} on all elements being built -->
+	<!-- Add on <ant> task for each top level element being built. -->
+	<!-- ===================================================================== -->
+	<!--<available property="allElementsFile" file="${builder}/allElements.xml" value="${builder}/allElements.xml"/>-->
+	<property name="allElementsFile" location="${eclipse.pdebuild.templates}/headless-build/allElements.xml"/>
 
-		<import file="${allElementsFile}" />
-		<target name="allElements">
-			<antcall target="allElementsDelegator" />
-		</target>
-		
-		<!-- ===================================================================== -->
-		<!-- ===================================================================== -->
-		<target name="getBaseComponents" depends="checkLocalBase" unless="skipBase">
-			<get src="${eclipseBaseURL}" dest="${buildDirectory}/../temp-base.zip" />
-			<unzip dest="${base}" overwrite="true" src="${buildDirectory}/../temp-base.zip" />
-		</target>
-
-		<target name="checkLocalBase">
-			<available file="${base}" property="skipBase" />
-		</target>
-
-		<!-- ===================================================================== -->
-		<!-- Check out map files from correct repository -->
-		<!-- Replace values for mapsCheckoutTag as desired. -->
-		<!-- ===================================================================== -->
-		<target name="getMapFiles" depends="checkLocalMaps" unless="skipMaps">
-			<echo message="Getting map files"/>
-			<property name="mapsCheckoutTag" value="HEAD" />
-			<mkdir dir="${buildDirectory}/maps"/>
-			<copy todir="${buildDirectory}/maps">
-				<fileset dir="${builder}/maps">
-					<include name="**/*.map"/>
-				</fileset>
-			</copy>
-		</target>
-
-		<target name="checkLocalMaps">
-			<available property="skipMaps" file="${buildDirectory}/maps" />
-		</target>
-
-		<target name="tagMapFiles" if="tagMaps">
-			<cvs dest="${buildDirectory}/maps/${mapsRoot}" command="tag ${mapsTagTag}" />
-		</target>
-
-		<!-- ===================================================================== -->
-
-		<target name="clean" unless="noclean">
-			<antcall target="allElements">
-				<param name="target" value="cleanElement" />
-			</antcall>
-		</target>
-
-		<target name="gatherLogs">
-			<mkdir dir="${buildDirectory}/${buildLabel}/compilelogs" />
-			<antcall target="allElements">
-				<param name="target" value="gatherLogs" />
-			</antcall>
-			<unzip dest="${buildDirectory}/${buildLabel}/compilelogs" overwrite="true">
-				<fileset dir="${buildDirectory}/features">
-					<include name="**/*.log.zip" />
-				</fileset>
-			</unzip>
-		</target>
+	<import file="${allElementsFile}" />
+	<target name="allElements">
+		<antcall target="allElementsDelegator" />
+	</target>
 	
-	<target name="preProcessRepos">
-		<openscada.import.repository id="org.openscada.external.sdk" version="${external.version}" todir="${repoBaseLocation}"/>
-		<openscada.import.repository id="org.openscada.aurora.sdk" version="${aurora.version}" todir="${repoBaseLocation}"/>
+	<!-- ===================================================================== -->
+	<!-- ===================================================================== -->
+	<target name="getBaseComponents" depends="checkLocalBase" unless="skipBase">
+		<get src="${eclipseBaseURL}" dest="${buildDirectory}/../temp-base.zip" />
+		<unzip dest="${base}" overwrite="true" src="${buildDirectory}/../temp-base.zip" />
+	</target>
+
+	<target name="checkLocalBase">
+		<available file="${base}" property="skipBase" />
+	</target>
+
+	<!-- ===================================================================== -->
+	<!-- Check out map files from correct repository -->
+	<!-- Replace values for mapsCheckoutTag as desired. -->
+	<!-- ===================================================================== -->
+	<target name="getMapFiles" depends="checkLocalMaps" unless="skipMaps">
+		<echo message="Getting map files"/>
+		<property name="mapsCheckoutTag" value="HEAD" />
+		<mkdir dir="${buildDirectory}/maps"/>
+		<copy todir="${buildDirectory}/maps">
+			<fileset dir="${builder}/maps">
+				<include name="**/*.map"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="checkLocalMaps">
+		<available property="skipMaps" file="${buildDirectory}/maps" />
+	</target>
+
+	<target name="tagMapFiles" if="tagMaps">
+		<cvs dest="${buildDirectory}/maps/${mapsRoot}" command="tag ${mapsTagTag}" />
+	</target>
+
+	<!-- ===================================================================== -->
+
+	<target name="clean" unless="noclean">
+		<antcall target="allElements">
+			<param name="target" value="cleanElement" />
+		</antcall>
+	</target>
+
+	<target name="gatherLogs">
+		<mkdir dir="${buildDirectory}/${buildLabel}/compilelogs" />
+		<antcall target="allElements">
+			<param name="target" value="gatherLogs" />
+		</antcall>
+		<unzip dest="${buildDirectory}/${buildLabel}/compilelogs" overwrite="true">
+			<fileset dir="${buildDirectory}/features">
+				<include name="**/*.log.zip" />
+			</fileset>
+		</unzip>
+	</target>
+	
+	<target name="preProcessRepos">	
+		<openscada.importAllRepositories/>
   	</target>
 
 	<!-- - - - - - - - - - - - - - - - - - 
