@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="project" default="default" basedir=".">
     <description>
-            Build Bootstrapper - 0.1.0
+            Build Bootstrapper - 0.1.1
     </description>
 
 	<property file="bootstrap.properties"/>
+	
+	<property name="input.dir" location="input"/>
 	
     <!-- ================================= 
           target: default
@@ -18,9 +20,11 @@
 
     	<!-- unzip -->
 
-    	<get src="${bootstrap.uri}" dest="builder.zip"/>
-    	<unzip dest="global" src="builder.zip"/>
-    	<delete file="builder.zip"/>
+    	<mkdir dir="${input.dir}" />
+    	<delete file="${input.dir}/builder.zip" failonerror="false" />
+    	
+    	<get src="${bootstrap.uri}" dest="${input.dir}/builder.zip"/>
+    	<unzip dest="global" src="${input.dir}/builder.zip"/>
     </target>
 
 </project>
