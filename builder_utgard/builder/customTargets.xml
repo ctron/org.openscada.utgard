@@ -132,6 +132,12 @@
   <!-- Steps to do before running the build.xmls for the elements being built. -->
   <!-- ===================================================================== -->
   <target name="preProcess">
+	<property file="${buildDirectory}/finalFeaturesVersions.properties"/>
+  	<echo message="Setting about versions: ${org.openscada.utgard}"/>
+  	<replace dir="${buildDirectory}/plugins" value="${org.openscada.utgard}">
+  		<include name="**/about.mappings"/>
+  		<replacetoken>@@VERSION@@</replacetoken>
+  	</replace>
   </target>
 
   <!-- ===================================================================== -->
