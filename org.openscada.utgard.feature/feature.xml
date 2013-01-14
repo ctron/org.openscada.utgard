@@ -17,6 +17,12 @@
       %license
    </license>
 
+   <requires>
+      <import plugin="org.openscada.jinterop.deps"/>
+      <import plugin="slf4j.api"/>
+      <import plugin="org.openscada.utils"/>
+   </requires>
+
    <plugin
          id="org.openscada.opc.dcom"
          download-size="0"
