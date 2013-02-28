@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="ASCII"?>
+<properties:properties xmlns:properties="urn:openscada:doc:content:properties">
+  <properties:groups properties:prefix="org.openscada.opc.lib">
+    <properties:properties properties:name="rpc.socketTimeout" properties:dataType="INTEGER" properties:shortDescription="Defines the communication timeout for DCOM RPC requests in milliseconds">
+      <properties:defaultValue>0</properties:defaultValue>
+      <properties:longDescription>
+      Sets the communication timeout of the DCOM RPC requests in milliseconds. If the value is left with the default (zero) requests will never fail due to communication timeout.
+      
+      Use the default with care. If you are really communicating over a remote line, you should consider setting a value here.
+      </properties:longDescription>
+    </properties:properties>
+  </properties:groups>
+</properties:properties>

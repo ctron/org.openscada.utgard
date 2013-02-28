@@ -1,21 +1,21 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.openscada.opc.dcom
-Bundle-Version: 0.7.0.qualifier
-Bundle-Name: OpenSCADA Utgard DCOM Mappings
-Bundle-Vendor: TH4 SYSTEMS GmbH
+Bundle-Version: 1.0.0.qualifier
+Bundle-Name: openSCADA Utgard DCOM Mappings
+Bundle-Vendor: openSCADA.org
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: org.jinterop.dcom.common,
- org.jinterop.dcom.core,
- org.jinterop.dcom.impls,
+Import-Package: org.jinterop.dcom.common;version="2.0.0",
+ org.jinterop.dcom.core;version="2.0.0",
+ org.jinterop.dcom.impls;version="2.0.0",
  rpc.core
-Export-Package: org.openscada.opc.dcom.common;version="0.7.0";uses:="org.jinterop.dcom.core",
- org.openscada.opc.dcom.common.impl;version="0.7.0";uses:="org.jinterop.dcom.core,org.openscada.opc.dcom.common",
- org.openscada.opc.dcom.da;version="0.7.0";uses:="org.jinterop.dcom.core,org.openscada.opc.dcom.common",
- org.openscada.opc.dcom.da.impl;version="0.7.0";
+Export-Package: org.openscada.opc.dcom.common;version="1.0.0";uses:="org.jinterop.dcom.core",
+ org.openscada.opc.dcom.common.impl;version="1.0.0";uses:="org.jinterop.dcom.core,org.openscada.opc.dcom.common",
+ org.openscada.opc.dcom.da;version="1.0.0";uses:="org.jinterop.dcom.core,org.openscada.opc.dcom.common",
+ org.openscada.opc.dcom.da.impl;version="1.0.0";
   uses:="org.jinterop.dcom.core,
    org.openscada.opc.dcom.da,
    org.openscada.opc.dcom.common.impl,
    org.openscada.opc.dcom.common",
- org.openscada.opc.dcom.list;version="0.7.0";uses:="org.openscada.opc.dcom.common",
- org.openscada.opc.dcom.list.impl;version="0.7.0";uses:="org.jinterop.dcom.core,org.openscada.opc.dcom.list,org.openscada.opc.dcom.common.impl"
+ org.openscada.opc.dcom.list;version="1.0.0";uses:="org.openscada.opc.dcom.common",
+ org.openscada.opc.dcom.list.impl;version="1.0.0";uses:="org.jinterop.dcom.core,org.openscada.opc.dcom.list,org.openscada.opc.dcom.common.impl"

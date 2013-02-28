@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ASCII"?>
+<properties:properties xmlns:properties="urn:openscada:doc:content:properties">
+  <properties:groups properties:prefix="org.openscada.opc.dcom">
+    <properties:properties properties:name="openscada.dcom.enum-batch-size" properties:dataType="INTEGER"
+    	properties:shortDescription="Defines the number of entried read in each batch fromt the OPC server">
+      <properties:defaultValue>10</properties:defaultValue>
+      <properties:longDescription>
+      This number defines the number of entries read in one request when requesting
+      information from the OPC server. The small the size, the worse the communication performance. But if the
+      the requests get "too big" they will fail and communication will break.
+      
+      Only set this value to anything else than the default if you really know what you are doing.
+      </properties:longDescription>
+    </properties:properties>
+  </properties:groups>
+</properties:properties>

@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: TestCases for org.openscada.opc.lib
 Bundle-SymbolicName: org.openscada.opc.lib.test
-Bundle-Version: 0.7.0.qualifier
-Bundle-Vendor: TH4 SYSTEMS GmbH
-Fragment-Host: org.openscada.opc.lib;bundle-version="0.7.0"
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: openSCADA.org
+Fragment-Host: org.openscada.opc.lib;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: org.openscada.utils.exec;version="0.15.0"
+Import-Package: org.openscada.utils.exec;version="1.0.0"

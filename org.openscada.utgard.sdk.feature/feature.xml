@@ -3,7 +3,7 @@
       id="org.openscada.utgard.sdk"
       label="openSCADA Utgard SDK"
       version="1.0.0.qualifier"
-      provider-name="TH4 SYSTEMS GmbH">
+      provider-name="openSCADA.org">
 
    <description>
       openSCADA OPC Components (SDK)
