@@ -39,7 +39,6 @@ import org.openscada.opc.dcom.da.OPCGroupState;
  * Implementation of <code>IOPCGroupStateMgt</code>
  * 
  * @author Jens Reimann <jens.reimann@th4-systems.com>
- * 
  */
 public class OPCGroupStateMgt extends BaseCOMObject
 {
@@ -50,7 +49,7 @@ public class OPCGroupStateMgt extends BaseCOMObject
 
     public OPCGroupState getState () throws JIException
     {
-        JICallBuilder callObject = new JICallBuilder ( true );
+        final JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 0 );
 
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
@@ -62,9 +61,9 @@ public class OPCGroupStateMgt extends BaseCOMObject
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
 
-        Object result[] = getCOMObject ().call ( callObject );
+        final Object result[] = getCOMObject ().call ( callObject );
 
-        OPCGroupState state = new OPCGroupState ();
+        final OPCGroupState state = new OPCGroupState ();
         state.setUpdateRate ( (Integer)result[0] );
         state.setActive ( (Boolean)result[1] );
         state.setName ( ( (JIString) ( (JIPointer)result[2] ).getReferent () ).getString () );
@@ -78,10 +77,7 @@ public class OPCGroupStateMgt extends BaseCOMObject
     }
 
     /**
-     * Set the group state
-     * 
-     * Leaving any of the parameters <code>null</code> will keep the current
-     * value untouched.
+     * Set the group state Leaving any of the parameters <code>null</code> will keep the current value untouched.
      * 
      * @param requestedUpdateRate
      *            the requested update rate
@@ -100,7 +96,7 @@ public class OPCGroupStateMgt extends BaseCOMObject
      */
     public int setState ( final Integer requestedUpdateRate, final Boolean active, final Integer timeBias, final Float percentDeadband, final Integer localeID, final Integer clientHandle ) throws JIException
     {
-        JICallBuilder callObject = new JICallBuilder ( true );
+        final JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 1 );
 
         callObject.addInParamAsPointer ( new JIPointer ( requestedUpdateRate ), JIFlags.FLAG_NULL );
@@ -119,12 +115,12 @@ public class OPCGroupStateMgt extends BaseCOMObject
 
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
 
-        Object[] result = getCOMObject ().call ( callObject );
+        final Object[] result = getCOMObject ().call ( callObject );
 
         return (Integer)result[0];
     }
 
-    public OPCItemMgt getItemManagement () throws IllegalArgumentException, UnknownHostException, JIException
+    public OPCItemMgt getItemManagement () throws JIException
     {
         return new OPCItemMgt ( getCOMObject () );
     }
@@ -138,7 +134,7 @@ public class OPCGroupStateMgt extends BaseCOMObject
      */
     public void setName ( final String name ) throws JIException
     {
-        JICallBuilder callObject = new JICallBuilder ( true );
+        final JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 2 );
 
         callObject.addInParamAsString ( name, JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR );
@@ -158,14 +154,14 @@ public class OPCGroupStateMgt extends BaseCOMObject
      */
     public OPCGroupStateMgt clone ( final String name ) throws JIException, IllegalArgumentException, UnknownHostException
     {
-        JICallBuilder callObject = new JICallBuilder ( true );
+        final JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 3 );
 
         callObject.addInParamAsString ( name, JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR );
         callObject.addInParamAsUUID ( Constants.IOPCGroupStateMgt_IID, JIFlags.FLAG_NULL );
         callObject.addOutParamAsType ( IJIComObject.class, JIFlags.FLAG_NULL );
 
-        Object[] result = getCOMObject ().call ( callObject );
+        final Object[] result = getCOMObject ().call ( callObject );
         return new OPCGroupStateMgt ( (IJIComObject)result[0] );
     }
 
@@ -179,7 +175,7 @@ public class OPCGroupStateMgt extends BaseCOMObject
      */
     public EventHandler attach ( final IOPCDataCallback callback ) throws JIException
     {
-        OPCDataCallback callbackObject = new OPCDataCallback ();
+        final OPCDataCallback callbackObject = new OPCDataCallback ();
 
         callbackObject.setCallback ( callback );
 
@@ -189,7 +185,7 @@ public class OPCGroupStateMgt extends BaseCOMObject
         // the method attachEventHandler returns.
         synchronized ( callbackObject )
         {
-            String id = JIFrameworkHelper.attachEventHandler ( getCOMObject (), Constants.IOPCDataCallback_IID, JIObjectFactory.buildObject ( getCOMObject ().getAssociatedSession (), callbackObject.getCoClass () ) );
+            final String id = JIFrameworkHelper.attachEventHandler ( getCOMObject (), Constants.IOPCDataCallback_IID, JIObjectFactory.buildObject ( getCOMObject ().getAssociatedSession (), callbackObject.getCoClass () ) );
 
             callbackObject.setInfo ( getCOMObject (), id );
         }
@@ -202,7 +198,7 @@ public class OPCGroupStateMgt extends BaseCOMObject
         {
             return new OPCAsyncIO2 ( getCOMObject () );
         }
-        catch ( Exception e )
+        catch ( final Exception e )
         {
             return null;
         }
@@ -214,7 +210,7 @@ public class OPCGroupStateMgt extends BaseCOMObject
         {
             return new OPCSyncIO ( getCOMObject () );
         }
-        catch ( Exception e )
+        catch ( final Exception e )
         {
             return null;
         }

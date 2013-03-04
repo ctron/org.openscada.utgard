@@ -2,11 +2,11 @@
 <feature
       id="org.openscada.utgard.sdk"
       label="openSCADA Utgard SDK"
-      version="0.10.0.qualifier"
-      provider-name="TH4 SYSTEMS GmbH">
+      version="1.0.0.qualifier"
+      provider-name="openSCADA.org">
 
    <description>
-      OpenSCADA OPC Components (SDK)
+      openSCADA OPC Components (SDK)
    </description>
 
    <copyright url="http://opensource.org/licenses/lgpl-3.0.html">

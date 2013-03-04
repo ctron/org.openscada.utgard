@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -28,86 +28,87 @@ import org.jinterop.dcom.core.JIVariant;
 
 public class OPCITEMDEF
 {
-    private String _accessPath = "";
+    private String accessPath = "";
 
-    private String _itemID = "";
+    private String itemID = "";
 
-    private boolean _active = true;
+    private boolean active = true;
 
-    private int _clientHandle = 0;
+    private int clientHandle;
 
-    private short _requestedDataType = JIVariant.VT_EMPTY;
+    private short requestedDataType = JIVariant.VT_EMPTY;
 
-    private short _reserved = 0;
+    private short reserved;
 
     public String getAccessPath ()
     {
-        return this._accessPath;
+        return this.accessPath;
     }
 
     public void setAccessPath ( final String accessPath )
     {
-        this._accessPath = accessPath;
+        this.accessPath = accessPath;
     }
 
     public int getClientHandle ()
     {
-        return this._clientHandle;
+        return this.clientHandle;
     }
 
     public void setClientHandle ( final int clientHandle )
     {
-        this._clientHandle = clientHandle;
+        this.clientHandle = clientHandle;
     }
 
     public boolean isActive ()
     {
-        return this._active;
+        return this.active;
     }
 
-    public void setActive ( final boolean ctive )
+    public void setActive ( final boolean active )
     {
-        this._active = ctive;
+        this.active = active;
     }
 
     public String getItemID ()
     {
-        return this._itemID;
+        return this.itemID;
     }
 
     public void setItemID ( final String itemID )
     {
-        this._itemID = itemID;
+        this.itemID = itemID;
     }
 
     public short getRequestedDataType ()
     {
-        return this._requestedDataType;
+        return this.requestedDataType;
     }
 
     public void setRequestedDataType ( final short requestedDataType )
     {
-        this._requestedDataType = requestedDataType;
+        this.requestedDataType = requestedDataType;
     }
 
     public short getReserved ()
     {
-        return this._reserved;
+        return this.reserved;
     }
 
     public void setReserved ( final short reserved )
     {
-        this._reserved = reserved;
+        this.reserved = reserved;
     }
 
     /**
      * Convert to structure to a J-Interop structure
+     * 
      * @return the j-interop structe
      * @throws JIException
      */
     public JIStruct toStruct () throws JIException
     {
-        JIStruct struct = new JIStruct ();
+        final JIStruct struct = new JIStruct ();
         struct.addMember ( new JIString ( getAccessPath (), JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) );
         struct.addMember ( new JIString ( getItemID (), JIFlags.FLAG_REPRESENTATION_STRING_LPWSTR ) );
         struct.addMember ( new Integer ( isActive () ? 1 : 0 ) );
