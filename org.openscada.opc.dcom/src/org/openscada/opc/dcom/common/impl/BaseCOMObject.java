@@ -1,6 +1,8 @@
 /*
  * This file is part of the OpenSCADA project
+ * 
  * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2013 Jens Reimann (ctron@dentrassi.de)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -23,20 +25,21 @@ import org.jinterop.dcom.core.IJIComObject;
 
 public class BaseCOMObject
 {
-    private IJIComObject _comObject = null;
+    private IJIComObject comObject = null;
 
     /**
      * Create a new base COM object
-     * @param comObject The COM object to wrap but be addRef'ed
+     * 
+     * @param comObject
+     *            The COM object to wrap but be addRef'ed
      */
     public BaseCOMObject ( final IJIComObject comObject )
     {
-        super ();
-        this._comObject = comObject;
+        this.comObject = comObject;
     }
 
     protected synchronized IJIComObject getCOMObject ()
     {
-        return this._comObject;
+        return this.comObject;
     }
 }

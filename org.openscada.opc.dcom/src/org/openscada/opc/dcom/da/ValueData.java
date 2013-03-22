@@ -1,6 +1,8 @@
 /*
  * This file is part of the OpenSCADA project
+ * 
  * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2013 Jens Reimann (ctron@dentrassi.de)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -25,39 +27,39 @@ import org.jinterop.dcom.core.JIVariant;
 
 public class ValueData
 {
-    private JIVariant _value;
+    private JIVariant value;
 
-    private short _quality;
+    private short quality;
 
-    private Calendar _timestamp;
+    private Calendar timestamp;
 
     public short getQuality ()
     {
-        return this._quality;
+        return this.quality;
     }
 
     public void setQuality ( final short quality )
     {
-        this._quality = quality;
+        this.quality = quality;
     }
 
     public Calendar getTimestamp ()
     {
-        return this._timestamp;
+        return this.timestamp;
     }
 
     public void setTimestamp ( final Calendar timestamp )
     {
-        this._timestamp = timestamp;
+        this.timestamp = timestamp;
     }
 
     public JIVariant getValue ()
     {
-        return this._value;
+        return this.value;
     }
 
     public void setValue ( final JIVariant value )
     {
-        this._value = value;
+        this.value = value;
     }
 }

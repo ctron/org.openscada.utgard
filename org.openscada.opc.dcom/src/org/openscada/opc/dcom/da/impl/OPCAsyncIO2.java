@@ -1,6 +1,8 @@
 /*
  * This file is part of the OpenSCADA project
+ * 
  * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2013 Jens Reimann (ctron@dentrassi.de)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -37,32 +39,32 @@ public class OPCAsyncIO2 extends BaseCOMObject
 {
     public class AsyncResult
     {
-        private ResultSet<Integer> _result = null;
+        private final ResultSet<Integer> result;
 
-        private Integer _cancelId = null;
+        private final Integer cancelId;
 
         public AsyncResult ()
         {
             super ();
-            this._result = new ResultSet<Integer> ();
-            this._cancelId = null;
+            this.result = new ResultSet<Integer> ();
+            this.cancelId = null;
         }
 
         public AsyncResult ( final ResultSet<Integer> result, final Integer cancelId )
         {
             super ();
-            this._result = result;
-            this._cancelId = cancelId;
+            this.result = result;
+            this.cancelId = cancelId;
         }
 
         public Integer getCancelId ()
         {
-            return this._cancelId;
+            return this.cancelId;
         }
 
         public ResultSet<Integer> getResult ()
         {
-            return this._result;
+            return this.result;
         }
     }
 
@@ -73,7 +75,7 @@ public class OPCAsyncIO2 extends BaseCOMObject
 
     public void setEnable ( final boolean state ) throws JIException
     {
-        JICallBuilder callObject = new JICallBuilder ( true );
+        final JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 4 );
 
         callObject.addInParamAsInt ( state ? 1 : 0, JIFlags.FLAG_NULL );
@@ -83,21 +85,21 @@ public class OPCAsyncIO2 extends BaseCOMObject
 
     public int refresh ( final OPCDATASOURCE dataSource, final int transactionID ) throws JIException
     {
-        JICallBuilder callObject = new JICallBuilder ( true );
+        final JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 2 );
 
         callObject.addInParamAsShort ( (short)dataSource.id (), JIFlags.FLAG_NULL );
         callObject.addInParamAsInt ( transactionID, JIFlags.FLAG_NULL );
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
 
-        Object result[] = getCOMObject ().call ( callObject );
+        final Object result[] = getCOMObject ().call ( callObject );
 
         return (Integer)result[0];
     }
 
     public void cancel ( final int cancelId ) throws JIException
     {
-        JICallBuilder callObject = new JICallBuilder ( true );
+        final JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 3 );
 
         callObject.addInParamAsInt ( cancelId, JIFlags.FLAG_NULL );
@@ -112,7 +114,7 @@ public class OPCAsyncIO2 extends BaseCOMObject
             return new AsyncResult ();
         }
 
-        JICallBuilder callObject = new JICallBuilder ( true );
+        final JICallBuilder callObject = new JICallBuilder ( true );
         callObject.setOpnum ( 0 );
 
         callObject.addInParamAsInt ( serverHandles.length, JIFlags.FLAG_NULL );
@@ -122,12 +124,12 @@ public class OPCAsyncIO2 extends BaseCOMObject
         callObject.addOutParamAsType ( Integer.class, JIFlags.FLAG_NULL );
         callObject.addOutParamAsObject ( new JIPointer ( new JIArray ( Integer.class, null, 1, true ) ), JIFlags.FLAG_NULL );
 
-        Object[] result = getCOMObject ().call ( callObject );
+        final Object[] result = getCOMObject ().call ( callObject );
 
-        Integer cancelId = (Integer)result[0];
-        Integer[] errorCodes = (Integer[]) ( (JIArray) ( (JIPointer)result[1] ).getReferent () ).getArrayInstance ();
+        final Integer cancelId = (Integer)result[0];
+        final Integer[] errorCodes = (Integer[]) ( (JIArray) ( (JIPointer)result[1] ).getReferent () ).getArrayInstance ();
 
-        ResultSet<Integer> resultSet = new ResultSet<Integer> ();
+        final ResultSet<Integer> resultSet = new ResultSet<Integer> ();
 
         for ( int i = 0; i < serverHandles.length; i++ )
         {

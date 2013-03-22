@@ -1,6 +1,8 @@
 /*
  * This file is part of the OpenSCADA project
+ * 
  * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2013 Jens Reimann (ctron@dentrassi.de)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -21,9 +23,9 @@ package org.openscada.opc.dcom.common;
 
 public class Result<T>
 {
-    private T _value = null;
+    private T value;
 
-    private int _errorCode = 0;
+    private int errorCode;
 
     public Result ()
     {
@@ -31,32 +33,32 @@ public class Result<T>
 
     public Result ( final T value, final int errorCode )
     {
-        this._value = value;
-        this._errorCode = errorCode;
+        this.value = value;
+        this.errorCode = errorCode;
     }
 
     public int getErrorCode ()
     {
-        return this._errorCode;
+        return this.errorCode;
     }
 
     public void setErrorCode ( final int errorCode )
     {
-        this._errorCode = errorCode;
+        this.errorCode = errorCode;
     }
 
     public T getValue ()
     {
-        return this._value;
+        return this.value;
     }
 
     public void setValue ( final T value )
     {
-        this._value = value;
+        this.value = value;
     }
 
     public boolean isFailed ()
     {
-        return this._errorCode != 0;
+        return this.errorCode != 0;
     }
 }

@@ -1,6 +1,8 @@
 /*
  * This file is part of the OpenSCADA project
+ * 
  * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2013 Jens Reimann (ctron@dentrassi.de)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -23,53 +25,56 @@ import org.jinterop.dcom.core.JIVariant;
 
 /**
  * Data for a write request to the server
+ * 
  * @author Jens Reimann <jens.reimann@th4-systems.com>
- *
  */
 public class WriteRequest
 {
-    private int _serverHandle = 0;
+    private int serverHandle = 0;
 
-    private JIVariant _value = JIVariant.EMPTY ();
+    private JIVariant value = JIVariant.EMPTY ();
 
     public WriteRequest ()
     {
     }
 
-    public WriteRequest ( final WriteRequest arg0 )
+    public WriteRequest ( final WriteRequest request )
     {
-        this._serverHandle = arg0._serverHandle;
-        this._value = arg0._value;
+        this.serverHandle = request.serverHandle;
+        this.value = request.value;
     }
 
     /**
      * Create a new write request with pre-fille data
-     * @param serverHandle the server handle of the item to write to
-     * @param value the value to write.
+     * 
+     * @param serverHandle
+     *            the server handle of the item to write to
+     * @param value
+     *            the value to write.
      */
     public WriteRequest ( final int serverHandle, final JIVariant value )
     {
-        this._serverHandle = serverHandle;
-        this._value = value;
+        this.serverHandle = serverHandle;
+        this.value = value;
     }
 
     public int getServerHandle ()
     {
-        return this._serverHandle;
+        return this.serverHandle;
     }
 
     public void setServerHandle ( final int serverHandle )
     {
-        this._serverHandle = serverHandle;
+        this.serverHandle = serverHandle;
     }
 
     public JIVariant getValue ()
     {
-        return this._value;
+        return this.value;
     }
 
     public void setValue ( final JIVariant value )
     {
-        this._value = value;
+        this.value = value;
     }
 }

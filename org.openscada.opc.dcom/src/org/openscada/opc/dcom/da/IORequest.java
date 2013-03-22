@@ -1,6 +1,8 @@
 /*
  * This file is part of the OpenSCADA project
+ * 
  * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2013 Jens Reimann (ctron@dentrassi.de)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -21,34 +23,34 @@ package org.openscada.opc.dcom.da;
 
 public class IORequest
 {
-    private String _itemID;
+    private String itemID;
 
-    private int _maxAge;
+    private int maxAge;
 
     public IORequest ( final String itemID, final int maxAge )
     {
-        this._itemID = itemID;
-        this._maxAge = maxAge;
+        this.itemID = itemID;
+        this.maxAge = maxAge;
     }
 
     public String getItemID ()
     {
-        return this._itemID;
+        return this.itemID;
     }
 
     public void setItemID ( final String itemID )
     {
-        this._itemID = itemID;
+        this.itemID = itemID;
     }
 
     public int getMaxAge ()
     {
-        return this._maxAge;
+        return this.maxAge;
     }
 
     public void setMaxAge ( final int maxAge )
     {
-        this._maxAge = maxAge;
+        this.maxAge = maxAge;
     }
 
 }

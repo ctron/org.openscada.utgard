@@ -26,38 +26,38 @@ import org.openscada.opc.dcom.common.EventHandler;
 
 public class EventHandlerImpl implements EventHandler
 {
-    private String _identifier = null;
+    private String identifier = null;
 
-    private IJIComObject _object = null;
+    private IJIComObject object = null;
 
     public String getIdentifier ()
     {
-        return this._identifier;
+        return this.identifier;
     }
 
     public synchronized IJIComObject getObject ()
     {
-        return this._object;
+        return this.object;
     }
 
     public synchronized void setInfo ( final IJIComObject object, final String identifier )
     {
-        this._object = object;
-        this._identifier = identifier;
+        this.object = object;
+        this.identifier = identifier;
     }
 
     public synchronized void detach () throws JIException
     {
-        if ( this._object != null && this._identifier != null )
+        if ( this.object != null && this.identifier != null )
         {
             try
             {
-                JIFrameworkHelper.detachEventHandler ( this._object, this._identifier );
+                JIFrameworkHelper.detachEventHandler ( this.object, this.identifier );
             }
             finally
             {
-                this._object = null;
-                this._identifier = null;
+                this.object = null;
+                this.identifier = null;
             }
         }
     }
