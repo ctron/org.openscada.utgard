@@ -1,18 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>org.openscada.utgard-parent</artifactId>
 		<groupId>org.openscada.utgard</groupId>
-		<version>1.1.0</version>
+		<version>1.1.0-SNAPSHOT</version>
 		<relativePath>../builder_utgard</relativePath>
 	</parent>
 
 	<groupId>org.openscada.utgard.features</groupId>
 	<artifactId>org.openscada.utgard</artifactId>
-	<version>1.0.0.qualifier</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<packaging>eclipse-feature</packaging>
 
 	<!-- source features -->
