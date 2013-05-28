@@ -1,6 +1,8 @@
 /*
  * This file is part of the OpenSCADA project
+ * 
  * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2013 Jens Reimann (ctron@dentrassi.de)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -43,9 +45,9 @@ import org.openscada.opc.dcom.da.ValueData;
 
 public class OPCDataCallback extends EventHandlerImpl
 {
-    private IOPCDataCallback _callback = null;
+    private IOPCDataCallback callback = null;
 
-    private JILocalCoClass _coClass = null;
+    private JILocalCoClass coClass = null;
 
     public OPCDataCallback ()
     {
@@ -54,24 +56,24 @@ public class OPCDataCallback extends EventHandlerImpl
 
     public Object[] OnDataChange ( final int transactionId, final int serverGroupHandle, final int masterQuality, final int masterErrorCode, final int count, final JIArray clientHandles, final JIArray values, final JIArray qualities, final JIArray timestamps, final JIArray errors )
     {
-        IOPCDataCallback callback = this._callback;
+        final IOPCDataCallback callback = this.callback;
         if ( callback == null )
         {
             return new Object[] { org.openscada.opc.dcom.common.Constants.S_OK };
         }
 
         // get arrays for more readable code later ;-)
-        Integer[] errorCodes = (Integer[])errors.getArrayInstance ();
-        Integer[] itemHandles = (Integer[])clientHandles.getArrayInstance ();
-        Short[] qualitiesArray = (Short[])qualities.getArrayInstance ();
-        JIVariant[] valuesArray = (JIVariant[])values.getArrayInstance ();
-        JIStruct[] timestampArray = (JIStruct[])timestamps.getArrayInstance ();
+        final Integer[] errorCodes = (Integer[])errors.getArrayInstance ();
+        final Integer[] itemHandles = (Integer[])clientHandles.getArrayInstance ();
+        final Short[] qualitiesArray = (Short[])qualities.getArrayInstance ();
+        final JIVariant[] valuesArray = (JIVariant[])values.getArrayInstance ();
+        final JIStruct[] timestampArray = (JIStruct[])timestamps.getArrayInstance ();
 
         // create result data
-        KeyedResultSet<Integer, ValueData> result = new KeyedResultSet<Integer, ValueData> ();
+        final KeyedResultSet<Integer, ValueData> result = new KeyedResultSet<Integer, ValueData> ();
         for ( int i = 0; i < count; i++ )
         {
-            ValueData vd = new ValueData ();
+            final ValueData vd = new ValueData ();
             vd.setQuality ( qualitiesArray[i] );
             vd.setTimestamp ( FILETIME.fromStruct ( timestampArray[i] ).asCalendar () );
             vd.setValue ( valuesArray[i] );
@@ -83,7 +85,7 @@ public class OPCDataCallback extends EventHandlerImpl
         {
             callback.dataChange ( transactionId, serverGroupHandle, masterQuality, masterErrorCode, result );
         }
-        catch ( Throwable e )
+        catch ( final Throwable e )
         {
             e.printStackTrace ();
         }
@@ -94,23 +96,23 @@ public class OPCDataCallback extends EventHandlerImpl
 
     public synchronized Object[] OnReadComplete ( final int transactionId, final int serverGroupHandle, final int masterQuality, final int masterErrorCode, final int count, final JIArray clientHandles, final JIArray values, final JIArray qualities, final JIArray timestamps, final JIArray errors )
     {
-        if ( this._callback == null )
+        if ( this.callback == null )
         {
             return new Object[] { org.openscada.opc.dcom.common.Constants.S_OK };
         }
 
         // get arrays for more readable code later ;-)
-        Integer[] errorCodes = (Integer[])errors.getArrayInstance ();
-        Integer[] itemHandles = (Integer[])clientHandles.getArrayInstance ();
-        Short[] qualitiesArray = (Short[])qualities.getArrayInstance ();
-        JIVariant[] valuesArray = (JIVariant[])values.getArrayInstance ();
-        JIStruct[] timestampArray = (JIStruct[])timestamps.getArrayInstance ();
+        final Integer[] errorCodes = (Integer[])errors.getArrayInstance ();
+        final Integer[] itemHandles = (Integer[])clientHandles.getArrayInstance ();
+        final Short[] qualitiesArray = (Short[])qualities.getArrayInstance ();
+        final JIVariant[] valuesArray = (JIVariant[])values.getArrayInstance ();
+        final JIStruct[] timestampArray = (JIStruct[])timestamps.getArrayInstance ();
 
         // create result data
-        KeyedResultSet<Integer, ValueData> result = new KeyedResultSet<Integer, ValueData> ();
+        final KeyedResultSet<Integer, ValueData> result = new KeyedResultSet<Integer, ValueData> ();
         for ( int i = 0; i < count; i++ )
         {
-            ValueData vd = new ValueData ();
+            final ValueData vd = new ValueData ();
             vd.setQuality ( qualitiesArray[i] );
             vd.setTimestamp ( FILETIME.fromStruct ( timestampArray[i] ).asCalendar () );
             vd.setValue ( valuesArray[i] );
@@ -120,9 +122,9 @@ public class OPCDataCallback extends EventHandlerImpl
         // fire event
         try
         {
-            this._callback.readComplete ( transactionId, serverGroupHandle, masterQuality, masterErrorCode, result );
+            this.callback.readComplete ( transactionId, serverGroupHandle, masterQuality, masterErrorCode, result );
         }
-        catch ( Throwable e )
+        catch ( final Throwable e )
         {
             e.printStackTrace ();
         }
@@ -133,17 +135,17 @@ public class OPCDataCallback extends EventHandlerImpl
 
     public synchronized Object[] OnWriteComplete ( final int transactionId, final int serverGroupHandle, final int masterErrorCode, final int count, final JIArray clientHandles, final JIArray errors )
     {
-        if ( this._callback == null )
+        if ( this.callback == null )
         {
             return new Object[] { org.openscada.opc.dcom.common.Constants.S_OK };
         }
 
         // get arrays for more readable code later ;-)
-        Integer[] errorCodes = (Integer[])errors.getArrayInstance ();
-        Integer[] itemHandles = (Integer[])clientHandles.getArrayInstance ();
+        final Integer[] errorCodes = (Integer[])errors.getArrayInstance ();
+        final Integer[] itemHandles = (Integer[])clientHandles.getArrayInstance ();
 
         // create result data
-        ResultSet<Integer> result = new ResultSet<Integer> ();
+        final ResultSet<Integer> result = new ResultSet<Integer> ();
         for ( int i = 0; i < count; i++ )
         {
             result.add ( new Result<Integer> ( itemHandles[i], errorCodes[i] ) );
@@ -152,9 +154,9 @@ public class OPCDataCallback extends EventHandlerImpl
         // fire event
         try
         {
-            this._callback.writeComplete ( transactionId, serverGroupHandle, masterErrorCode, result );
+            this.callback.writeComplete ( transactionId, serverGroupHandle, masterErrorCode, result );
         }
-        catch ( Throwable e )
+        catch ( final Throwable e )
         {
             e.printStackTrace ();
         }
@@ -165,12 +167,12 @@ public class OPCDataCallback extends EventHandlerImpl
 
     public synchronized Object[] OnCancelComplete ( final int transactionId, final int serverGroupHandle )
     {
-        if ( this._callback == null )
+        if ( this.callback == null )
         {
             return new Object[] { org.openscada.opc.dcom.common.Constants.S_OK };
         }
 
-        this._callback.cancelComplete ( transactionId, serverGroupHandle );
+        this.callback.cancelComplete ( transactionId, serverGroupHandle );
 
         // The client must always return S_OK
         return new Object[] { org.openscada.opc.dcom.common.Constants.S_OK };
@@ -178,12 +180,12 @@ public class OPCDataCallback extends EventHandlerImpl
 
     public synchronized JILocalCoClass getCoClass () throws JIException
     {
-        if ( this._coClass != null )
+        if ( this.coClass != null )
         {
-            return this._coClass;
+            return this.coClass;
         }
 
-        this._coClass = new JILocalCoClass ( new JILocalInterfaceDefinition ( Constants.IOPCDataCallback_IID, false ), this, false );
+        this.coClass = new JILocalCoClass ( new JILocalInterfaceDefinition ( Constants.IOPCDataCallback_IID, false ), this, false );
 
         JILocalParamsDescriptor params;
         JILocalMethodDescriptor method;
@@ -202,7 +204,7 @@ public class OPCDataCallback extends EventHandlerImpl
         params.addInParamAsObject ( new JIArray ( Integer.class, null, 1, true ), JIFlags.FLAG_NULL ); // errors
 
         method = new JILocalMethodDescriptor ( "OnDataChange", params );
-        this._coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
+        this.coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
 
         // OnReadComplete
         params = new JILocalParamsDescriptor ();
@@ -217,7 +219,7 @@ public class OPCDataCallback extends EventHandlerImpl
         params.addInParamAsObject ( new JIArray ( FILETIME.getStruct (), null, 1, true ), JIFlags.FLAG_NULL );
         params.addInParamAsObject ( new JIArray ( Integer.class, null, 1, true ), JIFlags.FLAG_NULL );
         method = new JILocalMethodDescriptor ( "OnReadComplete", params );
-        this._coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
+        this.coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
 
         // OnWriteComplete
         params = new JILocalParamsDescriptor ();
@@ -228,30 +230,30 @@ public class OPCDataCallback extends EventHandlerImpl
         params.addInParamAsObject ( new JIArray ( Integer.class, null, 1, true ), JIFlags.FLAG_NULL );
         params.addInParamAsObject ( new JIArray ( Integer.class, null, 1, true ), JIFlags.FLAG_NULL );
         method = new JILocalMethodDescriptor ( "OnWriteComplete", params );
-        this._coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
+        this.coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
 
         // OnCancelComplete
         params = new JILocalParamsDescriptor ();
         params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL );
         params.addInParamAsType ( Integer.class, JIFlags.FLAG_NULL );
         method = new JILocalMethodDescriptor ( "OnCancelComplete", params );
-        this._coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
+        this.coClass.getInterfaceDefinition ().addMethodDescriptor ( method );
 
         // Add supported event interfaces
-        List<String> eventInterfaces = new LinkedList<String> ();
+        final List<String> eventInterfaces = new LinkedList<String> ();
         eventInterfaces.add ( Constants.IOPCDataCallback_IID );
-        this._coClass.setSupportedEventInterfaces ( eventInterfaces );
+        this.coClass.setSupportedEventInterfaces ( eventInterfaces );
 
-        return this._coClass;
+        return this.coClass;
     }
 
     public void setCallback ( final IOPCDataCallback callback )
     {
-        this._callback = callback;
+        this.callback = callback;
     }
 
     public IOPCDataCallback getCallback ()
     {
-        return this._callback;
+        return this.callback;
     }
 }

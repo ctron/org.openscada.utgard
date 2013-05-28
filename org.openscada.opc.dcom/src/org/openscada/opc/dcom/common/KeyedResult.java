@@ -21,7 +21,7 @@ package org.openscada.opc.dcom.common;
 
 public class KeyedResult<K, V> extends Result<V>
 {
-    private K _key = null;
+    private K key;
 
     public KeyedResult ()
     {
@@ -31,16 +31,16 @@ public class KeyedResult<K, V> extends Result<V>
     public KeyedResult ( final K key, final V value, final int errorCode )
     {
         super ( value, errorCode );
-        this._key = key;
+        this.key = key;
     }
 
     public K getKey ()
     {
-        return this._key;
+        return this.key;
     }
 
     public void setKey ( final K key )
     {
-        this._key = key;
+        this.key = key;
     }
 }
