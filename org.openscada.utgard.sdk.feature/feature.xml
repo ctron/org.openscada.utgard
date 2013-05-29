@@ -1,9 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<feature
-      id="org.openscada.utgard.sdk"
-      label="openSCADA Utgard SDK"
-      version="1.0.0.qualifier"
-      provider-name="openSCADA.org">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><feature id="org.openscada.utgard.sdk" label="openSCADA Utgard SDK" provider-name="openSCADA.org" version="1.1.0.v20130529">
 
    <description>
       openSCADA OPC Components (SDK)
@@ -17,12 +12,8 @@
       %license
    </license>
 
-   <includes
-         id="org.openscada.utgard"
-         version="0.0.0"/>
+   <includes id="org.openscada.utgard" version="0.0.0"/>
 
-   <includes
-         id="org.openscada.utgard.source"
-         version="0.0.0"/>
+   <includes id="org.openscada.utgard.source" version="0.0.0"/>
 
 </feature>

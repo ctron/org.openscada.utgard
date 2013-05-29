@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/org.openscada.utgard_1.0.0.qualifier.jar" id="org.openscada.utgard" version="1.0.0.qualifier">
+   <feature url="features/org.openscada.utgard_1.1.0.v20130529.jar" id="org.openscada.utgard" version="1.1.0.v20130529">
       <category name="org.openscada.utgard.category"/>
    </feature>
-   <feature url="features/org.openscada.utgard.sdk_1.0.0.qualifier.jar" id="org.openscada.utgard.sdk" version="1.0.0.qualifier">
+   <feature url="features/org.openscada.utgard.sdk_1.1.0.v20130529.jar" id="org.openscada.utgard.sdk" version="1.1.0.v20130529">
       <category name="org.openscada.utgard.category"/>
    </feature>
    <category-def name="org.openscada.utgard.category" label="openSCADA Utgard"/>

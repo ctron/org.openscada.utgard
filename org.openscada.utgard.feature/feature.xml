@@ -1,9 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<feature
-      id="org.openscada.utgard"
-      label="%featureName"
-      version="1.0.0.qualifier"
-      provider-name="openSCADA.org">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><feature id="org.openscada.utgard" label="%featureName" provider-name="openSCADA.org" version="1.1.0.v20130529">
 
    <description>
       openSCADA OPC Components
@@ -24,18 +19,8 @@
       <import plugin="org.openscada.jinterop.core"/>
    </requires>
 
-   <plugin
-         id="org.openscada.opc.dcom"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+   <plugin download-size="0" id="org.openscada.opc.dcom" install-size="0" unpack="false" version="0.0.0"/>
 
-   <plugin
-         id="org.openscada.opc.lib"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+   <plugin download-size="0" id="org.openscada.opc.lib" install-size="0" unpack="false" version="0.0.0"/>
 
 </feature>
