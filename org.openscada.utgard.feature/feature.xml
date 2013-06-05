@@ -19,9 +19,10 @@
 
    <requires>
       <import plugin="org.openscada.jinterop.deps"/>
-      <import plugin="slf4j.api"/>
       <import plugin="org.openscada.utils"/>
       <import plugin="org.openscada.jinterop.core"/>
+      <import plugin="org.slf4j.api"/>
+      <import plugin="org.openscada.external.jcifs"/>
    </requires>
 
    <plugin
