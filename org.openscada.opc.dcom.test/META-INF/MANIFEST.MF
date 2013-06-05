@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: TestCases for org.openscada.opc.dcom
 Bundle-SymbolicName: org.openscada.opc.dcom.test
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.2.0.qualifier
 Bundle-Vendor: openSCADA.org
 Fragment-Host: org.openscada.opc.dcom;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: org.junit4;bundle-version="4.5.0"
+Require-Bundle: org.junit;bundle-version="4.11.0"
