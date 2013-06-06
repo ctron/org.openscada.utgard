@@ -6,4 +6,4 @@ Bundle-Version: 1.2.0.qualifier
 Bundle-Vendor: openSCADA.org
 Fragment-Host: org.openscada.opc.dcom;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: org.junit;bundle-version="4.11.0"
+Require-Bundle: org.junit;bundle-version="4.8.0"
