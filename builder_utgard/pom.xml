@@ -21,6 +21,16 @@
 			<url>http://download.eclipse.org/releases/kepler</url>
 		</repository>
 		<repository>
+			<id>eclipse.orbit</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/tools/orbit/downloads/drops/R20130118183705/repository/</url>
+		</repository>
+		<repository>
+			<id>eclipse.scada.p2.composite</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/eclipsescada/updates/integration</url>
+		</repository>
+		<repository>
 			<id>openscada.p2.external</id>
 			<layout>p2</layout>
 			<url>http://repo.openscada.org/p2/external/I/1.2.0/</url>
