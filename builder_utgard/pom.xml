@@ -16,9 +16,9 @@
 
 	<repositories>
 		<repository>
-			<id>juno</id>
+			<id>eclipse.kepler</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/releases/juno</url>
+			<url>http://download.eclipse.org/releases/kepler</url>
 		</repository>
 		<repository>
 			<id>openscada.p2.external</id>
