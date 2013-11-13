@@ -1,0 +1,9 @@
+Package: [[name]]
+Version: [[version]]
+Section: misc
+Priority: optional
+Architecture: all
+Depends: org.eclipse.scada, org.eclipse.scada.external.p2-incubation
+Maintainer: Jens Reimann <jens.reimann@ibh-systems.com>
+Description: openSCADA P2 Repository - [[artifactId]]
+Distribution: development

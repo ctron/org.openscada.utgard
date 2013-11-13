@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ======================================================================
+      Post process build
+     ====================================================================== -->
+<project name="project" default="default">
+    <description>
+Things to do after the main build
+        
+Called from the pom.xml when the profile "openscada-ci"
+is active.
+    </description>
+	    
+    <property name="output" location="../../output"/>
+    
+    <!-- ================================= 
+          target: default
+         ================================= -->
+    <target name="default" depends="clean,build">
+    </target>
+    
+    <!-- ================================= 
+          target: clean
+         ================================= -->
+    <target name="clean">
+        <delete dir="${output}"/>
+    </target>
+    
+    <!-- ================================= 
+          target: build
+         ================================= -->
+    <target name="build">
+        <mkdir dir="${output}"/>
+        <mkdir dir="${output}/p2"/>
+            
+        <move todir="${output}">
+            <fileset dir=".">
+                <include name="target/**/${repo}*.rpm"/>
+                <include name="target/${repo}_*.deb"/>
+                <include name="target/${repo}-*.zip"/>
+            </fileset>
+            <mapper type="flatten"/>
+        </move>
+
+        <move todir="${output}/p2">
+            <fileset dir="target/repository">
+            </fileset>
+        </move>
+   </target>
+    
+</project>

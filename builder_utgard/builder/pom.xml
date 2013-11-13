@@ -13,4 +13,114 @@
 	<artifactId>org.openscada.utgard.p2</artifactId>
 	<version>1.2.0</version>
 	<packaging>eclipse-repository</packaging>
+	
+	<profiles>
+		<profile>
+			<id>deb</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>jdeb</artifactId>
+						<groupId>org.vafer</groupId>
+						<version>1.0.1</version>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>jdeb</goal>
+								</goals>
+								<configuration>
+									<dataSet>
+										<data>
+											<src>target/repository</src>
+											<type>directory</type>
+											<mapper>
+												<type>perm</type>
+												<prefix>/usr/share/eclipsescada/p2/${project.groupId}</prefix>
+											</mapper>
+										</data>
+									</dataSet>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>rpm</id>
+
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>rpm-maven-plugin</artifactId>
+						<version>2.1-alpha-3</version>
+						<executions>
+							<execution>
+								<id>generate-rpm</id>
+								<goals>
+									<goal>rpm</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<copyright>EPL</copyright>
+							<distribution>openSCADA 1.2.0</distribution>
+							<group>Application/Misc</group>
+							<packager>openSCADA Project</packager>
+							<changelogFile>rpm/changelog</changelogFile>
+							<defineStatements>
+								<!-- <defineStatement>_unpackaged_files_terminate_build 0</defineStatement> -->
+							</defineStatements>
+							<mappings>
+								<mapping>
+									<directory>/usr/share/eclipsescada/p2/${project.groupId}</directory>
+									<filemode>0755</filemode>
+									<username>root</username>
+									<groupname>root</groupname>
+									<sources>
+										<source>
+											<location>target/repository</location>
+										</source>
+									</sources>
+								</mapping>
+							</mappings>
+
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile> <!-- rpm -->
+		
+		<profile>
+			<id>openscada-ci</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.7</version>
+						<executions>
+							<execution>
+								<id>ant-post-proc</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<tasks>
+										<property name="repo" value="${project.artifactId}"/>
+										<ant antfile="post.ant" />
+									</tasks>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		
+	</profiles>
+	
 </project>
