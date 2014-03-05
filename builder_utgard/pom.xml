@@ -23,7 +23,7 @@
 		<repository>
 			<id>eclipse.orbit</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/tools/orbit/downloads/drops/R20130118183705/repository/</url>
+			<url>http://download.eclipse.org/tools/orbit/downloads/drops/R20140114142710/repository/</url>
 		</repository>
 		<repository>
 			<id>eclipse.scada.p2.composite</id>
