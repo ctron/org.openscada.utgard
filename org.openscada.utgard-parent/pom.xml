@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.openscada</groupId>
+		<artifactId>superParent</artifactId>
+		<version>1.2.0-SNAPSHOT</version>
+	</parent>
+
+	<repositories>
+		<repository>
+			<id>org.openscada</id>
+			<url>http://neutronium.openscada.org/maven</url>
+		</repository>
+	</repositories>
+
+	<groupId>org.openscada.utgard</groupId>
+	<artifactId>parent</artifactId>
+	<packaging>pom</packaging>
+
+	<properties>
+		<tycho.scmUrl>scm:git:git://git.openscada.org/org.openscada.utgard.git</tycho.scmUrl>
+	</properties>
+
+	<modules>
+		<module>../org.openscada.utgard.feature</module>
+		<module>../org.openscada.utgard.sdk.feature</module>
+
+		<module>../org.openscada.opc.dcom</module>
+		<module>../org.openscada.opc.lib</module>
+	</modules>
+
+</project>
