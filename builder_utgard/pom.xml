@@ -28,7 +28,7 @@
 		<repository>
 			<id>eclipse.scada.p2.composite</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/eclipsescada/updates/milestone/0.1.0</url>
+			<url>http://download.eclipse.org/eclipsescada/updates/release/0.1.0</url>
 		</repository>
 		<repository>
 			<id>openscada.p2.external</id>
