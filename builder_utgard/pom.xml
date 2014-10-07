@@ -28,17 +28,12 @@
 		<repository>
 			<id>eclipse.scada.p2.composite</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/eclipsescada/updates/release/0.1.0</url>
+			<url>http://download.eclipse.org/eclipsescada/updates/milestone/0.2</url>
 		</repository>
 		<repository>
-			<id>openscada.p2.external</id>
+			<id>openscada.p2.composite</id>
 			<layout>p2</layout>
-			<url>http://repo.openscada.org/p2/external/I/1.2.0/</url>
-		</repository>
-		<repository>
-			<id>openscada.p2.jinterop</id>
-			<layout>p2</layout>
-			<url>http://repo.openscada.org/p2/jinterop/I/1.2.0/</url>
+			<url>http://neutronium.openscada.org/p2/1.2/milestone/</url>
 		</repository>
 	</repositories>
 	
