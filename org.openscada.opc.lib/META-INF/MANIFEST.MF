@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.openscada.opc.lib
-Bundle-Version: 1.2.0.qualifier
+Bundle-Version: 1.3.0.qualifier
 Bundle-Name: openSCADA Utgard Library
 Bundle-Vendor: openSCADA.org
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
@@ -16,7 +16,7 @@ Import-Package: org.jinterop.dcom.common;version="[2.0.0,3.0.0)",
  org.slf4j;version="[1.5.0,2.0.0)",
  rpc.core
 Export-Package: org.openscada.opc.lib.common;version="1.0.0",
- org.openscada.opc.lib.da;version="1.0.0";
+ org.openscada.opc.lib.da;version="1.3.0";
   uses:="org.jinterop.dcom.core,
    org.openscada.opc.lib.common,
    org.openscada.opc.lib.da.browser,
