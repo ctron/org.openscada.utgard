@@ -1,6 +1,7 @@
 /*
- * This file is part of the OpenSCADA project
+ * This file is part of the openSCADA project
  * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2014 IBH SYSTEMS GmbH (http://ibh-systems.com)
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,15 +27,15 @@ public abstract class AccessBase implements ServerConnectionStateListener
 {
     private static Logger logger = LoggerFactory.getLogger ( AccessBase.class );
 
-    protected Server server = null;
+    protected Server server;
 
-    protected Group group = null;
+    protected Group group;
 
-    protected boolean active = false;
+    protected boolean active;
 
     private final List<AccessStateListener> stateListeners = new CopyOnWriteArrayList<AccessStateListener> ();
 
-    private boolean bound = false;
+    private boolean bound;
 
     /**
      * Holds the item to callback assignment
@@ -45,24 +46,22 @@ public abstract class AccessBase implements ServerConnectionStateListener
 
     protected Map<Item, ItemState> itemCache = new HashMap<Item, ItemState> ();
 
-    private int period = 0;
+    private final int period;
 
     protected Map<String, DataCallback> itemSet = new HashMap<String, DataCallback> ();
 
-    protected String logTag = null;
+    protected String logTag;
 
-    protected Logger dataLogger = null;
+    protected Logger dataLogger;
 
     public AccessBase ( final Server server, final int period ) throws IllegalArgumentException, UnknownHostException, NotConnectedException, JIException, DuplicateGroupException
     {
-        super ();
         this.server = server;
         this.period = period;
     }
 
     public AccessBase ( final Server server, final int period, final String logTag )
     {
-        super ();
         this.server = server;
         this.period = period;
         this.logTag = logTag;
@@ -172,6 +171,7 @@ public abstract class AccessBase implements ServerConnectionStateListener
         }
     }
 
+    @Override
     public void connectionStateChanged ( final boolean connected )
     {
         try
@@ -200,7 +200,7 @@ public abstract class AccessBase implements ServerConnectionStateListener
 
         logger.debug ( "Create a new group" );
         this.group = this.server.addGroup ();
-        this.group.setActive ( true );
+        this.group.setActive ( true, this.period );
         this.active = true;
 
         notifyStateListenersState ( true );

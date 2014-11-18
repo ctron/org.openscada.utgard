@@ -1,6 +1,7 @@
 /*
- * This file is part of the OpenSCADA project
+ * This file is part of the openSCADA project
  * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2014 IBH SYSTEMS GmbH (http://ibh-systems.com)
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -75,10 +76,15 @@ public class Group
         this._group.setState ( null, state, null, null, null, null );
     }
 
+    public void setActive ( final boolean state, final int period ) throws JIException
+    {
+        this._group.setState ( period, state, null, null, null, null );
+    }
+
     /**
      * remove the group from the server
-     * @throws JIException 
      *
+     * @throws JIException
      */
     public void remove () throws JIException
     {
@@ -92,6 +98,7 @@ public class Group
 
     /**
      * Get the group name from the server
+     *
      * @return The group name fetched from the server
      * @throws JIException
      */
@@ -102,7 +109,9 @@ public class Group
 
     /**
      * Change the group name
-     * @param name the new name of the group
+     *
+     * @param name
+     *            the new name of the group
      * @throws JIException
      */
     public void setName ( final String name ) throws JIException
@@ -113,40 +122,47 @@ public class Group
     /**
      * Add a single item. Actually calls {@link #addItems(String[])} with only
      * one paraemter
-     * @param item The item to add
+     *
+     * @param item
+     *            The item to add
      * @return The added item
-     * @throws JIException The add operation failed
-     * @throws AddFailedException The item was not added due to an error
+     * @throws JIException
+     *             The add operation failed
+     * @throws AddFailedException
+     *             The item was not added due to an error
      */
     public Item addItem ( final String item ) throws JIException, AddFailedException
     {
-        Map<String, Item> items = addItems ( item );
+        final Map<String, Item> items = addItems ( item );
         return items.get ( item );
     }
 
     /**
-     * Validate item ids and get additional information to them.
-     * <br>
-     * According to the OPC specification you should first <em>validate</em>
-     * the items and the <em>add</em> them. The spec also says that when a server
-     * lets the item pass validation it must also let them pass the add operation.
-     * @param items The items to validate
-     * @return A result map of item id to result information (including error code).
+     * Validate item ids and get additional information to them. <br>
+     * According to the OPC specification you should first <em>validate</em> the
+     * items and the <em>add</em> them. The spec also says that when a server
+     * lets the item pass validation it must also let them pass the add
+     * operation.
+     *
+     * @param items
+     *            The items to validate
+     * @return A result map of item id to result information (including error
+     *         code).
      * @throws JIException
      */
     public synchronized Map<String, Result<OPCITEMRESULT>> validateItems ( final String... items ) throws JIException
     {
-        OPCITEMDEF[] defs = new OPCITEMDEF[items.length];
+        final OPCITEMDEF[] defs = new OPCITEMDEF[items.length];
         for ( int i = 0; i < items.length; i++ )
         {
             defs[i] = new OPCITEMDEF ();
             defs[i].setItemID ( items[i] );
         }
 
-        KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> result = this._items.validate ( defs );
+        final KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> result = this._items.validate ( defs );
 
-        Map<String, Result<OPCITEMRESULT>> resultMap = new HashMap<String, Result<OPCITEMRESULT>> ();
-        for ( KeyedResult<OPCITEMDEF, OPCITEMRESULT> resultEntry : result )
+        final Map<String, Result<OPCITEMRESULT>> resultMap = new HashMap<String, Result<OPCITEMRESULT>> ();
+        for ( final KeyedResult<OPCITEMDEF, OPCITEMRESULT> resultEntry : result )
         {
             resultMap.put ( resultEntry.getKey ().getItemID (), new Result<OPCITEMRESULT> ( resultEntry.getValue (), resultEntry.getErrorCode () ) );
         }
@@ -156,21 +172,26 @@ public class Group
 
     /**
      * Add new items to the group
-     * @param items The items (by string id) to add
+     *
+     * @param items
+     *            The items (by string id) to add
      * @return A result map of id to item object
-     * @throws JIException The add operation completely failed. No item was added.
-     * @throws AddFailedException If one or more item could not be added. Item without error where added.
+     * @throws JIException
+     *             The add operation completely failed. No item was added.
+     * @throws AddFailedException
+     *             If one or more item could not be added. Item without error
+     *             where added.
      */
     public synchronized Map<String, Item> addItems ( final String... items ) throws JIException, AddFailedException
     {
         // Find which items we already have
-        Map<String, Integer> handles = findItems ( items );
+        final Map<String, Integer> handles = findItems ( items );
 
-        List<Integer> foundItems = new ArrayList<Integer> ( items.length );
-        List<String> missingItems = new ArrayList<String> ();
+        final List<Integer> foundItems = new ArrayList<Integer> ( items.length );
+        final List<String> missingItems = new ArrayList<String> ();
 
         // separate missing items from the found ones
-        for ( Map.Entry<String, Integer> entry : handles.entrySet () )
+        for ( final Map.Entry<String, Integer> entry : handles.entrySet () )
         {
             if ( entry.getValue () == null )
             {
@@ -183,11 +204,11 @@ public class Group
         }
 
         // now fetch missing items from OPC server
-        Set<Integer> newClientHandles = new HashSet<Integer> ();
-        OPCITEMDEF[] itemDef = new OPCITEMDEF[missingItems.size ()];
+        final Set<Integer> newClientHandles = new HashSet<Integer> ();
+        final OPCITEMDEF[] itemDef = new OPCITEMDEF[missingItems.size ()];
         for ( int i = 0; i < missingItems.size (); i++ )
         {
-            OPCITEMDEF def = new OPCITEMDEF ();
+            final OPCITEMDEF def = new OPCITEMDEF ();
             def.setItemID ( missingItems.get ( i ) );
             def.setActive ( true );
 
@@ -203,14 +224,14 @@ public class Group
         }
 
         // check the result and add new items
-        Map<String, Integer> failedItems = new HashMap<String, Integer> ();
-        KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> result = this._items.add ( itemDef );
+        final Map<String, Integer> failedItems = new HashMap<String, Integer> ();
+        final KeyedResultSet<OPCITEMDEF, OPCITEMRESULT> result = this._items.add ( itemDef );
         int i = 0;
-        for ( KeyedResult<OPCITEMDEF, OPCITEMRESULT> entry : result )
+        for ( final KeyedResult<OPCITEMDEF, OPCITEMRESULT> entry : result )
         {
             if ( entry.getErrorCode () == 0 )
             {
-                Item item = new Item ( this, entry.getValue ().getServerHandle (), itemDef[i].getClientHandle (), entry.getKey ().getItemID () );
+                final Item item = new Item ( this, entry.getValue ().getServerHandle (), itemDef[i].getClientHandle (), entry.getKey ().getItemID () );
                 addItem ( item );
                 foundItems.add ( item.getServerHandle () );
             }
@@ -249,7 +270,7 @@ public class Group
 
     protected Item getItemByOPCItemId ( final String opcItemId )
     {
-        Integer serverHandle = this._itemHandleMap.get ( opcItemId );
+        final Integer serverHandle = this._itemHandleMap.get ( opcItemId );
         if ( serverHandle == null )
         {
             _log.debug ( String.format ( "Failed to locate item with id '%s'", opcItemId ) );
@@ -261,7 +282,7 @@ public class Group
 
     private synchronized Map<String, Integer> findItems ( final String[] items )
     {
-        Map<String, Integer> data = new HashMap<String, Integer> ();
+        final Map<String, Integer> data = new HashMap<String, Integer> ();
 
         for ( int i = 0; i < items.length; i++ )
         {
@@ -273,10 +294,10 @@ public class Group
 
     private synchronized Map<String, Item> findItems ( final Collection<Integer> handles )
     {
-        Map<String, Item> itemMap = new HashMap<String, Item> ();
-        for ( Integer i : handles )
+        final Map<String, Item> itemMap = new HashMap<String, Item> ();
+        for ( final Integer i : handles )
         {
-            Item item = this._itemMap.get ( i );
+            final Item item = this._itemMap.get ( i );
             if ( item != null )
             {
                 itemMap.put ( item.getId (), item );
@@ -287,7 +308,7 @@ public class Group
 
     protected void checkItems ( final Item[] items )
     {
-        for ( Item item : items )
+        for ( final Item item : items )
         {
             if ( item.getGroup () != this )
             {
@@ -300,7 +321,7 @@ public class Group
     {
         checkItems ( items );
 
-        Integer[] handles = new Integer[items.length];
+        final Integer[] handles = new Integer[items.length];
         for ( int i = 0; i < items.length; i++ )
         {
             handles[i] = items[i].getServerHandle ();
@@ -313,7 +334,7 @@ public class Group
     {
         checkItems ( items );
 
-        Integer[] handles = new Integer[items.length];
+        final Integer[] handles = new Integer[items.length];
 
         for ( int i = 0; i < items.length; i++ )
         {
@@ -325,27 +346,27 @@ public class Group
 
     public synchronized Map<Item, Integer> write ( final WriteRequest... requests ) throws JIException
     {
-        Item[] items = new Item[requests.length];
+        final Item[] items = new Item[requests.length];
 
         for ( int i = 0; i < requests.length; i++ )
         {
             items[i] = requests[i].getItem ();
         }
 
-        Integer[] handles = getServerHandles ( items );
+        final Integer[] handles = getServerHandles ( items );
 
-        org.openscada.opc.dcom.da.WriteRequest[] wr = new org.openscada.opc.dcom.da.WriteRequest[items.length];
+        final org.openscada.opc.dcom.da.WriteRequest[] wr = new org.openscada.opc.dcom.da.WriteRequest[items.length];
         for ( int i = 0; i < items.length; i++ )
         {
             wr[i] = new org.openscada.opc.dcom.da.WriteRequest ( handles[i], requests[i].getValue () );
         }
 
-        ResultSet<org.openscada.opc.dcom.da.WriteRequest> resultSet = this._syncIO.write ( wr );
+        final ResultSet<org.openscada.opc.dcom.da.WriteRequest> resultSet = this._syncIO.write ( wr );
 
-        Map<Item, Integer> result = new HashMap<Item, Integer> ();
+        final Map<Item, Integer> result = new HashMap<Item, Integer> ();
         for ( int i = 0; i < requests.length; i++ )
         {
-            Result<org.openscada.opc.dcom.da.WriteRequest> entry = resultSet.get ( i );
+            final Result<org.openscada.opc.dcom.da.WriteRequest> entry = resultSet.get ( i );
             result.put ( requests[i].getItem (), entry.getErrorCode () );
         }
 
@@ -354,15 +375,15 @@ public class Group
 
     public synchronized Map<Item, ItemState> read ( final boolean device, final Item... items ) throws JIException
     {
-        Integer[] handles = getServerHandles ( items );
+        final Integer[] handles = getServerHandles ( items );
 
-        KeyedResultSet<Integer, OPCITEMSTATE> states = this._syncIO.read ( device ? OPCDATASOURCE.OPC_DS_DEVICE : OPCDATASOURCE.OPC_DS_CACHE, handles );
+        final KeyedResultSet<Integer, OPCITEMSTATE> states = this._syncIO.read ( device ? OPCDATASOURCE.OPC_DS_DEVICE : OPCDATASOURCE.OPC_DS_CACHE, handles );
 
-        Map<Item, ItemState> data = new HashMap<Item, ItemState> ();
-        for ( KeyedResult<Integer, OPCITEMSTATE> entry : states )
+        final Map<Item, ItemState> data = new HashMap<Item, ItemState> ();
+        for ( final KeyedResult<Integer, OPCITEMSTATE> entry : states )
         {
-            Item item = this._itemMap.get ( entry.getKey () );
-            ItemState state = new ItemState ( entry.getErrorCode (), entry.getValue ().getValue (), entry.getValue ().getTimestamp ().asCalendar (), entry.getValue ().getQuality () );
+            final Item item = this._itemMap.get ( entry.getKey () );
+            final ItemState state = new ItemState ( entry.getErrorCode (), entry.getValue ().getValue (), entry.getValue ().getTimestamp ().asCalendar (), entry.getValue ().getQuality () );
             data.put ( item, state );
         }
         return data;
@@ -375,7 +396,7 @@ public class Group
 
     public synchronized void clear () throws JIException
     {
-        Integer[] handles = this._itemMap.keySet ().toArray ( new Integer[0] );
+        final Integer[] handles = this._itemMap.keySet ().toArray ( new Integer[0] );
         try
         {
             this._items.remove ( handles );
@@ -392,6 +413,30 @@ public class Group
     public synchronized OPCAsyncIO2 getAsyncIO20 ()
     {
         return this._group.getAsyncIO2 ();
+    }
+
+    /**
+     * Set part of the group state
+     * <p>
+     * Each of the parameters may be <code>null</code> in which the parameter is
+     * not changed.
+     * </p>
+     *
+     * @param requestedUpdateRate
+     *            the requested update rate. <em>Note:</em> that the server may
+     *            return a different update rate.
+     * @param timeBias
+     *            the new time bias value
+     * @param percentDeadband
+     *            the new percent deadband value
+     * @throws JIException
+     *             if anything in the OPC communication or on the server goes
+     *             wrong
+     * @since 1.3.0
+     */
+    public void setGroupState ( final Integer requestedUpdateRate, final Integer timeBias, final Float percentDeadband ) throws JIException
+    {
+        this._group.setState ( requestedUpdateRate, null, timeBias, percentDeadband, null, null );
     }
 
     public synchronized EventHandler attach ( final IOPCDataCallback dataCallback ) throws JIException
@@ -412,7 +457,7 @@ public class Group
     public synchronized void removeItem ( final String opcItemId ) throws IllegalArgumentException, UnknownHostException, JIException
     {
         _log.debug ( String.format ( "Removing item '%s'", opcItemId ) );
-        Item item = getItemByOPCItemId ( opcItemId );
+        final Item item = getItemByOPCItemId ( opcItemId );
         if ( item != null )
         {
             this._group.getItemManagement ().remove ( item.getServerHandle () );
