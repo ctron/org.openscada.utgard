@@ -30,6 +30,8 @@
 
 		<module>../org.openscada.opc.dcom</module>
 		<module>../org.openscada.opc.lib</module>
+		
+		<module>../org.openscada.opc.xmlda</module>
 	</modules>
 
 </project>

@@ -2,7 +2,7 @@
 <feature
       id="org.openscada.utgard"
       label="%featureName"
-      version="1.3.0.qualifier"
+      version="1.4.0.qualifier"
       provider-name="openSCADA.org">
 
    <description>
@@ -18,11 +18,11 @@
    </license>
 
    <requires>
-      <import plugin="org.openscada.jinterop.deps"/>
-      <import plugin="org.eclipse.scada.utils"/>
       <import plugin="org.openscada.jinterop.core"/>
+      <import plugin="org.openscada.jinterop.deps"/>
       <import plugin="org.slf4j.api"/>
-      <import plugin="org.openscada.external.jcifs"/>
+      <import plugin="org.eclipse.scada.utils"/>
+      <import plugin="org.eclipse.osgi"/>
    </requires>
 
    <plugin
@@ -34,6 +34,13 @@
 
    <plugin
          id="org.openscada.opc.lib"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.openscada.opc.xmlda"
          download-size="0"
          install-size="0"
          version="0.0.0"

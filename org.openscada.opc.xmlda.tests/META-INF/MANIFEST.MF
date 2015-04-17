@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Unit tests for 'org.openscada.opc.xmlda'
+Bundle-SymbolicName: org.openscada.opc.xmlda.tests
+Bundle-Version: 1.4.0.qualifier
+Bundle-Vendor: IBH SYSTEMS GmbH
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Fragment-Host: org.openscada.opc.xmlda;bundle-version="1.3.0"
+Require-Bundle: org.junit
