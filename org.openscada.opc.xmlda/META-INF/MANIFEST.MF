@@ -5,7 +5,11 @@ Bundle-SymbolicName: org.openscada.opc.xmlda
 Bundle-Version: 1.4.0.qualifier
 Bundle-Vendor: IBH SYSTEMS GmbH
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: org.openscada.opc.xmlda;version="1.3.0"
+Export-Package: org.openscada.opc.xmlda;version="1.4.0";
+  uses:="org.openscada.opc.xmlda.requests,
+   javax.xml.namespace,
+   org.openscada.opc.xmlda.browse,
+   org.eclipse.scada.utils.concurrent"
 Import-Package: javax.xml.bind.annotation,
  javax.xml.datatype,
  javax.xml.namespace,
