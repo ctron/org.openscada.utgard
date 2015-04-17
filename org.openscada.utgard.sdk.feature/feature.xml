@@ -2,7 +2,7 @@
 <feature
       id="org.openscada.utgard.sdk"
       label="openSCADA Utgard SDK"
-      version="1.3.0.qualifier"
+      version="1.4.0.qualifier"
       provider-name="openSCADA.org">
 
    <description>
