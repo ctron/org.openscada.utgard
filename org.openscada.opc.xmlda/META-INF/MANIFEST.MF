@@ -9,7 +9,9 @@ Export-Package: org.openscada.opc.xmlda;version="1.4.0";
   uses:="org.openscada.opc.xmlda.requests,
    javax.xml.namespace,
    org.openscada.opc.xmlda.browse,
-   org.eclipse.scada.utils.concurrent"
+   org.eclipse.scada.utils.concurrent",
+ org.openscada.opc.xmlda.browse;version="1.4.0";uses:="org.openscada.opc.xmlda",
+ org.openscada.opc.xmlda.requests;version="1.4.0";uses:="org.opcfoundation.webservices.xmlda._1,javax.xml.namespace,org.openscada.opc.xmlda"
 Import-Package: javax.xml.bind.annotation,
  javax.xml.datatype,
  javax.xml.namespace,
