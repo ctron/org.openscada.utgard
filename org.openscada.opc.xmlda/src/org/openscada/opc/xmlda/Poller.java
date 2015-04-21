@@ -55,8 +55,6 @@ public class Poller
 
     private Thread thread;
 
-    private List<ItemRequest> items = new ArrayList<> ();
-
     private final Map<String, ItemRequest> handleMap = new HashMap<> ();
 
     private volatile String subscriptionHandle;
@@ -87,13 +85,13 @@ public class Poller
 
         synchronized ( this )
         {
-            if ( this.items.isEmpty () )
+            if ( this.handleMap.isEmpty () )
             {
                 logger.debug ( "No items registered. Skipping ..." );
                 return;
             }
 
-            for ( final ItemRequest item : this.items )
+            for ( final ItemRequest item : this.handleMap.values () )
             {
                 final SubscribeRequestItem itemRequest = new SubscribeRequestItem ();
                 itemRequest.setItemName ( item.getItemName () );
@@ -118,12 +116,32 @@ public class Poller
         fireStateUpdate ( SubscriptionState.ACTIVE );
     }
 
+    public synchronized void addItem ( final ItemRequest item )
+    {
+        logger.debug ( "Adding item: {}", item );
+
+        this.subscriptionHandle = null;
+        fireStateUpdate ( SubscriptionState.INACTIVE );
+
+        this.handleMap.put ( item.getClientHandle (), item );
+        notifyAll ();
+    }
+
+    public synchronized void removeItem ( final ItemRequest item )
+    {
+        logger.debug ( "Removing item: {}", item );
+
+        this.subscriptionHandle = null;
+        fireStateUpdate ( SubscriptionState.INACTIVE );
+
+        this.handleMap.remove ( item.getClientHandle () );
+        notifyAll ();
+    }
+
     public synchronized void setItems ( final List<ItemRequest> items )
     {
         this.subscriptionHandle = null;
         fireStateUpdate ( SubscriptionState.INACTIVE );
-
-        this.items = new ArrayList<> ( items );
 
         this.handleMap.clear ();
         for ( final ItemRequest req : items )
@@ -293,7 +311,7 @@ public class Poller
                     }
                     synchronized ( this )
                     {
-                        if ( this.items.isEmpty () )
+                        if ( this.handleMap.isEmpty () )
                         {
                             logger.info ( "Waiting for items" );
                             fireStateUpdate ( SubscriptionState.WAITING );

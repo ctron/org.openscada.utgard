@@ -39,7 +39,7 @@ public class BrowseResponse extends BaseResponse
             return null;
         }
 
-        return new BrowseRequest ( this.request.getItemName (), this.request.getItemPath (), this.request.getBrowserType (), this.request.getMaxElementsReturned (), this.continuationPoint );
+        return new BrowseRequest ( this.request.getItemName (), this.request.getItemPath (), this.request.getBrowserType (), this.request.getMaxElementsReturned (), this.request.isFullProperties (), this.continuationPoint );
     }
 
     public List<BrowseEntry> getEntries ()

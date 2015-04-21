@@ -88,19 +88,19 @@ public class Connection implements AutoCloseable
         return new Poller ( this, this.eventExecutor, listener, (int) ( this.requestTimeout * 0.8 + 1.0 ) );
     }
 
-    public Browser createBrowser ( final String itemName, final String itemPath, final BrowserListener listener, final long scanDelay, final int batchSize )
+    public Browser createBrowser ( final String itemName, final String itemPath, final BrowserListener listener, final long scanDelay, final int batchSize, final boolean fullProperties )
     {
-        return new Browser ( itemName, itemPath, this, this.executor, this.eventExecutor, listener, scanDelay, batchSize );
+        return new Browser ( itemName, itemPath, this, this.executor, this.eventExecutor, listener, scanDelay, batchSize, fullProperties );
     }
 
-    public Browser createBrowser ( final BrowseEntry entry, final BrowserListener listener, final long scanDelay, final int batchSize )
+    public Browser createBrowser ( final BrowseEntry entry, final BrowserListener listener, final long scanDelay, final int batchSize, final boolean fullProperties )
     {
-        return createBrowser ( entry.getItemName (), entry.getItemPath (), listener, scanDelay, batchSize );
+        return createBrowser ( entry.getItemName (), entry.getItemPath (), listener, scanDelay, batchSize, fullProperties );
     }
 
-    public Browser createRootBrowser ( final BrowserListener listener, final long scanDelay, final int batchSize )
+    public Browser createRootBrowser ( final BrowserListener listener, final long scanDelay, final int batchSize, final boolean fullProperties )
     {
-        return createBrowser ( null, null, listener, scanDelay, batchSize );
+        return createBrowser ( null, null, listener, scanDelay, batchSize, fullProperties );
     }
 
     public <S> S unwrap ( final Class<S> clazz )

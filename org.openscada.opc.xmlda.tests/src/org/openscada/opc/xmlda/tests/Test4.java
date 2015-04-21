@@ -68,7 +68,7 @@ public class Test4
                         }
                     }
                 }
-            }, 5_000, 5 );
+            }, 5_000, 5, false );
 
             browser.dispose ( 10_000 );
         }

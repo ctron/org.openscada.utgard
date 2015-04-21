@@ -50,7 +50,9 @@ public class Browser
 
     private boolean scanning;
 
-    public Browser ( final String itemName, final String itemPath, final Connection connection, final ScheduledExecutorService executor, final Executor eventExecutor, final BrowserListener listener, final long scanDelay, final int batchSize )
+    private final boolean fullProperties;
+
+    public Browser ( final String itemName, final String itemPath, final Connection connection, final ScheduledExecutorService executor, final Executor eventExecutor, final BrowserListener listener, final long scanDelay, final int batchSize, final boolean fullProperties )
     {
         this.itemName = itemName;
         this.itemPath = itemPath;
@@ -63,6 +65,8 @@ public class Browser
         this.scanDelay = scanDelay;
         this.batchSize = batchSize;
 
+        this.fullProperties = fullProperties;
+
         startBrowse ();
     }
 
@@ -72,7 +76,7 @@ public class Browser
         this.scanning = true;
 
         fireStateChange ( BrowserState.BROWSING, null );
-        scheduleBrowse ( new BrowseRequest ( this.itemName, this.itemPath, BrowseType.ALL, this.batchSize ) );
+        scheduleBrowse ( new BrowseRequest ( this.itemName, this.itemPath, BrowseType.ALL, this.batchSize, this.fullProperties ) );
     }
 
     private void scheduleBrowse ( final Task<BrowseResponse> request )

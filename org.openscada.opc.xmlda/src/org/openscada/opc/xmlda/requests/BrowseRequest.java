@@ -29,18 +29,21 @@ public class BrowseRequest implements Task<BrowseResponse>
 
     private final String continuationPoint;
 
-    public BrowseRequest ( final String itemName, final String itemPath, final BrowseType browserType, final Integer maxElementsReturned )
+    private final boolean fullProperties;
+
+    public BrowseRequest ( final String itemName, final String itemPath, final BrowseType browserType, final Integer maxElementsReturned, final boolean fullProperties )
     {
-        this ( itemName, itemPath, browserType, maxElementsReturned, null );
+        this ( itemName, itemPath, browserType, maxElementsReturned, fullProperties, null );
     }
 
-    public BrowseRequest ( final String itemName, final String itemPath, final BrowseType browserType, final Integer maxElementsReturned, final String continuationPoint )
+    public BrowseRequest ( final String itemName, final String itemPath, final BrowseType browserType, final Integer maxElementsReturned, final boolean fullProperties, final String continuationPoint )
     {
         this.itemName = itemName;
         this.itemPath = itemPath;
         this.browserType = browserType;
         this.maxElementsReturned = maxElementsReturned;
         this.continuationPoint = continuationPoint;
+        this.fullProperties = fullProperties;
     }
 
     public String getItemName ()
@@ -66,6 +69,11 @@ public class BrowseRequest implements Task<BrowseResponse>
     public String getContinuationPoint ()
     {
         return this.continuationPoint;
+    }
+
+    public boolean isFullProperties ()
+    {
+        return this.fullProperties;
     }
 
     @Override
@@ -110,8 +118,12 @@ public class BrowseRequest implements Task<BrowseResponse>
         // set options
 
         request.setReturnErrorText ( true );
-        request.setReturnAllProperties ( true );
-        request.setReturnPropertyValues ( true );
+
+        if ( this.fullProperties )
+        {
+            request.setReturnAllProperties ( true );
+            request.setReturnPropertyValues ( true );
+        }
 
         // make the call & return
 

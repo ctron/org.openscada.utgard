@@ -42,6 +42,21 @@ public class State
         return this.vendor;
     }
 
+    public boolean isGood ()
+    {
+        return this.quality.isGood ();
+    }
+
+    public boolean isBad ()
+    {
+        return this.quality.isBad ();
+    }
+
+    public boolean isUncertain ()
+    {
+        return this.quality.isUncertain ();
+    }
+
     @Override
     public String toString ()
     {

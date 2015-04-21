@@ -32,4 +32,10 @@ public class ItemRequest
         return this.itemName;
     }
 
+    @Override
+    public String toString ()
+    {
+        return String.format ( "[ItemRequest: %s - %s]", this.itemName, this.clientHandle );
+    }
+
 }
