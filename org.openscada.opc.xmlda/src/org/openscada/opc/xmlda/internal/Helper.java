@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,7 +71,7 @@ public final class Helper
         return format.format ( timestamp.getTime () );
     }
 
-    public static Calendar convert ( final XMLGregorianCalendar time )
+    public static GregorianCalendar convert ( final XMLGregorianCalendar time )
     {
         if ( time == null )
         {
@@ -222,7 +223,7 @@ public final class Helper
         }
 
         final String itemPath = value.getItemPath ();
-        final Calendar timestamp = convert ( value.getTimestamp () );
+        final GregorianCalendar timestamp = convert ( value.getTimestamp () );
         final Object valueObj = convertRawValue ( value.getValue () );
         final State quality = convert ( value.getQuality () );
 

@@ -16,10 +16,13 @@ public class ItemRequest
 
     private final String itemName;
 
-    public ItemRequest ( final String clientHandle, final String itemName )
+    private final String itemPath;
+
+    public ItemRequest ( final String clientHandle, final String itemName, final String itemPath )
     {
         this.clientHandle = clientHandle;
         this.itemName = itemName;
+        this.itemPath = itemPath;
     }
 
     public String getClientHandle ()
@@ -35,7 +38,7 @@ public class ItemRequest
     @Override
     public String toString ()
     {
-        return String.format ( "[ItemRequest: %s - %s]", this.itemName, this.clientHandle );
+        return String.format ( "[ItemRequest: %s - %s - %s]", this.itemName, this.itemPath, this.clientHandle );
     }
 
 }

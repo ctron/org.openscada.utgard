@@ -10,7 +10,7 @@
  *******************************************************************************/
 package org.openscada.opc.xmlda.requests;
 
-import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import org.openscada.opc.xmlda.internal.Helper;
 
@@ -24,11 +24,11 @@ public class ItemValue
 
     private final State state;
 
-    private final Calendar timestamp;
+    private final GregorianCalendar timestamp;
 
     private final ErrorInformation errorInformation;
 
-    public ItemValue ( final String itemName, final String itemPath, final Object value, final State state, final Calendar timestamp, final ErrorInformation errorInformation )
+    public ItemValue ( final String itemName, final String itemPath, final Object value, final State state, final GregorianCalendar timestamp, final ErrorInformation errorInformation )
     {
         this.itemName = itemName;
         this.itemPath = itemPath;
@@ -53,7 +53,7 @@ public class ItemValue
         return this.state;
     }
 
-    public Calendar getTimestamp ()
+    public GregorianCalendar getTimestamp ()
     {
         return this.timestamp;
     }

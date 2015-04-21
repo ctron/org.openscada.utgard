@@ -63,6 +63,8 @@ public class Poller
 
     private final Executor executor;
 
+    private final AtomicLong changeCounter = new AtomicLong ();
+
     Poller ( final Connection connection, final Executor executor, final SubscriptionListener listener, final int waitTime )
     {
         this.connection = connection;
@@ -77,6 +79,8 @@ public class Poller
 
     protected void setup ()
     {
+        final long current = this.changeCounter.get ();
+
         final Service soap = this.connection.unwrap ( Service.class );
 
         final RequestOptions options = makeDefautOptions ();
@@ -85,6 +89,8 @@ public class Poller
 
         synchronized ( this )
         {
+            this.subscriptionHandle = null;
+
             if ( this.handleMap.isEmpty () )
             {
                 logger.debug ( "No items registered. Skipping ..." );
@@ -104,24 +110,33 @@ public class Poller
 
         final Subscribe subscribe = new Subscribe ();
         subscribe.setOptions ( options );
-        subscribe.setReturnValuesOnReply ( false );
+        subscribe.setReturnValuesOnReply ( true );
+
         subscribe.setItemList ( itemList );
         subscribe.setSubscriptionPingRate ( this.waitTime * 4 );
 
         final SubscribeResponse result = soap.subscribe ( subscribe );
 
+        // we can always send out what we have
         updateValues ( makeValues ( result ) );
 
-        this.subscriptionHandle = result.getServerSubHandle ();
-        fireStateUpdate ( SubscriptionState.ACTIVE );
+        if ( this.changeCounter.get () != current )
+        {
+            return; // re-try
+        }
+
+        synchronized ( this )
+        {
+            this.subscriptionHandle = result.getServerSubHandle ();
+            fireStateUpdate ( SubscriptionState.ACTIVE );
+        }
     }
 
     public synchronized void addItem ( final ItemRequest item )
     {
         logger.debug ( "Adding item: {}", item );
 
-        this.subscriptionHandle = null;
-        fireStateUpdate ( SubscriptionState.INACTIVE );
+        markSubscriptionChange ();
 
         this.handleMap.put ( item.getClientHandle (), item );
         notifyAll ();
@@ -131,17 +146,47 @@ public class Poller
     {
         logger.debug ( "Removing item: {}", item );
 
-        this.subscriptionHandle = null;
-        fireStateUpdate ( SubscriptionState.INACTIVE );
+        markSubscriptionChange ();
 
         this.handleMap.remove ( item.getClientHandle () );
         notifyAll ();
     }
 
+    private void markSubscriptionChange ()
+    {
+        this.executor.execute ( new Runnable () {
+
+            @Override
+            public void run ()
+            {
+                performAbortPoll ();
+            }
+
+        } );
+    }
+
+    private void performAbortPoll ()
+    {
+        this.changeCounter.incrementAndGet ();
+
+        final Service soap = this.connection.unwrap ( Service.class );
+        final String subscriptionHandle;
+
+        synchronized ( this )
+        {
+            subscriptionHandle = this.subscriptionHandle;
+            this.subscriptionHandle = null;
+        }
+
+        if ( subscriptionHandle != null )
+        {
+            performCancelSubscription ( soap, subscriptionHandle );
+        }
+    }
+
     public synchronized void setItems ( final List<ItemRequest> items )
     {
-        this.subscriptionHandle = null;
-        fireStateUpdate ( SubscriptionState.INACTIVE );
+        markSubscriptionChange ();
 
         this.handleMap.clear ();
         for ( final ItemRequest req : items )
@@ -155,6 +200,53 @@ public class Poller
     public synchronized void setItems ( final String... items )
     {
         setItems ( makeRequests ( Arrays.asList ( items ) ) );
+    }
+
+    protected void runPoller ()
+    {
+        logger.info ( "Starting poller" );
+        try
+        {
+            long lastValue = -1;
+            fireStateUpdate ( SubscriptionState.INACTIVE );
+            while ( this.running )
+            {
+                try
+                {
+                    final long current = this.changeCounter.get ();
+                    if ( current != lastValue || this.subscriptionHandle == null )
+                    {
+                        logger.info ( "Performing setup - changeCounter: %s, last: %s, handle: %s", current, lastValue, this.subscriptionHandle );
+                        setup ();
+                        lastValue = current;
+                        logger.info ( "Setup complete" );
+                    }
+                    if ( this.subscriptionHandle != null )
+                    {
+                        logger.debug ( "Performing poll" );
+                        performPollOnce ();
+                    }
+                    synchronized ( this )
+                    {
+                        if ( this.handleMap.isEmpty () )
+                        {
+                            logger.info ( "Waiting for items" );
+                            fireStateUpdate ( SubscriptionState.WAITING );
+                            wait ();
+                        }
+                    }
+                }
+                catch ( final Throwable e )
+                {
+                    logger.warn ( "Failed to poll", e );
+                    invalidate ();
+                }
+            }
+        }
+        finally
+        {
+            logger.info ( "Exit poll loop" );
+        }
     }
 
     protected void performPollOnce ()
@@ -288,50 +380,6 @@ public class Poller
         this.thread.start ();
     }
 
-    protected void runPoller ()
-    {
-        logger.info ( "Starting poller" );
-        try
-        {
-            fireStateUpdate ( SubscriptionState.INACTIVE );
-            while ( this.running )
-            {
-                try
-                {
-                    if ( this.subscriptionHandle == null )
-                    {
-                        logger.info ( "Performing setup" );
-                        setup ();
-                        logger.info ( "Setup complete" );
-                    }
-                    if ( this.subscriptionHandle != null )
-                    {
-                        logger.debug ( "Performing poll" );
-                        performPollOnce ();
-                    }
-                    synchronized ( this )
-                    {
-                        if ( this.handleMap.isEmpty () )
-                        {
-                            logger.info ( "Waiting for items" );
-                            fireStateUpdate ( SubscriptionState.WAITING );
-                            wait ();
-                        }
-                    }
-                }
-                catch ( final Throwable e )
-                {
-                    logger.warn ( "Failed to poll", e );
-                    invalidate ();
-                }
-            }
-        }
-        finally
-        {
-            logger.info ( "Exit poll loop" );
-        }
-    }
-
     private void fireStateUpdate ( final SubscriptionState state )
     {
         if ( this.listener == null )
@@ -384,18 +432,24 @@ public class Poller
         {
             logger.info ( "Disposing at server..." );
 
-            try
-            {
-                final SubscriptionCancel parameters = new SubscriptionCancel ();
-                parameters.setServerSubHandle ( subscriptionHandle );
-                soap.subscriptionCancel ( parameters );
-            }
-            catch ( final Exception e )
-            {
-                logger.warn ( "Failed to dispose at server", e );
-            }
+            performCancelSubscription ( soap, subscriptionHandle );
 
             logger.info ( "Disposing at server...done!" );
+        }
+    }
+
+    private void performCancelSubscription ( final Service soap, final String subscriptionHandle )
+    {
+        try
+        {
+            logger.info ( "Canceling subscription: {}", subscriptionHandle );
+            final SubscriptionCancel parameters = new SubscriptionCancel ();
+            parameters.setServerSubHandle ( subscriptionHandle );
+            soap.subscriptionCancel ( parameters );
+        }
+        catch ( final Exception e )
+        {
+            logger.info ( "Failed to dispose at server", e );
         }
     }
 
@@ -405,7 +459,7 @@ public class Poller
 
         for ( final String itemName : itemNames )
         {
-            result.add ( new ItemRequest ( itemName, itemName ) );
+            result.add ( new ItemRequest ( itemName, itemName, null ) );
         }
 
         return result;
