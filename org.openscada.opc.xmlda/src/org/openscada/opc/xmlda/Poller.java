@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.xml.namespace.QName;
@@ -61,11 +61,11 @@ public class Poller
 
     private volatile boolean running;
 
-    private final Executor executor;
+    private final ExecutorService executor;
 
     private final AtomicLong changeCounter = new AtomicLong ();
 
-    Poller ( final Connection connection, final Executor executor, final SubscriptionListener listener, final int waitTime )
+    Poller ( final Connection connection, final ExecutorService executor, final SubscriptionListener listener, final int waitTime )
     {
         this.connection = connection;
         this.executor = executor;
@@ -154,6 +154,11 @@ public class Poller
 
     private void markSubscriptionChange ()
     {
+        if ( this.executor.isShutdown () )
+        {
+            return;
+        }
+
         this.executor.execute ( new Runnable () {
 
             @Override
