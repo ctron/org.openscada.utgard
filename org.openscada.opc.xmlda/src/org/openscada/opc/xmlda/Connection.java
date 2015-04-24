@@ -13,6 +13,7 @@ package org.openscada.opc.xmlda;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -74,10 +75,15 @@ public class Connection implements AutoCloseable
 
         this.soap = this.service.getPort ( portName, org.opcfoundation.webservices.xmlda._1.Service.class );
 
-        ( (BindingProvider)this.soap ).getRequestContext ().put ( "javax.xml.ws.client.connectionTimeout", connectTimeout );
-        ( (BindingProvider)this.soap ).getRequestContext ().put ( "javax.xml.ws.client.receiveTimeout", requestTimeout );
-        ( (BindingProvider)this.soap ).getRequestContext ().put ( "com.sun.xml.internal.ws.connect.timeout", connectTimeout );
-        ( (BindingProvider)this.soap ).getRequestContext ().put ( "com.sun.xml.internal.ws.request.timeout", requestTimeout );
+        final BindingProvider bindingProvider = (BindingProvider)this.soap;
+
+        final Map<String, Object> context = bindingProvider.getRequestContext ();
+
+        context.put ( "javax.xml.ws.client.connectionTimeout", connectTimeout );
+        context.put ( "javax.xml.ws.client.receiveTimeout", requestTimeout );
+        context.put ( "com.sun.xml.internal.ws.connect.timeout", connectTimeout );
+        context.put ( "com.sun.xml.internal.ws.request.timeout", requestTimeout );
+        context.put ( BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url.toString () );
 
         this.executor = Executors.newSingleThreadScheduledExecutor ( new NamedThreadFactory ( this.name + "/Requests" ) );
         this.eventExecutor = Executors.newSingleThreadExecutor ( new NamedThreadFactory ( this.name + "/Events" ) );

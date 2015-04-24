@@ -3,9 +3,11 @@ package org.openscada.opc.xmlda.tests;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.xml.namespace.QName;
+import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Holder;
 import javax.xml.ws.Service;
 
@@ -51,6 +53,11 @@ public class ConnectionTest implements AutoCloseable
     {
         this.service = Service.create ( url, serviceName );
         this.soap = this.service.getPort ( new QName ( serviceName.getNamespaceURI (), portName ), org.opcfoundation.webservices.xmlda._1.Service.class );
+
+        final BindingProvider bindingProvider = (BindingProvider)this.soap;
+        final Map<String, Object> context = bindingProvider.getRequestContext ();
+
+        context.put ( BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url.toString () );
 
         this.clientHandle = UUID.randomUUID ().toString ();
     }
