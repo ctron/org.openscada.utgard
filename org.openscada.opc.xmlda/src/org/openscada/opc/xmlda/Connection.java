@@ -32,9 +32,7 @@ import org.openscada.opc.xmlda.requests.BrowseEntry;
 
 public class Connection implements AutoCloseable
 {
-    private final Service service;
-
-    private final org.opcfoundation.webservices.xmlda._1.Service soap;
+    private org.opcfoundation.webservices.xmlda._1.Service soap;
 
     private final ScheduledExecutorService executor;
 
@@ -43,6 +41,16 @@ public class Connection implements AutoCloseable
     private final String name;
 
     private final int requestTimeout;
+
+    private final QName serviceName;
+
+    private final String localPortName;
+
+    private final int connectTimeout;
+
+    private final URL wsdlUrl;
+
+    private final URL serverUrl;
 
     protected class TaskRunner<T> extends FutureTask<T>
     {
@@ -59,34 +67,88 @@ public class Connection implements AutoCloseable
         }
     }
 
+    /**
+     * Create a connection
+     * <p>
+     * This constructor takes a default connection timeout of 5 seconds, and
+     * request timeout of 10 seconds
+     * </p>
+     *
+     * @param url
+     *            the endpoint and WSDL URL
+     * @param serviceName
+     *            the name of the service
+     * @throws MalformedURLException
+     *             thrown in case the URL has an invalid syntax
+     */
     public Connection ( final String url, final String serviceName ) throws MalformedURLException
     {
-        this ( new URL ( url ), new QName ( "http://opcfoundation.org/webservices/XMLDA/1.0/", serviceName ), serviceName + "Soap", 5_000, 10_000 );
+        this ( new URL ( url + "?wsdl" ), new URL ( url ), new QName ( "http://opcfoundation.org/webservices/XMLDA/1.0/", serviceName ), serviceName + "Soap", 5_000, 10_000 );
     }
 
-    public Connection ( final URL url, final QName serviceName, final String localPortName, final int connectTimeout, final int requestTimeout )
+    /**
+     * Create a connection with more control over the connection parameters
+     *
+     * @param wsdlUrl
+     *            the URL of the WSDL file. This may be <code>null</code> in
+     *            which case the serverUrl is used. This URL may point to a file
+     *            system local resource.
+     * @param serverUrl
+     *            The URL to the server endpoint. This URL will override any
+     *            endpoint in the WSDL file.
+     * @param serviceName
+     *            The service name
+     * @param localPortName
+     *            The local port name
+     * @param connectTimeout
+     *            The connection timeout (in milliseconds)
+     * @param requestTimeout
+     *            The request timeout (in millisedonds)
+     */
+    public Connection ( final URL wsdlUrl, final URL serverUrl, final QName serviceName, final String localPortName, final int connectTimeout, final int requestTimeout )
     {
-        this.name = url + "/" + localPortName;
+        if ( serverUrl == null )
+        {
+            throw new NullPointerException ( "'serverUrl' must not be null" );
+        }
 
-        this.service = Service.create ( url, serviceName );
+        this.wsdlUrl = wsdlUrl;
+        this.serverUrl = serverUrl;
+        this.name = serverUrl + "/" + localPortName;
+
+        this.connectTimeout = connectTimeout;
         this.requestTimeout = requestTimeout;
 
-        final QName portName = new QName ( serviceName.getNamespaceURI (), localPortName );
+        this.serviceName = serviceName;
+        this.localPortName = localPortName;
 
-        this.soap = this.service.getPort ( portName, org.opcfoundation.webservices.xmlda._1.Service.class );
+        this.executor = Executors.newSingleThreadScheduledExecutor ( new NamedThreadFactory ( this.name + "/Requests" ) );
+        this.eventExecutor = Executors.newSingleThreadExecutor ( new NamedThreadFactory ( this.name + "/Events" ) );
+    }
+
+    protected org.opcfoundation.webservices.xmlda._1.Service createPort ()
+    {
+        if ( this.soap != null )
+        {
+            return this.soap;
+        }
+
+        final QName portName = new QName ( this.serviceName.getNamespaceURI (), this.localPortName );
+
+        final Service service = Service.create ( this.wsdlUrl == null ? this.serverUrl : this.wsdlUrl, this.serviceName );
+        this.soap = service.getPort ( portName, org.opcfoundation.webservices.xmlda._1.Service.class );
 
         final BindingProvider bindingProvider = (BindingProvider)this.soap;
 
         final Map<String, Object> context = bindingProvider.getRequestContext ();
 
-        context.put ( "javax.xml.ws.client.connectionTimeout", connectTimeout );
-        context.put ( "javax.xml.ws.client.receiveTimeout", requestTimeout );
-        context.put ( "com.sun.xml.internal.ws.connect.timeout", connectTimeout );
-        context.put ( "com.sun.xml.internal.ws.request.timeout", requestTimeout );
-        context.put ( BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url.toString () );
+        context.put ( "javax.xml.ws.client.connectionTimeout", this.connectTimeout );
+        context.put ( "javax.xml.ws.client.receiveTimeout", this.requestTimeout );
+        context.put ( "com.sun.xml.internal.ws.connect.timeout", this.connectTimeout );
+        context.put ( "com.sun.xml.internal.ws.request.timeout", this.requestTimeout );
+        context.put ( BindingProvider.ENDPOINT_ADDRESS_PROPERTY, this.serverUrl.toString () );
 
-        this.executor = Executors.newSingleThreadScheduledExecutor ( new NamedThreadFactory ( this.name + "/Requests" ) );
-        this.eventExecutor = Executors.newSingleThreadExecutor ( new NamedThreadFactory ( this.name + "/Events" ) );
+        return this.soap;
     }
 
     public Poller createPoller ( final SubscriptionListener listener )
@@ -113,7 +175,7 @@ public class Connection implements AutoCloseable
     {
         if ( clazz.equals ( org.opcfoundation.webservices.xmlda._1.Service.class ) )
         {
-            return clazz.cast ( this.soap );
+            return clazz.cast ( createPort () );
         }
         return null;
     }

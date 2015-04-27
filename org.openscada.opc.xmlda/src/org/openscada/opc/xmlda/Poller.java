@@ -174,7 +174,6 @@ public class Poller
     {
         this.changeCounter.incrementAndGet ();
 
-        final Service soap = this.connection.unwrap ( Service.class );
         final String subscriptionHandle;
 
         synchronized ( this )
@@ -185,7 +184,7 @@ public class Poller
 
         if ( subscriptionHandle != null )
         {
-            performCancelSubscription ( soap, subscriptionHandle );
+            performCancelSubscription ( subscriptionHandle );
         }
     }
 
@@ -221,7 +220,7 @@ public class Poller
                     final long current = this.changeCounter.get ();
                     if ( current != lastValue || this.subscriptionHandle == null )
                     {
-                        logger.info ( "Performing setup - changeCounter: %s, last: %s, handle: %s", current, lastValue, this.subscriptionHandle );
+                        logger.info ( "Performing setup - changeCounter: {}, last: {}, handle: {}", current, lastValue, this.subscriptionHandle );
                         setup ();
                         lastValue = current;
                         logger.info ( "Setup complete" );
@@ -424,8 +423,6 @@ public class Poller
         logger.info ( "Disposing" );
         this.running = false;
 
-        final Service soap = this.connection.unwrap ( Service.class );
-
         String subscriptionHandle;
         synchronized ( this )
         {
@@ -437,17 +434,20 @@ public class Poller
         {
             logger.info ( "Disposing at server..." );
 
-            performCancelSubscription ( soap, subscriptionHandle );
+            performCancelSubscription ( subscriptionHandle );
 
             logger.info ( "Disposing at server...done!" );
         }
     }
 
-    private void performCancelSubscription ( final Service soap, final String subscriptionHandle )
+    private void performCancelSubscription ( final String subscriptionHandle )
     {
         try
         {
             logger.info ( "Canceling subscription: {}", subscriptionHandle );
+
+            final Service soap = this.connection.unwrap ( Service.class );
+
             final SubscriptionCancel parameters = new SubscriptionCancel ();
             parameters.setServerSubHandle ( subscriptionHandle );
             soap.subscriptionCancel ( parameters );
