@@ -154,7 +154,12 @@ public class Connection implements AutoCloseable
 
     public Poller createPoller ( final SubscriptionListener listener )
     {
-        return new Poller ( this, this.eventExecutor, listener, (int) ( this.requestTimeout * 0.8 + 1.0 ) );
+        return new Poller ( this, this.eventExecutor, listener, (int) ( this.requestTimeout * 0.8 + 1000.0 ), 100 );
+    }
+
+    public Poller createPoller ( final SubscriptionListener listener, final int waitTime, final Integer samplingRate )
+    {
+        return new Poller ( this, this.eventExecutor, listener, waitTime, samplingRate );
     }
 
     public Browser createBrowser ( final String itemName, final String itemPath, final BrowserListener listener, final long scanDelay, final int batchSize, final boolean fullProperties )

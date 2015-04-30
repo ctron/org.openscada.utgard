@@ -65,12 +65,16 @@ public class Poller
 
     private final AtomicLong changeCounter = new AtomicLong ();
 
-    Poller ( final Connection connection, final ExecutorService executor, final SubscriptionListener listener, final int waitTime )
+    private final Integer samplingRate;
+
+    Poller ( final Connection connection, final ExecutorService executor, final SubscriptionListener listener, final int waitTime, final Integer samplingRate )
     {
         this.connection = connection;
         this.executor = executor;
         this.listener = listener;
         this.waitTime = waitTime;
+
+        this.samplingRate = samplingRate;
 
         this.name = String.format ( "Poller/%s/%s", connection, POLLER_COUNTER.incrementAndGet () );
 
@@ -103,7 +107,7 @@ public class Poller
                 itemRequest.setItemName ( item.getItemName () );
                 itemRequest.setClientItemHandle ( item.getClientHandle () );
                 itemRequest.setEnableBuffering ( true );
-                itemRequest.setRequestedSamplingRate ( 100 );
+                itemRequest.setRequestedSamplingRate ( this.samplingRate );
                 itemList.getItems ().add ( itemRequest );
             }
         }
