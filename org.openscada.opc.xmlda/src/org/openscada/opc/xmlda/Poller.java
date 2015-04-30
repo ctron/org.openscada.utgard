@@ -244,6 +244,14 @@ public class Poller
                 {
                     logger.warn ( "Failed to poll", e );
                     invalidate ();
+                    try
+                    {
+                        Thread.sleep ( this.waitTime );
+                    }
+                    catch ( final InterruptedException e1 )
+                    {
+                        // got woken up
+                    }
                 }
             }
         }

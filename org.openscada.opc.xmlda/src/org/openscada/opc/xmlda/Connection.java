@@ -16,16 +16,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Service;
 
+import org.eclipse.scada.utils.concurrent.ExportedExecutorService;
 import org.eclipse.scada.utils.concurrent.FutureTask;
-import org.eclipse.scada.utils.concurrent.NamedThreadFactory;
 import org.eclipse.scada.utils.concurrent.NotifyFuture;
+import org.eclipse.scada.utils.concurrent.ScheduledExportedExecutorService;
 import org.openscada.opc.xmlda.browse.Browser;
 import org.openscada.opc.xmlda.browse.BrowserListener;
 import org.openscada.opc.xmlda.requests.BrowseEntry;
@@ -103,7 +104,7 @@ public class Connection implements AutoCloseable
      * @param connectTimeout
      *            The connection timeout (in milliseconds)
      * @param requestTimeout
-     *            The request timeout (in millisedonds)
+     *            The request timeout (in milliseconds)
      */
     public Connection ( final URL wsdlUrl, final URL serverUrl, final QName serviceName, final String localPortName, final int connectTimeout, final int requestTimeout )
     {
@@ -122,8 +123,8 @@ public class Connection implements AutoCloseable
         this.serviceName = serviceName;
         this.localPortName = localPortName;
 
-        this.executor = Executors.newSingleThreadScheduledExecutor ( new NamedThreadFactory ( this.name + "/Requests" ) );
-        this.eventExecutor = Executors.newSingleThreadExecutor ( new NamedThreadFactory ( this.name + "/Events" ) );
+        this.executor = new ScheduledExportedExecutorService ( this.name + "/Requests" );
+        this.eventExecutor = new ExportedExecutorService ( this.name + "/Events", 1, 1, 1, TimeUnit.SECONDS );
     }
 
     protected org.opcfoundation.webservices.xmlda._1.Service createPort ()
