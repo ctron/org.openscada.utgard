@@ -205,7 +205,7 @@ public class Poller
         notifyAll ();
     }
 
-    public synchronized void setItems ( final String... items )
+    public void setItems ( final String... items )
     {
         setItems ( makeRequests ( Arrays.asList ( items ) ) );
     }
