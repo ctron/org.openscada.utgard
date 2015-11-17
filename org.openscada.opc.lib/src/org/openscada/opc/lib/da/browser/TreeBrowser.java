@@ -42,9 +42,9 @@ public class TreeBrowser extends BaseBrowser
 
     /**
      * Browse for all items without search parameters.
-     * <br/>
+     * <p>
      * This will actually call:
-     * <br/>
+     * </p>
      * <code>
      * TreeBrowser ( browser, "", EnumSet.noneOf ( Access.class ), JIVariant.VT_EMPTY );
      * </code>
@@ -165,7 +165,7 @@ public class TreeBrowser extends BaseBrowser
 
     /**
      * Fill the leaves and branches of the branch provided branches including
-     * alls sub-branches. 
+     * all sub-branches. 
      * @param branch The branch to fill.
      * @throws IllegalArgumentException
      * @throws UnknownHostException
@@ -179,8 +179,9 @@ public class TreeBrowser extends BaseBrowser
 
     /**
      * Fill the branch object with the leaves of this currently selected branch.
-     * <br/>
+     * <p>
      * The server object is not located to the branch before browsing!
+     * </p>
      * @param branch The branch to fill
      * @throws IllegalArgumentException
      * @throws UnknownHostException
