@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.Holder;
@@ -34,16 +35,30 @@ import org.openscada.opc.xmlda.requests.ReadResponse.Builder;
 
 public class ReadRequest implements Task<ReadResponse>
 {
+    private final Integer maxAge;
+
     private final Set<String> itemNames;
 
-    public ReadRequest ( final String... itemName )
+    public ReadRequest ( final String... itemNames )
     {
-        this ( new HashSet<> ( Arrays.asList ( itemName ) ) );
+        this ( null, itemNames );
+    }
+
+    public ReadRequest ( final Integer maxAge, final String... itemNames )
+    {
+        this.maxAge = maxAge;
+        this.itemNames = new HashSet<> ( Arrays.asList ( itemNames ) );
     }
 
     public ReadRequest ( final Set<String> itemNames )
     {
-        this.itemNames = itemNames;
+        this ( null, itemNames );
+    }
+
+    public ReadRequest ( final Integer maxAge, final Set<String> itemNames )
+    {
+        this.maxAge = maxAge;
+        this.itemNames = new CopyOnWriteArraySet<> ( itemNames );
     }
 
     public Set<String> getItemNames ()
@@ -73,6 +88,7 @@ public class ReadRequest implements Task<ReadResponse>
         {
             final ReadRequestItem rri = new ReadRequestItem ();
             rri.setItemName ( itemName );
+            rri.setMaxAge ( this.maxAge );
             itemList.getItems ().add ( rri );
         }
 
