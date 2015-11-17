@@ -30,6 +30,7 @@ import org.eclipse.scada.utils.concurrent.ScheduledExportedExecutorService;
 import org.openscada.opc.xmlda.browse.Browser;
 import org.openscada.opc.xmlda.browse.BrowserListener;
 import org.openscada.opc.xmlda.requests.BrowseEntry;
+import org.openscada.opc.xmlda.requests.ReadRequest;
 
 public class Connection implements AutoCloseable
 {
@@ -152,14 +153,39 @@ public class Connection implements AutoCloseable
         return this.soap;
     }
 
-    public Poller createPoller ( final SubscriptionListener listener )
+    public Poller createSubscriptionPoller ( final SubscriptionListener listener )
     {
-        return new Poller ( this, this.eventExecutor, listener, (int) ( this.requestTimeout * 0.8 + 1000.0 ), 100 );
+        return new SubscriptionPoller ( this, this.eventExecutor, listener, (int) ( this.requestTimeout * 0.8 + 1000.0 ), 100 );
     }
 
-    public Poller createPoller ( final SubscriptionListener listener, final int waitTime, final Integer samplingRate )
+    /**
+     * Create a new subscription based poller
+     */
+    public Poller createSubscriptionPoller ( final SubscriptionListener listener, final int waitTime, final Integer samplingRate )
     {
-        return new Poller ( this, this.eventExecutor, listener, waitTime, samplingRate );
+        return new SubscriptionPoller ( this, this.eventExecutor, listener, waitTime, samplingRate );
+    }
+
+    /**
+     * Create a new poller using {@link ReadRequest}s instead of subscriptions
+     * <p>
+     * The {@link ReadRequest} should only be used for one-shot read operations.
+     * Continuous data acquisition should be realized using subscriptions (see
+     * {@link #createSubscriptionPoller(SubscriptionListener, int, Integer)}).
+     * However some server implementations are quite buggy so a emulating a
+     * subscription by falling back to {@link ReadRequest}s might be a last
+     * resort.
+     * </p>
+     *
+     * @param period
+     *            the poll period in milliseconds
+     * @param maxAge
+     *            the maximum data age, used by the server to evaluate if the
+     *            data should be fetched from the cache or the device
+     */
+    public Poller createReadPoller ( final SubscriptionListener listener, final long period, final Integer maxAge )
+    {
+        return new ReadRequestPoller ( this, listener, this.eventExecutor, period, maxAge );
     }
 
     public Browser createBrowser ( final String itemName, final String itemPath, final BrowserListener listener, final long scanDelay, final int batchSize, final boolean fullProperties )

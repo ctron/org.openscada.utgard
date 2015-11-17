@@ -13,57 +13,93 @@ import org.openscada.opc.xmlda.requests.ItemValue;
 
 public class Test3
 {
+    private static final SubscriptionListener DEFAULT_LISTENER = new ConsoleDumpListener ();
+
+    private static class ConsoleDumpListener implements SubscriptionListener
+    {
+        @Override
+        public void stateChange ( final SubscriptionState state )
+        {
+            System.out.println ( "State change: " + state );
+        }
+
+        @Override
+        public void dataChange ( final Map<String, ItemValue> values )
+        {
+            final StringWriter sw = new StringWriter ();
+            final PrintWriter pw = new PrintWriter ( sw );
+
+            pw.println ( "Update" );
+            pw.println ( "----------" );
+
+            for ( final Map.Entry<String, ItemValue> entry : values.entrySet () )
+            {
+                pw.format ( "\t%s = %s%n", entry.getKey (), entry.getValue () );
+            }
+
+            System.out.print ( sw );
+            System.out.flush ();
+        }
+    }
+
     @Test
-    public void test1 () throws Exception
+    public void testAsync1 () throws Exception
+    {
+        System.out.println ( "   ASYNC" );
+        System.out.println ( "========================" );
+        performTest ( true );
+        System.out.println ( "========================" );
+    }
+
+    @Test
+    public void testSync1 () throws Exception
+    {
+        System.out.println ( "   SYNC" );
+        System.out.println ( "========================" );
+        performTest ( false );
+        System.out.println ( "========================" );
+    }
+
+    private void performTest ( final boolean async ) throws Exception
     {
         try ( Connection c = new Connection ( "http://advosol.com/XMLDADemo/ts_sim/OpcDaGateway.asmx", "OpcXmlDaSrv" ) )
         // try ( Connection c = new Connection ( "http://advosol.com/XMLDADemo/XML_Sim/opcxmldaserver.asmx", "OpcXmlDA" ) )
         {
-            final Poller poller = c.createPoller ( new SubscriptionListener () {
+            final Poller poller;
 
-                @Override
-                public void stateChange ( final SubscriptionState state )
-                {
-                    System.out.println ( "State change: " + state );
-                }
+            if ( async )
+            {
+                poller = c.createSubscriptionPoller ( DEFAULT_LISTENER );
+            }
+            else
+            {
+                poller = c.createReadPoller ( DEFAULT_LISTENER, 1_000, 0 );
+            }
 
-                @Override
-                public void dataChange ( final Map<String, ItemValue> values )
-                {
-                    final StringWriter sw = new StringWriter ();
-                    final PrintWriter pw = new PrintWriter ( sw );
+            try
+            {
+                Thread.sleep ( 1_000 );
 
-                    pw.println ( "Update" );
-                    pw.println ( "----------" );
+                poller.setItems ( "Dynamic.Analog Types.Double", "Dynamic.Analog Types.Double1" );
 
-                    for ( final Map.Entry<String, ItemValue> entry : values.entrySet () )
-                    {
-                        pw.format ( "\t%s = %s%n", entry.getKey (), entry.getValue () );
-                    }
+                Thread.sleep ( 10_000 );
 
-                    System.out.print ( sw );
-                    System.out.flush ();
-                }
-            } );
+                poller.setItems ( "Dynamic.Analog Types.Double", "Dynamic.Analog Types.Double1", "SimulatedData.Ramp" );
 
-            Thread.sleep ( 1_000 );
+                Thread.sleep ( 20_000 );
 
-            poller.setItems ( "Dynamic.Analog Types.Double", "Dynamic.Analog Types.Double1" );
+                poller.setItems ( "Dynamic.Analog Types.Double", "Dynamic.Analog Types.Double1" );
 
-            Thread.sleep ( 10_000 );
+                Thread.sleep ( 30_000 );
 
-            poller.setItems ( "Dynamic.Analog Types.Double", "Dynamic.Analog Types.Double1", "SimulatedData.Ramp" );
+                poller.setItems ();
 
-            Thread.sleep ( 20_000 );
-
-            poller.setItems ( "Dynamic.Analog Types.Double", "Dynamic.Analog Types.Double1" );
-
-            Thread.sleep ( 30_000 );
-
-            poller.setItems ();
-
-            Thread.sleep ( 3_000 );
-
+                Thread.sleep ( 3_000 );
+            }
+            finally
+            {
+                poller.close ();
+            }
         }
     }
 }

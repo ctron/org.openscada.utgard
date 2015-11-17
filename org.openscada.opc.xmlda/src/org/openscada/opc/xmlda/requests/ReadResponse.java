@@ -44,6 +44,11 @@ public class ReadResponse extends BaseResponse
         }
     }
 
+    public Map<String, ItemValue> getValues ()
+    {
+        return this.values;
+    }
+
     @Override
     public String toString ()
     {

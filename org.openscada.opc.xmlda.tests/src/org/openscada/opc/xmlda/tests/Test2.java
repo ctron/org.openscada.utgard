@@ -39,7 +39,7 @@ public class Test2
                 }
             } );
 
-            final NotifyFuture<ReadResponse> f = c.scheduleTask ( new ReadRequest ( "Dynamic.Analog Types.Double", "Dynamic.Analog Types.Double1" ) );
+            final NotifyFuture<ReadResponse> f = c.scheduleTask ( new ReadRequest.Builder ( "Dynamic.Analog Types.Double", "Dynamic.Analog Types.Double1" ).build () );
             f.addListener ( new FutureListener<ReadResponse> () {
 
                 @Override
@@ -61,7 +61,7 @@ public class Test2
                 }
             } );
 
-            c.scheduleTask ( new ReadRequest ( "Dynamic.Analog Types.Double" ) ).cancel ( false );
+            c.scheduleTask ( new ReadRequest.Builder ( "Dynamic.Analog Types.Double" ).build () ).cancel ( false );
 
             s.acquire ();
         }

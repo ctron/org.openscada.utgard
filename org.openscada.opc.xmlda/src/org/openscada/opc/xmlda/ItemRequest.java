@@ -10,6 +10,10 @@
  *******************************************************************************/
 package org.openscada.opc.xmlda;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 public class ItemRequest
 {
     private final String clientHandle;
@@ -39,6 +43,18 @@ public class ItemRequest
     public String toString ()
     {
         return String.format ( "[ItemRequest: %s - %s - %s]", this.itemName, this.itemPath, this.clientHandle );
+    }
+
+    public static List<ItemRequest> makeRequests ( final Collection<String> itemNames )
+    {
+        final List<ItemRequest> result = new CopyOnWriteArrayList<> ();
+
+        for ( final String itemName : itemNames )
+        {
+            result.add ( new ItemRequest ( itemName, itemName, null ) );
+        }
+
+        return result;
     }
 
 }
