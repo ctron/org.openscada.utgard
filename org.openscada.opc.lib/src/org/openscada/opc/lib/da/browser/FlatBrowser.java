@@ -21,7 +21,7 @@ import org.openscada.opc.dcom.da.impl.OPCBrowseServerAddressSpace;
 
 /**
  * Browse through the flat server namespace 
- * @author Jens Reimann <jens.reimann@th4-systems.com>
+ * @author Jens Reimann
  *
  */
 public class FlatBrowser extends BaseBrowser
