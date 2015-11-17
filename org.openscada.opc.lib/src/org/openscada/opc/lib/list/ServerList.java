@@ -112,7 +112,7 @@ public class ServerList
      * List all servers that match the requirements
      * @param implemented All implemented categories
      * @param required All required categories
-     * @return A collection of <q>class ids</q>
+     * @return A collection of "class ids"
      * @throws IllegalArgumentException
      * @throws UnknownHostException
      * @throws JIException

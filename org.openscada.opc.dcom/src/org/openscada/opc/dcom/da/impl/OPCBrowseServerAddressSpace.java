@@ -28,7 +28,7 @@ import org.openscada.opc.dcom.da.OPCNAMESPACETYPE;
 
 /**
  * Implementation for <code>IOPCBrowseServerAddressSpace</code>
- * @author Jens Reimann <jens.reimann@th4-systems.com>
+ * @author Jens Reimann
  *
  */
 public class OPCBrowseServerAddressSpace extends BaseCOMObject

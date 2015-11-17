@@ -17,7 +17,7 @@ import org.jinterop.dcom.core.JIVariant;
 /**
  * Data for a write request to the server
  * 
- * @author Jens Reimann <jens.reimann@th4-systems.com>
+ * @author Jens Reimann
  */
 public class WriteRequest
 {

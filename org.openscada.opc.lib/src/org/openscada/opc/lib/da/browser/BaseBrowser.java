@@ -35,8 +35,8 @@ public class BaseBrowser
     /**
      * The batch size is the number of entries that will be requested with one call
      * from the server. Sometimes too big batch sizes will cause an exception. And
-     * smaller batch sizes degrade perfomance. The default is set by {@link EnumString#DEFAULT_BATCH_SIZE}
-     * and can be overridden by the java property <q>openscada.dcom.enum-batch-size</q>.
+     * smaller batch sizes degrade performance. The default is set by {@link EnumString#DEFAULT_BATCH_SIZE}
+     * and can be overridden by the java property {@code openscada.dcom.enum-batch-size}.
      */
     protected int _batchSize;
 

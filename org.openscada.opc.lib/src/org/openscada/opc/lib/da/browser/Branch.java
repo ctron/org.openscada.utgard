@@ -47,8 +47,9 @@ public class Branch
 
     /**
      * Get all branches.
-     * <br/>
-     * They must be filled first with a fill method from the {@link TreeBrowser} 
+     * <p>
+     * They must be filled first with a fill method from the {@link TreeBrowser}
+     * </p> 
      * @return The list of branches
      */
     public Collection<Branch> getBranches ()
@@ -63,8 +64,9 @@ public class Branch
 
     /**
      * Get all leaves.
-     * <br/>
-     * They must be filled first with a fill method from the {@link TreeBrowser} 
+     * <p>
+     * They must be filled first with a fill method from the {@link TreeBrowser}
+     * </p> 
      * @return The list of leaves
      */
     public Collection<Leaf> getLeaves ()

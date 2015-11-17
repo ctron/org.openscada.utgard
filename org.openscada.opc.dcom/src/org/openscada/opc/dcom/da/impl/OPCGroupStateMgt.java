@@ -29,7 +29,7 @@ import org.openscada.opc.dcom.da.OPCGroupState;
 /**
  * Implementation of <code>IOPCGroupStateMgt</code>
  * 
- * @author Jens Reimann <jens.reimann@th4-systems.com>
+ * @author Jens Reimann
  */
 public class OPCGroupStateMgt extends BaseCOMObject
 {

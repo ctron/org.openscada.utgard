@@ -23,11 +23,12 @@ import org.openscada.opc.dcom.da.impl.OPCBrowseServerAddressSpace;
 
 /**
  * Browse through the hierarchical server namespace.
- * <br/>
+ * <p>
  * The operations on the address space browser browser are not synchronized
  * as is the TreeBrowser itself. The user must take care of preventing
- * simultanious access to this instance and the server address space browser.
- * @author Jens Reimann <jens.reimann@th4-systems.com>
+ * simultaneous access to this instance and the server address space browser.
+ * </p>
+ * @author Jens Reimann
  *
  */
 public class TreeBrowser extends BaseBrowser

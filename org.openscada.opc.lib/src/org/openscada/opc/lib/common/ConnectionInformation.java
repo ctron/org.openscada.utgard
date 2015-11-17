@@ -12,7 +12,7 @@ package org.openscada.opc.lib.common;
 
 /**
  * Holds the connection information
- * @author Jens Reimann <jens.reimann@th4-systems.com>
+ * @author Jens Reimann
  *
  * If both <code>clsId</code> and <code>progId</code> are set then <code>clsId</code>
  * has priority!
