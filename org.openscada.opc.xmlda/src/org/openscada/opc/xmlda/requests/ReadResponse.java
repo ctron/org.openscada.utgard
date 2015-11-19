@@ -38,9 +38,9 @@ public class ReadResponse extends BaseResponse
             return result;
         }
 
-        public void addValue ( final ItemValue itemValue )
+        public void addValue ( final String clientItemHandle, final ItemValue itemValue )
         {
-            this.values.put ( itemValue.getItemName (), itemValue );
+            this.values.put ( clientItemHandle, itemValue );
         }
     }
 

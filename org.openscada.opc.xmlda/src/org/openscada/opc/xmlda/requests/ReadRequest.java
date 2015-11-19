@@ -145,7 +145,7 @@ public class ReadRequest implements Task<ReadResponse>
 
         for ( final ItemValue value : rItemList.value.getItems () )
         {
-            builder.addValue ( Helper.convertValue ( value, errorMap ) );
+            builder.addValue ( value.getClientItemHandle (), Helper.convertValue ( value, errorMap ) );
         }
 
         // return
