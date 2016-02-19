@@ -54,7 +54,7 @@ public class ReadRequestPoller extends AbstractPoller
             {
                 poll ();
             }
-        }, period, period, TimeUnit.MILLISECONDS );
+        }, 0, period, TimeUnit.MILLISECONDS );
     }
 
     private static Builder createDefaultRequestBuilder ( final Integer maxAge )
