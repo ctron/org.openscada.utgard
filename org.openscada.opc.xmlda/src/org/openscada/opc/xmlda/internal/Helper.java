@@ -10,8 +10,11 @@
  *******************************************************************************/
 package org.openscada.opc.xmlda.internal;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
@@ -44,6 +47,7 @@ import org.opcfoundation.webservices.xmlda._1.OPCError;
 import org.opcfoundation.webservices.xmlda._1.OPCQuality;
 import org.opcfoundation.webservices.xmlda._1.QualityBits;
 import org.opcfoundation.webservices.xmlda._1.ServerState;
+import org.openscada.opc.xmlda.OpcType;
 import org.openscada.opc.xmlda.requests.BrowseEntry;
 import org.openscada.opc.xmlda.requests.BrowseRequest;
 import org.openscada.opc.xmlda.requests.BrowseResponse;
@@ -307,6 +311,171 @@ public final class Helper
 
         // just pass back the value
         return value;
+    }
+
+    /**
+     * ArrayOfAnyType is not supported
+     * ArrayOfDateTime is not supported
+     * if parsing of any value fails it will be returned as a string
+     * 
+     * @param value
+     * @return
+     */
+    public static Object parseStringValue ( final String value, final OpcType opcType )
+    {
+        if ( value == null || !value.startsWith ( "[" ) || !value.endsWith ( "]" ) )
+        {
+            return value;
+        }
+        try
+        {
+            switch ( opcType )
+            {
+                case ARRAY_OF_BOOLEAN:
+                {
+                    ArrayOfBoolean v = new ArrayOfBoolean ();
+                    for ( String el : toStringList ( value ) )
+                    {
+                        v.getBoolean ().add ( Boolean.parseBoolean ( el ) );
+                    }
+                    return v;
+                }
+                case ARRAY_OF_BYTE:
+                {
+                    ArrayOfByte v = new ArrayOfByte ();
+                    for ( String el : toStringList ( value ) )
+                    {
+                        v.getByte ().add ( Byte.parseByte ( el ) );
+                    }
+                    return v;
+                }
+                case ARRAY_OF_DECIMAL:
+                {
+                    ArrayOfDecimal v = new ArrayOfDecimal ();
+                    for ( String el : toStringList ( value ) )
+                    {
+                        v.getDecimal ().add ( new BigDecimal ( el ) );
+                    }
+                    return v;
+                }
+                case ARRAY_OF_DOUBLE:
+                {
+                    ArrayOfDouble v = new ArrayOfDouble ();
+                    for ( String el : toStringList ( value ) )
+                    {
+                        v.getDouble ().add ( Double.parseDouble ( el ) );
+                    }
+                    return v;
+                }
+                case ARRAY_OF_FLOAT:
+                {
+                    ArrayOfFloat v = new ArrayOfFloat ();
+                    for ( String el : toStringList ( value ) )
+                    {
+                        v.getFloat ().add ( Float.parseFloat ( el ) );
+                    }
+                    return v;
+                }
+                case ARRAY_OF_INT:
+                {
+                    ArrayOfInt v = new ArrayOfInt ();
+                    for ( String el : toStringList ( value ) )
+                    {
+                        v.getInt ().add ( Integer.parseInt ( el ) );
+                    }
+                    return v;
+                }
+                case ARRAY_OF_LONG:
+                {
+                    ArrayOfLong v = new ArrayOfLong ();
+                    for ( String el : toStringList ( value ) )
+                    {
+                        v.getLong ().add ( Long.parseLong ( el ) );
+                    }
+                    return v;
+                }
+                case ARRAY_OF_SHORT:
+                {
+                    ArrayOfShort v = new ArrayOfShort ();
+                    for ( String el : toStringList ( value ) )
+                    {
+                        v.getShort ().add ( Short.parseShort ( el ) );
+                    }
+                    return v;
+                }
+                case ARRAY_OF_STRING:
+                {
+                    ArrayOfString v = new ArrayOfString ();
+                    v.getString ().addAll ( toStringList ( value ) );
+                }
+                case ARRAY_OF_UNSIGNED_INT:
+                {
+                    ArrayOfUnsignedInt v = new ArrayOfUnsignedInt ();
+                    for ( String el : toStringList ( value ) )
+                    {
+                        v.getUnsignedInt ().add ( Long.parseLong ( el ) );
+                    }
+                    return v;
+                }
+                case ARRAY_OF_UNSIGNED_LONG:
+                {
+                    ArrayOfUnsignedLong v = new ArrayOfUnsignedLong ();
+                    for ( String el : toStringList ( value ) )
+                    {
+                        v.getUnsignedLong ().add ( new BigInteger ( el ) );
+                    }
+                    return v;
+                }
+                case ARRAY_OF_UNSIGNED_SHORT:
+                {
+                    ArrayOfUnsignedShort v = new ArrayOfUnsignedShort ();
+                    for ( String el : toStringList ( value ) )
+                    {
+                        v.getUnsignedShort ().add ( Integer.parseInt ( el ) );
+                    }
+                    return v;
+                }
+                case ARRAY_OF_ANY_TYPE:
+                case ARRAY_OF_DATE_TIME:
+                case ARRAY_OF_UNSIGNED_BYTE:
+                case BASE64_BINARY:
+                case BOOLEAN:
+                case BYTE:
+                case DATE:
+                case DATE_TIME:
+                case DECIMAL:
+                case DOUBLE:
+                case DURATION:
+                case FLOAT:
+                case INT:
+                case LONG:
+                case QNAME:
+                case SHORT:
+                case STRING:
+                case TIME:
+                case UNDEFINED:
+                case UNSIGNED_BYTE:
+                case UNSIGNED_INT:
+                case UNSIGNED_LONG:
+                case UNSIGNED_SHORT:
+                default:
+                    break;
+            }
+        }
+        catch ( NumberFormatException e )
+        {
+            return value;
+        }
+        return value;
+    }
+
+    private static List<String> toStringList ( String value )
+    {
+        if ( value.equals ( "[]" ) )
+        {
+            return Collections.emptyList ();
+        }
+        return Arrays.asList ( value.substring ( 1, value.length () - 1 ).split ( ", " ) );
     }
 
     private static ErrorInformation makeError ( final QName error, final Map<QName, String> errorMap )
