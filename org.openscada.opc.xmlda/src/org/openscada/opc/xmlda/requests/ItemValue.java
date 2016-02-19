@@ -12,6 +12,7 @@ package org.openscada.opc.xmlda.requests;
 
 import java.util.GregorianCalendar;
 
+import org.openscada.opc.xmlda.OpcType;
 import org.openscada.opc.xmlda.internal.Helper;
 
 public class ItemValue
@@ -28,11 +29,19 @@ public class ItemValue
 
     private final ErrorInformation errorInformation;
 
+    private final OpcType opcType;
+
     public ItemValue ( final String itemName, final String itemPath, final Object value, final State state, final GregorianCalendar timestamp, final ErrorInformation errorInformation )
+    {
+        this ( itemName, itemPath, value, OpcType.UNDEFINED, state, timestamp, errorInformation );
+    }
+
+    public ItemValue ( final String itemName, final String itemPath, final Object value, final OpcType opcType, final State state, final GregorianCalendar timestamp, final ErrorInformation errorInformation )
     {
         this.itemName = itemName;
         this.itemPath = itemPath;
         this.value = value;
+        this.opcType = opcType;
         this.state = state;
         this.timestamp = timestamp;
         this.errorInformation = errorInformation;
@@ -61,6 +70,11 @@ public class ItemValue
     public Object getValue ()
     {
         return this.value;
+    }
+
+    public OpcType getOpcType ()
+    {
+        return opcType;
     }
 
     public ErrorInformation getErrorInformation ()

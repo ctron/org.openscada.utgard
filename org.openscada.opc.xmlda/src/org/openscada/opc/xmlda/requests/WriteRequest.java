@@ -24,12 +24,17 @@ import org.opcfoundation.webservices.xmlda._1.Service;
 import org.opcfoundation.webservices.xmlda._1.Write;
 import org.opcfoundation.webservices.xmlda._1.WriteRequestItemList;
 import org.openscada.opc.xmlda.Connection;
+import org.openscada.opc.xmlda.OpcType;
 import org.openscada.opc.xmlda.Task;
 import org.openscada.opc.xmlda.internal.Helper;
 import org.openscada.opc.xmlda.requests.WriteResponse.Builder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class WriteRequest implements Task<WriteResponse>
 {
+    private final static Logger logger = LoggerFactory.getLogger ( WriteRequest.class );
+
     private final List<ItemValue> values;
 
     private DatatypeFactory factory;
@@ -84,7 +89,14 @@ public class WriteRequest implements Task<WriteResponse>
                 iv.setTimestamp ( this.factory.newXMLGregorianCalendar ( ts ) );
             }
 
-            iv.setValue ( value.getValue () );
+            if ( value.getValue () != null && value.getValue () instanceof String && value.getOpcType () != OpcType.UNDEFINED )
+            {
+                iv.setValue ( Helper.parseStringValue ( (String)value.getValue (), value.getOpcType () ) );
+            }
+            else
+            {
+                iv.setValue ( value.getValue () );
+            }
 
             list.getItems ().add ( iv );
         }
@@ -112,14 +124,10 @@ public class WriteRequest implements Task<WriteResponse>
 
         final Map<QName, String> errorMap = Helper.mapErrors ( result.getErrors () );
 
-        // TODO: fetch write errors
-        for ( final org.opcfoundation.webservices.xmlda._1.ItemValue riv : result.getRItemList ().getItems () )
-        {
-            System.out.println ( riv.getResultID () );
-        }
-
         for ( final org.opcfoundation.webservices.xmlda._1.ItemValue value : result.getRItemList ().getItems () )
         {
+            // TODO: fetch write errors
+            logger.info ( "{}", value.getResultID () );
             builder.addValue ( Helper.convertValue ( value, errorMap ) );
         }
 
